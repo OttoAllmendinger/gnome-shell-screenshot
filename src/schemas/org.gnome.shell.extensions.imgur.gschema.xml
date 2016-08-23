@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist gettext-domain="gnome-shell-extensions">
+  <enum id="org.gnome.shell.extensions.imgur.click-action">
+    <value nick="show-menu" value="0" />
+    <value nick="select-area" value="1" />
+    <value nick="select-window" value="2" />
+    <value nick="select-desktop" value="3" />
+  </enum>
+
+  <schema
+    id="org.gnome.shell.extensions.imgur"
+    path="/org/gnome/shell/extensions/imgur/">
+
+    <key name="copy-clipboard" type="b">
+      <default>false</default>
+    </key>
+
+    <key name="shortcut-select-area" type="as">
+      <default><![CDATA[['<Super>F11']]]></default>
+    </key>
+
+    <key name="shortcut-select-window" type="as">
+      <default>[]</default>
+    </key>
+
+    <key name="shortcut-select-desktop" type="as">
+      <default>[]</default>
+    </key>
+
+    <key name="enable-indicator" type="b">
+      <default>true</default>
+    </key>
+
+    <key
+        name="click-action"
+        enum="org.gnome.shell.extensions.imgur.click-action">
+      <default>'show-menu'</default>
+    </key>
+
+  
+    <key name="keep-file" type="b">
+      <default>false</default>
+    </key>
+
+    <key name="save-location" type="s">
+      <default>'/tmp/'</default>
+      <summary>File Save location</summary>
+      <description>Location where screenshots are stored</description>
+    </key>
+
+  </schema>
+</schemalist>
+<!--
+vi:sts=2:st=2:et
+-->
