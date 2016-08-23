@@ -1,9 +1,9 @@
 {
-    "shell-version": ["3.16", "3.18", "3.19", "3.20"],
-    "uuid": "gnome-shell-imgur@ttll.de",
-    "name": "Imgur Screenshot Uploader",
-    "url": "https://github.com/OttoAllmendinger/gnome-shell-imgur/",
-    "description": "Upload screenshots directly to imgur.com",
-    "settings-schema":  "org.gnome.shell.extensions.imgur",
-    "gettext-domain": "imgur-uploader"
+    "shell-version": ["3.18", "3.19", "3.20"],
+    "uuid": "gnome-shell-screenshot@ttll.de",
+    "name": "Screenshot Tool",
+    "url": "https://github.com/OttoAllmendinger/gnome-shell-screenshot/",
+    "description": "Create, store and upload screenshots",
+    "settings-schema":  "org.gnome.shell.extensions.screenshot",
+    "gettext-domain": "gnome-shell-screenshot"
 }

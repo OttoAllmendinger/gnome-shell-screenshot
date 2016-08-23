@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist gettext-domain="gnome-shell-extensions">
-  <enum id="org.gnome.shell.extensions.imgur.click-action">
+  <enum id="org.gnome.shell.extensions.screenshot.click-action">
     <value nick="show-menu" value="0" />
     <value nick="select-area" value="1" />
     <value nick="select-window" value="2" />
@@ -8,8 +8,8 @@
   </enum>
 
   <schema
-    id="org.gnome.shell.extensions.imgur"
-    path="/org/gnome/shell/extensions/imgur/">
+    id="org.gnome.shell.extensions.screenshot"
+    path="/org/gnome/shell/extensions/screenshot/">
 
     <key name="copy-clipboard" type="b">
       <default>false</default>
@@ -33,7 +33,7 @@
 
     <key
         name="click-action"
-        enum="org.gnome.shell.extensions.imgur.click-action">
+        enum="org.gnome.shell.extensions.screenshot.click-action">
       <default>'show-menu'</default>
     </key>
 

@@ -1,20 +1,24 @@
-![Screenshot](https://raw.github.com/OttoAllmendinger/gnome-shell-imgur/master/data/screenshot.png)
+![Screenshot](https://raw.github.com/OttoAllmendinger/gnome-shell-screenshot/master/data/screenshot.png)
 
-Uploads screenshots directly to imgur.com and displays URL.
+Creates screenshots and performs different actions with it
+
+* Save to disk
+* Copy to clipboard
+* Upload to imgur.com
 
 ## Installation
 
 ### Via extensions.gnome.org
 
-The latest reviewed version can be found at [GNOME Shell Extensions](https://extensions.gnome.org/extension/683/imgur-screenshot-uploader/).
+The latest reviewed version can be found at [GNOME Shell Extensions](https://extensions.gnome.org/extension/TBD)
 
 ### Via github.com
 
 The latest development version can be installed manually with these commands:
 
 ```sh
-git clone https://github.com/OttoAllmendinger/gnome-shell-imgur.git
-cd gnome-shell-imgur
+git clone https://github.com/OttoAllmendinger/gnome-shell-screenshot.git
+cd gnome-shell-screensot
 make install
 ```
 
@@ -24,7 +28,7 @@ gnome-tweak-tool.
 ## Disclaimer
 
 The Imgur logo and "IMGUR" are trademarks of Imgur LLC and are used here for
-informational purposes only. My application, gnome-shell-imgur, is not
+informational purposes only. My application, gnome-shell-screenshot, is not
 affiliated with Imgur and has not been reviewed or approved by Imgur.
 
 ## Contributors
