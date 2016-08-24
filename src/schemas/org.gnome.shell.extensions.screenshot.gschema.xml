@@ -7,13 +7,16 @@
     <value nick="select-desktop" value="3" />
   </enum>
 
+  <enum id="org.gnome.shell.extensions.screenshot.clipboard-action">
+    <value nick="none" value="0" />
+    <value nick="set-image-data" value="1" />
+    <value nick="set-local-path" value="2" />
+    <value nick="set-remote-url" value="3" />
+  </enum>
+
   <schema
     id="org.gnome.shell.extensions.screenshot"
     path="/org/gnome/shell/extensions/screenshot/">
-
-    <key name="copy-clipboard" type="b">
-      <default>false</default>
-    </key>
 
     <key name="shortcut-select-area" type="as">
       <default><![CDATA[['<Super>F11']]]></default>
@@ -37,17 +40,21 @@
       <default>'show-menu'</default>
     </key>
 
-  
-    <key name="keep-file" type="b">
+    <key name="save-screenshot" type="b">
       <default>false</default>
     </key>
 
     <key name="save-location" type="s">
-      <default>'/tmp/'</default>
+      <default>'$PICTURES'</default>
       <summary>File Save location</summary>
       <description>Location where screenshots are stored</description>
     </key>
 
+    <key
+        name="clipboard-action"
+        enum="org.gnome.shell.extensions.screenshot.clipboard-action">
+      <default>'none'</default>
+    </key>
   </schema>
 </schemalist>
 <!--

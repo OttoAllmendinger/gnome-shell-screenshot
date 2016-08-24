@@ -1,4 +1,4 @@
-let versionArray = function (v) v.split(".").map(Number);
+let versionArray = (v) => v.split(".").map(Number);
 
 let zip = function (a, b) {
     let headA = a.shift(), headB = b.shift();
@@ -11,24 +11,22 @@ let zip = function (a, b) {
 
 function versionEqual(a, b) {
     return zip(versionArray(a), versionArray(b)).reduce(
-        function (prev, [a, b], index) prev && (a === b)
+        (prev, [a, b], index) => prev && (a === b)
     , true);
-};
+}
 
 function versionGreater(a, b) {
     return (!versionEqual(a, b))
         && zip(versionArray(a), versionArray(b)).reduce(
-            function (prev, [a, b], index) prev && (a >= (b || 0))
+            (prev, [a, b], index) => prev && (a >= (b || 0))
     , true);
-};
+}
 
 function versionSmaller(a, b) {
     return (!versionEqual(a, b)) && (!versionGreater(a, b));
-};
+}
 
-if (this['ARGV'] !== undefined) {
-    // ghetto tests
-    //
+if (window["ARGV"] && ARGV[0] == "test") {
     log('zip("1.2.3", "1.2")=' + JSON.stringify(zip(
         versionArray("1.2.3"),
         versionArray("1.2"))));

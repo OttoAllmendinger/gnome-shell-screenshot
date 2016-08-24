@@ -16,7 +16,7 @@ const Main = imports.ui.main;
 const Gettext = imports.gettext.domain('gnome-shell-extensions');
 const _ = Gettext.gettext;
 
-const FileTemplate = 'gnome-shell-imgur-XXXXXX.png';
+const FileTemplate = 'gnome-shell-screenshot-XXXXXX.png';
 
 
 const ScreenshotWindowIncludeCursor = false;
@@ -57,7 +57,7 @@ const getWindowRectangle = function (win) {
 
 
 const selectWindow = function (windows, x, y) {
-  let filtered = windows.filter(function (win) {
+  let filtered = windows.filter((win) => {
     if ((win !== undefined)
           && win.visible
           && (typeof win.get_meta_window === 'function')) {
@@ -73,7 +73,7 @@ const selectWindow = function (windows, x, y) {
     }
   });
 
-  filtered.sort(function (a, b)
+  filtered.sort((a, b) =>
     (a.get_meta_window().get_layer() <= b.get_meta_window().get_layer())
   );
 
@@ -116,7 +116,7 @@ const makeDesktopScreenshot = function(callback) {
 
 
 const Capture = new Lang.Class({
-  Name: "ImgurUploader.Capture",
+  Name: "ScreenshotTool.Capture",
 
   _init: function () {
     this._mouseDown = false;
@@ -188,7 +188,7 @@ Signals.addSignalMethods(Capture.prototype);
 
 
 const SelectionArea = new Lang.Class({
-  Name: "ImgurUploader.SelectionArea",
+  Name: "ScreenshotTool.SelectionArea",
 
   _init: function () {
     this._mouseDown = false;
@@ -199,7 +199,7 @@ const SelectionArea = new Lang.Class({
 
   _onEvent: function (capture, event) {
     let type = event.type();
-    let [x, y, mask] = global.get_pointer();
+    let [x, y] = global.get_pointer();
 
     if (type === Clutter.EventType.BUTTON_PRESS) {
       [this._startX, this._startY] = [x, y];
@@ -219,6 +219,11 @@ const SelectionArea = new Lang.Class({
     let fileName = getTempFile();
 
     if ((region.w > 8) && (region.h > 8)) {
+      this.dimensions = {
+        width: region.w,
+        height: region.h
+      };
+
       makeAreaScreenshot(
           region,
           this.emit.bind(this, 'screenshot')
@@ -241,7 +246,7 @@ Signals.addSignalMethods(SelectionArea.prototype);
 
 
 const SelectionWindow = new Lang.Class({
-  Name: "ImgurUploader.SelectionWindow",
+  Name: "ScreenshotTool.SelectionWindow",
 
   _init: function () {
     this._windows = global.get_window_actors();
@@ -252,7 +257,7 @@ const SelectionWindow = new Lang.Class({
 
   _onEvent: function (capture, event) {
     let type = event.type();
-    let [x, y, mask] = global.get_pointer();
+    let [x, y] = global.get_pointer();
 
     this._selectedWindow = selectWindow(this._windows, x, y)
 
@@ -278,14 +283,14 @@ const SelectionWindow = new Lang.Class({
   },
 
   _screenshot: function (win) {
-    Mainloop.idle_add(function () {
+    Mainloop.idle_add(() => {
       Main.activateWindow(win.get_meta_window());
 
-      Mainloop.idle_add(function () {
+      Mainloop.idle_add(() => {
         makeWindowScreenshot(win, this.emit.bind(this, 'screenshot'));
         this._capture._stop();
-      }.bind(this));
-    }.bind(this));
+      });
+    });
   }
 });
 
@@ -297,14 +302,14 @@ Signals.addSignalMethods(SelectionWindow.prototype);
 
 
 const SelectionDesktop = new Lang.Class({
-  Name: "ImgurUploader.SelectionDesktop",
+  Name: "ScreenshotTool.SelectionDesktop",
 
   _init: function () {
     this._windows = global.get_window_actors();
-    Mainloop.idle_add(function () {
+    Mainloop.idle_add(() => {
       makeDesktopScreenshot(this.emit.bind(this, 'screenshot'));
       this.emit('stop');
-    }.bind(this));
+    });
   }
 });
 

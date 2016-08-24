@@ -1,11 +1,11 @@
-.PHONY: all schemas zipfile
+.PHONY: all schemas zipfile lint
 
 SCHEMA = org.gnome.shell.extensions.screenshot.gschema.xml
 
 SOURCE = src/*.js \
 		 src/stylesheet.css \
 		 src/metadata.json \
-		 src/icons \
+		 src/empty64.png \
 		 src/schemas/*
 
 ZIPFILE = gnome-shell-screenshot.zip
@@ -17,9 +17,15 @@ all: archive
 
 schemas: src/schemas/gschemas.compiled
 
+lint:
+	eslint src/*js
+
 archive: $(ZIPFILE)
 
-install: archive
+uninstall:
+	-rm -r $(EXTENSION_PATH)
+
+install: lint archive
 	-rm -r $(EXTENSION_PATH)
 	mkdir -p $(EXTENSION_PATH)
 	unzip $(ZIPFILE) -d $(EXTENSION_PATH)

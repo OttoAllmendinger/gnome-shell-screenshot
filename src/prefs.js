@@ -8,13 +8,14 @@ const Lang = imports.lang;
 const Signals = imports.signals;
 
 const Gtk = imports.gi.Gtk;
-// const Gio = imports.gi.Gio;
+const GLib = imports.gi.GLib;
 const GObject = imports.gi.GObject;
 
 const Gettext = imports.gettext.domain('gnome-shell-extensions');
 const _ = Gettext.gettext;
 
 const Local = imports.misc.extensionUtils.getCurrentExtension();
+const Path = Local.imports.path;
 const Config = Local.imports.config;
 const Convenience = Local.imports.convenience;
 
@@ -31,9 +32,9 @@ const buildHbox = function () {
   });
 };
 
-const ImgurSettingsWidget = new GObject.Class({
-  Name: 'ImgurSettingsWidget',
-  GTypeName: 'ImgurSettingsWidget',
+const ScreenshotToolSettingsWidget = new GObject.Class({
+  Name: 'ScreenshotToolSettingsWidget',
+  GTypeName: 'ScreenshotToolSettingsWidget',
   Extends: Gtk.Box,
 
   _init: function (params) {
@@ -49,10 +50,6 @@ const ImgurSettingsWidget = new GObject.Class({
     this._prefsIndicator = this._makePrefsIndicator();
     label = new Gtk.Label({label: _("Indicator")});
     this._notebook.append_page(this._prefsIndicator, label);
-
-    this._prefsDefaultActions = this._makePrefsDefaultActions();
-    label = new Gtk.Label({label: _("Default Actions")});
-    this._notebook.append_page(this._prefsDefaultActions, label);
 
     this._prefsKeybindings = this._makePrefsKeybindings();
     label = new Gtk.Label({label: _("Keybindings")});
@@ -83,9 +80,9 @@ const ImgurSettingsWidget = new GObject.Class({
 
     const switchShowIndicator = new Gtk.Switch();
 
-    switchShowIndicator.connect('notify::active', function (button) {
+    switchShowIndicator.connect('notify::active', (button) => {
       _settings.set_boolean(Config.KeyEnableIndicator, button.active);
-    }.bind(this));
+    });
 
     switchShowIndicator.active = _settings.get_boolean(
         Config.KeyEnableIndicator
@@ -102,7 +99,7 @@ const ImgurSettingsWidget = new GObject.Class({
     hbox = buildHbox();
 
     const labelDefaultClickAction = new Gtk.Label({
-      label: _('Default click action'),
+      label: _('Default Click Action'),
       xalign: 0,
       expand: true
     });
@@ -118,7 +115,7 @@ const ImgurSettingsWidget = new GObject.Class({
 
     const comboBoxDefaultClickAction = this._getComboBox(
       clickActionOptions, GObject.TYPE_INT, currentClickAction,
-      function (value) _settings.set_enum(Config.KeyClickAction, value)
+      (value) => _settings.set_enum(Config.KeyClickAction, value)
     );
 
     hbox.add(labelDefaultClickAction);
@@ -126,64 +123,59 @@ const ImgurSettingsWidget = new GObject.Class({
 
     prefs.add(hbox, {fill: false});
 
-    return prefs;
-  },
 
-  _makePrefsDefaultActions: function () {
-    let prefs = new Gtk.Box({
-      orientation: Gtk.Orientation.VERTICAL,
-      margin: 20,
-      margin_top: 10,
-      expand: false
-    });
-
-    /* Copy link to clipboard [on|off] */
+    /* Clipboard Action [dropdown] */
 
     hbox = buildHbox();
 
-    const labelCopyClipboard = new Gtk.Label({
-      label: _('Copy URL to clipboard'),
+    const labelClipboardContent = new Gtk.Label({
+      label: _('Default Clipboard Content'),
       xalign: 0,
       expand: true
     });
 
-    const switchCopyClipboard = new Gtk.Switch();
+    const comboBoxOptions = [
+      [_("Unchanged")     , Config.ClipboardActions.NONE],
+      [_("Image Data")    , Config.ClipboardActions.SET_IMAGE_DATA],
+      // [_("Local Path")    , Config.ClipboardActions.SET_LOCAL_PATH]
+      // TODO
+      // [_("Remote URL")    , Config.ClipboardActions.SET_REMOTE_URL]
+    ];
 
-    switchCopyClipboard.connect('notify::active', function (button) {
-      _settings.set_boolean(Config.KeyCopyClipboard, button.active);
-    }.bind(this));
 
-    switchCopyClipboard.active = _settings.get_boolean(
-        Config.KeyCopyClipboard
+    const currentClipboardAction =
+      _settings.get_string(Config.KeyClipboardAction);
+
+    const comboBoxClipboardContent = this._getComboBox(
+      comboBoxOptions, GObject.TYPE_STRING, currentClipboardAction,
+      (value) => _settings.set_string(Config.KeyClipboardAction, value)
     );
 
-    hbox.add(labelCopyClipboard);
-    hbox.add(switchCopyClipboard);
+    hbox.add(labelClipboardContent);
+    hbox.add(comboBoxClipboardContent);
 
     prefs.add(hbox, {fill: false});
 
-    /* Keep file [on|off] */
+    /* Save Screenshot [on|off] */
 
     hbox = buildHbox();
 
-    const labelKeepFile = new Gtk.Label({
-      label: _('Keep Saved File'),
+    const labelSaveScreenshot = new Gtk.Label({
+      label: _('Auto-Save Screenshot'),
       xalign: 0,
       expand: true
     });
 
-    const switchKeepFile = new Gtk.Switch();
+    const switchSaveScreenshot = new Gtk.Switch();
 
-    switchKeepFile.connect('notify::active', function (button) {
-      _settings.set_boolean(Config.KeyKeepFile, button.active);
-    }.bind(this));
+    switchSaveScreenshot.connect('notify::active', (button) => {
+      _settings.set_boolean(Config.KeySaveScreenshot, button.active);
+    });
 
-    switchKeepFile.active = _settings.get_boolean(
-        Config.KeyKeepFile
-    );
+    switchSaveScreenshot.active = _settings.get_boolean(Config.KeySaveScreenshot);
 
-    hbox.add(labelKeepFile);
-    hbox.add(switchKeepFile);
+    hbox.add(labelSaveScreenshot);
+    hbox.add(switchSaveScreenshot);
 
     prefs.add(hbox, {fill: false});
 
@@ -193,32 +185,46 @@ const ImgurSettingsWidget = new GObject.Class({
     hbox = buildHbox();
 
     const labelSaveLocation = new Gtk.Label({
-      label: _('Save location'),
+      label: _('Save Location'),
       xalign: 0,
       expand: true
     });
 
 
     const chooserSaveLocation = new Gtk.FileChooserButton({
-      title: _("Select")
+      title: _("Select"),
+      local_only: true,
     });
     chooserSaveLocation.set_action(Gtk.FileChooserAction.SELECT_FOLDER);
 
-    chooserSaveLocation.set_filename(_settings.get_string('save-location'));
-    chooserSaveLocation.connect('file-set', function() {
-      _settings.set_string(
-        'save-location',
-        chooserSaveLocation.get_current_folder()
+    try {
+      let saveLocation = Path.expand(
+        _settings.get_string(Config.KeySaveLocation)
       );
-    }.bind(this));
+      chooserSaveLocation.set_filename(saveLocation);
+    } catch (e) {
+      logError(e);
+    }
+    chooserSaveLocation.connect('file-set', () => {
+      log("file-set");
+      let dir = Path.expand(_settings.get_string(Config.KeySaveLocation));
+      log("dir="+dir);
+      let [filename, err] = GLib.filename_from_uri(
+        chooserSaveLocation.get_uri()
+      );
+      if (err) {
+        throw new Error("can't resolve uri");
+      }
+      _settings.set_string(Config.KeySaveLocation, filename);
+    });
 
     const _setSensitivity = function () {
-      var sensitive = _settings.get_boolean(Config.KeyKeepFile);
+      var sensitive = _settings.get_boolean(Config.KeySaveScreenshot);
       labelSaveLocation.set_sensitive(sensitive);
       chooserSaveLocation.set_sensitive(sensitive);
     };
 
-    switchKeepFile.connect('notify::active', _setSensitivity);
+    switchSaveScreenshot.connect('notify::active', _setSensitivity);
     _setSensitivity();
 
     hbox.add(labelSaveLocation);
@@ -245,7 +251,7 @@ const ImgurSettingsWidget = new GObject.Class({
       ["shortcut-select-desktop", "Select whole desktop"]
     ];
 
-    for each (let [name, description] in bindings) {
+    for (let [name, description] of bindings) {
       log("binding: " + name + " description: " + description);
       let binding = _settings.get_strv(name)[0];
 
@@ -270,7 +276,7 @@ const ImgurSettingsWidget = new GObject.Class({
     let cellrend = new Gtk.CellRendererText();
     let col = new Gtk.TreeViewColumn({
       'title': 'Keyboard Shortcut',
-       'expand': true
+      'expand': true
     });
 
     col.pack_start(cellrend, true);
@@ -282,7 +288,7 @@ const ImgurSettingsWidget = new GObject.Class({
       'accel-mode': Gtk.CellRendererAccelMode.GTK
     });
 
-    cellrend.connect('accel-edited', function(rend, iter, key, mods) {
+    cellrend.connect('accel-edited', (rend, iter, key, mods) => {
       let value = Gtk.accelerator_name(key, mods);
       let [succ, iterator] = model.get_iter_from_string(iter);
 
@@ -296,7 +302,7 @@ const ImgurSettingsWidget = new GObject.Class({
       _settings.set_strv(name, [value]);
     });
 
-    cellrend.connect('accel-cleared', function(rend, iter, key, mods) {
+    cellrend.connect('accel-cleared', (rend, iter, key, mods) => {
       let [succ, iterator] = model.get_iter_from_string(iter);
 
       if (!succ) {
@@ -332,7 +338,7 @@ const ImgurSettingsWidget = new GObject.Class({
     comboBox.pack_start(renderer, true);
     comboBox.add_attribute(renderer, 'text', 0);
 
-    for each (let [label, value] in options) {
+    for (let [label, value] of options) {
       let iter;
 
       model.set(
@@ -346,7 +352,7 @@ const ImgurSettingsWidget = new GObject.Class({
       }
     }
 
-    comboBox.connect('changed', function (entry) {
+    comboBox.connect('changed', (entry) => {
       let [success, iter] = comboBox.get_active_iter();
 
       if (!success) {
@@ -367,7 +373,7 @@ function init() {
 }
 
 function buildPrefsWidget() {
-  let widget = new ImgurSettingsWidget();
+  let widget = new ScreenshotToolSettingsWidget();
   widget.show_all();
 
   return widget;

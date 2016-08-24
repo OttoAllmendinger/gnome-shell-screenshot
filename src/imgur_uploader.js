@@ -13,7 +13,7 @@ const _httpSession = new Soup.SessionAsync();
 
 const Uploader = new Lang.Class({
   Name: "Uploader",
-  _init: function () true
+  _init: () => true
 });
 
 
@@ -142,14 +142,14 @@ const DummyUploader = new Lang.Class({
 });
 
 
-if (this['ARGV'] !== undefined) {
+if (window['ARGV'] && ARGV[0] == "test") {
 
   // run by gjs
   log("command line");
 
   let uploader = new ImgurUploader();
 
-  uploader.connect("data", function (obj, data) {
+  uploader.connect("data", (obj, data) => {
     log(JSON.stringify(data));
   });
 

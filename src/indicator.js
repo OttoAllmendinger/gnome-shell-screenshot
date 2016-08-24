@@ -4,6 +4,7 @@ const Lang = imports.lang;
 const Signals = imports.signals;
 
 const St = imports.gi.St;
+const Shell = imports.gi.Shell;
 
 const PanelMenu = imports.ui.panelMenu;
 const PopupMenu = imports.ui.popupMenu;
@@ -17,14 +18,13 @@ const Local = ExtensionUtils.getCurrentExtension();
 const Config = Local.imports.config;
 
 
-const DefaultIcon = 'imgur-uploader-symbolic';
-const HoverIcon = 'imgur-uploader-color';
+const DefaultIcon = 'camera-photo-symbolic';
 
 
 
 
 const Indicator = new Lang.Class({
-  Name: "ImgurUploader.Indicator",
+  Name: "ScreenshotTool.Indicator",
   Extends: PanelMenu.Button,
 
   _init: function (extension) {
@@ -40,8 +40,6 @@ const Indicator = new Lang.Class({
     });
 
     this.actor.add_actor(this._icon);
-    this.actor.connect('enter-event', this._hoverIcon.bind(this));
-    this.actor.connect('leave-event', this._resetIcon.bind(this));
 
     this._signalSettings.push(this._extension.settings.connect(
         'changed::' + Config.KeyClickAction,
@@ -74,13 +72,14 @@ const Indicator = new Lang.Class({
   },
 
   _enableMenu: function () {
+    // These actions can be triggered via shortcut or popup menu
     const items = [
       ["select-area", _("Select Area")],
       ["select-window", _("Select Window")],
       ["select-desktop", _("Select Desktop")]
     ];
 
-    for each (let [action, title] in items) {
+    items.forEach(([action, title]) => {
       let item = new PopupMenu.PopupMenuItem(title);
       item.connect(
         'activate', function (action) {
@@ -89,7 +88,24 @@ const Indicator = new Lang.Class({
         }.bind(this, action)
       );
       this.menu.addMenuItem(item);
-    }
+    })
+
+    this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
+
+    // Settings can only be triggered via menu
+    let settingsItem = new PopupMenu.PopupMenuItem(_('Settings'));
+    settingsItem.connect('activate', () => {
+      let appSys = Shell.AppSystem.get_default();
+      let prefs = appSys.lookup_app('gnome-shell-extension-prefs.desktop');
+      if (prefs.get_state() == prefs.SHELL_APP_STATE_RUNNING) {
+        prefs.activate();
+      } else {
+        prefs.get_app_info().launch_uris(
+          ['extension:///' + Local.metadata.uuid], null
+        );
+      }
+    });
+    this.menu.addMenuItem(settingsItem);
   },
 
   _disableMenu: function () {
@@ -98,28 +114,16 @@ const Indicator = new Lang.Class({
 
   startSelection: function () {
     this._selection = true;
-    this._hoverIcon();
   },
 
   stopSelection: function () {
     this._selection = false;
-    this._resetIcon();
-  },
-
-  _hoverIcon: function () {
-    this._icon.icon_name = HoverIcon;
-  },
-
-  _resetIcon: function () {
-    if (!this._selection) {
-      this._icon.icon_name = DefaultIcon;
-    }
   },
 
   destroy: function () {
     this.parent();
-    this._signalSettings.forEach(function (signal) {
+    this._signalSettings.forEach((signal) => {
       this._extension.settings.disconnect(signal);
-    }.bind(this));
+    });
   }
 });
