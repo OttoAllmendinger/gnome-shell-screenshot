@@ -23,7 +23,6 @@ const Local = ExtensionUtils.getCurrentExtension();
 
 const Config = Local.imports.config;
 const Path = Local.imports.path;
-const ImgurUploader = Local.imports.imgur_uploader;
 const Indicator = Local.imports.indicator;
 const Selection = Local.imports.selection;
 const Clipboard = Local.imports.clipboard;
