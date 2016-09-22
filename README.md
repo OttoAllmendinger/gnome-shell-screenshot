@@ -11,7 +11,7 @@ This extension is based on
 ### Via extensions.gnome.org
 
 The latest reviewed version can be found at
-[GNOME Shell Extensions](https://extensions.gnome.org/extension/TBD)
+[GNOME Shell Extensions](https://extensions.gnome.org/extension/1112/screenshot-tool/)
 
 ### Via github.com
 
