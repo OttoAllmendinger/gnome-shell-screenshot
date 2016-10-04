@@ -1,0 +1,133 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-10-04 19:17+0200\n"
+"PO-Revision-Date: 2016-10-04 19:18+0200\n"
+"Last-Translator: Raphael Rochet <raphael@rri.fr>\n"
+"Language-Team: \n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.8.9\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: indicator.js:75 prefs.js:108
+msgid "Select Area"
+msgstr "Sélectionner une zone"
+
+#: indicator.js:76 prefs.js:109
+msgid "Select Window"
+msgstr "Sélectionner une fenêtre"
+
+#: indicator.js:77 prefs.js:110
+msgid "Select Desktop"
+msgstr "Sélectionner le bureau"
+
+#: indicator.js:94
+msgid "Settings"
+msgstr "Paramètres"
+
+#: notifications.js:49
+msgid "New Screenshot"
+msgstr "Nouvelle capture d'écran"
+
+#: notifications.js:50
+msgid "Size:"
+msgstr "Taille:"
+
+#: notifications.js:66
+msgid "Copy"
+msgstr "Copier"
+
+#: notifications.js:67
+msgid "Save"
+msgstr "Enregistrer"
+
+#: notifications.js:101
+msgid "Error"
+msgstr "Erreur"
+
+#: prefs.js:51
+msgid "Indicator"
+msgstr "Indicateur"
+
+#: prefs.js:55
+msgid "Keybindings"
+msgstr "Raccourcis clavier"
+
+#: prefs.js:76
+msgid "Show indicator"
+msgstr "Afficher l'indicateur"
+
+#: prefs.js:102
+msgid "Default Click Action"
+msgstr "Action de clic par défaut"
+
+#: prefs.js:111
+msgid "Show Menu"
+msgstr "Afficher le menu"
+
+#: prefs.js:132
+msgid "Default Clipboard Content"
+msgstr "Contenu par défaut du presse-papier"
+
+#: prefs.js:138
+msgid "Unchanged"
+msgstr "Inchangé"
+
+#: prefs.js:139
+msgid "Image Data"
+msgstr "Image"
+
+#: prefs.js:164
+msgid "Auto-Save Screenshot"
+msgstr "Enregistrement automatique"
+
+#: prefs.js:188
+msgid "Save Location"
+msgstr "Emplacement de sauvegarde"
+
+#: prefs.js:195
+msgid "Select"
+msgstr "Sélectionner"
+
+#: prefs.js:249
+msgid "Select area"
+msgstr "Sélectionner une zone"
+
+#: prefs.js:250
+msgid "Select window"
+msgstr "Sélectionner une fenêtre"
+
+#: prefs.js:251
+msgid "Select whole desktop"
+msgstr "Sélectionner tout le bureau"
+
+#: prefs.js:278
+msgid "Keyboard Shortcut"
+msgstr "Raccourci clavier"
+
+#: prefs.js:318
+msgid "Modify"
+msgstr "Modifier"
+
+#: saveDlg.js:27
+msgid "_Cancel"
+msgstr "_Annuler"
+
+#: saveDlg.js:28
+msgid "_Save"
+msgstr "_Enregistrer"
+
+#: selection.js:234
+msgid "selected region was too small - please select a larger area"
+msgstr ""
+"La zone sélectionnée était trop petite - merci de sélectionner une plus "
+"grande zone"
