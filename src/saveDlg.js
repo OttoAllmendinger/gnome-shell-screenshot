@@ -10,6 +10,10 @@
 const Gio = imports.gi.Gio;
 const Gtk = imports.gi.Gtk;
 
+const domain = 'gnome-shell-screenshot';
+const Gettext = imports.gettext;
+const _ = Gettext.domain(domain).gettext;
+
 const copy = (srcPath, dstDir, dstName) => {
   if (!srcPath) {
     print("no srcPath");
@@ -21,8 +25,8 @@ const copy = (srcPath, dstDir, dstName) => {
 
   let dlg = new Gtk.FileChooserDialog({ action: Gtk.FileChooserAction.SAVE });
 
-  dlg.add_button("_Cancel", Gtk.ResponseType.CANCEL);
-  dlg.add_button("_Save", Gtk.ResponseType.OK);
+  dlg.add_button( _("_Cancel"), Gtk.ResponseType.CANCEL);
+  dlg.add_button( _("_Save"), Gtk.ResponseType.OK);
 
   if (dstDir) {
     let dstDirFile = Gio.File.new_for_path(dstDir);
@@ -42,5 +46,11 @@ const copy = (srcPath, dstDir, dstName) => {
 }
 
 if (window["ARGV"]) {
+
+  let workDir = Gio.File.new_for_path(ARGV[3]);
+  let localeDir = workDir.get_child('locale');
+  if (localeDir.query_exists(null))
+    Gettext.bindtextdomain(domain, localeDir.get_path());
+
   copy(ARGV[0], ARGV[1], ARGV[2])
 }
