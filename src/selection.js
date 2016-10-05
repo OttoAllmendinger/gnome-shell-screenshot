@@ -13,7 +13,7 @@ const Main = imports.ui.main;
 
 
 
-const Gettext = imports.gettext.domain('gnome-shell-extensions');
+const Gettext = imports.gettext.domain('gnome-shell-screenshot');
 const _ = Gettext.gettext;
 
 const FileTemplate = 'gnome-shell-screenshot-XXXXXX.png';

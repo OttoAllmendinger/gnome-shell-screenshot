@@ -6,6 +6,7 @@ SOURCE = src/*.js \
 		 src/stylesheet.css \
 		 src/metadata.json \
 		 src/empty64.png \
+		 src/locale/*/LC_MESSAGES/gnome-shell-screenshot.mo \
 		 src/schemas/*
 
 ZIPFILE = gnome-shell-screenshot.zip

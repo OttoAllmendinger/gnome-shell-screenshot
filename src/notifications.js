@@ -12,7 +12,7 @@ const MessageTray = imports.ui.messageTray;
 
 const Util = imports.misc.util;
 
-const Gettext = imports.gettext.domain('gnome-shell-extensions');
+const Gettext = imports.gettext.domain('gnome-shell-screenshot');
 const _ = Gettext.gettext;
 
 const ExtensionUtils = imports.misc.extensionUtils;
@@ -47,7 +47,7 @@ const Notification = new Lang.Class({
     this.parent(
       source,
       _("New Screenshot"),
-      "Size: " + width + "x" + height,
+      _("Size:") + " " + width + "x" + height,
       { gicon: Thumbnail.getIcon(file.get_path()) }
     );
 
@@ -84,7 +84,8 @@ const Notification = new Lang.Class({
       Local.path + "/saveDlg.js",
       this._file.get_path(),
       Path.expand("$PICTURES"),
-      this._newFilename
+      this._newFilename,
+      Local.dir.get_path(),
     ]);
   }
 });

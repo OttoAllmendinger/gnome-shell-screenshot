@@ -11,7 +11,7 @@ const Gtk = imports.gi.Gtk;
 const GLib = imports.gi.GLib;
 const GObject = imports.gi.GObject;
 
-const Gettext = imports.gettext.domain('gnome-shell-extensions');
+const Gettext = imports.gettext.domain('gnome-shell-screenshot');
 const _ = Gettext.gettext;
 
 const Local = imports.misc.extensionUtils.getCurrentExtension();
@@ -246,9 +246,9 @@ const ScreenshotToolSettingsWidget = new GObject.Class({
     ]);
 
     let bindings = [
-      ["shortcut-select-area", "Select area"],
-      ["shortcut-select-window", "Select window"],
-      ["shortcut-select-desktop", "Select whole desktop"]
+      ["shortcut-select-area", _("Select area")],
+      ["shortcut-select-window", _("Select window")],
+      ["shortcut-select-desktop", _("Select whole desktop")]
     ];
 
     for (let [name, description] of bindings) {
@@ -275,7 +275,7 @@ const ScreenshotToolSettingsWidget = new GObject.Class({
 
     let cellrend = new Gtk.CellRendererText();
     let col = new Gtk.TreeViewColumn({
-      'title': 'Keyboard Shortcut',
+      'title': _('Keyboard Shortcut'),
       'expand': true
     });
 
@@ -315,7 +315,7 @@ const ScreenshotToolSettingsWidget = new GObject.Class({
       _settings.set_strv(name, []);
     });
 
-    col = new Gtk.TreeViewColumn({'title': 'Modify', min_width: 200});
+    col = new Gtk.TreeViewColumn({'title': _('Modify'), min_width: 200});
 
     col.pack_end(cellrend, false);
     col.add_attribute(cellrend, 'accel-mods', 2);
@@ -370,6 +370,7 @@ const ScreenshotToolSettingsWidget = new GObject.Class({
 
 function init() {
   _settings = Convenience.getSettings();
+  Convenience.initTranslations();
 }
 
 function buildPrefsWidget() {

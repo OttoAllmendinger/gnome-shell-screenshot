@@ -15,7 +15,7 @@ const Shell = imports.gi.Shell;
 
 const Main = imports.ui.main;
 
-const Gettext = imports.gettext.domain('gnome-shell-extensions');
+const Gettext = imports.gettext.domain('gnome-shell-screenshot');
 // const _ = Gettext.gettext;
 
 const ExtensionUtils = imports.misc.extensionUtils;
@@ -193,6 +193,10 @@ Signals.addSignalMethods(Extension.prototype);
 
 
 let _extension;
+
+function init() {
+  Convenience.initTranslations();
+}
 
 function enable() {
   _extension = new Extension();
