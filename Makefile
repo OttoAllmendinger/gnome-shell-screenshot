@@ -26,7 +26,7 @@ archive: $(ZIPFILE)
 uninstall:
 	-rm -r $(EXTENSION_PATH)
 
-install: lint archive
+install: archive
 	-rm -r $(EXTENSION_PATH)
 	mkdir -p $(EXTENSION_PATH)
 	unzip $(ZIPFILE) -d $(EXTENSION_PATH)
