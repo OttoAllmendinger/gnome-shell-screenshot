@@ -1,0 +1,133 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-10-04 19:17+0200\n"
+"PO-Revision-Date: 2016-11-14 00:52+0100\n"
+"Last-Translator: Gregor Santner <gsantner.github.io>\n"
+"Language-Team: \n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.8.11\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Language: de\n"
+"X-Source-Language: C\n"
+
+#: indicator.js:75 prefs.js:108
+msgid "Select Area"
+msgstr "Bereich auswählen"
+
+#: indicator.js:76 prefs.js:109
+msgid "Select Window"
+msgstr "Fenster auswählen"
+
+#: indicator.js:77 prefs.js:110
+msgid "Select Desktop"
+msgstr "Desktop auswählen"
+
+#: indicator.js:94
+msgid "Settings"
+msgstr "Einstellungen"
+
+#: notifications.js:49
+msgid "New Screenshot"
+msgstr "Neues Bildschirmfoto"
+
+#: notifications.js:50
+msgid "Size:"
+msgstr "Größe:"
+
+#: notifications.js:66
+msgid "Copy"
+msgstr "Kopieren"
+
+#: notifications.js:67
+msgid "Save"
+msgstr "Speichern"
+
+#: notifications.js:101
+msgid "Error"
+msgstr "Fehler"
+
+#: prefs.js:51
+msgid "Indicator"
+msgstr "Indikator"
+
+#: prefs.js:55
+msgid "Keybindings"
+msgstr "Tastaturbelegung"
+
+#: prefs.js:76
+msgid "Show indicator"
+msgstr "Indikator anzeigen"
+
+#: prefs.js:102
+msgid "Default Click Action"
+msgstr "Standard Klick Aktion"
+
+#: prefs.js:111
+msgid "Show Menu"
+msgstr "Menü anzeigen"
+
+#: prefs.js:132
+msgid "Default Clipboard Content"
+msgstr "Standard Inhalt der Zwischenablage"
+
+#: prefs.js:138
+msgid "Unchanged"
+msgstr "Unverändert"
+
+#: prefs.js:139
+msgid "Image Data"
+msgstr "Bild Daten"
+
+#: prefs.js:164
+msgid "Auto-Save Screenshot"
+msgstr "Bildschirmfoto automatisch abspeichern"
+
+#: prefs.js:188
+msgid "Save Location"
+msgstr "Speicherort"
+
+#: prefs.js:195
+msgid "Select"
+msgstr "Auswählen"
+
+#: prefs.js:249
+msgid "Select area"
+msgstr "Bereich auswählen"
+
+#: prefs.js:250
+msgid "Select window"
+msgstr "Fenster auswählen"
+
+#: prefs.js:251
+msgid "Select whole desktop"
+msgstr "Gesamten Bildschirm auswählen"
+
+#: prefs.js:278
+msgid "Keyboard Shortcut"
+msgstr "Tastaturkürzel"
+
+#: prefs.js:318
+msgid "Modify"
+msgstr "Bearbeiten"
+
+#: saveDlg.js:27
+msgid "_Cancel"
+msgstr "_Abbrechen"
+
+#: saveDlg.js:28
+msgid "_Save"
+msgstr "_Speichern"
+
+#: selection.js:234
+msgid "selected region was too small - please select a larger area"
+msgstr "Der ausgewählte Bereich war zu klein - bitte größeren Bereich auswählen"
