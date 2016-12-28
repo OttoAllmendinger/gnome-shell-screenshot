@@ -29,8 +29,12 @@ gnome-tweak-tool.
 
 ## Contributors
 
-* See contributors for
-  [gnome-shell-imgur](https://github.com/OttoAllmendinger/gnome-shell-imgur/).
+* https://github.com/RaphaelRochet -- French translation
+* https://github.com/gsantner -- German translation
+* https://github.com/pkomur -- Polish translation
+
+Also see contributors for
+[gnome-shell-imgur](https://github.com/OttoAllmendinger/gnome-shell-imgur/).
 
 ## Tip Address
 
