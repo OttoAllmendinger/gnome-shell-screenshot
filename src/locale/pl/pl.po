@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-11-22 21:39+0100\n"
-"PO-Revision-Date: 2016-11-22 22:07+0100\n"
+"PO-Revision-Date: 2017-01-02 21:36+0100\n"
 "Language-Team: pkomur@gmail.com\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -56,7 +56,7 @@ msgstr "Błąd"
 
 #: prefs.js:51
 msgid "Indicator"
-msgstr "Wskaźnik"
+msgstr "Ikona"
 
 #: prefs.js:55
 msgid "Keybindings"
@@ -64,7 +64,7 @@ msgstr "Klawiatura"
 
 #: prefs.js:76
 msgid "Show indicator"
-msgstr "Pokaż wskaźnik"
+msgstr "Pokaż ikonę na panelu"
 
 #: prefs.js:102
 msgid "Default Click Action"
