@@ -17,6 +17,7 @@ const _ = Gettext.gettext;
 const Local = imports.misc.extensionUtils.getCurrentExtension();
 const Path = Local.imports.path;
 const Config = Local.imports.config;
+const Filename = Local.imports.filename;
 const Convenience = Local.imports.convenience;
 
 
@@ -173,7 +174,6 @@ const ScreenshotToolSettingsWidget = new GObject.Class({
 
     let hbox;
 
-
     /* Save Screenshot [on|off] */
 
     hbox = buildHbox();
@@ -248,11 +248,89 @@ const ScreenshotToolSettingsWidget = new GObject.Class({
     saveScreenshotBindSensitivity(labelSaveLocation);
     saveScreenshotBindSensitivity(chooserSaveLocation);
 
-
     hbox.add(labelSaveLocation);
     hbox.add(chooserSaveLocation);
 
     prefs.add(hbox, {fill: false});
+
+
+    /* Filename */
+    hbox = buildHbox();
+
+    const [defaultTemplate,] =
+      _settings.get_default_value(Config.KeyFilenameTemplate).get_string();
+
+    const mockDimensions = {width: 800, height: 600};
+
+    const labelFilenameTemplate = new Gtk.Label({
+      label: _('Default Filename'),
+      xalign: 0,
+      expand: true,
+    });
+
+    const inputFilenameTemplate = new Gtk.Entry({
+      expand: true,
+      tooltip_text: Filename.tooltipText(mockDimensions),
+      secondary_icon_name: "document-revert",
+    });
+
+    hbox.add(labelFilenameTemplate);
+    hbox.add(inputFilenameTemplate);
+
+    inputFilenameTemplate.text =
+      _settings.get_string(Config.KeyFilenameTemplate);
+
+
+    prefs.add(hbox, {fill: false});
+
+    /* Filename Preview */
+
+    hbox = buildHbox();
+
+    const labelPreview = new Gtk.Label({
+      label: _('Preview'),
+      expand: true,
+      xalign: 0
+    });
+
+    const textPreview = new Gtk.Label({
+      xalign: 0,
+    });
+
+    const setPreview = (tpl) => {
+      try {
+        if (tpl == "") {
+          return;
+        }
+        inputFilenameTemplate.get_style_context().remove_class("error");
+        let label = Filename.get(tpl, mockDimensions);
+        textPreview.label = label;
+        _settings.set_string(Config.KeyFilenameTemplate, tpl);
+      } catch (e) {
+        logError(e);
+        textPreview.label = "";
+        inputFilenameTemplate.get_style_context().add_class("error");
+      }
+    }
+
+    ["inserted-text", "deleted-text"].forEach((name) => {
+      inputFilenameTemplate.get_buffer().connect(name, ({text}) => {
+        setPreview(text);
+      })
+    })
+
+    inputFilenameTemplate.connect("icon-press", () => {
+      inputFilenameTemplate.text = defaultTemplate;
+    });
+
+    setPreview(inputFilenameTemplate.text);
+
+    hbox.add(labelPreview);
+    hbox.add(textPreview);
+
+    prefs.add(hbox);
+
+
 
     return prefs;
   },

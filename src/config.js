@@ -29,6 +29,8 @@ const KeySaveScreenshot = 'save-screenshot';
 
 const KeySaveLocation = 'save-location';
 
+const KeyFilenameTemplate = 'filename-template';
+
 // See schemas/org.gnome.shell.extensions.screenshot.gschema.xml
 const KeyClipboardAction = 'clipboard-action';
 
