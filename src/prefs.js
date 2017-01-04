@@ -177,6 +177,15 @@ const ScreenshotToolSettingsWidget = new GObject.Class({
     hbox.add(labelSaveScreenshot);
     hbox.add(switchSaveScreenshot);
 
+    const saveScreenshotBindSensitivity = (actor) => {
+      var setSensitive = () => {
+        var sensitive = _settings.get_boolean(Config.KeySaveScreenshot);
+        actor.set_sensitive(sensitive)
+      };
+      switchSaveScreenshot.connect('notify::active', setSensitive);
+      setSensitive();
+    };
+
     prefs.add(hbox, {fill: false});
 
 
@@ -218,14 +227,9 @@ const ScreenshotToolSettingsWidget = new GObject.Class({
       _settings.set_string(Config.KeySaveLocation, filename);
     });
 
-    const _setSensitivity = function () {
-      var sensitive = _settings.get_boolean(Config.KeySaveScreenshot);
-      labelSaveLocation.set_sensitive(sensitive);
-      chooserSaveLocation.set_sensitive(sensitive);
-    };
+    saveScreenshotBindSensitivity(labelSaveLocation);
+    saveScreenshotBindSensitivity(chooserSaveLocation);
 
-    switchSaveScreenshot.connect('notify::active', _setSensitivity);
-    _setSensitivity();
 
     hbox.add(labelSaveLocation);
     hbox.add(chooserSaveLocation);
