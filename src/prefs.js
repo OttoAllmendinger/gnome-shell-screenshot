@@ -51,6 +51,10 @@ const ScreenshotToolSettingsWidget = new GObject.Class({
     label = new Gtk.Label({label: _("Indicator")});
     this._notebook.append_page(this._prefsIndicator, label);
 
+    this._prefsIndicator = this._makePrefsStorage();
+    label = new Gtk.Label({label: _("Storage")});
+    this._notebook.append_page(this._prefsIndicator, label);
+
     this._prefsKeybindings = this._makePrefsKeybindings();
     label = new Gtk.Label({label: _("Keybindings")});
     this._notebook.append_page(this._prefsKeybindings, label);
@@ -155,6 +159,20 @@ const ScreenshotToolSettingsWidget = new GObject.Class({
     hbox.add(comboBoxClipboardContent);
 
     prefs.add(hbox, {fill: false});
+
+    return prefs;
+  },
+
+  _makePrefsStorage: function () {
+    let prefs = new Gtk.Box({
+      orientation: Gtk.Orientation.VERTICAL,
+      margin: 20,
+      margin_top: 10,
+      expand: false
+    });
+
+    let hbox;
+
 
     /* Save Screenshot [on|off] */
 
