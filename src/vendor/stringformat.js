@@ -26,7 +26,7 @@
       return template.replace(
         /([{}])\1|[{](.*?)(?:!(.+?))?[}]/g,
         function(match, literal, key, xf) {
-          if (literal != null) {
+          if (literal != "") {
             return literal;
           }
           if (key.length > 0) {
@@ -46,7 +46,7 @@
           }
           var value = defaultTo('', lookup(args, key.split('.')));
 
-          if (xf == null) {
+          if (xf == "") {
             return value;
           } else if (Object.prototype.hasOwnProperty.call(transformers, xf)) {
             return transformers[xf](value);
