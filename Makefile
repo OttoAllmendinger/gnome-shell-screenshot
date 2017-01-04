@@ -3,6 +3,7 @@
 SCHEMA = org.gnome.shell.extensions.screenshot.gschema.xml
 
 SOURCE = src/*.js \
+		 src/vendor/*js \
 		 src/stylesheet.css \
 		 src/metadata.json \
 		 src/empty64.png \
