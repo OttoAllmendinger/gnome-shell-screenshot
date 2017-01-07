@@ -27,6 +27,7 @@ const Indicator = Local.imports.indicator;
 const Selection = Local.imports.selection;
 const Clipboard = Local.imports.clipboard;
 const Notifications = Local.imports.notifications;
+const Filename = Local.imports.filename;
 
 const Convenience = Local.imports.convenience;
 
@@ -159,21 +160,32 @@ const Extension = new Lang.Class({
       Clipboard.setImage(image);
     }
 
-    let file = Gio.File.new_for_path(filePath);
-    let {width, height} = image.get_pixbuf();
-    let newFilename =
-      "Screenshot " + String(Date()) + " " + width + "x" + height + ".png";
-
-    let saveFile = this.settings.get_boolean(Config.KeySaveScreenshot);
-    if (saveFile) {
+    let getNextPath = () => {
       let dir = Path.expand(this.settings.get_string(Config.KeySaveLocation));
-      let newPath = Path.join(dir, newFilename);
+      let filenameTemplate = this.settings.get_string(Config.KeyFilenameTemplate);
+      let {width, height} = image.get_pixbuf();
+      let dimensions = {width: width, height: height};
+      for (var n=0; ; n++) {
+        let newFilename = Filename.get(filenameTemplate, dimensions, n);
+        let newPath = Path.join(dir, newFilename);
+        let file = Gio.File.new_for_path(newPath);
+        let exists = file.query_exists(/* cancellable */ null);
+        if (!exists) {
+          return newPath;
+        }
+      }
+    }
+
+    let file = Gio.File.new_for_path(filePath);
+    let saveFile = this.settings.get_boolean(Config.KeySaveScreenshot);
+    let newPath = getNextPath();
+    if (saveFile) {
       let dstFile = Gio.File.new_for_path(newPath);
       file.copy(dstFile, Gio.FileCopyFlags.NONE, null, null);
       file = dstFile;
     }
 
-    Notifications.notifyScreenshot(image, file, newFilename);
+    Notifications.notifyScreenshot(image, file, newPath);
   },
 
   destroy: function () {
