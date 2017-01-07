@@ -46,8 +46,14 @@
 
     <key name="save-location" type="s">
       <default>'$PICTURES'</default>
-      <summary>File Save location</summary>
+      <summary>File Save Location</summary>
       <description>Location where screenshots are stored</description>
+    </key>
+
+    <key name="filename-template" type="s">
+      <default>'{N}-{Y}{m}{d}{H}{M}{S}-{w}x{h}'</default>
+      <summary>Filename Template</summary>
+      <description>Name template for stored screenshots</description>
     </key>
 
     <key
