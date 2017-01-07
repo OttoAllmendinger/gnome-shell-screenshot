@@ -1,3 +1,4 @@
+const GLib = imports.gi.GLib;
 
 const Gettext = imports.gettext.domain('gnome-shell-screenshot');
 const _ = Gettext.gettext;
@@ -54,3 +55,11 @@ const get = (template, dim, n) => {
   }
   return basename + sequence + ".png";
 }
+
+
+const tempfilePattern = 'gnome-shell-screenshot-XXXXXX.png';
+
+const getTemp = function () {
+  let [fileHandle, fileName] = GLib.file_open_tmp(tempfilePattern);
+  return fileName;
+};

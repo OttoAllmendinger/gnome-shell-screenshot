@@ -4,7 +4,6 @@ const Lang = imports.lang;
 const Signals = imports.signals;
 const Mainloop = imports.mainloop;
 
-const GLib = imports.gi.GLib;
 const Shell = imports.gi.Shell;
 const Meta = imports.gi.Meta;
 const Clutter = imports.gi.Clutter;
@@ -12,11 +11,8 @@ const Clutter = imports.gi.Clutter;
 const Main = imports.ui.main;
 
 
-
 const Gettext = imports.gettext.domain('gnome-shell-screenshot');
 const _ = Gettext.gettext;
-
-const FileTemplate = 'gnome-shell-screenshot-XXXXXX.png';
 
 
 const ScreenshotWindowIncludeCursor = false;
@@ -25,12 +21,8 @@ const ScreenshotDesktopIncludeCursor = false;
 
 const ExtensionUtils = imports.misc.extensionUtils;
 const Local = ExtensionUtils.getCurrentExtension();
+const Filename = Local.imports.filename;
 const Convenience = Local.imports.convenience;
-
-const getTempFile = function () {
-  let [fileHandle, fileName] = GLib.file_open_tmp(FileTemplate);
-  return fileName;
-};
 
 
 const getRectangle = function (x1, y1, x2, y2) {
@@ -82,7 +74,7 @@ const selectWindow = function (windows, x, y) {
 
 
 const makeAreaScreenshot = function ({x, y, w, h}, callback) {
-  let fileName = getTempFile();
+  let fileName = Filename.getTemp();
   let screenshot = new Shell.Screenshot();
   screenshot.screenshot_area(
     x, y, w, h, fileName,
@@ -91,7 +83,7 @@ const makeAreaScreenshot = function ({x, y, w, h}, callback) {
 };
 
 const makeWindowScreenshot = function (win, callback) {
-  let fileName = getTempFile();
+  let fileName = Filename.getTemp();
   let screenshot = new Shell.Screenshot();
 
   screenshot.screenshot_window(
@@ -103,7 +95,7 @@ const makeWindowScreenshot = function (win, callback) {
 };
 
 const makeDesktopScreenshot = function(callback) {
-  let fileName = getTempFile();
+  let fileName = Filename.getTemp();
   let screenshot = new Shell.Screenshot();
   screenshot.screenshot(
       ScreenshotDesktopIncludeCursor,
@@ -216,7 +208,7 @@ const SelectionArea = new Lang.Class({
   },
 
   _screenshot: function (region) {
-    let fileName = getTempFile();
+    let fileName = Filename.getTemp();
 
     if ((region.w > 8) && (region.h > 8)) {
       this.dimensions = {
