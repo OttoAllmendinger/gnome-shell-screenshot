@@ -4,6 +4,7 @@ const GdkPixbuf = imports.gi.GdkPixbuf;
 
 const ExtensionUtils = imports.misc.extensionUtils;
 const Local = ExtensionUtils.getCurrentExtension();
+const Filename = Local.imports.filename;
 const {dump} = Local.imports.dump;
 
 // width and height of thumbnail
@@ -35,7 +36,7 @@ const getIcon = (path) => {
   );
 
   // return as file icon
-  let scaledPath = path + ".scaled";
+  let scaledPath = Filename.getTemp();
   dst.savev(scaledPath, "png", [], []);
   let scaledFile = Gio.File.new_for_path(scaledPath);
   return new Gio.FileIcon({ file: scaledFile });
