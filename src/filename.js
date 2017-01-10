@@ -11,6 +11,7 @@ const DefaultTemplate = "{N}-{Y}{m}{d}-{H}{M}{S}-{w}x{h}";
 
 const parameters = ({width, height}) => {
   let now = new Date();
+  let hostname = GLib.get_host_name();
 
   let padZero = (s, n) => {
     if (String(s).length < n) {
@@ -32,6 +33,7 @@ const parameters = ({width, height}) => {
     [ "S", pad(now.getSeconds()),     _("Second")],
     [ "w", width,                     _("Width")],
     [ "h", height,                    _("Height")],
+    [ "hn", hostname,                 _("Hostname")],
   ]
 }
 
