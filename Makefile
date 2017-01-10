@@ -43,3 +43,5 @@ $(ZIPFILE): $(SOURCE) schemas
 prefs: install
 	gnome-shell-extension-prefs $(UUID)
 
+restart:
+	gjs tools/restartShell.js
