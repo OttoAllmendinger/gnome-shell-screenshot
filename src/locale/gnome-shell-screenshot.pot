@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-04 19:17+0200\n"
+"POT-Creation-Date: 2017-01-10 15:39+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,19 +17,63 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: indicator.js:75 prefs.js:108
+#: filename.js:27
+msgid "Screenshot"
+msgstr ""
+
+#: filename.js:27
+msgid "Screenshot (literal)"
+msgstr ""
+
+#: filename.js:28
+msgid "Year"
+msgstr ""
+
+#: filename.js:29
+msgid "Month"
+msgstr ""
+
+#: filename.js:30
+msgid "Day"
+msgstr ""
+
+#: filename.js:31
+msgid "Hour"
+msgstr ""
+
+#: filename.js:32
+msgid "Minute"
+msgstr ""
+
+#: filename.js:33
+msgid "Second"
+msgstr ""
+
+#: filename.js:34
+msgid "Width"
+msgstr ""
+
+#: filename.js:35
+msgid "Height"
+msgstr ""
+
+#: filename.js:36
+msgid "Hostname"
+msgstr ""
+
+#: indicator.js:77 prefs.js:113
 msgid "Select Area"
 msgstr ""
 
-#: indicator.js:76 prefs.js:109
+#: indicator.js:78 prefs.js:114
 msgid "Select Window"
 msgstr ""
 
-#: indicator.js:77 prefs.js:110
+#: indicator.js:79 prefs.js:115
 msgid "Select Desktop"
 msgstr ""
 
-#: indicator.js:94
+#: indicator.js:96
 msgid "Settings"
 msgstr ""
 
@@ -49,82 +93,94 @@ msgstr ""
 msgid "Save"
 msgstr ""
 
-#: notifications.js:101
+#: notifications.js:102
 msgid "Error"
 msgstr ""
 
-#: prefs.js:51
+#: prefs.js:52
 msgid "Indicator"
 msgstr ""
 
-#: prefs.js:55
+#: prefs.js:56
+msgid "Storage"
+msgstr ""
+
+#: prefs.js:60
 msgid "Keybindings"
 msgstr ""
 
-#: prefs.js:76
+#: prefs.js:81
 msgid "Show indicator"
 msgstr ""
 
-#: prefs.js:102
+#: prefs.js:107
 msgid "Default Click Action"
 msgstr ""
 
-#: prefs.js:111
+#: prefs.js:116
 msgid "Show Menu"
 msgstr ""
 
-#: prefs.js:132
+#: prefs.js:137
 msgid "Default Clipboard Content"
 msgstr ""
 
-#: prefs.js:138
+#: prefs.js:143
 msgid "Unchanged"
 msgstr ""
 
-#: prefs.js:139
+#: prefs.js:144
 msgid "Image Data"
 msgstr ""
 
-#: prefs.js:164
+#: prefs.js:182
 msgid "Auto-Save Screenshot"
 msgstr ""
 
-#: prefs.js:188
+#: prefs.js:215
 msgid "Save Location"
 msgstr ""
 
-#: prefs.js:195
+#: prefs.js:222
 msgid "Select"
 msgstr ""
 
-#: prefs.js:249
+#: prefs.js:266
+msgid "Default Filename"
+msgstr ""
+
+#: prefs.js:291
+msgid "Preview"
+msgstr ""
+
+#: prefs.js:349
 msgid "Select area"
 msgstr ""
 
-#: prefs.js:250
+#: prefs.js:350
 msgid "Select window"
 msgstr ""
 
-#: prefs.js:251
+#: prefs.js:351
 msgid "Select whole desktop"
 msgstr ""
 
-#: prefs.js:278
+#: prefs.js:378
 msgid "Keyboard Shortcut"
 msgstr ""
 
-#: prefs.js:318
+#: prefs.js:418
 msgid "Modify"
 msgstr ""
 
-#: saveDlg.js:27
+#: saveDlg.js:28
 msgid "_Cancel"
 msgstr ""
 
-#: saveDlg.js:28
+#: saveDlg.js:29
 msgid "_Save"
 msgstr ""
 
-#: selection.js:234
+#: selection.js:226
 msgid "selected region was too small - please select a larger area"
 msgstr ""

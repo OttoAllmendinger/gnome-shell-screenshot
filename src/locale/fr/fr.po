@@ -7,30 +7,74 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-04 19:17+0200\n"
-"PO-Revision-Date: 2016-10-04 19:18+0200\n"
+"POT-Creation-Date: 2017-01-10 15:40+0100\n"
+"PO-Revision-Date: 2017-01-10 15:51+0100\n"
 "Last-Translator: Raphael Rochet <raphael@rri.fr>\n"
 "Language-Team: \n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.8.9\n"
+"X-Generator: Poedit 1.8.11\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: indicator.js:75 prefs.js:108
+#: filename.js:27
+msgid "Screenshot"
+msgstr "Capture"
+
+#: filename.js:27
+msgid "Screenshot (literal)"
+msgstr "\"Capture\""
+
+#: filename.js:28
+msgid "Year"
+msgstr "Année"
+
+#: filename.js:29
+msgid "Month"
+msgstr "Mois"
+
+#: filename.js:30
+msgid "Day"
+msgstr "Jour"
+
+#: filename.js:31
+msgid "Hour"
+msgstr "Heure"
+
+#: filename.js:32
+msgid "Minute"
+msgstr "Minute"
+
+#: filename.js:33
+msgid "Second"
+msgstr "Seconde"
+
+#: filename.js:34
+msgid "Width"
+msgstr "Largeur"
+
+#: filename.js:35
+msgid "Height"
+msgstr "Hauteur"
+
+#: filename.js:36
+msgid "Hostname"
+msgstr "Nom d'hôte"
+
+#: indicator.js:77 prefs.js:113
 msgid "Select Area"
 msgstr "Sélectionner une zone"
 
-#: indicator.js:76 prefs.js:109
+#: indicator.js:78 prefs.js:114
 msgid "Select Window"
 msgstr "Sélectionner une fenêtre"
 
-#: indicator.js:77 prefs.js:110
+#: indicator.js:79 prefs.js:115
 msgid "Select Desktop"
 msgstr "Sélectionner le bureau"
 
-#: indicator.js:94
+#: indicator.js:96
 msgid "Settings"
 msgstr "Paramètres"
 
@@ -50,83 +94,95 @@ msgstr "Copier"
 msgid "Save"
 msgstr "Enregistrer"
 
-#: notifications.js:101
+#: notifications.js:102
 msgid "Error"
 msgstr "Erreur"
 
-#: prefs.js:51
+#: prefs.js:52
 msgid "Indicator"
 msgstr "Indicateur"
 
-#: prefs.js:55
+#: prefs.js:56
+msgid "Storage"
+msgstr "Sauvegarde"
+
+#: prefs.js:60
 msgid "Keybindings"
 msgstr "Raccourcis clavier"
 
-#: prefs.js:76
+#: prefs.js:81
 msgid "Show indicator"
 msgstr "Afficher l'indicateur"
 
-#: prefs.js:102
+#: prefs.js:107
 msgid "Default Click Action"
 msgstr "Action de clic par défaut"
 
-#: prefs.js:111
+#: prefs.js:116
 msgid "Show Menu"
 msgstr "Afficher le menu"
 
-#: prefs.js:132
+#: prefs.js:137
 msgid "Default Clipboard Content"
 msgstr "Contenu par défaut du presse-papier"
 
-#: prefs.js:138
+#: prefs.js:143
 msgid "Unchanged"
 msgstr "Inchangé"
 
-#: prefs.js:139
+#: prefs.js:144
 msgid "Image Data"
 msgstr "Image"
 
-#: prefs.js:164
+#: prefs.js:182
 msgid "Auto-Save Screenshot"
-msgstr "Enregistrement automatique"
+msgstr "Sauvegarde automatique"
 
-#: prefs.js:188
+#: prefs.js:215
 msgid "Save Location"
 msgstr "Emplacement de sauvegarde"
 
-#: prefs.js:195
+#: prefs.js:222
 msgid "Select"
 msgstr "Sélectionner"
 
-#: prefs.js:249
+#: prefs.js:266
+msgid "Default Filename"
+msgstr "Nom de fichier par défaut"
+
+#: prefs.js:291
+msgid "Preview"
+msgstr "Aperçu"
+
+#: prefs.js:349
 msgid "Select area"
 msgstr "Sélectionner une zone"
 
-#: prefs.js:250
+#: prefs.js:350
 msgid "Select window"
 msgstr "Sélectionner une fenêtre"
 
-#: prefs.js:251
+#: prefs.js:351
 msgid "Select whole desktop"
 msgstr "Sélectionner tout le bureau"
 
-#: prefs.js:278
+#: prefs.js:378
 msgid "Keyboard Shortcut"
 msgstr "Raccourci clavier"
 
-#: prefs.js:318
+#: prefs.js:418
 msgid "Modify"
 msgstr "Modifier"
 
-#: saveDlg.js:27
+#: saveDlg.js:28
 msgid "_Cancel"
 msgstr "_Annuler"
 
-#: saveDlg.js:28
+#: saveDlg.js:29
 msgid "_Save"
 msgstr "_Enregistrer"
 
-#: selection.js:234
+#: selection.js:226
 msgid "selected region was too small - please select a larger area"
 msgstr ""
 "La zone sélectionnée était trop petite - merci de sélectionner une plus "
