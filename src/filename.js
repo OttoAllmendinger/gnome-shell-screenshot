@@ -38,7 +38,7 @@ const parameters = ({width, height}) => {
 }
 
 const tooltipText = (dim) => {
-  let head = ["Parameters:"];
+  let head = [_("Parameters:")];
   return parameters(dim).reduce((arr, [key, value, description]) => {
     arr.push(key + "\t" + description);
     return arr;
