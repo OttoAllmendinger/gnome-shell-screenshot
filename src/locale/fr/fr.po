@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-10 15:40+0100\n"
-"PO-Revision-Date: 2017-01-10 15:51+0100\n"
+"POT-Creation-Date: 2017-01-11 21:44+0100\n"
+"PO-Revision-Date: 2017-01-11 21:44+0100\n"
 "Last-Translator: Raphael Rochet <raphael@rri.fr>\n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -61,6 +61,10 @@ msgstr "Hauteur"
 #: filename.js:36
 msgid "Hostname"
 msgstr "Nom d'hôte"
+
+#: filename.js:41
+msgid "Parameters:"
+msgstr "Paramètres :"
 
 #: indicator.js:77 prefs.js:113
 msgid "Select Area"
