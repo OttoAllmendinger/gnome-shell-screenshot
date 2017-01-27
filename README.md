@@ -19,7 +19,7 @@ The latest development version can be installed manually with these commands:
 
 ```sh
 git clone https://github.com/OttoAllmendinger/gnome-shell-screenshot.git
-cd gnome-shell-screensot
+cd gnome-shell-screenshot
 make install
 ```
 
