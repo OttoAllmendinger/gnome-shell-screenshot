@@ -26,6 +26,16 @@ make install
 Then go to https://extensions.gnome.org/local/ to turn on the extension or use
 gnome-tweak-tool.
 
+## Known Issues
+
+### Clipboard stops working in Gnome 3.20
+
+On Gnome 3.20, the clipboard stops working after the lock screen appears.
+
+See https://github.com/OttoAllmendinger/gnome-shell-screenshot/issues/4
+
+As a workaround, restart the shell: `Ctrl-F2` `r` `Enter`. The clipboard
+should work again afterwards.
 
 ## Contributors
 
