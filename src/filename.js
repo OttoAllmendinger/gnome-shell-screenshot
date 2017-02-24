@@ -27,7 +27,7 @@ const parameters = ({width, height}) => {
     [ "N", _("Screenshot"),           _("Screenshot (literal)")],
     [ "Y", now.getFullYear(),         _("Year")],
     [ "m", pad(now.getMonth()+1),     _("Month")],
-    [ "d", pad(now.getDay()),         _("Day")],
+    [ "d", pad(now.getDate()),        _("Day")],
     [ "H", pad(now.getHours()),       _("Hour")],
     [ "M", pad(now.getMinutes()),     _("Minute")],
     [ "S", pad(now.getSeconds()),     _("Second")],
