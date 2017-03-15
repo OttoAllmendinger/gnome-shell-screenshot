@@ -216,10 +216,12 @@ const SelectionArea = new Lang.Class({
         height: region.h
       };
 
-      makeAreaScreenshot(
-          region,
-          this.emit.bind(this, 'screenshot')
-      );
+      Mainloop.idle_add(() => {
+        makeAreaScreenshot(
+            region,
+            this.emit.bind(this, 'screenshot')
+        );
+      });
     } else {
       this.emit(
         "error",
@@ -275,12 +277,11 @@ const SelectionWindow = new Lang.Class({
   },
 
   _screenshot: function (win) {
+    this._capture._stop();
     Mainloop.idle_add(() => {
       Main.activateWindow(win.get_meta_window());
-
       Mainloop.idle_add(() => {
         makeWindowScreenshot(win, this.emit.bind(this, 'screenshot'));
-        this._capture._stop();
       });
     });
   }
@@ -297,7 +298,6 @@ const SelectionDesktop = new Lang.Class({
   Name: "ScreenshotTool.SelectionDesktop",
 
   _init: function () {
-    this._windows = global.get_window_actors();
     Mainloop.idle_add(() => {
       makeDesktopScreenshot(this.emit.bind(this, 'screenshot'));
       this.emit('stop');
