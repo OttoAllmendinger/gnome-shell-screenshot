@@ -25,7 +25,7 @@ const Filename = Local.imports.filename;
 const Convenience = Local.imports.convenience;
 
 
-const getRectangle = function (x1, y1, x2, y2) {
+const getRectangle = (x1, y1, x2, y2) => {
   return {
     x: Math.min(x1, x2),
     y: Math.min(y1, y2),
@@ -35,7 +35,7 @@ const getRectangle = function (x1, y1, x2, y2) {
 };
 
 
-const getWindowRectangle = function (win) {
+const getWindowRectangle = (win) => {
   let [wx, wy] = win.get_position();
   let [width, height] = win.get_size();
 
@@ -48,7 +48,7 @@ const getWindowRectangle = function (win) {
 };
 
 
-const selectWindow = function (windows, x, y) {
+const selectWindow = (windows, x, y) => {
   let filtered = windows.filter((win) => {
     if ((win !== undefined)
           && win.visible
@@ -73,7 +73,7 @@ const selectWindow = function (windows, x, y) {
 };
 
 
-const makeAreaScreenshot = function ({x, y, w, h}, callback) {
+const makeAreaScreenshot = ({x, y, w, h}, callback) => {
   let fileName = Filename.getTemp();
   let screenshot = new Shell.Screenshot();
   screenshot.screenshot_area(
@@ -82,7 +82,7 @@ const makeAreaScreenshot = function ({x, y, w, h}, callback) {
   );
 };
 
-const makeWindowScreenshot = function (win, callback) {
+const makeWindowScreenshot = (win, callback) => {
   let fileName = Filename.getTemp();
   let screenshot = new Shell.Screenshot();
 
@@ -94,7 +94,7 @@ const makeWindowScreenshot = function (win, callback) {
   );
 };
 
-const makeDesktopScreenshot = function(callback) {
+const makeDesktopScreenshot = (callback) => {
   let fileName = Filename.getTemp();
   let screenshot = new Shell.Screenshot();
   screenshot.screenshot(
