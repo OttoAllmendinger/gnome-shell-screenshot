@@ -146,7 +146,7 @@ const Capture = new Lang.Class({
   _onCaptureEvent: function (actor, event) {
     if (event.type() === Clutter.EventType.KEY_PRESS) {
       if (event.get_key_symbol() === Clutter.Escape) {
-        this._stop();
+        this.stop();
       }
     }
 
@@ -162,7 +162,7 @@ const Capture = new Lang.Class({
     this.drawContainer({x: -10, y: -10, w: 0, h: 0});
   },
 
-  _stop: function () {
+  stop: function () {
     global.stage.disconnect(this._signalCapturedEvent);
     this._setDefaultCursor();
     Main.uiGroup.remove_actor(this._container);
@@ -201,7 +201,7 @@ const SelectionArea = new Lang.Class({
       if (type === Clutter.EventType.MOTION) {
         this._capture.drawContainer(rect);
       } else if (type === Clutter.EventType.BUTTON_RELEASE) {
-        this._capture._stop();
+        this._capture.stop();
         this._screenshot(rect);
       }
     }
@@ -277,7 +277,7 @@ const SelectionWindow = new Lang.Class({
   },
 
   _screenshot: function (win) {
-    this._capture._stop();
+    this._capture.stop();
     Mainloop.idle_add(() => {
       Main.activateWindow(win.get_meta_window());
       Mainloop.idle_add(() => {
