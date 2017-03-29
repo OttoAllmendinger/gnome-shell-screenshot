@@ -44,23 +44,23 @@ const ScreenshotToolSettingsWidget = new GObject.Class({
   },
 
   _initLayout: function () {
-    this._notebook = new Gtk.Notebook();
+    let notebook = new Gtk.Notebook();
 
-    let label;
+    let page, label;
 
-    this._prefsIndicator = this._makePrefsIndicator();
+    page = this._makePrefsIndicator();
     label = new Gtk.Label({label: _("Indicator")});
-    this._notebook.append_page(this._prefsIndicator, label);
+    notebook.append_page(page, label);
 
-    this._prefsIndicator = this._makePrefsStorage();
+    page = this._makePrefsStorage();
     label = new Gtk.Label({label: _("Storage")});
-    this._notebook.append_page(this._prefsIndicator, label);
+    notebook.append_page(page, label);
 
-    this._prefsKeybindings = this._makePrefsKeybindings();
+    page = this._makePrefsKeybindings();
     label = new Gtk.Label({label: _("Keybindings")});
-    this._notebook.append_page(this._prefsKeybindings, label);
+    notebook.append_page(page, label);
 
-    this.add(this._notebook);
+    this.add(notebook);
   },
 
   _makePrefsIndicator: function () {
