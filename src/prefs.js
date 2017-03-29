@@ -25,7 +25,7 @@ const Convenience = Local.imports.convenience;
 let _settings;
 
 
-const buildHbox = function () {
+const buildHbox = () => {
   return new Gtk.Box({
     orientation: Gtk.Orientation.HORIZONTAL,
     margin_top: 5,
