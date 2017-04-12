@@ -120,10 +120,6 @@ const Extension = new Lang.Class({
 
     this._selection = selection;
 
-    if (this._indicator) {
-      this._indicator.startSelection();
-    }
-
     this._selection.connect("screenshot", this._onScreenshot.bind(this));
 
     this._selection.connect("error", (selection, message) => {
@@ -132,10 +128,6 @@ const Extension = new Lang.Class({
 
     this._selection.connect("stop", () => {
       this._selection = null;
-
-      if (this._indicator) {
-        this._indicator.stopSelection();
-      }
     });
   },
 

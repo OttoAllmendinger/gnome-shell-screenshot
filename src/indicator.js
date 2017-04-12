@@ -112,14 +112,6 @@ const Indicator = new Lang.Class({
     this.menu.removeAll();
   },
 
-  startSelection: function () {
-    this._selection = true;
-  },
-
-  stopSelection: function () {
-    this._selection = false;
-  },
-
   destroy: function () {
     this.parent();
     this._signalSettings.forEach((signal) => {
