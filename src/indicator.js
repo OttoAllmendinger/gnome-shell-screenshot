@@ -5,6 +5,7 @@ const Signals = imports.signals;
 
 const St = imports.gi.St;
 const Shell = imports.gi.Shell;
+const Clutter = imports.gi.Clutter;
 
 const PanelMenu = imports.ui.panelMenu;
 const PopupMenu = imports.ui.popupMenu;
@@ -16,6 +17,8 @@ const ExtensionUtils = imports.misc.extensionUtils;
 const Local = ExtensionUtils.getCurrentExtension();
 
 const Config = Local.imports.config;
+
+const {dump} = Local.imports.dump;
 
 
 const DefaultIcon = 'camera-photo-symbolic';
@@ -40,38 +43,27 @@ const Indicator = new Lang.Class({
     });
 
     this.actor.add_actor(this._icon);
+    this.actor.connect('button-press-event', this._onClick.bind(this));
 
-    this._signalSettings.push(this._extension.settings.connect(
-        'changed::' + Config.KeyClickAction,
-        this._updateButton.bind(this)
-    ));
-
-    this._signalButtonPressEvent = this.actor.connect(
-      'button-press-event',
-      this._onClick.bind(this)
-    );
-
-    this._updateButton();
+    this._buildMenu();
   },
 
-  _updateButton: function () {
-    const action = this._clickAction =
-      this._extension.settings.get_string(Config.KeyClickAction);
+  _onClick: function (obj, evt) {
+    // only override primary button behavior
+    if (evt.get_button() !== Clutter.BUTTON_PRIMARY) {
+      return;
+    }
 
+    let action = this._extension.settings.get_string(Config.KeyClickAction);
     if (action === 'show-menu') {
-      this._enableMenu()
-    } else {
-      this._disableMenu();
+      return;
     }
+
+    this.menu.close();
+    this._extension.onAction(action);
   },
 
-  _onClick: function () {
-    if (this._clickAction && (this._clickAction !== 'show-menu')) {
-      this._extension.onAction(this._clickAction);
-    }
-  },
-
-  _enableMenu: function () {
+  _buildMenu: function () {
     // These actions can be triggered via shortcut or popup menu
     const items = [
       ["select-area", _("Select Area")],
@@ -106,10 +98,6 @@ const Indicator = new Lang.Class({
       }
     });
     this.menu.addMenuItem(settingsItem);
-  },
-
-  _disableMenu: function () {
-    this.menu.removeAll();
   },
 
   destroy: function () {
