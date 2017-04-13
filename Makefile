@@ -2,7 +2,9 @@
 
 SCHEMA = org.gnome.shell.extensions.screenshot.gschema.xml
 
-SOURCE = src/*.js \
+SOURCE_JAVASCRIPT=src/*js
+
+SOURCE = $(SOURCE_JAVASCRIPT) \
 		 src/vendor/*js \
 		 src/stylesheet.css \
 		 src/metadata.json \
@@ -32,9 +34,11 @@ install: archive
 	mkdir -p $(EXTENSION_PATH)
 	unzip $(ZIPFILE) -d $(EXTENSION_PATH)
 
-
 src/schemas/gschemas.compiled: src/schemas/$(SCHEMA)
 	glib-compile-schemas src/schemas/
+
+src/locale/gnome-shell-screenshot.pot: $(SOURCE_JAVASCRIPT)
+	xgettext -k_ -kN_ -o $@ $(sort $^)
 
 $(ZIPFILE): $(SOURCE) schemas
 	-rm $(ZIPFILE)
