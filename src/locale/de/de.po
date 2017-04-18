@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-04 19:17+0200\n"
+"POT-Creation-Date: 2017-04-18 21:21+0200\n"
 "PO-Revision-Date: 2016-11-14 00:52+0100\n"
 "Last-Translator: Gregor Santner <gsantner.github.io>\n"
 "Language-Team: \n"
@@ -20,114 +20,175 @@ msgstr ""
 "X-Language: de\n"
 "X-Source-Language: C\n"
 
-#: indicator.js:75 prefs.js:108
+#: src/filename.js:27
+msgid "Screenshot"
+msgstr "Bildschirmfoto"
+
+#: src/filename.js:27
+msgid "Screenshot (literal)"
+msgstr "Bildschirmfoto (als Wort)"
+
+#: src/filename.js:28
+msgid "Year"
+msgstr "Jahr"
+
+#: src/filename.js:29
+msgid "Month"
+msgstr "Monat"
+
+#: src/filename.js:30
+msgid "Day"
+msgstr "Tag"
+
+#: src/filename.js:31
+msgid "Hour"
+msgstr "Stunde"
+
+#: src/filename.js:32
+msgid "Minute"
+msgstr "Minute"
+
+#: src/filename.js:33
+msgid "Second"
+msgstr "Sekunde"
+
+#: src/filename.js:34
+msgid "Width"
+msgstr "Breite"
+
+#: src/filename.js:35
+msgid "Height"
+msgstr "Höhe"
+
+#: src/filename.js:36
+msgid "Hostname"
+msgstr "Computername"
+
+#: src/filename.js:41
+msgid "Parameters:"
+msgstr "Parameter:"
+
+#: src/indicator.js:69 src/prefs.js:113
 msgid "Select Area"
 msgstr "Bereich auswählen"
 
-#: indicator.js:76 prefs.js:109
+#: src/indicator.js:70 src/prefs.js:114
 msgid "Select Window"
 msgstr "Fenster auswählen"
 
-#: indicator.js:77 prefs.js:110
+#: src/indicator.js:71 src/prefs.js:115
 msgid "Select Desktop"
 msgstr "Desktop auswählen"
 
-#: indicator.js:94
+#: src/indicator.js:88
 msgid "Settings"
 msgstr "Einstellungen"
 
-#: notifications.js:49
+#: src/notifications.js:49
 msgid "New Screenshot"
 msgstr "Neues Bildschirmfoto"
 
-#: notifications.js:50
+#: src/notifications.js:50
 msgid "Size:"
 msgstr "Größe:"
 
-#: notifications.js:66
+#: src/notifications.js:66
 msgid "Copy"
 msgstr "Kopieren"
 
-#: notifications.js:67
+#: src/notifications.js:67
 msgid "Save"
 msgstr "Speichern"
 
-#: notifications.js:101
+#: src/notifications.js:102
 msgid "Error"
 msgstr "Fehler"
 
-#: prefs.js:51
+#: src/prefs.js:52
 msgid "Indicator"
 msgstr "Indikator"
 
-#: prefs.js:55
+#: src/prefs.js:56
+msgid "Storage"
+msgstr ""
+
+#: src/prefs.js:60
 msgid "Keybindings"
 msgstr "Tastaturbelegung"
 
-#: prefs.js:76
+#: src/prefs.js:81
 msgid "Show indicator"
 msgstr "Indikator anzeigen"
 
-#: prefs.js:102
-msgid "Default Click Action"
-msgstr "Standard Klick Aktion"
+#: src/prefs.js:107
+msgid "Primary Button"
+msgstr "Primärtaste"
 
-#: prefs.js:111
+#: src/prefs.js:116
 msgid "Show Menu"
 msgstr "Menü anzeigen"
 
-#: prefs.js:132
+#: src/prefs.js:137
 msgid "Default Clipboard Content"
 msgstr "Standard Inhalt der Zwischenablage"
 
-#: prefs.js:138
+#: src/prefs.js:143
 msgid "Unchanged"
 msgstr "Unverändert"
 
-#: prefs.js:139
+#: src/prefs.js:144
 msgid "Image Data"
-msgstr "Bild Daten"
+msgstr "Bilddaten"
 
-#: prefs.js:164
+#: src/prefs.js:182
 msgid "Auto-Save Screenshot"
 msgstr "Bildschirmfoto automatisch abspeichern"
 
-#: prefs.js:188
+#: src/prefs.js:215
 msgid "Save Location"
 msgstr "Speicherort"
 
-#: prefs.js:195
+#: src/prefs.js:222
 msgid "Select"
 msgstr "Auswählen"
 
-#: prefs.js:249
+#: src/prefs.js:266
+msgid "Default Filename"
+msgstr "Standard-Dateiname"
+
+#: src/prefs.js:291
+msgid "Preview"
+msgstr "Vorschau"
+
+#: src/prefs.js:349
 msgid "Select area"
 msgstr "Bereich auswählen"
 
-#: prefs.js:250
+#: src/prefs.js:350
 msgid "Select window"
 msgstr "Fenster auswählen"
 
-#: prefs.js:251
+#: src/prefs.js:351
 msgid "Select whole desktop"
 msgstr "Gesamten Bildschirm auswählen"
 
-#: prefs.js:278
+#: src/prefs.js:378
 msgid "Keyboard Shortcut"
 msgstr "Tastaturkürzel"
 
-#: prefs.js:318
+#: src/prefs.js:418
 msgid "Modify"
 msgstr "Bearbeiten"
 
-#: saveDlg.js:27
+#: src/saveDlg.js:28
 msgid "_Cancel"
 msgstr "_Abbrechen"
 
-#: saveDlg.js:28
+#: src/saveDlg.js:29
 msgid "_Save"
 msgstr "_Speichern"
 
-#: selection.js:234
+#: src/selection.js:228
 msgid "selected region was too small - please select a larger area"
-msgstr "Der ausgewählte Bereich war zu klein - bitte größeren Bereich auswählen"
+msgstr ""
+"Der ausgewählte Bereich war zu klein - bitte größeren Bereich auswählen"
