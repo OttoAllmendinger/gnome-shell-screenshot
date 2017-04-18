@@ -40,6 +40,21 @@ src/schemas/gschemas.compiled: src/schemas/$(SCHEMA)
 src/locale/gnome-shell-screenshot.pot: $(SOURCE_JAVASCRIPT)
 	xgettext -k_ -kN_ -o $@ $(sort $^)
 
+# TODO Create new translation
+#
+# src/locale/%.po: src/locale/gnome-shell-screenshot.pot
+# 	msginit \
+# 	  --no-translator \
+# 	  --input=$^ \
+# 	  --output-file=$@ \
+# 	  --locale=de_DE.utf8 # FIXME replace this
+
+src/locale/%.po: src/locale/gnome-shell-screenshot.pot
+	msgmerge --backup=none --update $@ $^
+
+src/locale/%/LC_MESSAGES/gnome-shell-screenshot.mo: src/locale/%/*.po
+	msgfmt $^ --output-file=$@
+
 $(ZIPFILE): $(SOURCE) schemas
 	-rm $(ZIPFILE)
 	cd src && zip -r ../$(ZIPFILE) $(patsubst src/%,%,$(SOURCE))
