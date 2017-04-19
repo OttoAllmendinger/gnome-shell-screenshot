@@ -104,7 +104,7 @@ const ScreenshotToolSettingsWidget = new GObject.Class({
     hbox = buildHbox();
 
     const labelDefaultClickAction = new Gtk.Label({
-      label: _('Default Primary Button Click Action'),
+      label: _("Primary Button"),
       xalign: 0,
       expand: true
     });
