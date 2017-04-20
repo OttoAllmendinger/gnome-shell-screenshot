@@ -9,9 +9,9 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-04-19 12:23+0200\n"
 "PO-Revision-Date: 2017-04-20 09:43+0200\n"
-"Last-Translator: Raphael Rochet <raphael@rri.fr>\n"
+"Last-Translator: Jimmy Scionti <jimmy.scionti@gmail.com>\n"
 "Language-Team: \n"
-"Language: fr\n"
+"Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -24,7 +24,7 @@ msgstr "Screenshot"
 
 #: src/filename.js:27
 msgid "Screenshot (literal)"
-msgstr "Screenshot"
+msgstr "\"Screenshot\""
 
 #: src/filename.js:28
 msgid "Year"
@@ -121,7 +121,7 @@ msgstr "Mostra l'indicatore"
 # FIXME this is translation of "Default Click Action"
 #: src/prefs.js:107
 msgid "Primary Button"
-msgstr "Comportamento al click"
+msgstr "Pulsante primario"
 
 #: src/prefs.js:116
 msgid "Show Menu"
