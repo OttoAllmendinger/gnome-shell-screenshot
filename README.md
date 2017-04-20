@@ -42,6 +42,7 @@ should work again afterwards.
 * https://github.com/RaphaelRochet -- French translation
 * https://github.com/gsantner -- German translation
 * https://github.com/pkomur -- Polish translation
+* https://github.com/amivaleo -- Italian translation
 
 Also see contributors for
 [gnome-shell-imgur](https://github.com/OttoAllmendinger/gnome-shell-imgur/).
