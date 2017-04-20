@@ -1,0 +1,193 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-04-19 12:23+0200\n"
+"PO-Revision-Date: 2017-04-20 09:43+0200\n"
+"Last-Translator: Raphael Rochet <raphael@rri.fr>\n"
+"Language-Team: \n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.8.7.1\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: src/filename.js:27
+msgid "Screenshot"
+msgstr "Screenshot"
+
+#: src/filename.js:27
+msgid "Screenshot (literal)"
+msgstr "Screenshot"
+
+#: src/filename.js:28
+msgid "Year"
+msgstr "Anno"
+
+#: src/filename.js:29
+msgid "Month"
+msgstr "Mese"
+
+#: src/filename.js:30
+msgid "Day"
+msgstr "Giorno"
+
+#: src/filename.js:31
+msgid "Hour"
+msgstr "Ora"
+
+#: src/filename.js:32
+msgid "Minute"
+msgstr "Minuto"
+
+#: src/filename.js:33
+msgid "Second"
+msgstr "Secondo"
+
+#: src/filename.js:34
+msgid "Width"
+msgstr "Larghezza"
+
+#: src/filename.js:35
+msgid "Height"
+msgstr "Altezza"
+
+#: src/filename.js:36
+msgid "Hostname"
+msgstr "Nome dell'host"
+
+#: src/filename.js:41
+msgid "Parameters:"
+msgstr "Parametri:"
+
+#: src/indicator.js:69 src/prefs.js:113
+msgid "Select Area"
+msgstr "Seleziona un'area"
+
+#: src/indicator.js:70 src/prefs.js:114
+msgid "Select Window"
+msgstr "Seleziona una finestra"
+
+#: src/indicator.js:71 src/prefs.js:115
+msgid "Select Desktop"
+msgstr "Seleziona la scrivania"
+
+#: src/indicator.js:88
+msgid "Settings"
+msgstr "Impostazioni"
+
+#: src/notifications.js:49
+msgid "New Screenshot"
+msgstr "Nuovo screenshot"
+
+#: src/notifications.js:50
+msgid "Size:"
+msgstr "Dimensione:"
+
+#: src/notifications.js:66
+msgid "Copy"
+msgstr "Copia"
+
+#: src/notifications.js:67
+msgid "Save"
+msgstr "Salva"
+
+#: src/notifications.js:102
+msgid "Error"
+msgstr "Errore"
+
+#: src/prefs.js:52
+msgid "Indicator"
+msgstr "Indicatore"
+
+#: src/prefs.js:56
+msgid "Storage"
+msgstr "Salvataggio"
+
+#: src/prefs.js:60
+msgid "Keybindings"
+msgstr "Scorciatoie"
+
+#: src/prefs.js:81
+msgid "Show indicator"
+msgstr "Mostra l'indicatore"
+
+# FIXME this is translation of "Default Click Action"
+#: src/prefs.js:107
+msgid "Primary Button"
+msgstr "Comportamento al click"
+
+#: src/prefs.js:116
+msgid "Show Menu"
+msgstr "Mostra il menu"
+
+#: src/prefs.js:137
+msgid "Default Clipboard Content"
+msgstr "Il contenuto di default degli appunti"
+
+#: src/prefs.js:143
+msgid "Unchanged"
+msgstr "Invariato"
+
+#: src/prefs.js:144
+msgid "Image Data"
+msgstr "Immagine"
+
+#: src/prefs.js:182
+msgid "Auto-Save Screenshot"
+msgstr "Salvataggio automatico"
+
+#: src/prefs.js:215
+msgid "Save Location"
+msgstr "Percorso di salvataggio"
+
+#: src/prefs.js:222
+msgid "Select"
+msgstr "Seleziona"
+
+#: src/prefs.js:266
+msgid "Default Filename"
+msgstr "Nome del file"
+
+#: src/prefs.js:291
+msgid "Preview"
+msgstr "Anteprima"
+
+#: src/prefs.js:349
+msgid "Select area"
+msgstr "Seleziona un'area"
+
+#: src/prefs.js:350
+msgid "Select window"
+msgstr "Seleziona una finestra"
+
+#: src/prefs.js:351
+msgid "Select whole desktop"
+msgstr "Seleziona la scrivania"
+
+#: src/prefs.js:378
+msgid "Keyboard Shortcut"
+msgstr "Scorciatoia da tastiera"
+
+#: src/prefs.js:418
+msgid "Modify"
+msgstr "Modifica"
+
+#: src/saveDlg.js:28
+msgid "_Cancel"
+msgstr "_Annulla"
+
+#: src/saveDlg.js:29
+msgid "_Save"
+msgstr "_Salva"
+
+#: src/selection.js:228
+msgid "selected region was too small - please select a larger area"
+msgstr ""
+"L'area selezionata è troppo piccola - seleziona un'area più grande"
