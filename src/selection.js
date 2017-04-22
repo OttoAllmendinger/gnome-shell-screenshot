@@ -82,7 +82,7 @@ const makeAreaScreenshot = ({x, y, w, h}, callback) => {
   );
 };
 
-const makeWindowScreenshot = (win, callback) => {
+const makeWindowScreenshot = (callback) => {
   let fileName = Filename.getTemp();
   let screenshot = new Shell.Screenshot();
 
@@ -281,7 +281,7 @@ const SelectionWindow = new Lang.Class({
     Mainloop.idle_add(() => {
       Main.activateWindow(win.get_meta_window());
       Mainloop.idle_add(() => {
-        makeWindowScreenshot(win, this.emit.bind(this, 'screenshot'));
+        makeWindowScreenshot(this.emit.bind(this, 'screenshot'));
       });
     });
   }
