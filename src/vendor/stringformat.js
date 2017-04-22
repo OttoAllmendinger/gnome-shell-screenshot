@@ -16,6 +16,12 @@
     return y == null ? x : y;
   };
 
+  // NOTE
+  // this works around inconsistencies in the Regex implementations of gjs
+  var isEmptyString = function (string) {
+    return (string == "") || (string == null);
+  };
+
   //  create :: Object -> String,*... -> String
   var create = function(transformers) {
     return function(template) {
@@ -26,7 +32,7 @@
       return template.replace(
         /([{}])\1|[{](.*?)(?:!(.+?))?[}]/g,
         function(match, literal, key, xf) {
-          if (literal != "") {
+          if (!isEmptyString(literal)) {
             return literal;
           }
           if (key.length > 0) {
@@ -46,7 +52,7 @@
           }
           var value = defaultTo('', lookup(args, key.split('.')));
 
-          if (xf == "") {
+          if (isEmptyString(xf)) {
             return value;
           } else if (Object.prototype.hasOwnProperty.call(transformers, xf)) {
             return transformers[xf](value);
