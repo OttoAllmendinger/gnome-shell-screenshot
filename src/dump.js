@@ -54,6 +54,10 @@ const dump = (v, opts = {values: true}) => {
       v = Array.prototype.slice.call(v);
     }
 
+    let type = typeof v;
+    let isPrimitive =
+      (v == null) || ((type != "object") && (type != "function"));
+
     if (isArray || isArguments || isObject || hasKeys) {
       if (objects.indexOf(v) >= 0) {
         segments.push("(recursion)");
@@ -72,7 +76,7 @@ const dump = (v, opts = {values: true}) => {
         makeSegments(x, nextObjects, indent+1)
       })
       segments.push("]");
-    } else if (isObject || hasKeys) {
+    } else if (!isPrimitive && (isObject || hasKeys)) {
       segments.push("{ <", asString, "> ");
       let keys;
       if (opts.all) {
@@ -108,6 +112,8 @@ const dump = (v, opts = {values: true}) => {
 
 
 if (window["ARGV"] && ARGV[0] === "test") {
+  log(dump("string"));
+  log(dump(true));
   log(dump([1,2,3]));
   log(dump({a:{aa:{aaa:1,aab:2}},b:3}));
 
