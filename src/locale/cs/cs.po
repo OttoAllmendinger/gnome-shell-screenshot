@@ -1,0 +1,191 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-04-26 14:14+0200\n"
+"PO-Revision-Date: 2017-04-26 14:29+0200\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.0.1\n"
+"Last-Translator: \n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"Language: cs\n"
+
+#: src/filename.js:27
+msgid "Screenshot"
+msgstr "Focení z obrazovky"
+
+#: src/filename.js:27
+msgid "Screenshot (literal)"
+msgstr "Fotka z obrazovky (doslovně)"
+
+#: src/filename.js:28
+msgid "Year"
+msgstr "Rok"
+
+#: src/filename.js:29
+msgid "Month"
+msgstr "Měsíc"
+
+#: src/filename.js:30
+msgid "Day"
+msgstr "Den"
+
+#: src/filename.js:31
+msgid "Hour"
+msgstr "Hodina"
+
+#: src/filename.js:32
+msgid "Minute"
+msgstr "Minuta"
+
+#: src/filename.js:33
+msgid "Second"
+msgstr "Sekunda"
+
+#: src/filename.js:34
+msgid "Width"
+msgstr "Šířka"
+
+#: src/filename.js:35
+msgid "Height"
+msgstr "Výška"
+
+#: src/filename.js:36
+msgid "Hostname"
+msgstr "Jméno hostitele"
+
+#: src/filename.js:41
+msgid "Parameters:"
+msgstr "Parametry:"
+
+#: src/indicator.js:77 src/prefs.js:113
+msgid "Select Area"
+msgstr "Vyber oblast"
+
+#: src/indicator.js:78 src/prefs.js:114
+msgid "Select Window"
+msgstr "Vyber okno"
+
+#: src/indicator.js:79 src/prefs.js:115
+msgid "Select Desktop"
+msgstr "Vyber pracovní plochu"
+
+#: src/indicator.js:96
+msgid "Settings"
+msgstr "Nastavení"
+
+#: src/notifications.js:49
+msgid "New Screenshot"
+msgstr "Nová fotka z obrazovky"
+
+#: src/notifications.js:50
+msgid "Size:"
+msgstr "Velikost:"
+
+#: src/notifications.js:66
+msgid "Copy"
+msgstr "Kopírovat"
+
+#: src/notifications.js:67
+msgid "Save"
+msgstr "Uložit"
+
+#: src/notifications.js:102
+msgid "Error"
+msgstr "Chyba"
+
+#: src/prefs.js:52
+msgid "Indicator"
+msgstr "Indikátor"
+
+#: src/prefs.js:56
+msgid "Storage"
+msgstr "Úložiště"
+
+#: src/prefs.js:60
+msgid "Keybindings"
+msgstr "Klávesové zkratky"
+
+#: src/prefs.js:81
+msgid "Show indicator"
+msgstr "Zobrazit indikátor"
+
+#: src/prefs.js:107
+msgid "Primary Button"
+msgstr "Primární tlačítko"
+
+#: src/prefs.js:116
+msgid "Show Menu"
+msgstr "Zobrazit nabídku"
+
+#: src/prefs.js:137
+msgid "Default Clipboard Content"
+msgstr "Výchozí obsah do schránky"
+
+#: src/prefs.js:143
+msgid "Unchanged"
+msgstr "Beze změn"
+
+#: src/prefs.js:144
+msgid "Image Data"
+msgstr "Data rastrového obrazu"
+
+#: src/prefs.js:182
+msgid "Auto-Save Screenshot"
+msgstr "Automatické ukládání"
+
+#: src/prefs.js:215
+msgid "Save Location"
+msgstr "Složka pro ukládání"
+
+#: src/prefs.js:222
+msgid "Select"
+msgstr "Vyber"
+
+#: src/prefs.js:266
+msgid "Default Filename"
+msgstr "Výchozí jméno souboru"
+
+#: src/prefs.js:291
+msgid "Preview"
+msgstr "Náhled"
+
+#: src/prefs.js:349
+msgid "Select area"
+msgstr "Vyber oblast"
+
+#: src/prefs.js:350
+msgid "Select window"
+msgstr "Vyber okno"
+
+#: src/prefs.js:351
+msgid "Select whole desktop"
+msgstr "Vyber celou obrazovku"
+
+#: src/prefs.js:378
+msgid "Keyboard Shortcut"
+msgstr "Klávesová zkratka"
+
+#: src/prefs.js:418
+msgid "Modify"
+msgstr "Upravit"
+
+#: src/saveDlg.js:28
+msgid "_Cancel"
+msgstr "_Zrušit"
+
+#: src/saveDlg.js:29
+msgid "_Save"
+msgstr "_Uložit"
+
+#: src/selection.js:228
+msgid "selected region was too small - please select a larger area"
+msgstr "vybraná oblast je příliš malá - vyber větší"
