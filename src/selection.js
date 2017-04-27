@@ -82,15 +82,31 @@ const makeAreaScreenshot = ({x, y, w, h}, callback) => {
   );
 };
 
-const makeWindowScreenshot = (callback) => {
+const makeWindowScreenshot = (win, callback) => {
   let fileName = Filename.getTemp();
   let screenshot = new Shell.Screenshot();
+
+  /* FIXME screenshot_window has upstream bug
+   * https://bugzilla.gnome.org/show_bug.cgi?id=780744
+   * https://github.com/OttoAllmendinger/gnome-shell-screenshot/issues/29
 
   screenshot.screenshot_window(
       ScreenshotWindowIncludeFrame,
       ScreenshotWindowIncludeCursor,
       fileName,
       callback.bind(callback, fileName)
+  );
+
+  */
+
+
+  /* FIXME workaround with screenshot_area */
+  let [w, h] = win.get_size();
+  let [wx, wy] = win.get_position();
+
+  screenshot.screenshot_area(
+    wx, wy, w, h, fileName,
+    callback.bind(callback, fileName)
   );
 };
 
@@ -281,7 +297,7 @@ const SelectionWindow = new Lang.Class({
     Mainloop.idle_add(() => {
       Main.activateWindow(win.get_meta_window());
       Mainloop.idle_add(() => {
-        makeWindowScreenshot(this.emit.bind(this, 'screenshot'));
+        makeWindowScreenshot(win, this.emit.bind(this, 'screenshot'));
       });
     });
   }
