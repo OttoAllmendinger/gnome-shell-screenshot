@@ -1,4 +1,4 @@
-.PHONY: all schemas zipfile lint
+.PHONY: all schemas zipfile lint translations
 
 SCHEMA = org.gnome.shell.extensions.screenshot.gschema.xml
 
@@ -9,8 +9,9 @@ SOURCE = $(SOURCE_JAVASCRIPT) \
 		 src/stylesheet.css \
 		 src/metadata.json \
 		 src/empty64.png \
-		 src/locale/*/LC_MESSAGES/gnome-shell-screenshot.mo \
 		 src/schemas/*
+
+MO_FILES = src/locale/*/LC_MESSAGES/gnome-shell-screenshot.mo
 
 ZIPFILE = gnome-shell-screenshot.zip
 
@@ -23,6 +24,8 @@ schemas: src/schemas/gschemas.compiled
 
 lint:
 	eslint src/*js
+
+translations: $(MO_FILES)
 
 archive: $(ZIPFILE)
 
@@ -57,7 +60,9 @@ src/locale/%/LC_MESSAGES/gnome-shell-screenshot.mo: src/locale/%/*.po
 
 $(ZIPFILE): $(SOURCE) schemas
 	-rm $(ZIPFILE)
-	cd src && zip -r ../$(ZIPFILE) $(patsubst src/%,%,$(SOURCE))
+	cd src && zip -r ../$(ZIPFILE) \
+	   $(patsubst src/%,%,$(SOURCE)) \
+	   $(patsubst src/%,%,$(MO_FILES))
 
 prefs: install
 	gnome-shell-extension-prefs $(UUID)
