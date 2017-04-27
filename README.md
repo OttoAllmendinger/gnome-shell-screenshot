@@ -49,5 +49,5 @@ Also see contributors for
 
 ## Tip Address
 
-Bitcoin tip address 17t3qB7fXnYpgfqvrh6gcwJBWWM6reYfoS
+Bitcoin tip address 1Nh2msr4uwSxTz4Na6DUBj4cEtP5VrjPAg
 
