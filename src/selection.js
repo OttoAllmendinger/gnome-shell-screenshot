@@ -180,6 +180,7 @@ const Capture = new Lang.Class({
 
   stop: function () {
     global.stage.disconnect(this._signalCapturedEvent);
+    this._container.visible = false;
     this._setDefaultCursor();
     Main.uiGroup.remove_actor(this._container);
     Main.popModal(this._container);
