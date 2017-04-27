@@ -213,6 +213,10 @@ const Extension = new Lang.Class({
     }
 
     Notifications.notifyScreenshot(screenshot);
+
+    if (this._indicator) {
+      this._indicator.setScreenshot(screenshot);
+    }
   },
 
   destroy: function () {

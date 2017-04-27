@@ -4,6 +4,7 @@ const Lang = imports.lang;
 const Signals = imports.signals;
 
 const St = imports.gi.St;
+const Cogl = imports.gi.Cogl;
 const Shell = imports.gi.Shell;
 const Clutter = imports.gi.Clutter;
 
@@ -26,6 +27,78 @@ const DefaultIcon = 'camera-photo-symbolic';
 
 
 const settings = Convenience.getSettings();
+
+const ScreenshotSection = new Lang.Class({
+  Name: "ScreenshotTool.ScreenshotSection",
+
+  _init: function (menu) {
+    this._image = new PopupMenu.PopupBaseMenuItem();
+    this._image.actor.content_gravity =
+      Clutter.ContentGravity.RESIZE_ASPECT;
+
+    this._copy = new PopupMenu.PopupMenuItem(_('Copy'));
+    this._save = new PopupMenu.PopupMenuItem(_('Save As...'));
+
+    this._image.connect('activate', this._onImage.bind(this));
+    this._copy.connect('activate', this._onCopy.bind(this));
+    this._save.connect('activate', this._onSave.bind(this));
+
+    menu.addMenuItem(this._image);
+    menu.addMenuItem(this._copy);
+    menu.addMenuItem(this._save);
+
+    this._setItemsVisible(false);
+  },
+
+  _setItemsVisible: function (visible) {
+    let items = [this._image, this._copy, this._save];
+    items.forEach((i) => {
+      i.actor.visible = visible;
+    });
+  },
+
+  _setImage: function (pixbuf) {
+    let {width, height} = pixbuf;
+    if (height == 0) {
+      return
+    }
+    let image = new Clutter.Image();
+    let success = image.set_data(
+      pixbuf.get_pixels(),
+      pixbuf.get_has_alpha()
+        ? Cogl.PixelFormat.RGBA_8888
+        : Cogl.PixelFormat.RGB_888,
+      width,
+      height,
+      pixbuf.get_rowstride()
+    );
+    if (!success) {
+      throw Error("error creating Clutter.Image()");
+    }
+
+    this._image.actor.content = image;
+    this._image.actor.height = 200;
+  },
+
+  setScreenshot: function (screenshot) {
+    this._screenshot = screenshot;
+    this._setImage(screenshot.gtkImage.get_pixbuf());
+    this._setItemsVisible(true);
+  },
+
+  _onImage: function () {
+    this._screenshot.launchOpen();
+  },
+
+  _onCopy: function () {
+    this._screenshot.copyClipboard();
+  },
+
+  _onSave: function () {
+    this._screenshot.launchSave();
+  }
+})
+
 
 
 const Indicator = new Lang.Class({
@@ -86,6 +159,10 @@ const Indicator = new Lang.Class({
 
     this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
 
+    this._screenshotSection = new ScreenshotSection(this.menu);
+
+    this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
+
     // Settings can only be triggered via menu
     let settingsItem = new PopupMenu.PopupMenuItem(_('Settings'));
     settingsItem.connect('activate', () => {
@@ -100,6 +177,10 @@ const Indicator = new Lang.Class({
       }
     });
     this.menu.addMenuItem(settingsItem);
+  },
+
+  setScreenshot: function (screenshot) {
+    this._screenshotSection.setScreenshot(screenshot);
   },
 
   destroy: function () {
