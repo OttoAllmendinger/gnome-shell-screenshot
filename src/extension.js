@@ -18,6 +18,7 @@ const Main = imports.ui.main;
 const Gettext = imports.gettext.domain('gnome-shell-screenshot');
 // const _ = Gettext.gettext;
 
+const Util = imports.misc.util;
 const ExtensionUtils = imports.misc.extensionUtils;
 const Local = ExtensionUtils.getCurrentExtension();
 
@@ -34,6 +35,63 @@ const Convenience = Local.imports.convenience;
 // const {dump} = Local.imports.dump;
 
 const settings = Convenience.getSettings();
+
+const Screenshot = new Lang.Class({
+  Name: "ScreenshotTool.Screenshot",
+
+  _init: function (filePath) {
+    this.gtkImage = new Gtk.Image({file: filePath});
+    this.inClipboard = false;
+    this.srcFile = Gio.File.new_for_path(filePath);
+    this.dstFile = null;
+  },
+
+  _nextFile: function () {
+    let dir = Path.expand(settings.get_string(Config.KeySaveLocation));
+    let filenameTemplate = settings.get_string(Config.KeyFilenameTemplate);
+    let {width, height} = this.gtkImage.get_pixbuf();
+    let dimensions = {width: width, height: height};
+    for (var n=0; ; n++) {
+      let newFilename = Filename.get(filenameTemplate, dimensions, n);
+      let newPath = Path.join(dir, newFilename);
+      let file = Gio.File.new_for_path(newPath);
+      let exists = file.query_exists(/* cancellable */ null);
+      if (!exists) {
+        return file;
+      }
+    }
+  },
+
+  autosave: function () {
+    let dstFile = this._nextFile();
+    this.srcFile.copy(dstFile, Gio.FileCopyFlags.NONE, null, null);
+    this.dstFile = dstFile;
+  },
+
+  launchOpen: function () {
+    let context = global.create_app_launch_context(0, -1);
+    let file = this.dstFile || this.srcFile;
+    Gio.AppInfo.launch_default_for_uri(file.get_uri(), context);
+  },
+
+  launchSave: function () {
+    let newFile = this._nextFile();
+    Util.spawn([
+      "gjs",
+      Local.path + "/saveDlg.js",
+      this.srcFile.get_path(),
+      Path.expand("$PICTURES"),
+      newFile.get_path(),
+      Local.dir.get_path(),
+    ]);
+  },
+
+  copyClipboard: function () {
+    Clipboard.setImage(this.gtkImage);
+    this.inClipboard = true;
+  },
+});
+
 
 const Extension = new Lang.Class({
   Name: "ScreenshotTool",
@@ -144,40 +202,17 @@ const Extension = new Lang.Class({
   },
 
   _onScreenshot: function (selection, filePath) {
+    let screenshot = new Screenshot(filePath);
     let clipboardAction = settings.get_string(Config.KeyClipboardAction);
-
-    let image = new Gtk.Image({file: filePath});
-
     if (clipboardAction == Config.ClipboardActions.SET_IMAGE_DATA) {
-      Clipboard.setImage(image);
+      screenshot.copyClipboard();
     }
 
-    let getNextPath = () => {
-      let dir = Path.expand(settings.get_string(Config.KeySaveLocation));
-      let filenameTemplate = settings.get_string(Config.KeyFilenameTemplate);
-      let {width, height} = image.get_pixbuf();
-      let dimensions = {width: width, height: height};
-      for (var n=0; ; n++) {
-        let newFilename = Filename.get(filenameTemplate, dimensions, n);
-        let newPath = Path.join(dir, newFilename);
-        let file = Gio.File.new_for_path(newPath);
-        let exists = file.query_exists(/* cancellable */ null);
-        if (!exists) {
-          return newPath;
-        }
-      }
+    if (settings.get_boolean(Config.KeySaveScreenshot)) {
+      screenshot.autosave();
     }
 
-    let file = Gio.File.new_for_path(filePath);
-    let saveFile = settings.get_boolean(Config.KeySaveScreenshot);
-    let newPath = getNextPath();
-    if (saveFile) {
-      let dstFile = Gio.File.new_for_path(newPath);
-      file.copy(dstFile, Gio.FileCopyFlags.NONE, null, null);
-      file = dstFile;
-    }
-
-    Notifications.notifyScreenshot(image, file, newPath);
+    Notifications.notifyScreenshot(screenshot);
   },
 
   destroy: function () {

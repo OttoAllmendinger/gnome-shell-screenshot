@@ -10,8 +10,6 @@ const GdkPixbuf = imports.gi.GdkPixbuf;
 const Main = imports.ui.main;
 const MessageTray = imports.ui.messageTray;
 
-const Util = imports.misc.util;
-
 const Gettext = imports.gettext.domain('gnome-shell-screenshot');
 const _ = Gettext.gettext;
 
@@ -42,13 +40,22 @@ const Notification = new Lang.Class({
   Name: "ScreenshotTool.Notification",
   Extends: MessageTray.Notification,
 
-  _init: function (source, image, file, newFilename) {
-    let {width, height} = image.get_pixbuf();
+  title: function () {
+    return _("New Screenshot");
+  },
+
+  banner: function ({gtkImage}) {
+    let {width, height} = gtkImage.get_pixbuf();
+    let banner = _("Size:") + " " + width + "x" + height + ".";
+    return banner;
+  },
+
+  _init: function (source, screenshot) {
     this.parent(
       source,
-      _("New Screenshot"),
-      _("Size:") + " " + width + "x" + height,
-      { gicon: Thumbnail.getIcon(file.get_path()) }
+      this.title(),
+      this.banner(screenshot),
+      { gicon: Thumbnail.getIcon(screenshot.srcFile.get_path()) }
     );
 
     this.connect("activated", this.onActivated.bind(this));
@@ -56,9 +63,7 @@ const Notification = new Lang.Class({
     // makes banner expand on hover
     this.setForFeedback(true);
 
-    this._file = file;
-    this._image = image;
-    this._newFilename = newFilename;
+    this._screenshot = screenshot;
   },
 
   createBanner: function() {
@@ -70,23 +75,15 @@ const Notification = new Lang.Class({
   },
 
   onActivated: function () {
-    let context = global.create_app_launch_context(0, -1);
-    Gio.AppInfo.launch_default_for_uri(this._file.get_uri(), context);
+    this._screenshot.launchOpen();
   },
 
   onCopy: function () {
-    Clipboard.setImage(this._image);
+    this._screenshot.copyClipboard();
   },
 
   onSave: function () {
-    Util.spawn([
-      "gjs",
-      Local.path + "/saveDlg.js",
-      this._file.get_path(),
-      Path.expand("$PICTURES"),
-      this._newFilename,
-      Local.dir.get_path(),
-    ]);
+    this._screenshot.launchSave();
   }
 });
 Signals.addSignalMethods(Notification.prototype);
@@ -109,9 +106,9 @@ Signals.addSignalMethods(ErrorNotification.prototype);
 
 
 
-const notifyScreenshot = (image, file, newFilename) => {
+const notifyScreenshot = (screenshot) => {
   let source = getSource();
-  let notification = new Notification(source, image, file, newFilename);
+  let notification = new Notification(source, screenshot);
   source.notify(notification);
 }
 
