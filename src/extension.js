@@ -33,15 +33,15 @@ const Convenience = Local.imports.convenience;
 
 // const {dump} = Local.imports.dump;
 
+const settings = Convenience.getSettings();
+
 const Extension = new Lang.Class({
   Name: "ScreenshotTool",
 
   _init: function () {
-    this.settings = Convenience.getSettings();
-
     this._signalSettings = [];
 
-    this._signalSettings.push(this.settings.connect(
+    this._signalSettings.push(settings.connect(
         'changed::' + Config.KeyEnableIndicator,
         this._updateIndicator.bind(this)
     ));
@@ -57,7 +57,7 @@ const Extension = new Lang.Class({
     for (let shortcut of Config.KeyShortcuts) {
       Main.wm.addKeybinding(
           shortcut,
-          this.settings,
+          settings,
           Meta.KeyBindingFlags.NONE,
           bindingMode,
           this.onAction.bind(this, shortcut.replace('shortcut-', ''))
@@ -86,7 +86,7 @@ const Extension = new Lang.Class({
   },
 
   _updateIndicator: function () {
-    if (this.settings.get_boolean(Config.KeyEnableIndicator)) {
+    if (settings.get_boolean(Config.KeyEnableIndicator)) {
       this._createIndicator();
     } else {
       this._destroyIndicator();
@@ -144,7 +144,7 @@ const Extension = new Lang.Class({
   },
 
   _onScreenshot: function (selection, filePath) {
-    let clipboardAction = this.settings.get_string(Config.KeyClipboardAction);
+    let clipboardAction = settings.get_string(Config.KeyClipboardAction);
 
     let image = new Gtk.Image({file: filePath});
 
@@ -153,8 +153,8 @@ const Extension = new Lang.Class({
     }
 
     let getNextPath = () => {
-      let dir = Path.expand(this.settings.get_string(Config.KeySaveLocation));
-      let filenameTemplate = this.settings.get_string(Config.KeyFilenameTemplate);
+      let dir = Path.expand(settings.get_string(Config.KeySaveLocation));
+      let filenameTemplate = settings.get_string(Config.KeyFilenameTemplate);
       let {width, height} = image.get_pixbuf();
       let dimensions = {width: width, height: height};
       for (var n=0; ; n++) {
@@ -169,7 +169,7 @@ const Extension = new Lang.Class({
     }
 
     let file = Gio.File.new_for_path(filePath);
-    let saveFile = this.settings.get_boolean(Config.KeySaveScreenshot);
+    let saveFile = settings.get_boolean(Config.KeySaveScreenshot);
     let newPath = getNextPath();
     if (saveFile) {
       let dstFile = Gio.File.new_for_path(newPath);
@@ -185,7 +185,7 @@ const Extension = new Lang.Class({
     this._unsetKeybindings();
 
     this._signalSettings.forEach((signal) => {
-      this.settings.disconnect(signal);
+      settings.disconnect(signal);
     });
 
     this.disconnectAll();

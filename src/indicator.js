@@ -17,6 +17,7 @@ const ExtensionUtils = imports.misc.extensionUtils;
 const Local = ExtensionUtils.getCurrentExtension();
 
 const Config = Local.imports.config;
+const Convenience = Local.imports.convenience;
 
 const {dump} = Local.imports.dump;
 
@@ -24,6 +25,7 @@ const {dump} = Local.imports.dump;
 const DefaultIcon = 'camera-photo-symbolic';
 
 
+const settings = Convenience.getSettings();
 
 
 const Indicator = new Lang.Class({
@@ -54,7 +56,7 @@ const Indicator = new Lang.Class({
       return;
     }
 
-    let action = this._extension.settings.get_string(Config.KeyClickAction);
+    let action = settings.get_string(Config.KeyClickAction);
     if (action === 'show-menu') {
       return;
     }
@@ -103,7 +105,7 @@ const Indicator = new Lang.Class({
   destroy: function () {
     this.parent();
     this._signalSettings.forEach((signal) => {
-      this._extension.settings.disconnect(signal);
+      settings.disconnect(signal);
     });
   }
 });
