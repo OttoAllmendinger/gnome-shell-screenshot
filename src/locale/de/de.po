@@ -74,7 +74,7 @@ msgstr "Kopieren"
 
 #: src/indicator.js:40
 msgid "Save As..."
-msgstr ""
+msgstr "Speichern unter..."
 
 #: src/indicator.js:144 src/prefs.js:113
 msgid "Select Area"
