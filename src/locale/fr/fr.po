@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-19 12:23+0200\n"
+"POT-Creation-Date: 2017-05-02 17:39+0200\n"
 "PO-Revision-Date: 2017-01-11 21:44+0100\n"
 "Last-Translator: Raphael Rochet <raphael@rri.fr>\n"
 "Language-Team: \n"
@@ -66,39 +66,43 @@ msgstr "Nom d'hôte"
 msgid "Parameters:"
 msgstr "Paramètres :"
 
-#: src/indicator.js:69 src/prefs.js:113
-msgid "Select Area"
-msgstr "Sélectionner une zone"
-
-#: src/indicator.js:70 src/prefs.js:114
-msgid "Select Window"
-msgstr "Sélectionner une fenêtre"
-
-#: src/indicator.js:71 src/prefs.js:115
-msgid "Select Desktop"
-msgstr "Sélectionner le bureau"
-
-#: src/indicator.js:88
-msgid "Settings"
-msgstr "Paramètres"
-
-#: src/notifications.js:49
-msgid "New Screenshot"
-msgstr "Nouvelle capture d'écran"
-
-#: src/notifications.js:50
-msgid "Size:"
-msgstr "Taille:"
-
-#: src/notifications.js:66
+#: src/indicator.js:39 src/notifications.js:71
 msgid "Copy"
 msgstr "Copier"
 
-#: src/notifications.js:67
+#: src/indicator.js:40
+msgid "Save As..."
+msgstr ""
+
+#: src/indicator.js:144 src/prefs.js:113
+msgid "Select Area"
+msgstr "Sélectionner une zone"
+
+#: src/indicator.js:145 src/prefs.js:114
+msgid "Select Window"
+msgstr "Sélectionner une fenêtre"
+
+#: src/indicator.js:146 src/prefs.js:115
+msgid "Select Desktop"
+msgstr "Sélectionner le bureau"
+
+#: src/indicator.js:167
+msgid "Settings"
+msgstr "Paramètres"
+
+#: src/notifications.js:44
+msgid "New Screenshot"
+msgstr "Nouvelle capture d'écran"
+
+#: src/notifications.js:49
+msgid "Size:"
+msgstr "Taille:"
+
+#: src/notifications.js:72
 msgid "Save"
 msgstr "Enregistrer"
 
-#: src/notifications.js:102
+#: src/notifications.js:99
 msgid "Error"
 msgstr "Erreur"
 
@@ -118,8 +122,8 @@ msgstr "Raccourcis clavier"
 msgid "Show indicator"
 msgstr "Afficher l'indicateur"
 
-#: src/prefs.js:107
 # FIXME this is translation of "Default Click Action"
+#: src/prefs.js:107
 msgid "Primary Button"
 msgstr "Action de clic par défaut"
 
@@ -187,7 +191,7 @@ msgstr "_Annuler"
 msgid "_Save"
 msgstr "_Enregistrer"
 
-#: src/selection.js:228
+#: src/selection.js:244
 msgid "selected region was too small - please select a larger area"
 msgstr ""
 "La zone sélectionnée était trop petite - merci de sélectionner une plus "

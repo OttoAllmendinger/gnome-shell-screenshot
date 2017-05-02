@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-18 21:21+0200\n"
+"POT-Creation-Date: 2017-05-02 17:39+0200\n"
 "PO-Revision-Date: 2016-11-14 00:52+0100\n"
 "Last-Translator: Gregor Santner <gsantner.github.io>\n"
 "Language-Team: \n"
@@ -68,39 +68,43 @@ msgstr "Computername"
 msgid "Parameters:"
 msgstr "Parameter:"
 
-#: src/indicator.js:69 src/prefs.js:113
-msgid "Select Area"
-msgstr "Bereich auswählen"
-
-#: src/indicator.js:70 src/prefs.js:114
-msgid "Select Window"
-msgstr "Fenster auswählen"
-
-#: src/indicator.js:71 src/prefs.js:115
-msgid "Select Desktop"
-msgstr "Desktop auswählen"
-
-#: src/indicator.js:88
-msgid "Settings"
-msgstr "Einstellungen"
-
-#: src/notifications.js:49
-msgid "New Screenshot"
-msgstr "Neues Bildschirmfoto"
-
-#: src/notifications.js:50
-msgid "Size:"
-msgstr "Größe:"
-
-#: src/notifications.js:66
+#: src/indicator.js:39 src/notifications.js:71
 msgid "Copy"
 msgstr "Kopieren"
 
-#: src/notifications.js:67
+#: src/indicator.js:40
+msgid "Save As..."
+msgstr ""
+
+#: src/indicator.js:144 src/prefs.js:113
+msgid "Select Area"
+msgstr "Bereich auswählen"
+
+#: src/indicator.js:145 src/prefs.js:114
+msgid "Select Window"
+msgstr "Fenster auswählen"
+
+#: src/indicator.js:146 src/prefs.js:115
+msgid "Select Desktop"
+msgstr "Desktop auswählen"
+
+#: src/indicator.js:167
+msgid "Settings"
+msgstr "Einstellungen"
+
+#: src/notifications.js:44
+msgid "New Screenshot"
+msgstr "Neues Bildschirmfoto"
+
+#: src/notifications.js:49
+msgid "Size:"
+msgstr "Größe:"
+
+#: src/notifications.js:72
 msgid "Save"
 msgstr "Speichern"
 
-#: src/notifications.js:102
+#: src/notifications.js:99
 msgid "Error"
 msgstr "Fehler"
 
@@ -188,7 +192,7 @@ msgstr "_Abbrechen"
 msgid "_Save"
 msgstr "_Speichern"
 
-#: src/selection.js:228
+#: src/selection.js:244
 msgid "selected region was too small - please select a larger area"
 msgstr ""
 "Der ausgewählte Bereich war zu klein - bitte größeren Bereich auswählen"

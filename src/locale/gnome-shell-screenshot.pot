@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-19 12:25+0200\n"
+"POT-Creation-Date: 2017-05-02 17:39+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -65,39 +65,43 @@ msgstr ""
 msgid "Parameters:"
 msgstr ""
 
-#: src/indicator.js:77 src/prefs.js:113
-msgid "Select Area"
-msgstr ""
-
-#: src/indicator.js:78 src/prefs.js:114
-msgid "Select Window"
-msgstr ""
-
-#: src/indicator.js:79 src/prefs.js:115
-msgid "Select Desktop"
-msgstr ""
-
-#: src/indicator.js:96
-msgid "Settings"
-msgstr ""
-
-#: src/notifications.js:49
-msgid "New Screenshot"
-msgstr ""
-
-#: src/notifications.js:50
-msgid "Size:"
-msgstr ""
-
-#: src/notifications.js:66
+#: src/indicator.js:39 src/notifications.js:71
 msgid "Copy"
 msgstr ""
 
-#: src/notifications.js:67
+#: src/indicator.js:40
+msgid "Save As..."
+msgstr ""
+
+#: src/indicator.js:144 src/prefs.js:113
+msgid "Select Area"
+msgstr ""
+
+#: src/indicator.js:145 src/prefs.js:114
+msgid "Select Window"
+msgstr ""
+
+#: src/indicator.js:146 src/prefs.js:115
+msgid "Select Desktop"
+msgstr ""
+
+#: src/indicator.js:167
+msgid "Settings"
+msgstr ""
+
+#: src/notifications.js:44
+msgid "New Screenshot"
+msgstr ""
+
+#: src/notifications.js:49
+msgid "Size:"
+msgstr ""
+
+#: src/notifications.js:72
 msgid "Save"
 msgstr ""
 
-#: src/notifications.js:102
+#: src/notifications.js:99
 msgid "Error"
 msgstr ""
 
@@ -185,6 +189,6 @@ msgstr ""
 msgid "_Save"
 msgstr ""
 
-#: src/selection.js:228
+#: src/selection.js:244
 msgid "selected region was too small - please select a larger area"
 msgstr ""

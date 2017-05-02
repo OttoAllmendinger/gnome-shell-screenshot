@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-19 12:23+0200\n"
+"POT-Creation-Date: 2017-05-02 17:39+0200\n"
 "PO-Revision-Date: 2017-01-12 21:47+0100\n"
 "Last-Translator: Piotr Komur <pkomur@gmail.com>\n"
 "Language-Team: pkomur@gmail.com\n"
@@ -67,39 +67,43 @@ msgstr "Nazwa użytkownika"
 msgid "Parameters:"
 msgstr "Parametry:"
 
-#: src/indicator.js:69 src/prefs.js:113
-msgid "Select Area"
-msgstr "Zaznacz obszar"
-
-#: src/indicator.js:70 src/prefs.js:114
-msgid "Select Window"
-msgstr "Wybierz okno"
-
-#: src/indicator.js:71 src/prefs.js:115
-msgid "Select Desktop"
-msgstr "Cały pulpit"
-
-#: src/indicator.js:88
-msgid "Settings"
-msgstr "Ustawienia"
-
-#: src/notifications.js:49
-msgid "New Screenshot"
-msgstr "Nowy zrzut"
-
-#: src/notifications.js:50
-msgid "Size:"
-msgstr "Rozmiar:"
-
-#: src/notifications.js:66
+#: src/indicator.js:39 src/notifications.js:71
 msgid "Copy"
 msgstr "Kopiuj"
 
-#: src/notifications.js:67
+#: src/indicator.js:40
+msgid "Save As..."
+msgstr ""
+
+#: src/indicator.js:144 src/prefs.js:113
+msgid "Select Area"
+msgstr "Zaznacz obszar"
+
+#: src/indicator.js:145 src/prefs.js:114
+msgid "Select Window"
+msgstr "Wybierz okno"
+
+#: src/indicator.js:146 src/prefs.js:115
+msgid "Select Desktop"
+msgstr "Cały pulpit"
+
+#: src/indicator.js:167
+msgid "Settings"
+msgstr "Ustawienia"
+
+#: src/notifications.js:44
+msgid "New Screenshot"
+msgstr "Nowy zrzut"
+
+#: src/notifications.js:49
+msgid "Size:"
+msgstr "Rozmiar:"
+
+#: src/notifications.js:72
 msgid "Save"
 msgstr "Zapisz"
 
-#: src/notifications.js:102
+#: src/notifications.js:99
 msgid "Error"
 msgstr "Błąd"
 
@@ -119,8 +123,8 @@ msgstr "Klawiatura"
 msgid "Show indicator"
 msgstr "Pokaż ikonę na panelu"
 
-#: src/prefs.js:107
 # FIXME this is translation of "Default Click Action"
+#: src/prefs.js:107
 msgid "Primary Button"
 msgstr "Domyślna akcja po kliknięciu"
 
@@ -188,6 +192,6 @@ msgstr "_Anuluj"
 msgid "_Save"
 msgstr "_Zapisz"
 
-#: src/selection.js:228
+#: src/selection.js:244
 msgid "selected region was too small - please select a larger area"
 msgstr "Zaznaczony obszar jest zbyt mały! Proszę zaznaczyć większy."
