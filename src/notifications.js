@@ -40,11 +40,11 @@ const Notification = new Lang.Class({
   Name: "ScreenshotTool.Notification",
   Extends: MessageTray.Notification,
 
-  title: function () {
+  _title: function () {
     return _("New Screenshot");
   },
 
-  banner: function ({gtkImage}) {
+  _banner: function ({gtkImage}) {
     let {width, height} = gtkImage.get_pixbuf();
     let banner = _("Size:") + " " + width + "x" + height + ".";
     return banner;
@@ -53,12 +53,12 @@ const Notification = new Lang.Class({
   _init: function (source, screenshot) {
     this.parent(
       source,
-      this.title(),
-      this.banner(screenshot),
+      this._title(),
+      this._banner(screenshot),
       { gicon: Thumbnail.getIcon(screenshot.srcFile.get_path()) }
     );
 
-    this.connect("activated", this.onActivated.bind(this));
+    this.connect("activated", this._onActivated.bind(this));
 
     // makes banner expand on hover
     this.setForFeedback(true);
@@ -68,21 +68,21 @@ const Notification = new Lang.Class({
 
   createBanner: function() {
     let b = this.parent();
-    b.addAction(_("Copy"), this.onCopy.bind(this));
-    b.addAction(_("Save"), this.onSave.bind(this));
+    b.addAction(_("Copy"), this._onCopy.bind(this));
+    b.addAction(_("Save"), this._onSave.bind(this));
     b._iconBin.child.icon_size = ICON_SIZE;
     return b;
   },
 
-  onActivated: function () {
+  _onActivated: function () {
     this._screenshot.launchOpen();
   },
 
-  onCopy: function () {
+  _onCopy: function () {
     this._screenshot.copyClipboard();
   },
 
-  onSave: function () {
+  _onSave: function () {
     this._screenshot.launchSave();
   }
 });
