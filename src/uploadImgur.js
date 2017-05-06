@@ -1,7 +1,6 @@
 // vi: sw=2 sts=2
 const Lang = imports.lang;
 const Signals = imports.signals;
-const Mainloop = imports.mainloop;
 
 const Gio = imports.gi.Gio;
 const Soup = imports.gi.Soup;
@@ -30,9 +29,10 @@ const getPostMessage = (file, callback) => {
     }
 
     let buffer = new Soup.Buffer(contents, contents.length);
-    let mimetype = this._getMimetype(file);
+    let mimetype = getMimetype(file);
     let multipart = new Soup.Multipart(Soup.FORM_MIME_TYPE_MULTIPART);
-    multipart.append_form_file('image', file, mimetype, buffer);
+    let filename = "image.png";
+    multipart.append_form_file('image', filename, mimetype, buffer);
 
     let message = Soup.form_request_new_from_multipart(url, multipart);
 
@@ -46,6 +46,8 @@ const getPostMessage = (file, callback) => {
 
 
 const Upload = new Lang.Class({
+  Name: "Upload",
+
   _init: function (file) {
     this._file = file;
   },
@@ -69,12 +71,14 @@ const Upload = new Lang.Class({
       );
 
       httpSession.queue_message(message,
-        (session, {status_code, response_body}) => {
+        (session, {status, status_code, response_body}) => {
           if (status_code == 200) {
-            this.emit('done', JSON.parse(response_body.data).data);
+            let data = JSON.parse(response_body.data).data;
+            this.responseData = data;
+            this.emit('done', data);
           } else {
             logError(new Error(
-              'getJSON error status code: ' + status_code +
+              'getJSON error status code: ' + status +
               ' data: ' + response_body.data
             ));
 
@@ -83,14 +87,14 @@ const Upload = new Lang.Class({
             try {
               errorMessage = JSON.parse(response_body.data).data.error;
             } catch (e) {
-              logError(new Error("failed to parse error message " + e));
+              logError(new Error(
+                "failed to parse error message " + e +
+                  " data=" + response_body.data
+              ));
               errorMessage = response_body.data
             }
 
-            this.emit(
-              'error',
-              "HTTP " + status_code + " - " + errorMessage
-            );
+            this.emit('error', "HTTP " + status_code + " - " + errorMessage);
           }
 
           message.disconnect(signalProgress);
@@ -98,4 +102,4 @@ const Upload = new Lang.Class({
     });
   }
 });
-Signals.addSignalMethods(Upload);
+Signals.addSignalMethods(Upload.prototype);

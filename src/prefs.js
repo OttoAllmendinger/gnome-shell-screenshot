@@ -56,6 +56,10 @@ const ScreenshotToolSettingsWidget = new GObject.Class({
     label = new Gtk.Label({label: _("Storage")});
     notebook.append_page(page, label);
 
+    page = this._makePrefsUploadImgur();
+    label = new Gtk.Label({label: _("Imgur Upload (Beta)")});
+    notebook.append_page(page, label);
+
     page = this._makePrefsKeybindings();
     label = new Gtk.Label({label: _("Keybindings")});
     notebook.append_page(page, label);
@@ -331,6 +335,41 @@ const ScreenshotToolSettingsWidget = new GObject.Class({
     prefs.add(hbox);
 
 
+
+    return prefs;
+  },
+
+  _makePrefsUploadImgur: function () {
+    let prefs = new Gtk.Box({
+      orientation: Gtk.Orientation.VERTICAL,
+      margin: 20,
+      margin_top: 10,
+      expand: false
+    });
+
+    let hbox;
+
+    /* Save Screenshot [on|off] */
+
+    hbox = buildHbox();
+
+    const labelEnable = new Gtk.Label({
+      label: _('Enable Imgur Upload'),
+      xalign: 0,
+      expand: true
+    });
+
+    const switchEnable = new Gtk.Switch();
+
+    switchEnable.connect('notify::active', (button) => {
+      _settings.set_boolean(Config.KeyEnableUploadImgur, button.active);
+    });
+
+    switchEnable.active = _settings.get_boolean(Config.KeyEnableUploadImgur);
+
+    hbox.add(labelEnable);
+    hbox.add(switchEnable);
+    prefs.add(hbox, {fill: false});
 
     return prefs;
   },

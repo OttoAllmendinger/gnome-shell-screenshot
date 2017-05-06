@@ -61,6 +61,10 @@
         enum="org.gnome.shell.extensions.screenshot.clipboard-action">
       <default>'none'</default>
     </key>
+
+    <key name="enable-imgur" type="b">
+      <default>false</default>
+    </key>
   </schema>
 </schemalist>
 <!--

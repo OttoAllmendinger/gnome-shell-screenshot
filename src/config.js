@@ -41,3 +41,6 @@ const ClipboardActions = {
   SET_REMOTE_URL: "set-remote-url"
 };
 
+
+
+const KeyEnableUploadImgur = 'enable-imgur';

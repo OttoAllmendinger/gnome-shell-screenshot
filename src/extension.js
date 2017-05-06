@@ -30,6 +30,8 @@ const Clipboard = Local.imports.clipboard;
 const Notifications = Local.imports.notifications;
 const Filename = Local.imports.filename;
 
+const UploadImgur = Local.imports.uploadImgur;
+
 const Convenience = Local.imports.convenience;
 
 // const {dump} = Local.imports.dump;
@@ -90,7 +92,43 @@ const Screenshot = new Lang.Class({
     Clipboard.setImage(this.gtkImage);
     this.inClipboard = true;
   },
+
+  imgurStartUpload: function () {
+    this.imgurUpload = new UploadImgur.Upload(this.srcFile);
+    // this.imgurUpload = new Local.imports.uploadDummy.Upload();
+    Notifications.notifyImgurUpload(this);
+    this.emit("imgur-upload", this.imgurUpload);
+    this.imgurUpload.start();
+  },
+
+  isImgurUploadComplete: function () {
+    return !!(this.imgurUpload && this.imgurUpload.responseData);
+  },
+
+  imgurOpenURL: function () {
+    if (!this.isImgurUploadComplete()) {
+      logError(new Error("no completed imgur upload"));
+      return;
+    }
+    let context = global.create_app_launch_context(0, -1);
+    let uri = this.imgurUpload.responseData.link;
+    if (!uri) {
+      logError(new Error("no uri in responseData"));
+      return;
+    }
+    Gio.AppInfo.launch_default_for_uri(uri, context);
+  },
+
+  imgurCopyURL: function () {
+    if (!this.isImgurUploadComplete()) {
+      logError(new Error("no completed imgur upload"));
+      return;
+    }
+    let uri = this.imgurUpload.responseData.link;
+    Clipboard.setText(uri);
+  }
 });
+Signals.addSignalMethods(Screenshot.prototype);
 
 
 const Extension = new Lang.Class({

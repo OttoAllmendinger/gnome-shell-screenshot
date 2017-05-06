@@ -18,8 +18,10 @@ const Local = ExtensionUtils.getCurrentExtension();
 
 const Path = Local.imports.path;
 const {dump} = Local.imports.dump;
+const Config = Local.imports.config;
 const Clipboard = Local.imports.clipboard;
 const Thumbnail = Local.imports.thumbnail;
+const Convenience = Local.imports.convenience;
 
 const NotificationIcon = 'camera-photo-symbolic';
 const NotificationSourceName = 'Screenshot Tool';
@@ -27,6 +29,8 @@ const NotificationSourceName = 'Screenshot Tool';
 
 const ICON_SIZE = 64;
 
+
+const settings = Convenience.getSettings();
 
 const getSource = () => {
   let source = new MessageTray.Source(
@@ -70,6 +74,9 @@ const Notification = new Lang.Class({
     let b = this.parent();
     b.addAction(_("Copy"), this._onCopy.bind(this));
     b.addAction(_("Save"), this._onSave.bind(this));
+    if (settings.get_boolean(Config.KeyEnableUploadImgur)) {
+      b.addAction(_("Upload To Imgur"), this._onUpload.bind(this));
+    }
     b._iconBin.child.icon_size = ICON_SIZE;
     return b;
   },
@@ -84,6 +91,10 @@ const Notification = new Lang.Class({
 
   _onSave: function () {
     this._screenshot.launchSave();
+  },
+
+  _onUpload: function () {
+    this._screenshot.imgurStartUpload();
   }
 });
 Signals.addSignalMethods(Notification.prototype);
@@ -105,6 +116,64 @@ const ErrorNotification = new Lang.Class({
 Signals.addSignalMethods(ErrorNotification.prototype);
 
 
+const ImgurNotification = new Lang.Class({
+  Name: "ScreenshotTool.ImgurNotification",
+  Extends: MessageTray.Notification,
+
+  _init: function (source, screenshot) {
+    this.parent(source, _("Imgur Upload"));
+    this.setForFeedback(true);
+    this.setResident(true);
+
+    this.connect("activated", this._onActivated.bind(this));
+
+    this._screenshot = screenshot;
+
+    this._upload = screenshot.imgurUpload;
+
+    this._upload.connect("progress", (obj, bytes, total) => {
+      this.update(
+          _("Imgur Upload"),
+          '' + Math.floor(100 * (bytes / total)) + '%'
+      );
+    });
+
+    this._upload.connect("error", (obj, msg) => {
+      this.update(_("Imgur Upload Failed"), msg);
+    });
+
+    this._upload.connect("done", () => {
+      this.update(
+        _("Imgur Upload Successful"), this._upload.responseData.link
+      );
+      if (this.copyButton) {
+        this.copyButton.visible = true;
+      }
+    });
+  },
+
+  createBanner: function() {
+    let b = this.parent();
+    this.copyButton = b.addAction(_("Copy Link"), this._onCopy.bind(this));
+    this.copyButton.visible = false;
+    return b;
+  },
+
+  _onActivated: function () {
+    if (this._screenshot.isImgurUploadComplete()) {
+      this._screenshot.imgurOpenURL();
+    } else {
+      this._upload.connect("done", () => {
+        this._screenshot.imgurOpenURL();
+      });
+    }
+  },
+
+  _onCopy: function () {
+    this._screenshot.imgurCopyURL();
+  },
+});
+
 
 const notifyScreenshot = (screenshot) => {
   let source = getSource();
@@ -115,5 +184,11 @@ const notifyScreenshot = (screenshot) => {
 const notifyError = (message) => {
   let source = getSource();
   let notification = new ErrorNotification(source, message);
+  source.notify(notification);
+}
+
+const notifyImgurUpload = (screenshot) => {
+  let source = getSource();
+  let notification = new ImgurNotification(source, screenshot);
   source.notify(notification);
 }

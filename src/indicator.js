@@ -32,6 +32,8 @@ const ScreenshotSection = new Lang.Class({
   Name: "ScreenshotTool.ScreenshotSection",
 
   _init: function (menu) {
+    this._screenshot = null;
+
     this._image = new PopupMenu.PopupBaseMenuItem();
     this._image.actor.content_gravity =
       Clutter.ContentGravity.RESIZE_ASPECT;
@@ -47,20 +49,57 @@ const ScreenshotSection = new Lang.Class({
     menu.addMenuItem(this._copy);
     menu.addMenuItem(this._save);
 
-    this._setItemsVisible(false);
+    // IMGUR
+
+    this._imgurMenu = new PopupMenu.PopupSubMenuMenuItem(_('Imgur'), false);
+    this._imgurUpload = new PopupMenu.PopupMenuItem(_('Upload'));
+    this._imgurOpen = new PopupMenu.PopupMenuItem(_('Open Link'));
+    this._imgurCopyLink = new PopupMenu.PopupMenuItem(_('Copy Link'));
+
+    this._imgurUpload.connect('activate', this._onImgurUpload.bind(this));
+    this._imgurOpen.connect('activate', this._onImgurOpen.bind(this));
+    this._imgurCopyLink.connect('activate', this._onImgurCopyLink.bind(this));
+
+    this._imgurMenu.menu.addMenuItem(this._imgurUpload);
+    this._imgurMenu.menu.addMenuItem(this._imgurOpen);
+    this._imgurMenu.menu.addMenuItem(this._imgurCopyLink);
+
+    menu.addMenuItem(this._imgurMenu);
+
+    menu.connect("open-state-changed", () => {
+      this._updateVisibility();
+    });
+
+    this._updateVisibility();
   },
 
-  _setItemsVisible: function (visible) {
-    let items = [this._image, this._copy, this._save];
-    items.forEach((i) => {
-      i.actor.visible = visible;
-    });
+  _updateVisibility: function () {
+    let visible = !!this._screenshot;
+
+    this._image.actor.visible = visible;
+    this._copy.actor.visible = visible;
+    this._save.actor.visible = visible;
+
+    let imgurEnabled = settings.get_boolean(Config.KeyEnableUploadImgur);
+    let imgurComplete =
+        this._screenshot &&
+        this._screenshot.imgurUpload &&
+        this._screenshot.imgurUpload.responseData;
+
+    this._imgurMenu.actor.visible =
+      visible && imgurEnabled;
+    this._imgurUpload.actor.visible =
+      visible && imgurEnabled && !imgurComplete;
+    this._imgurOpen.actor.visible =
+      visible && imgurEnabled && imgurComplete;
+    this._imgurCopyLink.actor.visible =
+      visible && imgurEnabled && imgurComplete;
   },
 
   _setImage: function (pixbuf) {
     let {width, height} = pixbuf;
     if (height == 0) {
-      return
+      return;
     }
     let image = new Clutter.Image();
     let success = image.set_data(
@@ -83,7 +122,13 @@ const ScreenshotSection = new Lang.Class({
   setScreenshot: function (screenshot) {
     this._screenshot = screenshot;
     this._setImage(screenshot.gtkImage.get_pixbuf());
-    this._setItemsVisible(true);
+    this._updateVisibility();
+
+    this._screenshot.connect("imgur-upload", (obj, upload) => {
+      upload.connect("done", (obj, data) => {
+        this._updateVisibility();
+      });
+    });
   },
 
   _onImage: function () {
@@ -96,6 +141,18 @@ const ScreenshotSection = new Lang.Class({
 
   _onSave: function () {
     this._screenshot.launchSave();
+  },
+
+  _onImgurUpload: function () {
+    this._screenshot.imgurStartUpload();
+  },
+
+  _onImgurOpen: function () {
+    this._screenshot.imgurOpenURL();
+  },
+
+  _onImgurCopyLink: function () {
+    this._screenshot.imgurCopyURL();
   }
 })
 
