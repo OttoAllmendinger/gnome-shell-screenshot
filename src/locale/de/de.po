@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-05-08 12:36+0200\n"
+"POT-Creation-Date: 2017-05-08 12:32+0200\n"
 "PO-Revision-Date: 2016-11-14 00:52+0100\n"
 "Last-Translator: Gregor Santner <gsantner.github.io>\n"
 "Language-Team: \n"
@@ -78,20 +78,20 @@ msgstr "Speichern unter..."
 
 #: src/indicator.js:54
 msgid "Imgur"
-msgstr ""
+msgstr "Imgur"
 
 #: src/indicator.js:55
 msgid "Upload"
-msgstr ""
+msgstr "Upload"
 
 #: src/indicator.js:56
 msgid "Open Link"
-msgstr ""
+msgstr "Link Öffnen"
 
 #: src/indicator.js:57 src/notifications.js:157
 #, fuzzy
 msgid "Copy Link"
-msgstr "Kopieren"
+msgstr "Link Kopieren"
 
 #: src/indicator.js:201 src/prefs.js:117
 msgid "Select Area"
@@ -123,7 +123,7 @@ msgstr "Speichern"
 
 #: src/notifications.js:78
 msgid "Upload To Imgur"
-msgstr ""
+msgstr "Imgur-Upload"
 
 #: src/notifications.js:110
 msgid "Error"
@@ -131,15 +131,15 @@ msgstr "Fehler"
 
 #: src/notifications.js:124 src/notifications.js:136
 msgid "Imgur Upload"
-msgstr ""
+msgstr "Imgur-Upload"
 
 #: src/notifications.js:142
 msgid "Imgur Upload Failed"
-msgstr ""
+msgstr "Imgur-Upload Fehlgeschlagen"
 
 #: src/notifications.js:147
 msgid "Imgur Upload Successful"
-msgstr ""
+msgstr "Imgur-Upload Erfolgreich"
 
 #: src/prefs.js:52
 msgid "Indicator"
@@ -147,11 +147,11 @@ msgstr "Indikator"
 
 #: src/prefs.js:56
 msgid "Storage"
-msgstr ""
+msgstr "Speicherung"
 
 #: src/prefs.js:60
 msgid "Imgur Upload (Beta)"
-msgstr ""
+msgstr "Imgur Upload (Beta)"
 
 #: src/prefs.js:64
 msgid "Keybindings"
@@ -203,7 +203,7 @@ msgstr "Vorschau"
 
 #: src/prefs.js:357
 msgid "Enable Imgur Upload"
-msgstr ""
+msgstr "Imgur-Upload aktivieren"
 
 #: src/prefs.js:388
 msgid "Select area"
