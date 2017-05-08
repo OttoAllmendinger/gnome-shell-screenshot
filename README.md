@@ -1,4 +1,4 @@
-![Screenshot](https://raw.github.com/OttoAllmendinger/gnome-shell-screenshot/master/data/screenshot.png)
+![Screenshot](https://raw.githubusercontent.com/OttoAllmendinger/gnome-shell-screenshot/master/data/screenshot.png)
 
 Shortcut to create screenshots that can be opened, copied to clipboard or saved
 to disk.
