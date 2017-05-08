@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-05-02 17:39+0200\n"
+"POT-Creation-Date: 2017-05-08 12:36+0200\n"
 "PO-Revision-Date: 2017-01-11 21:44+0100\n"
 "Last-Translator: Raphael Rochet <raphael@rri.fr>\n"
 "Language-Team: \n"
@@ -66,45 +66,78 @@ msgstr "Nom d'hôte"
 msgid "Parameters:"
 msgstr "Paramètres :"
 
-#: src/indicator.js:39 src/notifications.js:71
+#: src/indicator.js:41 src/notifications.js:75
 msgid "Copy"
 msgstr "Copier"
 
-#: src/indicator.js:40
+#: src/indicator.js:42
 msgid "Save As..."
 msgstr ""
 
-#: src/indicator.js:144 src/prefs.js:113
+#: src/indicator.js:54
+msgid "Imgur"
+msgstr ""
+
+#: src/indicator.js:55
+msgid "Upload"
+msgstr ""
+
+#: src/indicator.js:56
+msgid "Open Link"
+msgstr ""
+
+#: src/indicator.js:57 src/notifications.js:157
+#, fuzzy
+msgid "Copy Link"
+msgstr "Copier"
+
+#: src/indicator.js:201 src/prefs.js:117
 msgid "Select Area"
 msgstr "Sélectionner une zone"
 
-#: src/indicator.js:145 src/prefs.js:114
+#: src/indicator.js:202 src/prefs.js:118
 msgid "Select Window"
 msgstr "Sélectionner une fenêtre"
 
-#: src/indicator.js:146 src/prefs.js:115
+#: src/indicator.js:203 src/prefs.js:119
 msgid "Select Desktop"
 msgstr "Sélectionner le bureau"
 
-#: src/indicator.js:167
+#: src/indicator.js:224
 msgid "Settings"
 msgstr "Paramètres"
 
-#: src/notifications.js:44
+#: src/notifications.js:48
 msgid "New Screenshot"
 msgstr "Nouvelle capture d'écran"
 
-#: src/notifications.js:49
+#: src/notifications.js:53
 msgid "Size:"
 msgstr "Taille:"
 
-#: src/notifications.js:72
+#: src/notifications.js:76
 msgid "Save"
 msgstr "Enregistrer"
 
-#: src/notifications.js:99
+#: src/notifications.js:78
+msgid "Upload To Imgur"
+msgstr ""
+
+#: src/notifications.js:110
 msgid "Error"
 msgstr "Erreur"
+
+#: src/notifications.js:124 src/notifications.js:136
+msgid "Imgur Upload"
+msgstr ""
+
+#: src/notifications.js:142
+msgid "Imgur Upload Failed"
+msgstr ""
+
+#: src/notifications.js:147
+msgid "Imgur Upload Successful"
+msgstr ""
 
 #: src/prefs.js:52
 msgid "Indicator"
@@ -115,71 +148,79 @@ msgid "Storage"
 msgstr "Sauvegarde"
 
 #: src/prefs.js:60
+msgid "Imgur Upload (Beta)"
+msgstr ""
+
+#: src/prefs.js:64
 msgid "Keybindings"
 msgstr "Raccourcis clavier"
 
-#: src/prefs.js:81
+#: src/prefs.js:85
 msgid "Show indicator"
 msgstr "Afficher l'indicateur"
 
 # FIXME this is translation of "Default Click Action"
-#: src/prefs.js:107
+#: src/prefs.js:111
 msgid "Primary Button"
 msgstr "Action de clic par défaut"
 
-#: src/prefs.js:116
+#: src/prefs.js:120
 msgid "Show Menu"
 msgstr "Afficher le menu"
 
-#: src/prefs.js:137
+#: src/prefs.js:141
 msgid "Default Clipboard Content"
 msgstr "Contenu par défaut du presse-papier"
 
-#: src/prefs.js:143
+#: src/prefs.js:147
 msgid "Unchanged"
 msgstr "Inchangé"
 
-#: src/prefs.js:144
+#: src/prefs.js:148
 msgid "Image Data"
 msgstr "Image"
 
-#: src/prefs.js:182
+#: src/prefs.js:186
 msgid "Auto-Save Screenshot"
 msgstr "Sauvegarde automatique"
 
-#: src/prefs.js:215
+#: src/prefs.js:219
 msgid "Save Location"
 msgstr "Emplacement de sauvegarde"
 
-#: src/prefs.js:222
+#: src/prefs.js:226
 msgid "Select"
 msgstr "Sélectionner"
 
-#: src/prefs.js:266
+#: src/prefs.js:270
 msgid "Default Filename"
 msgstr "Nom de fichier par défaut"
 
-#: src/prefs.js:291
+#: src/prefs.js:295
 msgid "Preview"
 msgstr "Aperçu"
 
-#: src/prefs.js:349
+#: src/prefs.js:357
+msgid "Enable Imgur Upload"
+msgstr ""
+
+#: src/prefs.js:388
 msgid "Select area"
 msgstr "Sélectionner une zone"
 
-#: src/prefs.js:350
+#: src/prefs.js:389
 msgid "Select window"
 msgstr "Sélectionner une fenêtre"
 
-#: src/prefs.js:351
+#: src/prefs.js:390
 msgid "Select whole desktop"
 msgstr "Sélectionner tout le bureau"
 
-#: src/prefs.js:378
+#: src/prefs.js:417
 msgid "Keyboard Shortcut"
 msgstr "Raccourci clavier"
 
-#: src/prefs.js:418
+#: src/prefs.js:457
 msgid "Modify"
 msgstr "Modifier"
 
