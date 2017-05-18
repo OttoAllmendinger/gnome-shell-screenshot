@@ -38,14 +38,17 @@ const ScreenshotSection = new Lang.Class({
     this._image.actor.content_gravity =
       Clutter.ContentGravity.RESIZE_ASPECT;
 
+    this._clear = new PopupMenu.PopupMenuItem(_('Clear'));
     this._copy = new PopupMenu.PopupMenuItem(_('Copy'));
     this._save = new PopupMenu.PopupMenuItem(_('Save As...'));
 
     this._image.connect('activate', this._onImage.bind(this));
+    this._clear.connect('activate', this._onClear.bind(this));
     this._copy.connect('activate', this._onCopy.bind(this));
     this._save.connect('activate', this._onSave.bind(this));
 
     menu.addMenuItem(this._image);
+    menu.addMenuItem(this._clear);
     menu.addMenuItem(this._copy);
     menu.addMenuItem(this._save);
 
@@ -77,6 +80,7 @@ const ScreenshotSection = new Lang.Class({
     let visible = !!this._screenshot;
 
     this._image.actor.visible = visible;
+    this._clear.actor.visible = visible;
     this._copy.actor.visible = visible;
     this._save.actor.visible = visible;
 
@@ -121,18 +125,25 @@ const ScreenshotSection = new Lang.Class({
 
   setScreenshot: function (screenshot) {
     this._screenshot = screenshot;
-    this._setImage(screenshot.gtkImage.get_pixbuf());
-    this._updateVisibility();
 
-    this._screenshot.connect("imgur-upload", (obj, upload) => {
-      upload.connect("done", (obj, data) => {
-        this._updateVisibility();
+    if (screenshot) {
+      this._setImage(screenshot.gtkImage.get_pixbuf());
+      this._screenshot.connect("imgur-upload", (obj, upload) => {
+        upload.connect("done", (obj, data) => {
+          this._updateVisibility();
+        });
       });
-    });
+    }
+
+    this._updateVisibility();
   },
 
   _onImage: function () {
     this._screenshot.launchOpen();
+  },
+
+  _onClear: function () {
+    this.setScreenshot(null);
   },
 
   _onCopy: function () {
