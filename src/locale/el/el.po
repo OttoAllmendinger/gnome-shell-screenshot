@@ -1,0 +1,235 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-05-18 15:03+0300\n"
+"PO-Revision-Date: 2017-05-18 19:51+0300\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.0.1\n"
+"Last-Translator: \n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: el\n"
+
+#: src/filename.js:27
+msgid "Screenshot"
+msgstr "Στιγμιότυπο"
+
+#: src/filename.js:27
+msgid "Screenshot (literal)"
+msgstr "Στιγμιότυπο οθόνης"
+
+#: src/filename.js:28
+msgid "Year"
+msgstr "Έτος"
+
+#: src/filename.js:29
+msgid "Month"
+msgstr "Μήνας"
+
+#: src/filename.js:30
+msgid "Day"
+msgstr "Ημέρα"
+
+#: src/filename.js:31
+msgid "Hour"
+msgstr "Ώρα"
+
+#: src/filename.js:32
+msgid "Minute"
+msgstr "Λεπτό"
+
+#: src/filename.js:33
+msgid "Second"
+msgstr "Δευτερόλεπτο"
+
+#: src/filename.js:34
+msgid "Width"
+msgstr "Πλάτος"
+
+#: src/filename.js:35
+msgid "Height"
+msgstr "Ύψος"
+
+#: src/filename.js:36
+msgid "Hostname"
+msgstr "Όνομα οικοδεσπότη"
+
+#: src/filename.js:41
+msgid "Parameters:"
+msgstr "Παράμετροι:"
+
+#: src/indicator.js:41 src/notifications.js:75
+msgid "Copy"
+msgstr "Αντιγραφή"
+
+#: src/indicator.js:42
+msgid "Save As..."
+msgstr "Αποθήκευση ως..."
+
+#: src/indicator.js:54
+msgid "Imgur"
+msgstr "Imgur"
+
+#: src/indicator.js:55
+msgid "Upload"
+msgstr "Αποσολή"
+
+#: src/indicator.js:56
+msgid "Open Link"
+msgstr "Άνοιγμα συνδέσμου"
+
+#: src/indicator.js:57 src/notifications.js:157
+msgid "Copy Link"
+msgstr "Αντιγραφή συνδέσμου"
+
+#: src/indicator.js:201 src/prefs.js:117
+msgid "Select Area"
+msgstr "Επιλογή περιοχής"
+
+#: src/indicator.js:202 src/prefs.js:118
+msgid "Select Window"
+msgstr "Επιλογή παραθύρου"
+
+#: src/indicator.js:203 src/prefs.js:119
+msgid "Select Desktop"
+msgstr "Επιλογή επιφάνειας εργασίας"
+
+#: src/indicator.js:224
+msgid "Settings"
+msgstr "Ρυθμίσεις"
+
+#: src/notifications.js:48
+msgid "New Screenshot"
+msgstr "Νέο στιγμιότυπο"
+
+#: src/notifications.js:53
+msgid "Size:"
+msgstr "Μέγεθος:"
+
+#: src/notifications.js:76
+msgid "Save"
+msgstr "Αποθήκευση"
+
+#: src/notifications.js:78
+msgid "Upload To Imgur"
+msgstr "Αποστολή στο Imgur"
+
+#: src/notifications.js:110
+msgid "Error"
+msgstr "Σφάλμα"
+
+#: src/notifications.js:124 src/notifications.js:136
+msgid "Imgur Upload"
+msgstr "Αποστολή στο Imgur"
+
+#: src/notifications.js:142
+msgid "Imgur Upload Failed"
+msgstr "Ανεπιτυχής αποστολή στο Imgur"
+
+#: src/notifications.js:147
+msgid "Imgur Upload Successful"
+msgstr "Επιτυχής αποστολή στο Imgur"
+
+#: src/prefs.js:52
+msgid "Indicator"
+msgstr "Δείκτης"
+
+#: src/prefs.js:56
+msgid "Storage"
+msgstr "Αποθήκευση"
+
+#: src/prefs.js:60
+msgid "Imgur Upload (Beta)"
+msgstr "Αποστολή στο Imgur (Beta)"
+
+#: src/prefs.js:64
+msgid "Keybindings"
+msgstr "Συντομεύσεις πληκτρογίου"
+
+#: src/prefs.js:85
+msgid "Show indicator"
+msgstr "Εμφάνιση δείκτη"
+
+#: src/prefs.js:111
+msgid "Primary Button"
+msgstr "Κυρίως κουμπί"
+
+#: src/prefs.js:120
+msgid "Show Menu"
+msgstr "Εμφάνιση μενού"
+
+#: src/prefs.js:141
+msgid "Default Clipboard Content"
+msgstr "Προεπιλεγμένο περιεχόμενο προχείρου"
+
+#: src/prefs.js:147
+msgid "Unchanged"
+msgstr "Απαράλαχτο"
+
+#: src/prefs.js:148
+msgid "Image Data"
+msgstr "Δεδομένα εικόνας"
+
+#: src/prefs.js:186
+msgid "Auto-Save Screenshot"
+msgstr "Αυτόματη αποθήκευση στιγμιοτύπου"
+
+#: src/prefs.js:219
+msgid "Save Location"
+msgstr "Τοποθεσία αποθήκευσης"
+
+#: src/prefs.js:226
+msgid "Select"
+msgstr "Επιλογή"
+
+#: src/prefs.js:270
+msgid "Default Filename"
+msgstr "Προεπιλεγμένο όνομα αρχείου"
+
+#: src/prefs.js:295
+msgid "Preview"
+msgstr "Προεπισκόπηση"
+
+#: src/prefs.js:357
+msgid "Enable Imgur Upload"
+msgstr "Ενεργοποίηση αποστολής στο Imgur"
+
+#: src/prefs.js:388
+msgid "Select area"
+msgstr "Επιλογή περιοχής"
+
+#: src/prefs.js:389
+msgid "Select window"
+msgstr "Επιλογή παραθύρου"
+
+#: src/prefs.js:390
+msgid "Select whole desktop"
+msgstr "Επιλογή όλης της επιφάνειας εργασίας"
+
+#: src/prefs.js:417
+msgid "Keyboard Shortcut"
+msgstr "Συντομεύσεις πληκτρολογίου"
+
+#: src/prefs.js:457
+msgid "Modify"
+msgstr "Τροποποίηση"
+
+#: src/saveDlg.js:28
+msgid "_Cancel"
+msgstr "_Αναίρεση"
+
+#: src/saveDlg.js:29
+msgid "_Save"
+msgstr "_Αποθήκευση"
+
+#: src/selection.js:244
+msgid "selected region was too small - please select a larger area"
+msgstr "η επιλεγμένη περιοχή ήταν πολύ μικρή - παρακαλώ επιλέξτε μεγαλύτερη περιοχή"
