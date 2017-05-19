@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-05-08 12:36+0200\n"
+"POT-Creation-Date: 2017-05-19 11:59+0200\n"
 "PO-Revision-Date: 2017-04-20 09:43+0200\n"
 "Last-Translator: Jimmy Scionti <jimmy.scionti@gmail.com>\n"
 "Language-Team: \n"
@@ -66,44 +66,48 @@ msgstr "Nome dell'host"
 msgid "Parameters:"
 msgstr "Parametri:"
 
-#: src/indicator.js:41 src/notifications.js:75
+#: src/indicator.js:41
+msgid "Clear"
+msgstr ""
+
+#: src/indicator.js:42 src/notifications.js:75
 msgid "Copy"
 msgstr "Copia"
 
-#: src/indicator.js:42
+#: src/indicator.js:43
 msgid "Save As..."
 msgstr ""
 
-#: src/indicator.js:54
+#: src/indicator.js:57
 msgid "Imgur"
 msgstr ""
 
-#: src/indicator.js:55
+#: src/indicator.js:58
 msgid "Upload"
 msgstr ""
 
-#: src/indicator.js:56
+#: src/indicator.js:59
 msgid "Open Link"
 msgstr ""
 
-#: src/indicator.js:57 src/notifications.js:157
+#: src/indicator.js:60 src/notifications.js:157
 #, fuzzy
 msgid "Copy Link"
 msgstr "Copia"
 
-#: src/indicator.js:201 src/prefs.js:117
+#: src/indicator.js:212 src/prefs.js:117
 msgid "Select Area"
 msgstr "Seleziona un'area"
 
-#: src/indicator.js:202 src/prefs.js:118
+#: src/indicator.js:213 src/prefs.js:118
 msgid "Select Window"
 msgstr "Seleziona una finestra"
 
-#: src/indicator.js:203 src/prefs.js:119
+#: src/indicator.js:214 src/prefs.js:119
 msgid "Select Desktop"
 msgstr "Seleziona la scrivania"
 
-#: src/indicator.js:224
+#: src/indicator.js:235
 msgid "Settings"
 msgstr "Impostazioni"
 
