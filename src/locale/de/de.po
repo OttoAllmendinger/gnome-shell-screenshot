@@ -93,7 +93,6 @@ msgid "Open Link"
 msgstr "Link Öffnen"
 
 #: src/indicator.js:60 src/notifications.js:157
-#, fuzzy
 msgid "Copy Link"
 msgstr "Link Kopieren"
 
