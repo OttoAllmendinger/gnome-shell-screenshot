@@ -237,9 +237,6 @@ const ScreenshotToolSettingsWidget = new GObject.Class({
       logError(e);
     }
     chooserSaveLocation.connect('file-set', () => {
-      log("file-set");
-      let dir = Path.expand(_settings.get_string(Config.KeySaveLocation));
-      log("dir="+dir);
       let [filename, err] = GLib.filename_from_uri(
         chooserSaveLocation.get_uri()
       );
