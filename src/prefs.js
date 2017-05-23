@@ -33,6 +33,41 @@ const buildHbox = () => {
   });
 };
 
+const buildConfigSwitch = (label, configKey) => {
+  let hbox = buildHbox();
+
+  const gtkLabel = new Gtk.Label({
+    label: label,
+    xalign: 0,
+    expand: true
+  });
+
+  const gtkSwitch = new Gtk.Switch();
+
+  gtkSwitch.connect('notify::active', (button) => {
+    _settings.set_boolean(configKey, button.active);
+  });
+
+  gtkSwitch.active = _settings.get_boolean(configKey);
+
+  hbox.add(gtkLabel);
+  hbox.add(gtkSwitch);
+
+  return {
+    hbox: hbox,
+    gtkLabel: gtkLabel,
+    gtkSwitch: gtkSwitch
+  };
+};
+
+const bindSensitivity = (source, target) => {
+  let set = () => {
+    target.set_sensitive(source.active)
+  };
+  source.connect('notify::active', set);
+  set();
+}
+
 const ScreenshotToolSettingsWidget = new GObject.Class({
   Name: 'ScreenshotToolSettingsWidget',
   GTypeName: 'ScreenshotToolSettingsWidget',
@@ -79,28 +114,12 @@ const ScreenshotToolSettingsWidget = new GObject.Class({
 
     /* Show indicator [on|off] */
 
-    hbox = buildHbox();
-
-    const labelShowIndicator = new Gtk.Label({
-      label: _('Show indicator'),
-      xalign: 0,
-      expand: true
-    });
-
-    const switchShowIndicator = new Gtk.Switch();
-
-    switchShowIndicator.connect('notify::active', (button) => {
-      _settings.set_boolean(Config.KeyEnableIndicator, button.active);
-    });
-
-    switchShowIndicator.active = _settings.get_boolean(
-        Config.KeyEnableIndicator
+    let switchShowIndicator = buildConfigSwitch(
+      _('Show indicator'),
+      Config.KeyEnableIndicator
     );
 
-    hbox.add(labelShowIndicator);
-    hbox.add(switchShowIndicator);
-
-    prefs.add(hbox, {fill: false});
+    prefs.add(switchShowIndicator.hbox, {fill: false});
 
 
     /* Default click action [dropdown] */
@@ -180,35 +199,11 @@ const ScreenshotToolSettingsWidget = new GObject.Class({
 
     /* Save Screenshot [on|off] */
 
-    hbox = buildHbox();
+    const switchSaveScreenshot = buildConfigSwitch(
+      _('Auto-Save Screenshot'), Config.KeySaveScreenshot
+    );
 
-    const labelSaveScreenshot = new Gtk.Label({
-      label: _('Auto-Save Screenshot'),
-      xalign: 0,
-      expand: true
-    });
-
-    const switchSaveScreenshot = new Gtk.Switch();
-
-    switchSaveScreenshot.connect('notify::active', (button) => {
-      _settings.set_boolean(Config.KeySaveScreenshot, button.active);
-    });
-
-    switchSaveScreenshot.active = _settings.get_boolean(Config.KeySaveScreenshot);
-
-    hbox.add(labelSaveScreenshot);
-    hbox.add(switchSaveScreenshot);
-
-    const saveScreenshotBindSensitivity = (actor) => {
-      var setSensitive = () => {
-        var sensitive = _settings.get_boolean(Config.KeySaveScreenshot);
-        actor.set_sensitive(sensitive)
-      };
-      switchSaveScreenshot.connect('notify::active', setSensitive);
-      setSensitive();
-    };
-
-    prefs.add(hbox, {fill: false});
+    prefs.add(switchSaveScreenshot.hbox, {fill: false});
 
 
     /* Save Location [filechooser] */
@@ -246,8 +241,8 @@ const ScreenshotToolSettingsWidget = new GObject.Class({
       _settings.set_string(Config.KeySaveLocation, filename);
     });
 
-    saveScreenshotBindSensitivity(labelSaveLocation);
-    saveScreenshotBindSensitivity(chooserSaveLocation);
+    bindSensitivity(switchSaveScreenshot.gtkSwitch, labelSaveLocation);
+    bindSensitivity(switchSaveScreenshot.gtkSwitch, chooserSaveLocation);
 
     hbox.add(labelSaveLocation);
     hbox.add(chooserSaveLocation);
@@ -344,29 +339,13 @@ const ScreenshotToolSettingsWidget = new GObject.Class({
       expand: false
     });
 
-    let hbox;
+    /* Enable Imgur [on|off] */
 
-    /* Save Screenshot [on|off] */
+    let configSwitch = buildConfigSwitch(
+      _('Enable Imgur Upload'), Config.KeyEnableUploadImgur
+    );
 
-    hbox = buildHbox();
-
-    const labelEnable = new Gtk.Label({
-      label: _('Enable Imgur Upload'),
-      xalign: 0,
-      expand: true
-    });
-
-    const switchEnable = new Gtk.Switch();
-
-    switchEnable.connect('notify::active', (button) => {
-      _settings.set_boolean(Config.KeyEnableUploadImgur, button.active);
-    });
-
-    switchEnable.active = _settings.get_boolean(Config.KeyEnableUploadImgur);
-
-    hbox.add(labelEnable);
-    hbox.add(switchEnable);
-    prefs.add(hbox, {fill: false});
+    prefs.add(configSwitch.hbox, {fill: false});
 
     return prefs;
   },
