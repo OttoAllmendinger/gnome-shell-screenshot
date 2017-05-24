@@ -95,6 +95,11 @@ const Screenshot = new Lang.Class({
 
   imgurStartUpload: function () {
     this.imgurUpload = new UploadImgur.Upload(this.srcFile);
+
+    this.imgurUpload.connect("error", (obj, err) => {
+      Notifications.notifyError(String(err));
+    });
+
     // this.imgurUpload = new Local.imports.uploadDummy.Upload();
     Notifications.notifyImgurUpload(this);
     this.emit("imgur-upload", this.imgurUpload);

@@ -29,7 +29,7 @@ const getPostMessage = (file, callback) => {
     try {
       [, contents] = f.load_contents_finish(res);
     } catch (e) {
-      log("error loading file: " + e.message);
+      logError(new Error("error loading file: " + e.message));
       callback(e, null);
       return;
     }
@@ -48,6 +48,11 @@ const getPostMessage = (file, callback) => {
   });
 };
 
+const httpError = (status, statusCode, responeData) => {
+  return new Error("HTTP Error status=" + status +
+                   " statusCode=" + statusCode +
+                   " responseData=" + responeData);
+};
 
 const Upload = new Lang.Class({
   Name: "Upload",
@@ -81,11 +86,7 @@ const Upload = new Lang.Class({
             this.responseData = data;
             this.emit('done', data);
           } else {
-            logError(new Error(
-              'getJSON error status code: ' + status +
-              ' data: ' + response_body.data
-            ));
-
+            let err = httpError(status, status_code, response_body.data);
             let errorMessage;
 
             try {
@@ -98,7 +99,7 @@ const Upload = new Lang.Class({
               errorMessage = response_body.data
             }
 
-            this.emit('error', "HTTP " + status_code + " - " + errorMessage);
+            this.emit('error', err);
           }
 
           message.disconnect(signalProgress);
