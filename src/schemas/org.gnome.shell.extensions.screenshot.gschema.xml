@@ -65,6 +65,18 @@
     <key name="enable-imgur" type="b">
       <default>false</default>
     </key>
+
+    <key name="imgur-auto-upload" type="b">
+      <default>false</default>
+    </key>
+
+    <key name="imgur-auto-copy-link" type="b">
+      <default>false</default>
+    </key>
+
+    <key name="imgur-auto-open-link" type="b">
+      <default>false</default>
+    </key>
   </schema>
 </schemalist>
 <!--

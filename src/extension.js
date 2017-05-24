@@ -98,6 +98,17 @@ const Screenshot = new Lang.Class({
     // this.imgurUpload = new Local.imports.uploadDummy.Upload();
     Notifications.notifyImgurUpload(this);
     this.emit("imgur-upload", this.imgurUpload);
+
+    this.imgurUpload.connect("done", () => {
+      if (settings.get_boolean(Config.KeyImgurAutoCopyLink)) {
+        this.imgurCopyURL();
+      }
+
+      if (settings.get_boolean(Config.KeyImgurAutoOpenLink)) {
+        this.imgurOpenURL();
+      }
+    });
+
     this.imgurUpload.start();
   },
 
@@ -254,6 +265,13 @@ const Extension = new Lang.Class({
 
     if (this._indicator) {
       this._indicator.setScreenshot(screenshot);
+    }
+
+    let imgurEnabled = settings.get_boolean(Config.KeyEnableUploadImgur);
+    let imgurAutoUpload = settings.get_boolean(Config.KeyImgurAutoUpload);
+
+    if (imgurEnabled && imgurAutoUpload) {
+      screenshot.imgurStartUpload();
     }
   },
 

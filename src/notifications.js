@@ -72,12 +72,19 @@ const Notification = new Lang.Class({
 
   createBanner: function() {
     let b = this.parent();
+
+    b._iconBin.child.icon_size = ICON_SIZE;
+
     b.addAction(_("Copy"), this._onCopy.bind(this));
     b.addAction(_("Save"), this._onSave.bind(this));
+
     if (settings.get_boolean(Config.KeyEnableUploadImgur)) {
-      b.addAction(_("Upload To Imgur"), this._onUpload.bind(this));
+      if (settings.get_boolean(Config.KeyImgurAutoUpload)) {
+        b.addAction(_("Uploading To Imgur..."), () => { /* noop */ });
+      } else {
+        b.addAction(_("Upload To Imgur"), this._onUpload.bind(this));
+      }
     }
-    b._iconBin.child.icon_size = ICON_SIZE;
     return b;
   },
 
@@ -146,16 +153,21 @@ const ImgurNotification = new Lang.Class({
       this.update(
         _("Imgur Upload Successful"), this._upload.responseData.link
       );
-      if (this.copyButton) {
-        this.copyButton.visible = true;
-      }
+      this._updateCopyButton();
     });
+  },
+
+  _updateCopyButton: function () {
+    if (!this._copyButton) {
+      return;
+    }
+    this._copyButton.visible = this._screenshot.isImgurUploadComplete();
   },
 
   createBanner: function() {
     let b = this.parent();
-    this.copyButton = b.addAction(_("Copy Link"), this._onCopy.bind(this));
-    this.copyButton.visible = false;
+    this._copyButton = b.addAction(_("Copy Link"), this._onCopy.bind(this));
+    this._updateCopyButton();
     return b;
   },
 

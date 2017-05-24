@@ -44,3 +44,6 @@ const ClipboardActions = {
 
 
 const KeyEnableUploadImgur = 'enable-imgur';
+const KeyImgurAutoUpload = 'imgur-auto-upload';
+const KeyImgurAutoCopyLink = 'imgur-auto-copy-link';
+const KeyImgurAutoOpenLink = 'imgur-auto-open-link';

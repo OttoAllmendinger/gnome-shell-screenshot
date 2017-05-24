@@ -339,13 +339,59 @@ const ScreenshotToolSettingsWidget = new GObject.Class({
       expand: false
     });
 
-    /* Enable Imgur [on|off] */
+    /* Enable Imgur Upload [on|off] */
 
-    let configSwitch = buildConfigSwitch(
+    let configSwitchEnable = buildConfigSwitch(
       _('Enable Imgur Upload'), Config.KeyEnableUploadImgur
     );
 
-    prefs.add(configSwitch.hbox, {fill: false});
+    prefs.add(configSwitchEnable.hbox, {fill: false});
+
+
+    /* Auto-Upload After Capture [on|off] */
+
+    let configSwitchUploadOnCapture = buildConfigSwitch(
+      _('Auto-Upload After Capture'), Config.KeyImgurAutoUpload
+    );
+
+    bindSensitivity(
+      configSwitchEnable.gtkSwitch, configSwitchUploadOnCapture.gtkLabel
+    );
+    bindSensitivity(
+      configSwitchEnable.gtkSwitch, configSwitchUploadOnCapture.gtkSwitch
+    );
+
+    prefs.add(configSwitchUploadOnCapture.hbox, {fill: false});
+
+    /* Auto-Copy Link After Upload [on|off] */
+
+    let configSwitchCopyLinkOnUpload = buildConfigSwitch(
+      _('Auto-Copy Link After Upload'), Config.KeyImgurAutoCopyLink
+    );
+
+    bindSensitivity(
+      configSwitchEnable.gtkSwitch, configSwitchCopyLinkOnUpload.gtkLabel
+    );
+    bindSensitivity(
+      configSwitchEnable.gtkSwitch, configSwitchCopyLinkOnUpload.gtkSwitch
+    );
+
+    prefs.add(configSwitchCopyLinkOnUpload.hbox, {fill: false});
+
+    /* Auto-Open Link After Upload [on|off] */
+
+    let configSwitchOpenLinkOnUpload = buildConfigSwitch(
+      _('Auto-Open Link After Upload'), Config.KeyImgurAutoOpenLink
+    );
+    bindSensitivity(
+      configSwitchEnable.gtkSwitch, configSwitchOpenLinkOnUpload.gtkLabel
+    );
+    bindSensitivity(
+      configSwitchEnable.gtkSwitch, configSwitchOpenLinkOnUpload.gtkSwitch
+    );
+
+    prefs.add(configSwitchOpenLinkOnUpload.hbox, {fill: false});
+
 
     return prefs;
   },
