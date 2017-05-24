@@ -98,7 +98,7 @@ msgstr "Link Kopieren"
 
 #: src/indicator.js:63
 msgid "Delete"
-msgstr ""
+msgstr "Löschen"
 
 #: src/indicator.js:223 src/prefs.js:136
 msgid "Select Area"
@@ -129,9 +129,8 @@ msgid "Save"
 msgstr "Speichern"
 
 #: src/notifications.js:83
-#, fuzzy
 msgid "Uploading To Imgur..."
-msgstr "Imgur-Upload"
+msgstr "Imgur-Upload läuft..."
 
 #: src/notifications.js:85
 msgid "Upload To Imgur"
@@ -219,15 +218,15 @@ msgstr "Imgur-Upload aktivieren"
 
 #: src/prefs.js:354
 msgid "Auto-Upload After Capture"
-msgstr ""
+msgstr "Auto-Upload nach Aufname"
 
 #: src/prefs.js:369
 msgid "Auto-Copy Link After Upload"
-msgstr ""
+msgstr "Nach Upload automatisch Link kopieren"
 
 #: src/prefs.js:384
 msgid "Auto-Open Link After Upload"
-msgstr ""
+msgstr "Nach Upload automatisch Link öffnen"
 
 #: src/prefs.js:410
 msgid "Select area"
