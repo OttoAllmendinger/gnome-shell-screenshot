@@ -105,6 +105,25 @@ const Upload = new Lang.Class({
           message.disconnect(signalProgress);
       });
     });
+  },
+
+  deleteRemote: function () {
+    if (!this.responseData) {
+      throw new Error("no responseData");
+    }
+    let {deletehash} = this.responseData;
+    let uri = new Soup.URI(baseUrl + "image/" + deletehash);
+    let message = new Soup.Message({method: "DELETE", uri: uri});
+    authMessage(message);
+    httpSession.queue_message(message,
+      (session, {status, status_code, response_body}) => {
+        if (status_code == 200) {
+          this.emit('deleted');
+        } else {
+          this.emit('error', httpError(status, status_code, response_body.data));
+        }
+      }
+    );
   }
 });
 Signals.addSignalMethods(Upload.prototype);

@@ -60,14 +60,17 @@ const ScreenshotSection = new Lang.Class({
     this._imgurUpload = new PopupMenu.PopupMenuItem(_('Upload'));
     this._imgurOpen = new PopupMenu.PopupMenuItem(_('Open Link'));
     this._imgurCopyLink = new PopupMenu.PopupMenuItem(_('Copy Link'));
+    this._imgurDelete = new PopupMenu.PopupMenuItem(_('Delete'));
 
     this._imgurUpload.connect('activate', this._onImgurUpload.bind(this));
     this._imgurOpen.connect('activate', this._onImgurOpen.bind(this));
     this._imgurCopyLink.connect('activate', this._onImgurCopyLink.bind(this));
+    this._imgurDelete.connect('activate', this._onImgurDelete.bind(this));
 
     this._imgurMenu.menu.addMenuItem(this._imgurUpload);
     this._imgurMenu.menu.addMenuItem(this._imgurOpen);
     this._imgurMenu.menu.addMenuItem(this._imgurCopyLink);
+    this._imgurMenu.menu.addMenuItem(this._imgurDelete);
 
     menu.addMenuItem(this._imgurMenu);
 
@@ -99,6 +102,8 @@ const ScreenshotSection = new Lang.Class({
     this._imgurOpen.actor.visible =
       visible && imgurEnabled && imgurComplete;
     this._imgurCopyLink.actor.visible =
+      visible && imgurEnabled && imgurComplete;
+    this._imgurDelete.actor.visible =
       visible && imgurEnabled && imgurComplete;
   },
 
@@ -166,6 +171,10 @@ const ScreenshotSection = new Lang.Class({
 
   _onImgurCopyLink: function () {
     this._screenshot.imgurCopyURL();
+  },
+
+  _onImgurDelete: function () {
+    this._screenshot.imgurDelete();
   }
 })
 

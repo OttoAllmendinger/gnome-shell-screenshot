@@ -142,6 +142,17 @@ const Screenshot = new Lang.Class({
     }
     let uri = this.imgurUpload.responseData.link;
     Clipboard.setText(uri);
+  },
+
+  imgurDelete: function () {
+    if (!this.isImgurUploadComplete()) {
+      logError(new Error("no completed imgur upload"));
+      return;
+    }
+    this.imgurUpload.connect('deleted', () => {
+      this.imgurUpload = null;
+    });
+    this.imgurUpload.deleteRemote();
   }
 });
 Signals.addSignalMethods(Screenshot.prototype);
