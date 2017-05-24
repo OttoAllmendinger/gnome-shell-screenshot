@@ -14,6 +14,12 @@ const getMimetype = (file) => {
   return 'image/png'; // FIXME
 };
 
+const authMessage = (soupMessage) => {
+  soupMessage.request_headers.append(
+    "Authorization", "Client-ID " + clientId
+  );
+}
+
 const getPostMessage = (file, callback) => {
   let url = this.baseUrl + "image";
 
@@ -36,9 +42,7 @@ const getPostMessage = (file, callback) => {
 
     let message = Soup.form_request_new_from_multipart(url, multipart);
 
-    message.request_headers.append(
-      "Authorization", "Client-ID " + clientId
-    );
+    authMessage(message);
 
     callback(null, message);
   });
