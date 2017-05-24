@@ -54,6 +54,8 @@ const ScreenshotSection = new Lang.Class({
 
     // IMGUR
 
+    menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
+
     this._imgurMenu = new PopupMenu.PopupSubMenuMenuItem(_('Imgur'), false);
     this._imgurUpload = new PopupMenu.PopupMenuItem(_('Upload'));
     this._imgurOpen = new PopupMenu.PopupMenuItem(_('Open Link'));
