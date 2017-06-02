@@ -28,6 +28,8 @@ const copy = (srcPath, dstDir, dstName) => {
   dlg.add_button( _("_Cancel"), Gtk.ResponseType.CANCEL);
   dlg.add_button( _("_Save"), Gtk.ResponseType.OK);
 
+  dlg.set_do_overwrite_confirmation(true);
+
   if (dstDir) {
     let dstDirFile = Gio.File.new_for_path(dstDir);
     dlg.set_current_folder_file(dstDirFile);
@@ -42,7 +44,7 @@ const copy = (srcPath, dstDir, dstName) => {
   }
 
   let dstFile = Gio.File.new_for_path(dlg.get_filename());
-  srcFile.copy(dstFile, Gio.FileCopyFlags.NONE, null, null);
+  srcFile.copy(dstFile, Gio.FileCopyFlags.OVERWRITE, null, null);
 }
 
 if (window["ARGV"]) {
