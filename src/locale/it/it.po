@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-05-24 12:40+0200\n"
-"PO-Revision-Date: 2017-04-20 09:43+0200\n"
-"Last-Translator: Jimmy Scionti <jimmy.scionti@gmail.com>\n"
-"Language-Team: \n"
+"PO-Revision-Date: 2017-06-07 12:50+0200\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Last-Translator: Jimmy Scionti <jimmy.scionti@gmail.com>\n"
+"Language-Team: Jimmy Scionti <jimmy.scionti@gmail.com>\n"
 "X-Generator: Poedit 1.8.7.1\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: src/filename.js:27
 msgid "Screenshot"
@@ -68,7 +68,7 @@ msgstr "Parametri:"
 
 #: src/indicator.js:41
 msgid "Clear"
-msgstr ""
+msgstr "Svuota"
 
 #: src/indicator.js:42 src/notifications.js:78
 msgid "Copy"
@@ -76,28 +76,27 @@ msgstr "Copia"
 
 #: src/indicator.js:43
 msgid "Save As..."
-msgstr ""
+msgstr "Salva come..."
 
 #: src/indicator.js:59
 msgid "Imgur"
-msgstr ""
+msgstr "Imgur"
 
 #: src/indicator.js:60
 msgid "Upload"
-msgstr ""
+msgstr "Upload"
 
 #: src/indicator.js:61
 msgid "Open Link"
-msgstr ""
+msgstr "Apri link"
 
 #: src/indicator.js:62 src/notifications.js:169
-#, fuzzy
 msgid "Copy Link"
-msgstr "Copia"
+msgstr "Copia link"
 
 #: src/indicator.js:63
 msgid "Delete"
-msgstr ""
+msgstr "Cancella"
 
 #: src/indicator.js:223 src/prefs.js:136
 msgid "Select Area"
@@ -129,11 +128,11 @@ msgstr "Salva"
 
 #: src/notifications.js:83
 msgid "Uploading To Imgur..."
-msgstr ""
+msgstr "Caricamento su Imgur..."
 
 #: src/notifications.js:85
 msgid "Upload To Imgur"
-msgstr ""
+msgstr "Carica su Imgur"
 
 #: src/notifications.js:117
 msgid "Error"
@@ -141,15 +140,15 @@ msgstr "Errore"
 
 #: src/notifications.js:131 src/notifications.js:143
 msgid "Imgur Upload"
-msgstr ""
+msgstr "Upload su Imgur"
 
 #: src/notifications.js:149
 msgid "Imgur Upload Failed"
-msgstr ""
+msgstr "L'upload su Imgur è fallito"
 
 #: src/notifications.js:154
 msgid "Imgur Upload Successful"
-msgstr ""
+msgstr "L'upload su Imgur è terminato con successo"
 
 #: src/prefs.js:87
 msgid "Indicator"
@@ -161,7 +160,7 @@ msgstr "Salvataggio"
 
 #: src/prefs.js:95
 msgid "Imgur Upload (Beta)"
-msgstr ""
+msgstr "Upload su Imgur (Beta)"
 
 #: src/prefs.js:99
 msgid "Keybindings"
@@ -171,7 +170,6 @@ msgstr "Scorciatoie"
 msgid "Show indicator"
 msgstr "Mostra l'indicatore"
 
-# FIXME this is translation of "Default Click Action"
 #: src/prefs.js:130
 msgid "Primary Button"
 msgstr "Pulsante primario"
@@ -214,19 +212,19 @@ msgstr "Anteprima"
 
 #: src/prefs.js:345
 msgid "Enable Imgur Upload"
-msgstr ""
+msgstr "Abilità l'upload su Imgur"
 
 #: src/prefs.js:354
 msgid "Auto-Upload After Capture"
-msgstr ""
+msgstr "Upload automatico dopo lo screenshot"
 
 #: src/prefs.js:369
 msgid "Auto-Copy Link After Upload"
-msgstr ""
+msgstr "Copia automatica del link dopo l'upload"
 
 #: src/prefs.js:384
 msgid "Auto-Open Link After Upload"
-msgstr ""
+msgstr "Apertura automatica del link dopo l'upload"
 
 #: src/prefs.js:410
 msgid "Select area"
