@@ -1,0 +1,259 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-07-31 22:28+0300\n"
+"PO-Revision-Date: 2017-07-31 23:31+0300\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.0.2\n"
+"Last-Translator: Alex Gluck <alexgluck@bk.ru>\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Language: ru_RU\n"
+
+#: src/filename.js:27
+msgid "Screenshot"
+msgstr "Снимок экрана"
+
+#: src/filename.js:27
+msgid "Screenshot (literal)"
+msgstr "Скриншот (прописью)"
+
+#: src/filename.js:28
+msgid "Year"
+msgstr "Год"
+
+#: src/filename.js:29
+msgid "Month"
+msgstr "Месяц"
+
+#: src/filename.js:30
+msgid "Day"
+msgstr "День"
+
+#: src/filename.js:31
+msgid "Hour"
+msgstr "Час"
+
+#: src/filename.js:32
+msgid "Minute"
+msgstr "Минут"
+
+#: src/filename.js:33
+msgid "Second"
+msgstr "Секунд"
+
+#: src/filename.js:34
+msgid "Width"
+msgstr "Ширина"
+
+#: src/filename.js:35
+msgid "Height"
+msgstr "Высота"
+
+#: src/filename.js:36
+msgid "Hostname"
+msgstr "Имя машины"
+
+#: src/filename.js:41
+msgid "Parameters:"
+msgstr "Параметры:"
+
+#: src/indicator.js:41
+msgid "Clear"
+msgstr "Очистить"
+
+#: src/indicator.js:42 src/notifications.js:78
+msgid "Copy"
+msgstr "Копировать"
+
+#: src/indicator.js:43
+msgid "Save As..."
+msgstr "Сохранить как ..."
+
+#: src/indicator.js:59
+msgid "Imgur"
+msgstr "Imgur"
+
+#: src/indicator.js:60
+msgid "Upload"
+msgstr "Загрузить"
+
+#: src/indicator.js:61
+msgid "Open Link"
+msgstr "Открыть ссылку"
+
+#: src/indicator.js:62 src/notifications.js:169
+msgid "Copy Link"
+msgstr "Копировать ссылку"
+
+#: src/indicator.js:63
+msgid "Delete"
+msgstr "Удалить"
+
+#: src/indicator.js:223 src/prefs.js:136
+msgid "Select Area"
+msgstr "Выделить область"
+
+#: src/indicator.js:224 src/prefs.js:137
+msgid "Select Window"
+msgstr "Выделить окно"
+
+#: src/indicator.js:225 src/prefs.js:138
+msgid "Select Desktop"
+msgstr "Выбрать рабочий стол"
+
+#: src/indicator.js:246
+msgid "Settings"
+msgstr "Настройки"
+
+#: src/notifications.js:48
+msgid "New Screenshot"
+msgstr "Новый снимок"
+
+#: src/notifications.js:53
+msgid "Size:"
+msgstr "Размер:"
+
+#: src/notifications.js:79
+msgid "Save"
+msgstr "Сохранить"
+
+#: src/notifications.js:83
+msgid "Uploading To Imgur..."
+msgstr "Загрузить в Imgur..."
+
+#: src/notifications.js:85
+msgid "Upload To Imgur"
+msgstr "Загрузить в Imgur"
+
+#: src/notifications.js:117
+msgid "Error"
+msgstr "Ошибка"
+
+#: src/notifications.js:131 src/notifications.js:143
+msgid "Imgur Upload"
+msgstr "Загрузка в Imgur"
+
+#: src/notifications.js:149
+msgid "Imgur Upload Failed"
+msgstr "Загрузка в Imgur провалилась"
+
+#: src/notifications.js:154
+msgid "Imgur Upload Successful"
+msgstr "Загрузка в Imgur успешна"
+
+#: src/prefs.js:87
+msgid "Indicator"
+msgstr "Индикатор"
+
+#: src/prefs.js:91
+msgid "Storage"
+msgstr "Сохранять в"
+
+#: src/prefs.js:95
+msgid "Imgur Upload (Beta)"
+msgstr "Загрузка в Imgur (ВЕТА)"
+
+#: src/prefs.js:99
+msgid "Keybindings"
+msgstr "Горячие клавиши"
+
+#: src/prefs.js:118
+msgid "Show indicator"
+msgstr "Показывать иконку"
+
+#: src/prefs.js:130
+msgid "Primary Button"
+msgstr "Основная кнопка"
+
+#: src/prefs.js:139
+msgid "Show Menu"
+msgstr "Показать меню"
+
+#: src/prefs.js:160
+msgid "Default Clipboard Content"
+msgstr "Добавлять в буфер обмена"
+
+#: src/prefs.js:166
+msgid "Unchanged"
+msgstr "Необработанные данные"
+
+#: src/prefs.js:167
+msgid "Image Data"
+msgstr "Изображение"
+
+#: src/prefs.js:203
+msgid "Auto-Save Screenshot"
+msgstr "Авто-сохранение скриншота"
+
+#: src/prefs.js:214
+msgid "Save Location"
+msgstr "Сохранить область"
+
+#: src/prefs.js:221
+msgid "Select"
+msgstr "Выделить"
+
+#: src/prefs.js:262
+msgid "Default Filename"
+msgstr "Имя файла по умолчанию"
+
+#: src/prefs.js:287
+msgid "Preview"
+msgstr "Формат"
+
+#: src/prefs.js:345
+msgid "Enable Imgur Upload"
+msgstr "Включать загрузку в Imgur"
+
+#: src/prefs.js:354
+msgid "Auto-Upload After Capture"
+msgstr "Автозагрузка скриншота"
+
+#: src/prefs.js:369
+msgid "Auto-Copy Link After Upload"
+msgstr "Автокопирование ссылки после загрузки"
+
+#: src/prefs.js:384
+msgid "Auto-Open Link After Upload"
+msgstr "Автооткрытие ссылки после загрузки"
+
+#: src/prefs.js:410
+msgid "Select area"
+msgstr "Выделить область"
+
+#: src/prefs.js:411
+msgid "Select window"
+msgstr "Выбрать окно"
+
+#: src/prefs.js:412
+msgid "Select whole desktop"
+msgstr "Захватить текущий рабочий стол"
+
+#: src/prefs.js:439
+msgid "Keyboard Shortcut"
+msgstr "Горячая клавиша"
+
+#: src/prefs.js:479
+msgid "Modify"
+msgstr "Изменить"
+
+#: src/saveDlg.js:28
+msgid "_Cancel"
+msgstr "_Отменить"
+
+#: src/saveDlg.js:29
+msgid "_Save"
+msgstr "_Сохранить"
+
+#: src/selection.js:244
+msgid "selected region was too small - please select a larger area"
+msgstr "выбранная область слишком маленькая - выберите пожалуйста область шире"
