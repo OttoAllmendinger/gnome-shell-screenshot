@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-05-24 12:40+0200\n"
+"POT-Creation-Date: 2017-10-17 11:28+0200\n"
 "PO-Revision-Date: 2017-04-26 14:29+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -180,12 +180,12 @@ msgid "Show Menu"
 msgstr "Zobrazit nabídku"
 
 #: src/prefs.js:160
-msgid "Default Clipboard Content"
-msgstr "Výchozí obsah do schránky"
+msgid "Auto-Copy to Clipboard"
+msgstr ""
 
 #: src/prefs.js:166
-msgid "Unchanged"
-msgstr "Beze změn"
+msgid "Nothing"
+msgstr ""
 
 #: src/prefs.js:167
 msgid "Image Data"
@@ -258,3 +258,9 @@ msgstr "_Uložit"
 #: src/selection.js:244
 msgid "selected region was too small - please select a larger area"
 msgstr "vybraná oblast je příliš malá - vyber větší"
+
+#~ msgid "Default Clipboard Content"
+#~ msgstr "Výchozí obsah do schránky"
+
+#~ msgid "Unchanged"
+#~ msgstr "Beze změn"

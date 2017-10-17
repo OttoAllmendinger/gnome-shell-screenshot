@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-05-24 12:40+0200\n"
+"POT-Creation-Date: 2017-10-17 11:28+0200\n"
 "PO-Revision-Date: 2017-05-18 19:51+0300\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -180,12 +180,12 @@ msgid "Show Menu"
 msgstr "Εμφάνιση μενού"
 
 #: src/prefs.js:160
-msgid "Default Clipboard Content"
-msgstr "Προεπιλεγμένο περιεχόμενο προχείρου"
+msgid "Auto-Copy to Clipboard"
+msgstr ""
 
 #: src/prefs.js:166
-msgid "Unchanged"
-msgstr "Απαράλαχτο"
+msgid "Nothing"
+msgstr ""
 
 #: src/prefs.js:167
 msgid "Image Data"
@@ -259,3 +259,9 @@ msgstr "_Αποθήκευση"
 msgid "selected region was too small - please select a larger area"
 msgstr ""
 "η επιλεγμένη περιοχή ήταν πολύ μικρή - παρακαλώ επιλέξτε μεγαλύτερη περιοχή"
+
+#~ msgid "Default Clipboard Content"
+#~ msgstr "Προεπιλεγμένο περιεχόμενο προχείρου"
+
+#~ msgid "Unchanged"
+#~ msgstr "Απαράλαχτο"

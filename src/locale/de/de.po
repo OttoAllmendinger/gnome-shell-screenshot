@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-05-24 12:40+0200\n"
+"POT-Creation-Date: 2017-10-17 11:28+0200\n"
 "PO-Revision-Date: 2016-11-14 00:52+0100\n"
 "Last-Translator: Gregor Santner <gsantner.github.io>\n"
 "Language-Team: \n"
@@ -181,12 +181,12 @@ msgid "Show Menu"
 msgstr "Menü anzeigen"
 
 #: src/prefs.js:160
-msgid "Default Clipboard Content"
-msgstr "Standard Inhalt der Zwischenablage"
+msgid "Auto-Copy to Clipboard"
+msgstr ""
 
 #: src/prefs.js:166
-msgid "Unchanged"
-msgstr "Unverändert"
+msgid "Nothing"
+msgstr ""
 
 #: src/prefs.js:167
 msgid "Image Data"
@@ -260,3 +260,9 @@ msgstr "_Speichern"
 msgid "selected region was too small - please select a larger area"
 msgstr ""
 "Der ausgewählte Bereich war zu klein - bitte größeren Bereich auswählen"
+
+#~ msgid "Default Clipboard Content"
+#~ msgstr "Standard Inhalt der Zwischenablage"
+
+#~ msgid "Unchanged"
+#~ msgstr "Unverändert"
