@@ -69,7 +69,7 @@ msgstr "Parametry:"
 
 #: src/indicator.js:41
 msgid "Clear"
-msgstr ""
+msgstr "Oczyścić"
 
 #: src/indicator.js:42 src/notifications.js:78
 msgid "Copy"
@@ -77,19 +77,19 @@ msgstr "Kopiuj"
 
 #: src/indicator.js:43
 msgid "Save As..."
-msgstr ""
+msgstr "Zapisz jako..."
 
 #: src/indicator.js:59
 msgid "Imgur"
-msgstr ""
+msgstr "Imgur"
 
 #: src/indicator.js:60
 msgid "Upload"
-msgstr ""
+msgstr "Przekazać plik"
 
 #: src/indicator.js:61
 msgid "Open Link"
-msgstr ""
+msgstr "Otwórz link"
 
 #: src/indicator.js:62 src/notifications.js:169
 #, fuzzy
@@ -98,7 +98,7 @@ msgstr "Kopiuj"
 
 #: src/indicator.js:63
 msgid "Delete"
-msgstr ""
+msgstr "Kasować"
 
 #: src/indicator.js:223 src/prefs.js:136
 msgid "Select Area"
@@ -130,11 +130,11 @@ msgstr "Zapisz"
 
 #: src/notifications.js:83
 msgid "Uploading To Imgur..."
-msgstr ""
+msgstr "Przesyłanie do Imgur..."
 
 #: src/notifications.js:85
 msgid "Upload To Imgur"
-msgstr ""
+msgstr "Prześlij do Imgur"
 
 #: src/notifications.js:117
 msgid "Error"
@@ -142,15 +142,15 @@ msgstr "Błąd"
 
 #: src/notifications.js:131 src/notifications.js:143
 msgid "Imgur Upload"
-msgstr ""
+msgstr "Imgur Upload"
 
 #: src/notifications.js:149
 msgid "Imgur Upload Failed"
-msgstr ""
+msgstr "Pobranie Imgur nie powiodło się"
 
 #: src/notifications.js:154
 msgid "Imgur Upload Successful"
-msgstr ""
+msgstr "Imgur Upload udany"
 
 #: src/prefs.js:87
 msgid "Indicator"
@@ -162,7 +162,7 @@ msgstr "Miejsce"
 
 #: src/prefs.js:95
 msgid "Imgur Upload (Beta)"
-msgstr ""
+msgstr "Imgur Upload (Beta)"
 
 #: src/prefs.js:99
 msgid "Keybindings"
@@ -183,11 +183,11 @@ msgstr "Pokaż menu"
 
 #: src/prefs.js:160
 msgid "Auto-Copy to Clipboard"
-msgstr ""
+msgstr "Automatycznie kopiuj do schowka"
 
 #: src/prefs.js:166
 msgid "Nothing"
-msgstr ""
+msgstr "Nic"
 
 #: src/prefs.js:167
 msgid "Image Data"
@@ -215,19 +215,19 @@ msgstr "Podgląd"
 
 #: src/prefs.js:345
 msgid "Enable Imgur Upload"
-msgstr ""
+msgstr "Włącz Imgur Upload"
 
 #: src/prefs.js:354
 msgid "Auto-Upload After Capture"
-msgstr ""
+msgstr "Automatyczne przesyłanie po przechwyceniu"
 
 #: src/prefs.js:369
 msgid "Auto-Copy Link After Upload"
-msgstr ""
+msgstr "Automatycznie kopiuj link po przesłaniu"
 
 #: src/prefs.js:384
 msgid "Auto-Open Link After Upload"
-msgstr ""
+msgstr "Automatyczne otwieranie linka po przesłaniu"
 
 #: src/prefs.js:410
 msgid "Select area"
