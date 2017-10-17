@@ -182,11 +182,11 @@ msgstr "Menü anzeigen"
 
 #: src/prefs.js:160
 msgid "Auto-Copy to Clipboard"
-msgstr ""
+msgstr "Automatisch in die Zwischenablage"
 
 #: src/prefs.js:166
 msgid "Nothing"
-msgstr ""
+msgstr "Nichts"
 
 #: src/prefs.js:167
 msgid "Image Data"
