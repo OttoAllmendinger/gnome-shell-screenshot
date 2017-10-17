@@ -53,6 +53,7 @@ src/locale/gnome-shell-screenshot.pot: $(SOURCE_JAVASCRIPT)
 # 	  --locale=de_DE.utf8 # FIXME replace this
 
 src/locale/%.po: src/locale/gnome-shell-screenshot.pot
+	# NOTE sometimes --no-fuzzy-matching is better
 	msgmerge --backup=none --update $@ $^
 
 src/locale/%/LC_MESSAGES/gnome-shell-screenshot.mo: src/locale/%/*.po
