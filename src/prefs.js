@@ -156,14 +156,14 @@ const ScreenshotToolSettingsWidget = new GObject.Class({
 
     hbox = buildHbox();
 
-    const labelClipboardContent = new Gtk.Label({
-      label: _('Default Clipboard Content'),
+    const labelAutoCopy = new Gtk.Label({
+      label: _('Auto-Copy to Clipboard'),
       xalign: 0,
       expand: true
     });
 
     const comboBoxOptions = [
-      [_("Unchanged")     , Config.ClipboardActions.NONE],
+      [_("Nothing")       , Config.ClipboardActions.NONE],
       [_("Image Data")    , Config.ClipboardActions.SET_IMAGE_DATA],
       // [_("Local Path")    , Config.ClipboardActions.SET_LOCAL_PATH]
       // TODO
@@ -179,7 +179,7 @@ const ScreenshotToolSettingsWidget = new GObject.Class({
       (value) => _settings.set_string(Config.KeyClipboardAction, value)
     );
 
-    hbox.add(labelClipboardContent);
+    hbox.add(labelAutoCopy);
     hbox.add(comboBoxClipboardContent);
 
     prefs.add(hbox, {fill: false});
