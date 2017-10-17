@@ -41,7 +41,7 @@ should work again afterwards.
 
 * https://github.com/RaphaelRochet -- French translation
 * https://github.com/gsantner -- German translation
-* https://github.com/pkomur -- Polish translation
+* https://github.com/pkomur, https://github.com/orschiro -- Polish translation
 * https://github.com/amivaleo -- Italian translation
 * https://github.com/ge0rgecz -- Czech translation
 * https://github.com/dirosis -- Greek translation
