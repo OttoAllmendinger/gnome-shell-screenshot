@@ -83,7 +83,7 @@ const Screenshot = new Lang.Class({
       Local.path + "/saveDlg.js",
       this.srcFile.get_path(),
       Path.expand("$PICTURES"),
-      newFile.get_path(),
+      newFile.get_basename(),
       Local.dir.get_path(),
     ]);
   },
