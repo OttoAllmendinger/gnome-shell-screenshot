@@ -39,7 +39,7 @@ should work again afterwards.
 
 ## Contributors
 
-* https://github.com/RaphaelRochet -- French translation
+* https://github.com/RaphaelRochet, https://github.com/peetcamron -- French translation
 * https://github.com/gsantner -- German translation
 * https://github.com/pkomur, https://github.com/orschiro -- Polish translation
 * https://github.com/amivaleo -- Italian translation
