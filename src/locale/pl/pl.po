@@ -1,21 +1,21 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Piotr Komur <pkomur@gmail.com>, 2017.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: \n"
+"Project-Id-Version: gnome-shell-screenshot\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-17 11:28+0200\n"
-"PO-Revision-Date: 2017-01-12 21:47+0100\n"
+"POT-Creation-Date: 2017-10-30 17:01+0100\n"
+"PO-Revision-Date: 2017-10-30 17:26+0100\n"
 "Last-Translator: Piotr Komur <pkomur@gmail.com>\n"
 "Language-Team: pkomur@gmail.com\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.8.9\n"
+"X-Generator: Poedit 2.0.1\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
 
@@ -69,7 +69,7 @@ msgstr "Parametry:"
 
 #: src/indicator.js:41
 msgid "Clear"
-msgstr "Oczyścić"
+msgstr "Usuń"
 
 #: src/indicator.js:42 src/notifications.js:78
 msgid "Copy"
@@ -89,12 +89,11 @@ msgstr "Przekazać plik"
 
 #: src/indicator.js:61
 msgid "Open Link"
-msgstr "Otwórz link"
+msgstr "Otwórz odnośnik"
 
 #: src/indicator.js:62 src/notifications.js:169
-#, fuzzy
 msgid "Copy Link"
-msgstr "Kopiuj"
+msgstr "Kopiuj odnośnik"
 
 #: src/indicator.js:63
 msgid "Delete"
@@ -130,11 +129,11 @@ msgstr "Zapisz"
 
 #: src/notifications.js:83
 msgid "Uploading To Imgur..."
-msgstr "Przesyłanie do Imgur..."
+msgstr "Wysyłanie do Imgur..."
 
 #: src/notifications.js:85
 msgid "Upload To Imgur"
-msgstr "Prześlij do Imgur"
+msgstr "Wyślij do serwisu Imgur"
 
 #: src/notifications.js:117
 msgid "Error"
@@ -142,15 +141,15 @@ msgstr "Błąd"
 
 #: src/notifications.js:131 src/notifications.js:143
 msgid "Imgur Upload"
-msgstr "Imgur Upload"
+msgstr "Wysyłanie do serwisu Imgur"
 
 #: src/notifications.js:149
 msgid "Imgur Upload Failed"
-msgstr "Pobranie Imgur nie powiodło się"
+msgstr "Wysyłanie do Imgur nie powiodło się"
 
 #: src/notifications.js:154
 msgid "Imgur Upload Successful"
-msgstr "Imgur Upload udany"
+msgstr "Wysyłanie do Imgur powiodło się"
 
 #: src/prefs.js:87
 msgid "Indicator"
@@ -162,7 +161,7 @@ msgstr "Miejsce"
 
 #: src/prefs.js:95
 msgid "Imgur Upload (Beta)"
-msgstr "Imgur Upload (Beta)"
+msgstr "Wysyłanie do Imgur (Beta)"
 
 #: src/prefs.js:99
 msgid "Keybindings"
@@ -215,19 +214,19 @@ msgstr "Podgląd"
 
 #: src/prefs.js:345
 msgid "Enable Imgur Upload"
-msgstr "Włącz Imgur Upload"
+msgstr "Włącz wysyłanie do serwisu Imgur"
 
 #: src/prefs.js:354
 msgid "Auto-Upload After Capture"
-msgstr "Automatyczne przesyłanie po przechwyceniu"
+msgstr "Automatyczne wysyłanie po przechwyceniu"
 
 #: src/prefs.js:369
 msgid "Auto-Copy Link After Upload"
-msgstr "Automatycznie kopiuj link po przesłaniu"
+msgstr "Automatycznie kopiuj odnośnik po wysłaniu"
 
 #: src/prefs.js:384
 msgid "Auto-Open Link After Upload"
-msgstr "Automatyczne otwieranie linka po przesłaniu"
+msgstr "Automatycznie otwieraj odnośnik po wysłaniu"
 
 #: src/prefs.js:410
 msgid "Select area"
