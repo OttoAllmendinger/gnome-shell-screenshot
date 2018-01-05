@@ -1,0 +1,259 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-10-25 23:32-0400\n"
+"PO-Revision-Date: 2018-01-05 22:53+0200\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.0.3\n"
+"Last-Translator: \n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Language: uk_UA\n"
+
+#: src/filename.js:27
+msgid "Screenshot"
+msgstr "Скріншот"
+
+#: src/filename.js:27
+msgid "Screenshot (literal)"
+msgstr "Скріншот (прописом)"
+
+#: src/filename.js:28
+msgid "Year"
+msgstr "Рік"
+
+#: src/filename.js:29
+msgid "Month"
+msgstr "Місяць"
+
+#: src/filename.js:30
+msgid "Day"
+msgstr "День"
+
+#: src/filename.js:31
+msgid "Hour"
+msgstr "Година"
+
+#: src/filename.js:32
+msgid "Minute"
+msgstr "Хвилина"
+
+#: src/filename.js:33
+msgid "Second"
+msgstr "Секунда"
+
+#: src/filename.js:34
+msgid "Width"
+msgstr "Ширина"
+
+#: src/filename.js:35
+msgid "Height"
+msgstr "Висота"
+
+#: src/filename.js:36
+msgid "Hostname"
+msgstr "Ім'я хоста"
+
+#: src/filename.js:41
+msgid "Parameters:"
+msgstr "Параметри:"
+
+#: src/indicator.js:41
+msgid "Clear"
+msgstr "Очистити"
+
+#: src/indicator.js:42 src/notifications.js:78
+msgid "Copy"
+msgstr "Копіювати"
+
+#: src/indicator.js:43
+msgid "Save As..."
+msgstr "Зберегти як..."
+
+#: src/indicator.js:59
+msgid "Imgur"
+msgstr "Imgur"
+
+#: src/indicator.js:60
+msgid "Upload"
+msgstr "Завантажити"
+
+#: src/indicator.js:61
+msgid "Open Link"
+msgstr "Відкрити посилання"
+
+#: src/indicator.js:62 src/notifications.js:169
+msgid "Copy Link"
+msgstr "Копіювати посилання"
+
+#: src/indicator.js:63
+msgid "Delete"
+msgstr "Видалити"
+
+#: src/indicator.js:223 src/prefs.js:136
+msgid "Select Area"
+msgstr "Вибрати область"
+
+#: src/indicator.js:224 src/prefs.js:137
+msgid "Select Window"
+msgstr "Вибрати вікно"
+
+#: src/indicator.js:225 src/prefs.js:138
+msgid "Select Desktop"
+msgstr "Вибрати тло"
+
+#: src/indicator.js:246
+msgid "Settings"
+msgstr "Налаштування"
+
+#: src/notifications.js:48
+msgid "New Screenshot"
+msgstr "Новий скріншот"
+
+#: src/notifications.js:53
+msgid "Size:"
+msgstr "Розмір:"
+
+#: src/notifications.js:79
+msgid "Save"
+msgstr "Зберегти"
+
+#: src/notifications.js:83
+msgid "Uploading To Imgur..."
+msgstr "Завантажується на Imgur..."
+
+#: src/notifications.js:85
+msgid "Upload To Imgur"
+msgstr "Завантажити на Imgur"
+
+#: src/notifications.js:117
+msgid "Error"
+msgstr "Помилка"
+
+#: src/notifications.js:131 src/notifications.js:143
+msgid "Imgur Upload"
+msgstr "Завантаження на Imgur"
+
+#: src/notifications.js:149
+msgid "Imgur Upload Failed"
+msgstr "Не вдалося завантажити на Imgur"
+
+#: src/notifications.js:154
+msgid "Imgur Upload Successful"
+msgstr "Успішно завантажено на Imgur"
+
+#: src/prefs.js:87
+msgid "Indicator"
+msgstr "Індикатор"
+
+#: src/prefs.js:91
+msgid "Storage"
+msgstr "Сховище"
+
+#: src/prefs.js:95
+msgid "Imgur Upload (Beta)"
+msgstr "Завантаження на Imgur (Beta)"
+
+#: src/prefs.js:99
+msgid "Keybindings"
+msgstr "Комбінації клавіш"
+
+#: src/prefs.js:118
+msgid "Show indicator"
+msgstr "Показати індикатор"
+
+#: src/prefs.js:130
+msgid "Primary Button"
+msgstr "Основна кнопка"
+
+#: src/prefs.js:139
+msgid "Show Menu"
+msgstr "Показати меню"
+
+#: src/prefs.js:160
+msgid "Auto-Copy to Clipboard"
+msgstr "Автокопіювання до буфера обміну"
+
+#: src/prefs.js:166
+msgid "Nothing"
+msgstr "Нічого"
+
+#: src/prefs.js:167
+msgid "Image Data"
+msgstr "Дані зображення"
+
+#: src/prefs.js:203
+msgid "Auto-Save Screenshot"
+msgstr "Автокопіювання скріншота"
+
+#: src/prefs.js:214
+msgid "Save Location"
+msgstr "Місце зберігання"
+
+#: src/prefs.js:221
+msgid "Select"
+msgstr "Виберіть"
+
+#: src/prefs.js:262
+msgid "Default Filename"
+msgstr "Файл за замовчуванням"
+
+#: src/prefs.js:287
+msgid "Preview"
+msgstr "Попередній перегляд"
+
+#: src/prefs.js:345
+msgid "Enable Imgur Upload"
+msgstr "Увімкнути завантаження на Imgur"
+
+#: src/prefs.js:354
+msgid "Auto-Upload After Capture"
+msgstr "Автоматичне завантаження після зйомки"
+
+#: src/prefs.js:369
+msgid "Auto-Copy Link After Upload"
+msgstr "Автокопіювати посилання після завантаження"
+
+#: src/prefs.js:384
+msgid "Auto-Open Link After Upload"
+msgstr "Автоматично відкривати посилання після завантаження"
+
+#: src/prefs.js:410
+msgid "Select area"
+msgstr "Виберіть область"
+
+#: src/prefs.js:411
+msgid "Select window"
+msgstr "Виберіть вікно"
+
+#: src/prefs.js:412
+msgid "Select whole desktop"
+msgstr "Виберіть весь робочий стіл"
+
+#: src/prefs.js:439
+msgid "Keyboard Shortcut"
+msgstr "Клавіатурне скорочення"
+
+#: src/prefs.js:479
+msgid "Modify"
+msgstr "Зменити"
+
+#: src/saveDlg.js:28
+msgid "_Cancel"
+msgstr "_Відмінити"
+
+#: src/saveDlg.js:29
+msgid "_Save"
+msgstr "_Зберегти"
+
+#: src/selection.js:244
+msgid "selected region was too small - please select a larger area"
+msgstr "вибрана область була замалою - будь ласка, виберіть більшу область"
