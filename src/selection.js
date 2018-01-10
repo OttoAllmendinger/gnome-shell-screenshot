@@ -198,7 +198,8 @@ Signals.addSignalMethods(Capture.prototype);
 const SelectionArea = new Lang.Class({
   Name: "ScreenshotTool.SelectionArea",
 
-  _init: function () {
+  _init: function (options) {
+    this._options = options;
     this._mouseDown = false;
     this._capture = new Capture();
     this._capture.connect('captured-event', this._onEvent.bind(this));
@@ -232,7 +233,7 @@ const SelectionArea = new Lang.Class({
         height: region.h
       };
 
-      Mainloop.idle_add(() => {
+      Mainloop.timeout_add(this._options.captureDelay, () => {
         makeAreaScreenshot(
             region,
             this.emit.bind(this, 'screenshot')
@@ -258,7 +259,8 @@ Signals.addSignalMethods(SelectionArea.prototype);
 const SelectionWindow = new Lang.Class({
   Name: "ScreenshotTool.SelectionWindow",
 
-  _init: function () {
+  _init: function (options) {
+    this._options = options;
     this._windows = global.get_window_actors();
     this._capture = new Capture();
     this._capture.connect('captured-event', this._onEvent.bind(this));
@@ -294,7 +296,8 @@ const SelectionWindow = new Lang.Class({
 
   _screenshot: function (win) {
     this._capture.stop();
-    Mainloop.idle_add(() => {
+
+    Mainloop.timeout_add(this._options.captureDelay, () => {
       Main.activateWindow(win.get_meta_window());
       Mainloop.idle_add(() => {
         makeWindowScreenshot(win, this.emit.bind(this, 'screenshot'));
@@ -313,8 +316,9 @@ Signals.addSignalMethods(SelectionWindow.prototype);
 const SelectionDesktop = new Lang.Class({
   Name: "ScreenshotTool.SelectionDesktop",
 
-  _init: function () {
-    Mainloop.idle_add(() => {
+  _init: function (options) {
+    this._options = options;
+    Mainloop.timeout_add(this._options.captureDelay, () => {
       makeDesktopScreenshot(this.emit.bind(this, 'screenshot'));
       this.emit('stop');
     });
