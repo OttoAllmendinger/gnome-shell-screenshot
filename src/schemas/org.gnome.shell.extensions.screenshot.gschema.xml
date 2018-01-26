@@ -34,6 +34,10 @@
       <default>true</default>
     </key>
 
+    <key name="enable-notification" type="b">
+      <default>true</default>
+    </key>
+
     <key
         name="click-action"
         enum="org.gnome.shell.extensions.screenshot.click-action">
@@ -64,6 +68,10 @@
 
     <key name="enable-imgur" type="b">
       <default>false</default>
+    </key>
+
+    <key name="imgur-enable-notification" type="b">
+      <default>true</default>
     </key>
 
     <key name="imgur-auto-upload" type="b">

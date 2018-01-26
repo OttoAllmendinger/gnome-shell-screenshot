@@ -101,7 +101,9 @@ const Screenshot = new Lang.Class({
     });
 
     // this.imgurUpload = new Local.imports.uploadDummy.Upload();
-    Notifications.notifyImgurUpload(this);
+    if (settings.get_boolean(Config.KeyImgurEnableNotification)) {
+      Notifications.notifyImgurUpload(this);
+    }
     this.emit("imgur-upload", this.imgurUpload);
 
     this.imgurUpload.connect("done", () => {
@@ -277,7 +279,9 @@ const Extension = new Lang.Class({
       screenshot.autosave();
     }
 
-    Notifications.notifyScreenshot(screenshot);
+    if (settings.get_boolean(Config.KeyEnableNotification)) {
+      Notifications.notifyScreenshot(screenshot);
+    }
 
     if (this._indicator) {
       this._indicator.setScreenshot(screenshot);

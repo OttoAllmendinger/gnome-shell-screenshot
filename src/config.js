@@ -6,6 +6,7 @@ const SettingsSchema = 'org.gnome.shell.extensions.screenshot';
 
 const KeyEnableIndicator = 'enable-indicator';
 
+const KeyEnableNotification = 'enable-notification';
 
 const KeyShortcuts = [
   'shortcut-select-area',
@@ -44,6 +45,7 @@ const ClipboardActions = {
 
 
 const KeyEnableUploadImgur = 'enable-imgur';
+const KeyImgurEnableNotification = 'imgur-enable-notification';
 const KeyImgurAutoUpload = 'imgur-auto-upload';
 const KeyImgurAutoCopyLink = 'imgur-auto-copy-link';
 const KeyImgurAutoOpenLink = 'imgur-auto-open-link';

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-17 11:28+0200\n"
+"POT-Creation-Date: 2018-01-26 12:42+0100\n"
 "PO-Revision-Date: 2017-05-18 19:51+0300\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -98,15 +98,15 @@ msgstr "Αντιγραφή συνδέσμου"
 msgid "Delete"
 msgstr ""
 
-#: src/indicator.js:223 src/prefs.js:136
+#: src/indicator.js:223 src/prefs.js:145
 msgid "Select Area"
 msgstr "Επιλογή περιοχής"
 
-#: src/indicator.js:224 src/prefs.js:137
+#: src/indicator.js:224 src/prefs.js:146
 msgid "Select Window"
 msgstr "Επιλογή παραθύρου"
 
-#: src/indicator.js:225 src/prefs.js:138
+#: src/indicator.js:225 src/prefs.js:147
 msgid "Select Desktop"
 msgstr "Επιλογή επιφάνειας εργασίας"
 
@@ -168,82 +168,90 @@ msgid "Keybindings"
 msgstr "Συντομεύσεις πληκτρογίου"
 
 #: src/prefs.js:118
-msgid "Show indicator"
+msgid "Show Indicator"
 msgstr "Εμφάνιση δείκτη"
 
-#: src/prefs.js:130
+#: src/prefs.js:127
+msgid "Show Notification After Capture"
+msgstr ""
+
+#: src/prefs.js:139
 msgid "Primary Button"
 msgstr "Κυρίως κουμπί"
 
-#: src/prefs.js:139
+#: src/prefs.js:148
 msgid "Show Menu"
 msgstr "Εμφάνιση μενού"
 
-#: src/prefs.js:160
+#: src/prefs.js:169
 msgid "Auto-Copy to Clipboard"
 msgstr ""
 
-#: src/prefs.js:166
+#: src/prefs.js:175
 msgid "Nothing"
 msgstr ""
 
-#: src/prefs.js:167
+#: src/prefs.js:176
 msgid "Image Data"
 msgstr "Δεδομένα εικόνας"
 
-#: src/prefs.js:203
+#: src/prefs.js:212
 msgid "Auto-Save Screenshot"
 msgstr "Αυτόματη αποθήκευση στιγμιοτύπου"
 
-#: src/prefs.js:214
+#: src/prefs.js:223
 msgid "Save Location"
 msgstr "Τοποθεσία αποθήκευσης"
 
-#: src/prefs.js:221
+#: src/prefs.js:230
 msgid "Select"
 msgstr "Επιλογή"
 
-#: src/prefs.js:262
+#: src/prefs.js:271
 msgid "Default Filename"
 msgstr "Προεπιλεγμένο όνομα αρχείου"
 
-#: src/prefs.js:287
+#: src/prefs.js:296
 msgid "Preview"
 msgstr "Προεπισκόπηση"
 
-#: src/prefs.js:345
+#: src/prefs.js:354
 msgid "Enable Imgur Upload"
 msgstr "Ενεργοποίηση αποστολής στο Imgur"
 
-#: src/prefs.js:354
+#: src/prefs.js:362
+msgid "Show Upload Notification"
+msgstr ""
+
+#: src/prefs.js:379
 msgid "Auto-Upload After Capture"
 msgstr ""
 
-#: src/prefs.js:369
+#: src/prefs.js:394
 msgid "Auto-Copy Link After Upload"
 msgstr ""
 
-#: src/prefs.js:384
+#: src/prefs.js:409
 msgid "Auto-Open Link After Upload"
 msgstr ""
 
-#: src/prefs.js:410
+#: src/prefs.js:435
 msgid "Select area"
 msgstr "Επιλογή περιοχής"
 
-#: src/prefs.js:411
+#: src/prefs.js:436
 msgid "Select window"
 msgstr "Επιλογή παραθύρου"
 
-#: src/prefs.js:412
+#: src/prefs.js:437
 msgid "Select whole desktop"
 msgstr "Επιλογή όλης της επιφάνειας εργασίας"
 
-#: src/prefs.js:439
+#: src/prefs.js:464
 msgid "Keyboard Shortcut"
 msgstr "Συντομεύσεις πληκτρολογίου"
 
-#: src/prefs.js:479
+#: src/prefs.js:504
 msgid "Modify"
 msgstr "Τροποποίηση"
 

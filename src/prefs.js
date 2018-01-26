@@ -115,11 +115,20 @@ const ScreenshotToolSettingsWidget = new GObject.Class({
     /* Show indicator [on|off] */
 
     let switchShowIndicator = buildConfigSwitch(
-      _('Show indicator'),
+      _('Show Indicator'),
       Config.KeyEnableIndicator
     );
 
     prefs.add(switchShowIndicator.hbox, {fill: false});
+
+    /* Show notification [on|off] */
+
+    let switchShowNotification = buildConfigSwitch(
+      _('Show Notification After Capture'),
+      Config.KeyEnableNotification
+    );
+
+    prefs.add(switchShowNotification.hbox, {fill: false});
 
 
     /* Default click action [dropdown] */
@@ -346,6 +355,22 @@ const ScreenshotToolSettingsWidget = new GObject.Class({
     );
 
     prefs.add(configSwitchEnable.hbox, {fill: false});
+
+
+    /* Enable Upload Notification [on|off] */
+    let configSwitchEnableNotification = buildConfigSwitch(
+      _('Show Upload Notification'), Config.KeyImgurEnableNotification
+    );
+
+    prefs.add(configSwitchEnableNotification.hbox, {fill: false});
+
+    bindSensitivity(
+      configSwitchEnable.gtkSwitch, configSwitchEnableNotification.gtkLabel
+    );
+    bindSensitivity(
+      configSwitchEnable.gtkSwitch, configSwitchEnableNotification.gtkSwitch
+    );
+
 
 
     /* Auto-Upload After Capture [on|off] */

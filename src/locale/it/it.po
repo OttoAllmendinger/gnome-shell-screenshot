@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-17 11:28+0200\n"
+"POT-Creation-Date: 2018-01-26 12:42+0100\n"
 "PO-Revision-Date: 2017-06-07 12:50+0200\n"
 "Last-Translator: Jimmy Scionti <jimmy.scionti@gmail.com>\n"
 "Language-Team: Jimmy Scionti <jimmy.scionti@gmail.com>\n"
@@ -98,15 +98,15 @@ msgstr "Copia link"
 msgid "Delete"
 msgstr "Cancella"
 
-#: src/indicator.js:223 src/prefs.js:136
+#: src/indicator.js:223 src/prefs.js:145
 msgid "Select Area"
 msgstr "Seleziona un'area"
 
-#: src/indicator.js:224 src/prefs.js:137
+#: src/indicator.js:224 src/prefs.js:146
 msgid "Select Window"
 msgstr "Seleziona una finestra"
 
-#: src/indicator.js:225 src/prefs.js:138
+#: src/indicator.js:225 src/prefs.js:147
 msgid "Select Desktop"
 msgstr "Seleziona la scrivania"
 
@@ -167,82 +167,90 @@ msgid "Keybindings"
 msgstr "Scorciatoie"
 
 #: src/prefs.js:118
-msgid "Show indicator"
+msgid "Show Indicator"
 msgstr "Mostra l'indicatore"
 
-#: src/prefs.js:130
+#: src/prefs.js:127
+msgid "Show Notification After Capture"
+msgstr ""
+
+#: src/prefs.js:139
 msgid "Primary Button"
 msgstr "Pulsante primario"
 
-#: src/prefs.js:139
+#: src/prefs.js:148
 msgid "Show Menu"
 msgstr "Mostra il menu"
 
-#: src/prefs.js:160
+#: src/prefs.js:169
 msgid "Auto-Copy to Clipboard"
 msgstr ""
 
-#: src/prefs.js:166
+#: src/prefs.js:175
 msgid "Nothing"
 msgstr ""
 
-#: src/prefs.js:167
+#: src/prefs.js:176
 msgid "Image Data"
 msgstr "Immagine"
 
-#: src/prefs.js:203
+#: src/prefs.js:212
 msgid "Auto-Save Screenshot"
 msgstr "Salvataggio automatico"
 
-#: src/prefs.js:214
+#: src/prefs.js:223
 msgid "Save Location"
 msgstr "Percorso di salvataggio"
 
-#: src/prefs.js:221
+#: src/prefs.js:230
 msgid "Select"
 msgstr "Seleziona"
 
-#: src/prefs.js:262
+#: src/prefs.js:271
 msgid "Default Filename"
 msgstr "Nome del file"
 
-#: src/prefs.js:287
+#: src/prefs.js:296
 msgid "Preview"
 msgstr "Anteprima"
 
-#: src/prefs.js:345
+#: src/prefs.js:354
 msgid "Enable Imgur Upload"
 msgstr "Abilità l'upload su Imgur"
 
-#: src/prefs.js:354
+#: src/prefs.js:362
+msgid "Show Upload Notification"
+msgstr ""
+
+#: src/prefs.js:379
 msgid "Auto-Upload After Capture"
 msgstr "Upload automatico dopo lo screenshot"
 
-#: src/prefs.js:369
+#: src/prefs.js:394
 msgid "Auto-Copy Link After Upload"
 msgstr "Copia automatica del link dopo l'upload"
 
-#: src/prefs.js:384
+#: src/prefs.js:409
 msgid "Auto-Open Link After Upload"
 msgstr "Apertura automatica del link dopo l'upload"
 
-#: src/prefs.js:410
+#: src/prefs.js:435
 msgid "Select area"
 msgstr "Seleziona un'area"
 
-#: src/prefs.js:411
+#: src/prefs.js:436
 msgid "Select window"
 msgstr "Seleziona una finestra"
 
-#: src/prefs.js:412
+#: src/prefs.js:437
 msgid "Select whole desktop"
 msgstr "Seleziona la scrivania"
 
-#: src/prefs.js:439
+#: src/prefs.js:464
 msgid "Keyboard Shortcut"
 msgstr "Scorciatoia da tastiera"
 
-#: src/prefs.js:479
+#: src/prefs.js:504
 msgid "Modify"
 msgstr "Modifica"
 
