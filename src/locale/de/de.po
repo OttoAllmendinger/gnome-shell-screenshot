@@ -70,11 +70,11 @@ msgstr "Parameter:"
 
 #: src/indicator.js:87
 msgid "No Capture Delay"
-msgstr ""
+msgstr "Keine Aufnahmeverzögerung"
 
 #: src/indicator.js:89 src/indicator.js:91
 msgid "Capture Delay"
-msgstr ""
+msgstr "Aufnahmeverzögerung"
 
 #: src/indicator.js:107
 msgid "Clear"
