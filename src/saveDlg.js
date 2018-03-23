@@ -54,5 +54,5 @@ if (window["ARGV"]) {
   if (localeDir.query_exists(null))
     Gettext.bindtextdomain(domain, localeDir.get_path());
 
-  copy(ARGV[0], ARGV[1], ARGV[2])
+  copy(...[ARGV[0], ARGV[1], ARGV[2]].map(decodeURIComponent));
 }

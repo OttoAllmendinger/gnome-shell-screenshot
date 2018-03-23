@@ -86,10 +86,12 @@ const Screenshot = new Lang.Class({
     Util.spawn([
       "gjs",
       Local.path + "/saveDlg.js",
-      this.srcFile.get_path(),
-      Path.expand("$PICTURES"),
-      newFile.get_basename(),
-      Local.dir.get_path(),
+      ...[
+        this.srcFile.get_path(),
+        Path.expand("$PICTURES"),
+        newFile.get_basename(),
+        Local.dir.get_path()
+      ].map(encodeURIComponent)
     ]);
   },
 
