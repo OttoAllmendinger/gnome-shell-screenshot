@@ -38,6 +38,10 @@
       <default>true</default>
     </key>
 
+    <key name="capture-delay" type="i">
+      <default>0</default>
+    </key>
+
     <key
         name="click-action"
         enum="org.gnome.shell.extensions.screenshot.click-action">

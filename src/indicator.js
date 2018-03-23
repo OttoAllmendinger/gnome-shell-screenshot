@@ -10,6 +10,7 @@ const Clutter = imports.gi.Clutter;
 
 const PanelMenu = imports.ui.panelMenu;
 const PopupMenu = imports.ui.popupMenu;
+const Slider = imports.ui.slider;
 
 const Gettext = imports.gettext.domain('gnome-shell-screenshot');
 const _ = Gettext.gettext;
@@ -27,6 +28,71 @@ const DefaultIcon = 'camera-photo-symbolic';
 
 
 const settings = Convenience.getSettings();
+
+const CaptureDelayMenu = new Lang.Class({
+  Name: 'CaptureDelayMenu',
+  Extends: PopupMenu.PopupMenuSection,
+
+  createScale: function () {
+    let scale = [0];
+    for (let p = 1; p < 4; p ++) {
+      for (let x = 1; x <= 10; x += 1) {
+        scale.push(x * Math.pow(10, p));
+      }
+    }
+    return scale;
+  },
+
+  _init: function(control) {
+    this.parent();
+
+    this.scaleMS = this.createScale();
+
+    this.delayValueMS = settings.get_int(Config.KeyCaptureDelay);
+    this.slider = new Slider.Slider(this.scaleToSlider(this.delayValueMS));
+    this.slider.connect('value-changed', this.onDragEnd.bind(this));
+    this.sliderItem = new PopupMenu.PopupBaseMenuItem({ activate: false });
+    this.sliderItem.actor.add(this.slider.actor, { expand: true });
+    this.addMenuItem(this.sliderItem);
+
+    this.delayInfoItem = new PopupMenu.PopupMenuItem(
+      '', { activate: false, hover: false, can_focus: false }
+    );
+    this.addMenuItem(this.delayInfoItem)
+
+    this.updateDelayInfo();
+  },
+
+  scaleToSlider: function (ms) {
+    return this.scaleMS.findIndex((v) => v >= ms) / (this.scaleMS.length-1);
+  },
+
+  sliderToScale: function (value) {
+    return this.scaleMS[(value * (this.scaleMS.length-1)) | 0];
+  },
+
+  onDragEnd: function(slider, value, property) {
+    const newValue = this.sliderToScale(value);
+    if (newValue !== this.delayValueMS) {
+      this.delayValueMS = newValue;
+      settings.set_int(Config.KeyCaptureDelay, newValue);
+      this.updateDelayInfo();
+    }
+  },
+
+  updateDelayInfo: function() {
+    const v = this.delayValueMS;
+    let text;
+    if (v === 0) {
+      text = _('No Capture Delay');
+    } else if (v < 1000) {
+      text = `${v}ms ` + _('Capture Delay');
+    } else {
+      text = `${v / 1000}s ` + _('Capture Delay');
+    }
+    this.delayInfoItem.label.text = text;
+  }
+});
 
 const ScreenshotSection = new Lang.Class({
   Name: "ScreenshotTool.ScreenshotSection",
@@ -235,6 +301,13 @@ const Indicator = new Lang.Class({
       );
       this.menu.addMenuItem(item);
     })
+
+
+    // Delay
+
+    this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
+
+    this.menu.addMenuItem(new CaptureDelayMenu());
 
     this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
 

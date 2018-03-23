@@ -38,6 +38,11 @@ const Convenience = Local.imports.convenience;
 
 const settings = Convenience.getSettings();
 
+const getSelectionOptions = () => {
+  const captureDelay = settings.get_int(Config.KeyCaptureDelay);
+  return { captureDelay }
+}
+
 const Screenshot = new Lang.Class({
   Name: "ScreenshotTool.Screenshot",
 
@@ -257,15 +262,15 @@ const Extension = new Lang.Class({
   },
 
   _selectArea: function () {
-    this._startSelection(new Selection.SelectionArea());
+    this._startSelection(new Selection.SelectionArea(getSelectionOptions()));
   },
 
   _selectWindow: function() {
-    this._startSelection(new Selection.SelectionWindow());
+    this._startSelection(new Selection.SelectionWindow(getSelectionOptions()));
   },
 
   _selectDesktop: function () {
-    this._startSelection(new Selection.SelectionDesktop());
+    this._startSelection(new Selection.SelectionDesktop(getSelectionOptions()));
   },
 
   _onScreenshot: function (selection, filePath) {

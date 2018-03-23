@@ -25,6 +25,7 @@ const ClickActions = {
   SELECT_DESKTOP: 3
 };
 
+const KeyCaptureDelay = 'capture-delay';
 
 const KeySaveScreenshot = 'save-screenshot';
 
