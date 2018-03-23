@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-26 12:42+0100\n"
+"POT-Creation-Date: 2018-03-23 23:47+0100\n"
 "PO-Revision-Date: 2017-10-25 23:27-0400\n"
 "Last-Translator: Raphael Rochet <raphael@rri.fr>\n"
 "Language-Team: \n"
@@ -66,51 +66,59 @@ msgstr "Nom d'hôte"
 msgid "Parameters:"
 msgstr "Paramètres :"
 
-#: src/indicator.js:41
+#: src/indicator.js:87
+msgid "No Capture Delay"
+msgstr ""
+
+#: src/indicator.js:89 src/indicator.js:91
+msgid "Capture Delay"
+msgstr ""
+
+#: src/indicator.js:107
 msgid "Clear"
 msgstr "Effacer"
 
-#: src/indicator.js:42 src/notifications.js:78
+#: src/indicator.js:108 src/notifications.js:78
 msgid "Copy"
 msgstr "Copier"
 
-#: src/indicator.js:43
+#: src/indicator.js:109
 msgid "Save As..."
 msgstr "Enregistrer sous..."
 
-#: src/indicator.js:59
+#: src/indicator.js:125
 msgid "Imgur"
 msgstr "Imgur"
 
-#: src/indicator.js:60
+#: src/indicator.js:126
 msgid "Upload"
 msgstr "Téléverser"
 
-#: src/indicator.js:61
+#: src/indicator.js:127
 msgid "Open Link"
 msgstr "Ouvrir le lien"
 
-#: src/indicator.js:62 src/notifications.js:169
+#: src/indicator.js:128 src/notifications.js:169
 msgid "Copy Link"
 msgstr "Copier le lien"
 
-#: src/indicator.js:63
+#: src/indicator.js:129
 msgid "Delete"
 msgstr "Supprimer"
 
-#: src/indicator.js:223 src/prefs.js:145
+#: src/indicator.js:289 src/prefs.js:145
 msgid "Select Area"
 msgstr "Sélectionner une zone"
 
-#: src/indicator.js:224 src/prefs.js:146
+#: src/indicator.js:290 src/prefs.js:146
 msgid "Select Window"
 msgstr "Sélectionner une fenêtre"
 
-#: src/indicator.js:225 src/prefs.js:147
+#: src/indicator.js:291 src/prefs.js:147
 msgid "Select Desktop"
 msgstr "Sélectionner le bureau"
 
-#: src/indicator.js:246
+#: src/indicator.js:319
 msgid "Settings"
 msgstr "Paramètres"
 
@@ -263,7 +271,7 @@ msgstr "_Annuler"
 msgid "_Save"
 msgstr "_Enregistrer"
 
-#: src/selection.js:244
+#: src/selection.js:246
 msgid "selected region was too small - please select a larger area"
 msgstr ""
 "La zone sélectionnée était trop petite - merci de sélectionner une plus "

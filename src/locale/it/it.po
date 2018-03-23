@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-26 12:42+0100\n"
+"POT-Creation-Date: 2018-03-23 23:47+0100\n"
 "PO-Revision-Date: 2017-06-07 12:50+0200\n"
 "Last-Translator: Jimmy Scionti <jimmy.scionti@gmail.com>\n"
 "Language-Team: Jimmy Scionti <jimmy.scionti@gmail.com>\n"
@@ -66,51 +66,59 @@ msgstr "Nome dell'host"
 msgid "Parameters:"
 msgstr "Parametri:"
 
-#: src/indicator.js:41
+#: src/indicator.js:87
+msgid "No Capture Delay"
+msgstr ""
+
+#: src/indicator.js:89 src/indicator.js:91
+msgid "Capture Delay"
+msgstr ""
+
+#: src/indicator.js:107
 msgid "Clear"
 msgstr "Svuota"
 
-#: src/indicator.js:42 src/notifications.js:78
+#: src/indicator.js:108 src/notifications.js:78
 msgid "Copy"
 msgstr "Copia"
 
-#: src/indicator.js:43
+#: src/indicator.js:109
 msgid "Save As..."
 msgstr "Salva come..."
 
-#: src/indicator.js:59
+#: src/indicator.js:125
 msgid "Imgur"
 msgstr "Imgur"
 
-#: src/indicator.js:60
+#: src/indicator.js:126
 msgid "Upload"
 msgstr "Upload"
 
-#: src/indicator.js:61
+#: src/indicator.js:127
 msgid "Open Link"
 msgstr "Apri link"
 
-#: src/indicator.js:62 src/notifications.js:169
+#: src/indicator.js:128 src/notifications.js:169
 msgid "Copy Link"
 msgstr "Copia link"
 
-#: src/indicator.js:63
+#: src/indicator.js:129
 msgid "Delete"
 msgstr "Cancella"
 
-#: src/indicator.js:223 src/prefs.js:145
+#: src/indicator.js:289 src/prefs.js:145
 msgid "Select Area"
 msgstr "Seleziona un'area"
 
-#: src/indicator.js:224 src/prefs.js:146
+#: src/indicator.js:290 src/prefs.js:146
 msgid "Select Window"
 msgstr "Seleziona una finestra"
 
-#: src/indicator.js:225 src/prefs.js:147
+#: src/indicator.js:291 src/prefs.js:147
 msgid "Select Desktop"
 msgstr "Seleziona la scrivania"
 
-#: src/indicator.js:246
+#: src/indicator.js:319
 msgid "Settings"
 msgstr "Impostazioni"
 
@@ -262,7 +270,7 @@ msgstr "_Annulla"
 msgid "_Save"
 msgstr "_Salva"
 
-#: src/selection.js:244
+#: src/selection.js:246
 msgid "selected region was too small - please select a larger area"
 msgstr "L'area selezionata è troppo piccola - seleziona un'area più grande"
 
