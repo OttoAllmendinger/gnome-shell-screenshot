@@ -64,7 +64,13 @@ const CaptureDelayMenu = new Lang.Class({
   },
 
   scaleToSlider: function (ms) {
-    return this.scaleMS.findIndex((v) => v >= ms) / (this.scaleMS.length-1);
+    const N = this.scaleMS.length;
+    for (let i = 0; i < N; i++) {
+      if (this.scaleMS[i] >= ms) {
+        return i / (N-1);
+      }
+    }
+    return 0;
   },
 
   sliderToScale: function (value) {
@@ -86,9 +92,9 @@ const CaptureDelayMenu = new Lang.Class({
     if (v === 0) {
       text = _('No Capture Delay');
     } else if (v < 1000) {
-      text = `${v}ms ` + _('Capture Delay');
+      text = '' + v + 'ms ' + _('Capture Delay');
     } else {
-      text = `${v / 1000}s ` + _('Capture Delay');
+      text = '' + (v / 1000) + 's ' + _('Capture Delay');
     }
     this.delayInfoItem.label.text = text;
   }

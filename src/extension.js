@@ -40,7 +40,7 @@ const settings = Convenience.getSettings();
 
 const getSelectionOptions = () => {
   const captureDelay = settings.get_int(Config.KeyCaptureDelay);
-  return { captureDelay }
+  return { captureDelay: captureDelay }
 }
 
 const Screenshot = new Lang.Class({

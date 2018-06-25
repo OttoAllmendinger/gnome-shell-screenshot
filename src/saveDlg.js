@@ -48,11 +48,10 @@ const copy = (srcPath, dstDir, dstName) => {
 }
 
 if (window["ARGV"]) {
-
   let workDir = Gio.File.new_for_path(ARGV[3]);
   let localeDir = workDir.get_child('locale');
   if (localeDir.query_exists(null))
     Gettext.bindtextdomain(domain, localeDir.get_path());
 
-  copy(...[ARGV[0], ARGV[1], ARGV[2]].map(decodeURIComponent));
+  copy.apply(null, [ARGV[0], ARGV[1], ARGV[2]].map(decodeURIComponent));
 }
