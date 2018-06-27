@@ -4,6 +4,7 @@ const Lang = imports.lang;
 const Signals = imports.signals;
 const Mainloop = imports.mainloop;
 
+const Gio = imports.gi.Gio;
 const Shell = imports.gi.Shell;
 const Meta = imports.gi.Meta;
 const Clutter = imports.gi.Clutter;
@@ -18,12 +19,45 @@ const _ = Gettext.gettext;
 const ScreenshotWindowIncludeCursor = false;
 const ScreenshotWindowIncludeFrame = true;
 const ScreenshotDesktopIncludeCursor = false;
+const ScreenshotFlash = true;
 
 const ExtensionUtils = imports.misc.extensionUtils;
 const Local = ExtensionUtils.getCurrentExtension();
 const Filename = Local.imports.filename;
 const Convenience = Local.imports.convenience;
 
+const ScreenshotServiceIFace = `
+<node>
+  <interface name="org.gnome.Shell.Screenshot">
+    <method name="Screenshot">
+      <arg type="b" direction="in" name="include_cursor"/>
+      <arg type="b" direction="in" name="flash"/>
+      <arg type="s" direction="in" name="filename"/>
+      <arg type="b" direction="out" name="success"/>
+      <arg type="s" direction="out" name="filename_used"/>
+    </method>
+
+    <method name="ScreenshotArea">
+      <arg type="i" direction="in" name="x"/>
+      <arg type="i" direction="in" name="y"/>
+      <arg type="i" direction="in" name="width"/>
+      <arg type="i" direction="in" name="height"/>
+      <arg type="b" direction="in" name="flash"/>
+      <arg type="s" direction="in" name="filename"/>
+      <arg type="b" direction="out" name="success"/>
+      <arg type="s" direction="out" name="filename_used"/>
+    </method>
+  </interface>
+</node>
+`;
+
+const ScreenshotServiceProxy = Gio.DBusProxy.makeProxyWrapper(ScreenshotServiceIFace);
+
+const screenshotService = new ScreenshotServiceProxy(
+  Gio.DBus.session,
+  'org.gnome.Shell.Screenshot',
+  '/org/gnome/Shell/Screenshot'
+);
 
 const getRectangle = (x1, y1, x2, y2) => {
   return {
@@ -75,16 +109,19 @@ const selectWindow = (windows, x, y) => {
 
 const makeAreaScreenshot = ({x, y, w, h}, callback) => {
   let fileName = Filename.getTemp();
-  let screenshot = new Shell.Screenshot();
-  screenshot.screenshot_area(
-    x, y, w, h, fileName,
-    callback.bind(callback, fileName)
+  screenshotService.ScreenshotAreaRemote(
+    x, y, w, h, ScreenshotFlash, fileName,
+    (ok /*, filename (is fileName) */) => {
+      if (!ok) {
+        return logError('error in makeAreaScreenshot/ScreenshotAreaRemote: ok=false');
+      }
+      callback(fileName);
+    }
   );
 };
 
 const makeWindowScreenshot = (win, callback) => {
   let fileName = Filename.getTemp();
-  let screenshot = new Shell.Screenshot();
 
   /* FIXME screenshot_window has upstream bug
    * https://bugzilla.gnome.org/show_bug.cgi?id=780744
@@ -104,19 +141,29 @@ const makeWindowScreenshot = (win, callback) => {
   let [w, h] = win.get_size();
   let [wx, wy] = win.get_position();
 
-  screenshot.screenshot_area(
-    wx, wy, w, h, fileName,
-    callback.bind(callback, fileName)
+  screenshotService.ScreenshotAreaRemote(
+    wx, wy, w, h, ScreenshotFlash, fileName,
+    (ok /*, filename (is fileName) */) => {
+      if (!ok) {
+        return logError('error in makeWindowScreenshot/ScreenshotAreaRemote: ok=false');
+      }
+      callback(fileName);
+    }
   );
 };
 
 const makeDesktopScreenshot = (callback) => {
   let fileName = Filename.getTemp();
-  let screenshot = new Shell.Screenshot();
-  screenshot.screenshot(
-      ScreenshotDesktopIncludeCursor,
-      fileName,
-      callback.bind(callback, fileName)
+  screenshotService.ScreenshotRemote(
+    ScreenshotDesktopIncludeCursor,
+    ScreenshotFlash,
+    fileName,
+    (ok /*, filename (is fileName) */) => {
+      if (!ok) {
+        return logError('error in ScreenshotRemote: ok=false');
+      }
+      callback(fileName);
+    }
   );
 };
 
