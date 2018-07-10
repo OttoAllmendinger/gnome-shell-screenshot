@@ -111,7 +111,7 @@ const dump = (v, opts = {values: true}) => {
 }
 
 
-if (window["ARGV"] && ARGV[0] === "test") {
+if (window["ARGV"] && ('0' in ARGV) && ARGV[0] === "test") {
   log(dump("string"));
   log(dump(true));
   log(dump([1,2,3]));
