@@ -18,10 +18,10 @@ const _ = Gettext.gettext;
 const ExtensionUtils = imports.misc.extensionUtils;
 const Local = ExtensionUtils.getCurrentExtension();
 
-const Config = Local.imports.config;
-const Convenience = Local.imports.convenience;
+const Config = Local.imports.config.exports;
+const Convenience = Local.imports.convenience.exports;
 
-const {dump} = Local.imports.dump;
+const { dump } = Local.imports.dump.exports;
 
 
 const DefaultIcon = 'camera-photo-symbolic';
@@ -342,3 +342,7 @@ const Indicator = new Lang.Class({
     });
   }
 });
+
+var exports = {
+  Indicator
+};

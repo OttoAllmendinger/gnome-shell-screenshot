@@ -127,3 +127,7 @@ const Upload = new Lang.Class({
   }
 });
 Signals.addSignalMethods(Upload.prototype);
+
+var exports = {
+  Upload
+};

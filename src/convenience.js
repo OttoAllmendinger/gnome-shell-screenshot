@@ -31,7 +31,7 @@ const Gio = imports.gi.Gio;
 const Config = imports.misc.config;
 const ExtensionUtils = imports.misc.extensionUtils;
 const Local = ExtensionUtils.getCurrentExtension();
-const Version = Local.imports.version;
+const Version = Local.imports.version.exports;
 
 /**
  * initTranslations:
@@ -111,3 +111,12 @@ function currentVersionSmallerEqual(v) {
     return Version.versionEqual(currentVersion(), v)
         && (!Version.versionGreater(currentVersion(), v));
 }
+
+var exports = {
+  initTranslations,
+  getSettings,
+  currentVersion,
+  currentVersionEqual,
+  currentVersionGreaterEqual,
+  currentVersionSmallerEqual
+};

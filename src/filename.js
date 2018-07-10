@@ -5,7 +5,7 @@ const _ = Gettext.gettext;
 
 const Local = imports.misc.extensionUtils.getCurrentExtension();
 const StringFormat = Local.imports.vendor.stringformat;
-const Convenience = Local.imports.convenience;
+const Convenience = Local.imports.convenience.exports;
 
 const DefaultTemplate = "{N}-{Y}{m}{d}-{H}{M}{S}-{w}x{h}";
 
@@ -64,4 +64,10 @@ const tempfilePattern = 'gnome-shell-screenshot-XXXXXX.png';
 const getTemp = function () {
   let [fileHandle, fileName] = GLib.file_open_tmp(tempfilePattern);
   return fileName;
+};
+
+var exports = {
+  get,
+  getTemp,
+  tooltipText
 };

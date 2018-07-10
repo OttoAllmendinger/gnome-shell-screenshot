@@ -31,6 +31,11 @@ const mkdirParents = (path) => {
   }
 }
 
-if (window["ARGV"] && ARGV[0] === "test") {
+if (window["ARGV"] && ('0' in ARGV) && ARGV[0] === "test") {
   log(expand("$PICTURES///Screenshots"));
+}
+
+var exports = {
+  join,
+  expand
 }

@@ -21,8 +21,9 @@ const ScreenshotDesktopIncludeCursor = false;
 
 const ExtensionUtils = imports.misc.extensionUtils;
 const Local = ExtensionUtils.getCurrentExtension();
-const Filename = Local.imports.filename;
-const Convenience = Local.imports.convenience;
+
+const Filename = Local.imports.filename.exports;
+const Convenience = Local.imports.convenience.exports;
 
 
 const getRectangle = (x1, y1, x2, y2) => {
@@ -327,3 +328,10 @@ const SelectionDesktop = new Lang.Class({
 });
 
 Signals.addSignalMethods(SelectionDesktop.prototype);
+
+
+var exports = {
+  SelectionArea,
+  SelectionWindow,
+  SelectionDesktop
+};

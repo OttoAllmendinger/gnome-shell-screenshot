@@ -22,17 +22,17 @@ const Util = imports.misc.util;
 const ExtensionUtils = imports.misc.extensionUtils;
 const Local = ExtensionUtils.getCurrentExtension();
 
-const Config = Local.imports.config;
-const Path = Local.imports.path;
-const Indicator = Local.imports.indicator;
-const Selection = Local.imports.selection;
-const Clipboard = Local.imports.clipboard;
-const Notifications = Local.imports.notifications;
-const Filename = Local.imports.filename;
+const Config = Local.imports.config.exports;
+const Path = Local.imports.path.exports;
+const Indicator = Local.imports.indicator.exports;
+const Selection = Local.imports.selection.exports;
+const Clipboard = Local.imports.clipboard.exports;
+const Notifications = Local.imports.notifications.exports;
+const Filename = Local.imports.filename.exports;
 
-const UploadImgur = Local.imports.uploadImgur;
+const UploadImgur = Local.imports.uploadImgur.exports;
 
-const Convenience = Local.imports.convenience;
+const Convenience = Local.imports.convenience.exports;
 
 // const {dump} = Local.imports.dump;
 

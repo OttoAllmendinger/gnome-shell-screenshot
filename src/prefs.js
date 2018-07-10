@@ -15,10 +15,10 @@ const Gettext = imports.gettext.domain('gnome-shell-screenshot');
 const _ = Gettext.gettext;
 
 const Local = imports.misc.extensionUtils.getCurrentExtension();
-const Path = Local.imports.path;
-const Config = Local.imports.config;
-const Filename = Local.imports.filename;
-const Convenience = Local.imports.convenience;
+const Path = Local.imports.path.exports;
+const Config = Local.imports.config.exports;
+const Filename = Local.imports.filename.exports;
+const Convenience = Local.imports.convenience.exports;
 
 
 

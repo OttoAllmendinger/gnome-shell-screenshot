@@ -33,3 +33,9 @@ if (window["ARGV"] && ARGV[0] == "test") {
     log('versionEqual("1.2.3", "1.2")=' + versionEqual("1.2.3", "1.2"));
     log('versionGreater("3.10.1", "3.10")=' + versionGreater("3.10.1", "3.10"));
 }
+
+var exports = {
+  versionEqual,
+  versionGreater,
+  versionSmaller
+}

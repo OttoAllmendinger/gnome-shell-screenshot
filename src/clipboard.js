@@ -1,7 +1,6 @@
 const Gtk = imports.gi.Gtk;
 const Gdk = imports.gi.Gdk;
 
-// Not static because there were issues with stale handles for some reason
 const clipboard = Gtk.Clipboard.get_default(Gdk.Display.get_default());
 
 const setImage = function (gtkImage) {
@@ -11,3 +10,8 @@ const setImage = function (gtkImage) {
 const setText = function (text) {
     clipboard.set_text(text, -1);
 }
+
+var exports = {
+  setImage,
+  setText
+};

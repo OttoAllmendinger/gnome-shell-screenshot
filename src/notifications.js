@@ -16,12 +16,12 @@ const _ = Gettext.gettext;
 const ExtensionUtils = imports.misc.extensionUtils;
 const Local = ExtensionUtils.getCurrentExtension();
 
-const Path = Local.imports.path;
-const {dump} = Local.imports.dump;
-const Config = Local.imports.config;
-const Clipboard = Local.imports.clipboard;
-const Thumbnail = Local.imports.thumbnail;
-const Convenience = Local.imports.convenience;
+const Path = Local.imports.path.exports;
+const {dump} = Local.imports.dump.exports;
+const Config = Local.imports.config.exports;
+const Clipboard = Local.imports.clipboard.exports;
+const Thumbnail = Local.imports.thumbnail.exports;
+const Convenience = Local.imports.convenience.exports;
 
 const NotificationIcon = 'camera-photo-symbolic';
 const NotificationSourceName = 'Screenshot Tool';
@@ -204,3 +204,9 @@ const notifyImgurUpload = (screenshot) => {
   let notification = new ImgurNotification(source, screenshot);
   source.notify(notification);
 }
+
+var exports = {
+  notifyError,
+  notifyScreenshot,
+  notifyImgurUpload
+};

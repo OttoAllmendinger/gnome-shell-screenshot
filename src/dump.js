@@ -136,3 +136,5 @@ if (window["ARGV"] && ('0' in ARGV) && ARGV[0] === "test") {
   }
   log(dump(prop))
 }
+
+var exports = { dump };
