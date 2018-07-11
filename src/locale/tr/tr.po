@@ -1,0 +1,283 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-03-23 23:47+0100\n"
+"PO-Revision-Date: 2018-04-13 20:26+0300\n"
+"Last-Translator: M. Serdar Karaman <m.serdar.karaman@gmail.com>\n"
+"Language-Team: \n"
+"Language: tr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.0.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Language: tr\n"
+"X-Source-Language: C\n"
+
+#: src/filename.js:27
+msgid "Screenshot"
+msgstr "Ekran görüntüsü"
+
+#: src/filename.js:27
+msgid "Screenshot (literal)"
+msgstr "Ekran görüntüsü (yazı)"
+
+#: src/filename.js:28
+msgid "Year"
+msgstr "Yıl"
+
+#: src/filename.js:29
+msgid "Month"
+msgstr "Ay"
+
+#: src/filename.js:30
+msgid "Day"
+msgstr "Gün"
+
+#: src/filename.js:31
+msgid "Hour"
+msgstr "Saat"
+
+#: src/filename.js:32
+msgid "Minute"
+msgstr "Dakika"
+
+#: src/filename.js:33
+msgid "Second"
+msgstr "Saniye"
+
+#: src/filename.js:34
+msgid "Width"
+msgstr "Genişlik"
+
+#: src/filename.js:35
+msgid "Height"
+msgstr "Yükseklik"
+
+#: src/filename.js:36
+msgid "Hostname"
+msgstr "Bilgisayar adı"
+
+#: src/filename.js:41
+msgid "Parameters:"
+msgstr "Parametre:"
+
+#: src/indicator.js:87
+msgid "No Capture Delay"
+msgstr "Zaman gecikmesi olmasın"
+
+#: src/indicator.js:89 src/indicator.js:91
+msgid "Capture Delay"
+msgstr "Zaman gecikmesi"
+
+#: src/indicator.js:107
+msgid "Clear"
+msgstr "Temizle"
+
+#: src/indicator.js:108 src/notifications.js:78
+msgid "Copy"
+msgstr "Kopyala"
+
+#: src/indicator.js:109
+msgid "Save As..."
+msgstr "Farklı kaydet..."
+
+#: src/indicator.js:125
+msgid "Imgur"
+msgstr "Imgur"
+
+#: src/indicator.js:126
+msgid "Upload"
+msgstr "Yükle"
+
+#: src/indicator.js:127
+msgid "Open Link"
+msgstr "Bağlantıyı aç"
+
+#: src/indicator.js:128 src/notifications.js:169
+msgid "Copy Link"
+msgstr "Bağlantıyı kopyala"
+
+#: src/indicator.js:129
+msgid "Delete"
+msgstr "Sil"
+
+#: src/indicator.js:289 src/prefs.js:145
+msgid "Select Area"
+msgstr "Alan seç"
+
+#: src/indicator.js:290 src/prefs.js:146
+msgid "Select Window"
+msgstr "Pencere seç"
+
+#: src/indicator.js:291 src/prefs.js:147
+msgid "Select Desktop"
+msgstr "Masaüstü seç"
+
+#: src/indicator.js:319
+msgid "Settings"
+msgstr "Ayarlar"
+
+#: src/notifications.js:48
+msgid "New Screenshot"
+msgstr "Yeni ekran görüntüsü"
+
+#: src/notifications.js:53
+msgid "Size:"
+msgstr "Boyut:"
+
+#: src/notifications.js:79
+msgid "Save"
+msgstr "Kaydet"
+
+#: src/notifications.js:83
+msgid "Uploading To Imgur..."
+msgstr "Imgur'a yükleniyor..."
+
+#: src/notifications.js:85
+msgid "Upload To Imgur"
+msgstr "Imgur'a yükle"
+
+#: src/notifications.js:117
+msgid "Error"
+msgstr "Hata"
+
+#: src/notifications.js:131 src/notifications.js:143
+msgid "Imgur Upload"
+msgstr "Imgur yükle"
+
+#: src/notifications.js:149
+msgid "Imgur Upload Failed"
+msgstr "Imgur'a yükleme başarısız"
+
+#: src/notifications.js:154
+msgid "Imgur Upload Successful"
+msgstr "Imgur'a yükleme başarılı"
+
+#: src/prefs.js:87
+msgid "Indicator"
+msgstr "Gösterge"
+
+#: src/prefs.js:91
+msgid "Storage"
+msgstr "Depolama"
+
+#: src/prefs.js:95
+msgid "Imgur Upload (Beta)"
+msgstr "Imgur'a yükleme (Beta)"
+
+#: src/prefs.js:99
+msgid "Keybindings"
+msgstr "Kısa yol tuşları"
+
+#: src/prefs.js:118
+msgid "Show Indicator"
+msgstr "Simgeyi göster"
+
+#: src/prefs.js:127
+msgid "Show Notification After Capture"
+msgstr "Çektikten sonra bildirim göster"
+
+#: src/prefs.js:139
+msgid "Primary Button"
+msgstr "Sol tuş"
+
+#: src/prefs.js:148
+msgid "Show Menu"
+msgstr "Menüyü göster"
+
+#: src/prefs.js:169
+msgid "Auto-Copy to Clipboard"
+msgstr "Otomatik panoya kopyala"
+
+#: src/prefs.js:175
+msgid "Nothing"
+msgstr "Hiçbir şey"
+
+#: src/prefs.js:176
+msgid "Image Data"
+msgstr "Resim verisi"
+
+#: src/prefs.js:212
+msgid "Auto-Save Screenshot"
+msgstr "Ekran görüntüsünü oto-kaydet"
+
+#: src/prefs.js:223
+msgid "Save Location"
+msgstr "Kaydetme adresi"
+
+#: src/prefs.js:230
+msgid "Select"
+msgstr "Seç"
+
+#: src/prefs.js:271
+msgid "Default Filename"
+msgstr "Standart dosya adı"
+
+#: src/prefs.js:296
+msgid "Preview"
+msgstr "Ön izleme"
+
+#: src/prefs.js:354
+msgid "Enable Imgur Upload"
+msgstr "Imgur'a yüklemeyi etkinleştir"
+
+#: src/prefs.js:362
+msgid "Show Upload Notification"
+msgstr "Yükleme bildirimi göster"
+
+#: src/prefs.js:379
+msgid "Auto-Upload After Capture"
+msgstr "Çektikten sonra otomatik yükle"
+
+#: src/prefs.js:394
+msgid "Auto-Copy Link After Upload"
+msgstr "Yükledikten sonra bağlantıyı otomatik kopyala"
+
+#: src/prefs.js:409
+msgid "Auto-Open Link After Upload"
+msgstr "Yükledikten sonra bağlantıyı otomatik aç"
+
+#: src/prefs.js:435
+msgid "Select area"
+msgstr "Alan seç"
+
+#: src/prefs.js:436
+msgid "Select window"
+msgstr "Pencere seç"
+
+#: src/prefs.js:437
+msgid "Select whole desktop"
+msgstr "Bütün masaüstünü seç"
+
+#: src/prefs.js:464
+msgid "Keyboard Shortcut"
+msgstr "Klavye kısayolları"
+
+#: src/prefs.js:504
+msgid "Modify"
+msgstr "Değiştir"
+
+#: src/saveDlg.js:28
+msgid "_Cancel"
+msgstr "_İptal"
+
+#: src/saveDlg.js:29
+msgid "_Save"
+msgstr "_Kaydet"
+
+#: src/selection.js:246
+msgid "selected region was too small - please select a larger area"
+msgstr "Seçilen alan çok küçük - lütfen daha büyük bir alan seçin"
+
+#~ msgid "Default Clipboard Content"
+#~ msgstr "Standard Inhalt der Zwischenablage"
+
+#~ msgid "Unchanged"
+#~ msgstr "Unverändert"
