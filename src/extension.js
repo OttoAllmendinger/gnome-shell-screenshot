@@ -47,6 +47,9 @@ const Screenshot = new Lang.Class({
   Name: "ScreenshotTool.Screenshot",
 
   _init: function (filePath) {
+    if (!filePath) {
+      throw new Error(`need argument ${filePath}`);
+    }
     this.gtkImage = new Gtk.Image({file: filePath});
     this.inClipboard = false;
     this.srcFile = Gio.File.new_for_path(filePath);
@@ -104,6 +107,7 @@ const Screenshot = new Lang.Class({
     this.imgurUpload = new UploadImgur.Upload(this.srcFile);
 
     this.imgurUpload.connect("error", (obj, err) => {
+      logError(err);
       Notifications.notifyError(String(err));
     });
 

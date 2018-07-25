@@ -4,6 +4,7 @@ const Lang = imports.lang;
 const Signals = imports.signals;
 const Mainloop = imports.mainloop;
 
+const GLib   = imports.gi.GLib;
 const Shell = imports.gi.Shell;
 const Meta = imports.gi.Meta;
 const Clutter = imports.gi.Clutter;
@@ -37,34 +38,28 @@ const getRectangle = (x1, y1, x2, y2) => {
 
 
 const getWindowRectangle = (win) => {
-  let [wx, wy] = win.get_position();
-  let [width, height] = win.get_size();
-
-  return {
-    x: wx,
-    y: wy,
-    w: width,
-    h: height
-  };
+  const { x, y, width: w, height: h } = win.get_meta_window().get_frame_rect();
+  return { x, y, w, h };
 };
 
 
-const selectWindow = (windows, x, y) => {
-  let filtered = windows.filter((win) => {
-    if ((win !== undefined)
-          && win.visible
-          && (typeof win.get_meta_window === 'function')) {
-
-      let [w, h] = win.get_size();
-      let [wx, wy] = win.get_position();
-
-      return (
-        (wx <= x) && (wy <= y) && ((wx + w) >= x) && ((wy + h) >= y)
-      );
-    } else {
+const selectWindow = (windows, px, py) => {
+  const filtered = windows.filter((win) => {
+    if ((win === undefined)
+          || !win.visible
+          || (typeof win.get_meta_window !== 'function')
+    ) {
       return false;
     }
+    const { x, y, w, h } = getWindowRectangle(win);
+    return (
+      (x <= px) && (y <= py) && ((x + w) >= px) && ((y + h) >= py)
+    );
   });
+
+  if (filtered.length === 0) {
+    return;
+  }
 
   filtered.sort((a, b) =>
     (a.get_meta_window().get_layer() <= b.get_meta_window().get_layer())
@@ -73,55 +68,42 @@ const selectWindow = (windows, x, y) => {
   return filtered[0];
 };
 
+const callHelper = (argv, fileName, callback) => {
+  argv = ['gjs', Local.path + '/auxhelper.js', '--filename', fileName, ...argv];
+  // log(argv.join(' '));
+  let [success, pid] = GLib.spawn_async(
+    null, /* pwd */
+    argv,
+    null, /* envp */
+    GLib.SpawnFlags.SEARCH_PATH | GLib.SpawnFlags.DO_NOT_REAP_CHILD,
+    null /* child_setup */
+  );
+  if (!success) {
+    throw new Error(`success=false`);
+  }
+  GLib.child_watch_add(GLib.PRIORITY_DEFAULT, pid, (pid, exitCode) => {
+    if (exitCode !== 0) {
+      return callback(new Error(`exitCode=${exitCode}`, null));
+    }
+    callback(null, fileName);
+  });
+}
+
 
 const makeAreaScreenshot = ({x, y, w, h}, callback) => {
-  let fileName = Filename.getTemp();
-  let screenshot = new Shell.Screenshot();
-  screenshot.screenshot_area(
-    x, y, w, h, fileName,
-    callback.bind(callback, fileName)
-  );
+  const fileName = Filename.getTemp();
+  callHelper(['--area', [x,y,w,h].join(',')], fileName, callback);
 };
 
-const makeWindowScreenshot = (win, callback) => {
-  let fileName = Filename.getTemp();
-  let screenshot = new Shell.Screenshot();
-
-  /* FIXME screenshot_window has upstream bug
-   * https://bugzilla.gnome.org/show_bug.cgi?id=780744
-   * https://github.com/OttoAllmendinger/gnome-shell-screenshot/issues/29
-
-  screenshot.screenshot_window(
-      ScreenshotWindowIncludeFrame,
-      ScreenshotWindowIncludeCursor,
-      fileName,
-      callback.bind(callback, fileName)
-  );
-
-  */
-
-
-  /* FIXME workaround with screenshot_area */
-  let [w, h] = win.get_size();
-  let [wx, wy] = win.get_position();
-
-  screenshot.screenshot_area(
-    wx, wy, w, h, fileName,
-    callback.bind(callback, fileName)
-  );
+const makeWindowScreenshot = (callback) => {
+  const fileName = Filename.getTemp();
+  callHelper(['--window'], fileName, callback);
 };
 
 const makeDesktopScreenshot = (callback) => {
-  let fileName = Filename.getTemp();
-  let screenshot = new Shell.Screenshot();
-  screenshot.screenshot(
-      ScreenshotDesktopIncludeCursor,
-      fileName,
-      callback.bind(callback, fileName)
-  );
+  const fileName = Filename.getTemp();
+  callHelper(['--desktop'], fileName, callback);
 };
-
-
 
 
 const Capture = new Lang.Class({
@@ -194,7 +176,13 @@ const Capture = new Lang.Class({
 Signals.addSignalMethods(Capture.prototype);
 
 
-
+const emitScreenshotOnSuccess = (instance) =>
+  (error, fileName) => {
+    if (error) {
+      return instance.emit('error', error);
+    }
+    instance.emit('screenshot', fileName);
+  }
 
 
 const SelectionArea = new Lang.Class({
@@ -236,10 +224,7 @@ const SelectionArea = new Lang.Class({
       };
 
       Mainloop.timeout_add(this._options.captureDelay, () => {
-        makeAreaScreenshot(
-            region,
-            this.emit.bind(this, 'screenshot')
-        );
+        makeAreaScreenshot(region, emitScreenshotOnSuccess(this))
       });
     } else {
       this.emit(
@@ -253,8 +238,6 @@ const SelectionArea = new Lang.Class({
 });
 
 Signals.addSignalMethods(SelectionArea.prototype);
-
-
 
 
 
@@ -298,12 +281,11 @@ const SelectionWindow = new Lang.Class({
 
   _screenshot: function (win) {
     this._capture.stop();
-
     Mainloop.timeout_add(this._options.captureDelay, () => {
       Main.activateWindow(win.get_meta_window());
-      Mainloop.idle_add(() => {
-        makeWindowScreenshot(win, this.emit.bind(this, 'screenshot'));
-      });
+      Mainloop.idle_add(() =>
+        makeWindowScreenshot(emitScreenshotOnSuccess(this))
+      );
     });
   }
 });
@@ -321,7 +303,7 @@ const SelectionDesktop = new Lang.Class({
   _init: function (options) {
     this._options = options;
     Mainloop.timeout_add(this._options.captureDelay, () => {
-      makeDesktopScreenshot(this.emit.bind(this, 'screenshot'));
+      makeDesktopScreenshot(emitScreenshotOnSuccess(this));
       this.emit('stop');
     });
   }

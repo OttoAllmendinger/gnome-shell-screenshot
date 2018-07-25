@@ -115,7 +115,7 @@ const ErrorNotification = new Lang.Class({
     this.parent(
       source,
       _("Error"),
-      message,
+      String(message),
       { secondaryGIcon: new Gio.ThemedIcon({name: 'dialog-error'}) }
     );
   }
