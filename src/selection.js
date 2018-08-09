@@ -229,11 +229,6 @@ const SelectionArea = new Lang.Class({
       return;
     }
 
-    this.dimensions = {
-      width: region.w,
-      height: region.h
-    };
-
     const scaleFactor =
       St.ThemeContext.get_for_stage(global.stage).scale_factor;
 
