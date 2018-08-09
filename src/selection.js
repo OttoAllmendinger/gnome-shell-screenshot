@@ -4,6 +4,7 @@ const Lang = imports.lang;
 const Signals = imports.signals;
 const Mainloop = imports.mainloop;
 
+const St = imports.gi.St;
 const GLib   = imports.gi.GLib;
 const Shell = imports.gi.Shell;
 const Meta = imports.gi.Meta;
@@ -83,6 +84,7 @@ const callHelper = (argv, fileName, callback) => {
   }
   GLib.child_watch_add(GLib.PRIORITY_DEFAULT, pid, (pid, exitCode) => {
     if (exitCode !== 0) {
+      logError(new Error(`cmd: ${argv.join(' ')} exitCode=${exitCode}`));
       return callback(new Error(`exitCode=${exitCode}`, null));
     }
     callback(null, fileName);
@@ -217,23 +219,33 @@ const SelectionArea = new Lang.Class({
   _screenshot: function (region) {
     let fileName = Filename.getTemp();
 
-    if ((region.w > 8) && (region.h > 8)) {
-      this.dimensions = {
-        width: region.w,
-        height: region.h
-      };
-
-      Mainloop.timeout_add(this._options.captureDelay, () => {
-        makeAreaScreenshot(region, emitScreenshotOnSuccess(this))
-      });
-    } else {
+    if ((region.w < 8) || (region.h < 8)) {
       this.emit(
         "error",
         _("selected region was too small - please select a larger area")
       );
 
       this.emit("stop");
+      return;
     }
+
+    this.dimensions = {
+      width: region.w,
+      height: region.h
+    };
+
+    const scaleFactor =
+      St.ThemeContext.get_for_stage(global.stage).scale_factor;
+
+    if (scaleFactor !== 1) {
+      ['x', 'y', 'w', 'h'].forEach((key) => {
+        region[key] = Math.floor(region[key] / scaleFactor);
+      });
+    }
+
+    Mainloop.timeout_add(this._options.captureDelay, () => {
+      makeAreaScreenshot(region, emitScreenshotOnSuccess(this))
+    });
   }
 });
 
