@@ -136,12 +136,20 @@ const Capture = new Lang.Class({
     }
   },
 
+  _setCursorCompat: function (v) {
+    if (Convenience.currentVersionGreaterEqual('3.29')) {
+      global.display.set_cursor(v);
+    } else {
+      global.screen.set_cursor(v);
+    }
+  },
+
   _setDefaultCursor: function () {
-    global.screen.set_cursor(Meta.Cursor.DEFAULT);
+    this._setCursorCompat(Meta.Cursor.DEFAULT);
   },
 
   _setCaptureCursor: function () {
-    global.screen.set_cursor(Meta.Cursor.CROSSHAIR);
+    this._setCursorCompat(Meta.Cursor.CROSSHAIR);
   },
 
   _onCaptureEvent: function (actor, event) {
