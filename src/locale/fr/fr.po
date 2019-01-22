@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-23 23:47+0100\n"
+"POT-Creation-Date: 2019-11-04 01:16+0000\n"
 "PO-Revision-Date: 2019-05-01 18:56-0400\n"
 "Last-Translator: Benjamin Dupont <benjamin.dupont.984@gmail.com>\n"
 "Language-Team: \n"
@@ -66,199 +66,227 @@ msgstr "Nom d'hôte"
 msgid "Parameters:"
 msgstr "Paramètres :"
 
-#: src/indicator.js:87
+#: src/indicator.js:95
 msgid "No Capture Delay"
 msgstr "Pas de délai de capture"
 
-#: src/indicator.js:89 src/indicator.js:91
-msgid "Capture Delay"
-msgstr "Délai de capture"
-
-#: src/indicator.js:107
-msgid "Clear"
-msgstr "Effacer"
-
-#: src/indicator.js:108 src/notifications.js:78
-msgid "Copy"
-msgstr "Copier"
-
-#: src/indicator.js:109
-msgid "Save As..."
-msgstr "Enregistrer sous..."
-
-#: src/indicator.js:125
-msgid "Imgur"
-msgstr "Imgur"
-
-#: src/indicator.js:126
-msgid "Upload"
-msgstr "Téléverser"
-
-#: src/indicator.js:127
-msgid "Open Link"
-msgstr "Ouvrir le lien"
-
-#: src/indicator.js:128 src/notifications.js:169
-msgid "Copy Link"
-msgstr "Copier le lien"
-
-#: src/indicator.js:129
-msgid "Delete"
-msgstr "Supprimer"
-
-#: src/indicator.js:289 src/prefs.js:145
-msgid "Select Area"
-msgstr "Sélectionner une zone"
-
-#: src/indicator.js:290 src/prefs.js:146
-msgid "Select Window"
-msgstr "Sélectionner une fenêtre"
-
-#: src/indicator.js:291 src/prefs.js:147
-msgid "Select Desktop"
-msgstr "Sélectionner le bureau"
-
-#: src/indicator.js:319
-msgid "Settings"
-msgstr "Paramètres"
-
-#: src/notifications.js:48
+#: src/notifications.js:44
 msgid "New Screenshot"
 msgstr "Nouvelle capture d'écran"
 
-#: src/notifications.js:53
+#: src/notifications.js:49
 msgid "Size:"
 msgstr "Taille:"
 
-#: src/notifications.js:79
+#: src/notifications.js:74
+msgid "Copy"
+msgstr "Copier"
+
+#: src/notifications.js:75
 msgid "Save"
 msgstr "Enregistrer"
 
-#: src/notifications.js:83
+#: src/notifications.js:79
 msgid "Uploading To Imgur..."
 msgstr "Téléversement sur Imgur..."
 
-#: src/notifications.js:85
+#: src/notifications.js:81
 msgid "Upload To Imgur"
 msgstr "Téléverser sur Imgur"
 
-#: src/notifications.js:117
+#: src/notifications.js:87
+#, fuzzy
+msgid "Uploading To CloudApp..."
+msgstr "Téléversement sur Imgur..."
+
+#: src/notifications.js:89
+#, fuzzy
+msgid "Upload To CloudApp"
+msgstr "Téléverser sur Imgur"
+
+#: src/notifications.js:123
 msgid "Error"
 msgstr "Erreur"
 
-#: src/notifications.js:131 src/notifications.js:143
+#: src/notifications.js:134 src/notifications.js:146
 msgid "Imgur Upload"
 msgstr "Téléversement Imgur"
 
-#: src/notifications.js:149
+#: src/notifications.js:152
 msgid "Imgur Upload Failed"
 msgstr "Erreur lors du téléversement sur Imgur"
 
-#: src/notifications.js:154
+#: src/notifications.js:157
 msgid "Imgur Upload Successful"
 msgstr "Téléversement sur Imgur reussi"
 
-#: src/prefs.js:87
+#: src/notifications.js:172 src/notifications.js:233
+msgid "Copy Link"
+msgstr "Copier le lien"
+
+#: src/notifications.js:195 src/notifications.js:207
+msgid "CloudApp Upload"
+msgstr ""
+
+#: src/notifications.js:213
+#, fuzzy
+msgid "CloudApp Upload Failed"
+msgstr "Erreur lors du téléversement sur Imgur"
+
+#: src/notifications.js:218
+#, fuzzy
+msgid "CloudApp Upload Successful"
+msgstr "Téléversement sur Imgur reussi"
+
+#: src/prefs.js:86
 msgid "Indicator"
 msgstr "Indicateur"
 
-#: src/prefs.js:91
+#: src/prefs.js:90
 msgid "Storage"
 msgstr "Sauvegarde"
 
-#: src/prefs.js:95
+#: src/prefs.js:94
 msgid "Imgur Upload (Beta)"
 msgstr "Téléversement Imgur (Béta)"
 
-#: src/prefs.js:99
+#: src/prefs.js:98
+msgid "CloudApp Upload (Alpha)"
+msgstr ""
+
+#: src/prefs.js:102
 msgid "Keybindings"
 msgstr "Raccourcis clavier"
 
-#: src/prefs.js:118
+#: src/prefs.js:121
 msgid "Show Indicator"
 msgstr "Afficher l'indicateur"
 
-#: src/prefs.js:127
+#: src/prefs.js:130
 msgid "Show Notification After Capture"
 msgstr "Afficher une notification après la capture"
 
-#: src/prefs.js:139
+#: src/prefs.js:142
 msgid "Primary Button"
 msgstr "Boutton principal"
 
 #: src/prefs.js:148
+msgid "Select Area"
+msgstr "Sélectionner une zone"
+
+#: src/prefs.js:149
+msgid "Select Window"
+msgstr "Sélectionner une fenêtre"
+
+#: src/prefs.js:150
+msgid "Select Desktop"
+msgstr "Sélectionner le bureau"
+
+#: src/prefs.js:151
 msgid "Show Menu"
 msgstr "Afficher le menu"
 
-#: src/prefs.js:169
+#: src/prefs.js:172
 msgid "Auto-Copy to Clipboard"
 msgstr "Copier automatiquement dans le presse-papiers"
 
-#: src/prefs.js:175
+#: src/prefs.js:178
 msgid "Nothing"
 msgstr "Rien"
 
-#: src/prefs.js:176
+#: src/prefs.js:179
 msgid "Image Data"
 msgstr "Image"
 
-#: src/prefs.js:212
+#: src/prefs.js:215
 msgid "Auto-Save Screenshot"
 msgstr "Sauvegarde automatique"
 
-#: src/prefs.js:223
+#: src/prefs.js:226
 msgid "Save Location"
 msgstr "Emplacement de sauvegarde"
 
-#: src/prefs.js:230
+#: src/prefs.js:233
 msgid "Select"
 msgstr "Sélectionner"
 
-#: src/prefs.js:271
+#: src/prefs.js:274
 msgid "Default Filename"
 msgstr "Nom de fichier par défaut"
 
-#: src/prefs.js:296
+#: src/prefs.js:299
 msgid "Preview"
 msgstr "Aperçu"
 
-#: src/prefs.js:354
+#: src/prefs.js:357
 msgid "Enable Imgur Upload"
 msgstr "Activer le téléversement Imgur"
 
-#: src/prefs.js:362
+#: src/prefs.js:365 src/prefs.js:548
 msgid "Show Upload Notification"
 msgstr "Afficher une notification de téléversement"
 
-#: src/prefs.js:379
+#: src/prefs.js:382 src/prefs.js:563
 msgid "Auto-Upload After Capture"
 msgstr "Téléverser automatiquement après les captures"
 
-#: src/prefs.js:394
+#: src/prefs.js:397 src/prefs.js:578
 msgid "Auto-Copy Link After Upload"
 msgstr "Copier automatiquement le lien après le téléversement"
 
-#: src/prefs.js:409
+#: src/prefs.js:412 src/prefs.js:593
 msgid "Auto-Open Link After Upload"
 msgstr "Ouvrir automatiquement le lien après le téléversement"
 
-#: src/prefs.js:435
+#: src/prefs.js:438
+#, fuzzy
+msgid "Enable CloudApp Upload"
+msgstr "Activer le téléversement Imgur"
+
+#: src/prefs.js:448
+msgid "Email"
+msgstr ""
+
+#: src/prefs.js:481
+msgid "Password"
+msgstr ""
+
+#: src/prefs.js:515
+#, fuzzy
+msgid "Link"
+msgstr "Ouvrir le lien"
+
+#: src/prefs.js:521
+#, fuzzy
+msgid "Share Link"
+msgstr "Ouvrir le lien"
+
+#: src/prefs.js:522
+#, fuzzy
+msgid "Direct Link"
+msgstr "Ouvrir le lien"
+
+#: src/prefs.js:523
+msgid "Download Link"
+msgstr ""
+
+#: src/prefs.js:619
 msgid "Select area"
 msgstr "Sélectionner une zone"
 
-#: src/prefs.js:436
+#: src/prefs.js:620
 msgid "Select window"
 msgstr "Sélectionner une fenêtre"
 
-#: src/prefs.js:437
+#: src/prefs.js:621
 msgid "Select whole desktop"
 msgstr "Sélectionner tout le bureau"
 
-#: src/prefs.js:464
+#: src/prefs.js:648
 msgid "Keyboard Shortcut"
 msgstr "Raccourci clavier"
 
-#: src/prefs.js:504
+#: src/prefs.js:688
 msgid "Modify"
 msgstr "Modifier"
 
@@ -270,11 +298,31 @@ msgstr "_Annuler"
 msgid "_Save"
 msgstr "_Enregistrer"
 
-#: src/selection.js:246
-msgid "selected region was too small - please select a larger area"
-msgstr ""
-"La zone sélectionnée était trop petite - merci de sélectionner une plus "
-"grande zone"
+#~ msgid "Capture Delay"
+#~ msgstr "Délai de capture"
+
+#~ msgid "Clear"
+#~ msgstr "Effacer"
+
+#~ msgid "Save As..."
+#~ msgstr "Enregistrer sous..."
+
+#~ msgid "Imgur"
+#~ msgstr "Imgur"
+
+#~ msgid "Upload"
+#~ msgstr "Téléverser"
+
+#~ msgid "Delete"
+#~ msgstr "Supprimer"
+
+#~ msgid "Settings"
+#~ msgstr "Paramètres"
+
+#~ msgid "selected region was too small - please select a larger area"
+#~ msgstr ""
+#~ "La zone sélectionnée était trop petite - merci de sélectionner une plus "
+#~ "grande zone"
 
 #~ msgid "Default Clipboard Content"
 #~ msgstr "Contenu par défaut du presse-papier"

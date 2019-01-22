@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-24 12:20+0300\n"
+"POT-Creation-Date: 2019-11-04 01:16+0000\n"
 "PO-Revision-Date: 2019-09-24 12:52+0300\n"
 "Last-Translator: Berdy <berdygaming@outlook.com>\n"
 "Language-Team: \n"
@@ -66,199 +66,227 @@ msgstr "Име на машината"
 msgid "Parameters:"
 msgstr "Параметри:"
 
-#: src/indicator.js:87
+#: src/indicator.js:95
 msgid "No Capture Delay"
 msgstr "Без закъснение за снимане"
 
-#: src/indicator.js:89 src/indicator.js:91
-msgid "Capture Delay"
-msgstr "Закъснение за снимане"
-
-#: src/indicator.js:107
-msgid "Clear"
-msgstr "Изчистване"
-
-#: src/indicator.js:108 src/notifications.js:78
-msgid "Copy"
-msgstr "Копиране"
-
-#: src/indicator.js:109
-msgid "Save As..."
-msgstr "Съхраняване като..."
-
-#: src/indicator.js:125
-msgid "Imgur"
-msgstr "Imgur"
-
-#: src/indicator.js:126
-msgid "Upload"
-msgstr "Качване"
-
-#: src/indicator.js:127
-msgid "Open Link"
-msgstr "Отвори линк"
-
-#: src/indicator.js:128 src/notifications.js:169
-msgid "Copy Link"
-msgstr "Копирай линк"
-
-#: src/indicator.js:129
-msgid "Delete"
-msgstr "Изтрий"
-
-#: src/indicator.js:289 src/prefs.js:145
-msgid "Select Area"
-msgstr "Избери област"
-
-#: src/indicator.js:290 src/prefs.js:146
-msgid "Select Window"
-msgstr "Избери прозорец"
-
-#: src/indicator.js:291 src/prefs.js:147
-msgid "Select Desktop"
-msgstr "Избери работен плот"
-
-#: src/indicator.js:319
-msgid "Settings"
-msgstr "Настройки"
-
-#: src/notifications.js:48
+#: src/notifications.js:44
 msgid "New Screenshot"
 msgstr "Нова снимка"
 
-#: src/notifications.js:53
+#: src/notifications.js:49
 msgid "Size:"
 msgstr "Размер:"
 
-#: src/notifications.js:79
+#: src/notifications.js:74
+msgid "Copy"
+msgstr "Копиране"
+
+#: src/notifications.js:75
 msgid "Save"
 msgstr "Съхрани"
 
-#: src/notifications.js:83
+#: src/notifications.js:79
 msgid "Uploading To Imgur..."
 msgstr "Качване в Imgur..."
 
-#: src/notifications.js:85
+#: src/notifications.js:81
 msgid "Upload To Imgur"
 msgstr "Качи в Imgur"
 
-#: src/notifications.js:117
+#: src/notifications.js:87
+#, fuzzy
+msgid "Uploading To CloudApp..."
+msgstr "Качване в Imgur..."
+
+#: src/notifications.js:89
+#, fuzzy
+msgid "Upload To CloudApp"
+msgstr "Качи в Imgur"
+
+#: src/notifications.js:123
 msgid "Error"
 msgstr "Грешка"
 
-#: src/notifications.js:131 src/notifications.js:143
+#: src/notifications.js:134 src/notifications.js:146
 msgid "Imgur Upload"
 msgstr "Качване в Imgur"
 
-#: src/notifications.js:149
+#: src/notifications.js:152
 msgid "Imgur Upload Failed"
 msgstr "Качването в Imgur се провали"
 
-#: src/notifications.js:154
+#: src/notifications.js:157
 msgid "Imgur Upload Successful"
 msgstr "Качването в Imgur беше успешно"
 
-#: src/prefs.js:87
+#: src/notifications.js:172 src/notifications.js:233
+msgid "Copy Link"
+msgstr "Копирай линк"
+
+#: src/notifications.js:195 src/notifications.js:207
+msgid "CloudApp Upload"
+msgstr ""
+
+#: src/notifications.js:213
+#, fuzzy
+msgid "CloudApp Upload Failed"
+msgstr "Качването в Imgur се провали"
+
+#: src/notifications.js:218
+#, fuzzy
+msgid "CloudApp Upload Successful"
+msgstr "Качването в Imgur беше успешно"
+
+#: src/prefs.js:86
 msgid "Indicator"
 msgstr "Индикатор"
 
-#: src/prefs.js:91
+#: src/prefs.js:90
 msgid "Storage"
 msgstr "Хранилище"
 
-#: src/prefs.js:95
+#: src/prefs.js:94
 msgid "Imgur Upload (Beta)"
 msgstr "Качване в Imgur (Бета)"
 
-#: src/prefs.js:99
+#: src/prefs.js:98
+msgid "CloudApp Upload (Alpha)"
+msgstr ""
+
+#: src/prefs.js:102
 msgid "Keybindings"
 msgstr "Бутони"
 
-#: src/prefs.js:118
+#: src/prefs.js:121
 msgid "Show Indicator"
 msgstr "Показване на индикатор"
 
-#: src/prefs.js:127
+#: src/prefs.js:130
 msgid "Show Notification After Capture"
 msgstr "Показване на нотификация след качване"
 
-#: src/prefs.js:139
+#: src/prefs.js:142
 msgid "Primary Button"
 msgstr "Основен бутон"
 
 #: src/prefs.js:148
+msgid "Select Area"
+msgstr "Избери област"
+
+#: src/prefs.js:149
+msgid "Select Window"
+msgstr "Избери прозорец"
+
+#: src/prefs.js:150
+msgid "Select Desktop"
+msgstr "Избери работен плот"
+
+#: src/prefs.js:151
 msgid "Show Menu"
 msgstr "Покажи меню"
 
-#: src/prefs.js:169
+#: src/prefs.js:172
 msgid "Auto-Copy to Clipboard"
 msgstr "Автоматично копиране в клипборда"
 
-#: src/prefs.js:175
+#: src/prefs.js:178
 msgid "Nothing"
 msgstr "Нищо"
 
-#: src/prefs.js:176
+#: src/prefs.js:179
 msgid "Image Data"
 msgstr "Изображение"
 
-#: src/prefs.js:212
+#: src/prefs.js:215
 msgid "Auto-Save Screenshot"
 msgstr "Автоматично запазване на екранна снимка"
 
-#: src/prefs.js:223
+#: src/prefs.js:226
 msgid "Save Location"
 msgstr "Локация за запаметяване"
 
-#: src/prefs.js:230
+#: src/prefs.js:233
 msgid "Select"
 msgstr "Избери"
 
-#: src/prefs.js:271
+#: src/prefs.js:274
 msgid "Default Filename"
 msgstr "Име на файл по подразбиране"
 
-#: src/prefs.js:296
+#: src/prefs.js:299
 msgid "Preview"
 msgstr "Преглед"
 
-#: src/prefs.js:354
+#: src/prefs.js:357
 msgid "Enable Imgur Upload"
 msgstr "Включи качване в Imgur"
 
-#: src/prefs.js:362
+#: src/prefs.js:365 src/prefs.js:548
 msgid "Show Upload Notification"
 msgstr "Показване на нотификация за качване"
 
-#: src/prefs.js:379
+#: src/prefs.js:382 src/prefs.js:563
 msgid "Auto-Upload After Capture"
 msgstr "Автоматично качване след заснемане"
 
-#: src/prefs.js:394
+#: src/prefs.js:397 src/prefs.js:578
 msgid "Auto-Copy Link After Upload"
 msgstr "Автоматично копиране на линк след качване"
 
-#: src/prefs.js:409
+#: src/prefs.js:412 src/prefs.js:593
 msgid "Auto-Open Link After Upload"
 msgstr "Автоматично отваряне на линк след качване"
 
-#: src/prefs.js:435
+#: src/prefs.js:438
+#, fuzzy
+msgid "Enable CloudApp Upload"
+msgstr "Включи качване в Imgur"
+
+#: src/prefs.js:448
+msgid "Email"
+msgstr ""
+
+#: src/prefs.js:481
+msgid "Password"
+msgstr ""
+
+#: src/prefs.js:515
+#, fuzzy
+msgid "Link"
+msgstr "Отвори линк"
+
+#: src/prefs.js:521
+#, fuzzy
+msgid "Share Link"
+msgstr "Отвори линк"
+
+#: src/prefs.js:522
+#, fuzzy
+msgid "Direct Link"
+msgstr "Отвори линк"
+
+#: src/prefs.js:523
+msgid "Download Link"
+msgstr ""
+
+#: src/prefs.js:619
 msgid "Select area"
 msgstr "Изберете област"
 
-#: src/prefs.js:436
+#: src/prefs.js:620
 msgid "Select window"
 msgstr "Изберете прозорец"
 
-#: src/prefs.js:437
+#: src/prefs.js:621
 msgid "Select whole desktop"
 msgstr "Изберете целия екран"
 
-#: src/prefs.js:464
+#: src/prefs.js:648
 msgid "Keyboard Shortcut"
 msgstr "Бутон за пряк път"
 
-#: src/prefs.js:504
+#: src/prefs.js:688
 msgid "Modify"
 msgstr "Променете"
 
@@ -270,9 +298,29 @@ msgstr "_Отказ"
 msgid "_Save"
 msgstr "_Запаметяване"
 
-#: src/selection.js:246
-msgid "selected region was too small - please select a larger area"
-msgstr "избраната област е твърде малка - изберете по-голяма област"
+#~ msgid "Capture Delay"
+#~ msgstr "Закъснение за снимане"
+
+#~ msgid "Clear"
+#~ msgstr "Изчистване"
+
+#~ msgid "Save As..."
+#~ msgstr "Съхраняване като..."
+
+#~ msgid "Imgur"
+#~ msgstr "Imgur"
+
+#~ msgid "Upload"
+#~ msgstr "Качване"
+
+#~ msgid "Delete"
+#~ msgstr "Изтрий"
+
+#~ msgid "Settings"
+#~ msgstr "Настройки"
+
+#~ msgid "selected region was too small - please select a larger area"
+#~ msgstr "избраната област е твърде малка - изберете по-голяма област"
 
 #~ msgid "Default Clipboard Content"
 #~ msgstr "Клипбоард по подразбиране"

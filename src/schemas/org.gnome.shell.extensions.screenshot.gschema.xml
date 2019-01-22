@@ -14,6 +14,12 @@
     <value nick="set-remote-url" value="3" />
   </enum>
 
+  <enum id="org.gnome.shell.extensions.screenshot.cloud-app-link">
+    <value nick="share-link" value="0" />
+    <value nick="direct-link" value="1" />
+    <value nick="download-link" value="2" />
+  </enum>
+
   <schema
     id="org.gnome.shell.extensions.screenshot"
     path="/org/gnome/shell/extensions/screenshot/">
@@ -87,6 +93,40 @@
     </key>
 
     <key name="imgur-auto-open-link" type="b">
+      <default>false</default>
+    </key>
+
+    <key name="enable-cloud-app" type="b">
+      <default>false</default>
+    </key>
+
+    <key name="cloud-app-email" type="s">
+      <default>""</default>
+    </key>
+
+    <key name="cloud-app-password" type="s">
+      <default>""</default>
+    </key>
+
+    <key
+        name="cloud-app-link"
+        enum="org.gnome.shell.extensions.screenshot.cloud-app-link">
+      <default>'share-link'</default>
+    </key>
+
+    <key name="cloud-app-enable-notification" type="b">
+      <default>true</default>
+    </key>
+
+    <key name="cloud-app-auto-upload" type="b">
+      <default>false</default>
+    </key>
+
+    <key name="cloud-app-auto-copy-link" type="b">
+      <default>false</default>
+    </key>
+
+    <key name="cloud-app-auto-open-link" type="b">
       <default>false</default>
     </key>
   </schema>

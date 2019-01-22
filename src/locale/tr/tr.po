@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-23 23:47+0100\n"
+"POT-Creation-Date: 2019-11-04 01:16+0000\n"
 "PO-Revision-Date: 2018-04-13 20:26+0300\n"
 "Last-Translator: M. Serdar Karaman <m.serdar.karaman@gmail.com>\n"
 "Language-Team: \n"
@@ -68,199 +68,227 @@ msgstr "Bilgisayar adı"
 msgid "Parameters:"
 msgstr "Parametre:"
 
-#: src/indicator.js:87
+#: src/indicator.js:95
 msgid "No Capture Delay"
 msgstr "Zaman gecikmesi olmasın"
 
-#: src/indicator.js:89 src/indicator.js:91
-msgid "Capture Delay"
-msgstr "Zaman gecikmesi"
-
-#: src/indicator.js:107
-msgid "Clear"
-msgstr "Temizle"
-
-#: src/indicator.js:108 src/notifications.js:78
-msgid "Copy"
-msgstr "Kopyala"
-
-#: src/indicator.js:109
-msgid "Save As..."
-msgstr "Farklı kaydet..."
-
-#: src/indicator.js:125
-msgid "Imgur"
-msgstr "Imgur"
-
-#: src/indicator.js:126
-msgid "Upload"
-msgstr "Yükle"
-
-#: src/indicator.js:127
-msgid "Open Link"
-msgstr "Bağlantıyı aç"
-
-#: src/indicator.js:128 src/notifications.js:169
-msgid "Copy Link"
-msgstr "Bağlantıyı kopyala"
-
-#: src/indicator.js:129
-msgid "Delete"
-msgstr "Sil"
-
-#: src/indicator.js:289 src/prefs.js:145
-msgid "Select Area"
-msgstr "Alan seç"
-
-#: src/indicator.js:290 src/prefs.js:146
-msgid "Select Window"
-msgstr "Pencere seç"
-
-#: src/indicator.js:291 src/prefs.js:147
-msgid "Select Desktop"
-msgstr "Masaüstü seç"
-
-#: src/indicator.js:319
-msgid "Settings"
-msgstr "Ayarlar"
-
-#: src/notifications.js:48
+#: src/notifications.js:44
 msgid "New Screenshot"
 msgstr "Yeni ekran görüntüsü"
 
-#: src/notifications.js:53
+#: src/notifications.js:49
 msgid "Size:"
 msgstr "Boyut:"
 
-#: src/notifications.js:79
+#: src/notifications.js:74
+msgid "Copy"
+msgstr "Kopyala"
+
+#: src/notifications.js:75
 msgid "Save"
 msgstr "Kaydet"
 
-#: src/notifications.js:83
+#: src/notifications.js:79
 msgid "Uploading To Imgur..."
 msgstr "Imgur'a yükleniyor..."
 
-#: src/notifications.js:85
+#: src/notifications.js:81
 msgid "Upload To Imgur"
 msgstr "Imgur'a yükle"
 
-#: src/notifications.js:117
+#: src/notifications.js:87
+#, fuzzy
+msgid "Uploading To CloudApp..."
+msgstr "Imgur'a yükleniyor..."
+
+#: src/notifications.js:89
+#, fuzzy
+msgid "Upload To CloudApp"
+msgstr "Imgur'a yükle"
+
+#: src/notifications.js:123
 msgid "Error"
 msgstr "Hata"
 
-#: src/notifications.js:131 src/notifications.js:143
+#: src/notifications.js:134 src/notifications.js:146
 msgid "Imgur Upload"
 msgstr "Imgur yükle"
 
-#: src/notifications.js:149
+#: src/notifications.js:152
 msgid "Imgur Upload Failed"
 msgstr "Imgur'a yükleme başarısız"
 
-#: src/notifications.js:154
+#: src/notifications.js:157
 msgid "Imgur Upload Successful"
 msgstr "Imgur'a yükleme başarılı"
 
-#: src/prefs.js:87
+#: src/notifications.js:172 src/notifications.js:233
+msgid "Copy Link"
+msgstr "Bağlantıyı kopyala"
+
+#: src/notifications.js:195 src/notifications.js:207
+msgid "CloudApp Upload"
+msgstr ""
+
+#: src/notifications.js:213
+#, fuzzy
+msgid "CloudApp Upload Failed"
+msgstr "Imgur'a yükleme başarısız"
+
+#: src/notifications.js:218
+#, fuzzy
+msgid "CloudApp Upload Successful"
+msgstr "Imgur'a yükleme başarılı"
+
+#: src/prefs.js:86
 msgid "Indicator"
 msgstr "Gösterge"
 
-#: src/prefs.js:91
+#: src/prefs.js:90
 msgid "Storage"
 msgstr "Depolama"
 
-#: src/prefs.js:95
+#: src/prefs.js:94
 msgid "Imgur Upload (Beta)"
 msgstr "Imgur'a yükleme (Beta)"
 
-#: src/prefs.js:99
+#: src/prefs.js:98
+msgid "CloudApp Upload (Alpha)"
+msgstr ""
+
+#: src/prefs.js:102
 msgid "Keybindings"
 msgstr "Kısa yol tuşları"
 
-#: src/prefs.js:118
+#: src/prefs.js:121
 msgid "Show Indicator"
 msgstr "Simgeyi göster"
 
-#: src/prefs.js:127
+#: src/prefs.js:130
 msgid "Show Notification After Capture"
 msgstr "Çektikten sonra bildirim göster"
 
-#: src/prefs.js:139
+#: src/prefs.js:142
 msgid "Primary Button"
 msgstr "Sol tuş"
 
 #: src/prefs.js:148
+msgid "Select Area"
+msgstr "Alan seç"
+
+#: src/prefs.js:149
+msgid "Select Window"
+msgstr "Pencere seç"
+
+#: src/prefs.js:150
+msgid "Select Desktop"
+msgstr "Masaüstü seç"
+
+#: src/prefs.js:151
 msgid "Show Menu"
 msgstr "Menüyü göster"
 
-#: src/prefs.js:169
+#: src/prefs.js:172
 msgid "Auto-Copy to Clipboard"
 msgstr "Otomatik panoya kopyala"
 
-#: src/prefs.js:175
+#: src/prefs.js:178
 msgid "Nothing"
 msgstr "Hiçbir şey"
 
-#: src/prefs.js:176
+#: src/prefs.js:179
 msgid "Image Data"
 msgstr "Resim verisi"
 
-#: src/prefs.js:212
+#: src/prefs.js:215
 msgid "Auto-Save Screenshot"
 msgstr "Ekran görüntüsünü oto-kaydet"
 
-#: src/prefs.js:223
+#: src/prefs.js:226
 msgid "Save Location"
 msgstr "Kaydetme adresi"
 
-#: src/prefs.js:230
+#: src/prefs.js:233
 msgid "Select"
 msgstr "Seç"
 
-#: src/prefs.js:271
+#: src/prefs.js:274
 msgid "Default Filename"
 msgstr "Standart dosya adı"
 
-#: src/prefs.js:296
+#: src/prefs.js:299
 msgid "Preview"
 msgstr "Ön izleme"
 
-#: src/prefs.js:354
+#: src/prefs.js:357
 msgid "Enable Imgur Upload"
 msgstr "Imgur'a yüklemeyi etkinleştir"
 
-#: src/prefs.js:362
+#: src/prefs.js:365 src/prefs.js:548
 msgid "Show Upload Notification"
 msgstr "Yükleme bildirimi göster"
 
-#: src/prefs.js:379
+#: src/prefs.js:382 src/prefs.js:563
 msgid "Auto-Upload After Capture"
 msgstr "Çektikten sonra otomatik yükle"
 
-#: src/prefs.js:394
+#: src/prefs.js:397 src/prefs.js:578
 msgid "Auto-Copy Link After Upload"
 msgstr "Yükledikten sonra bağlantıyı otomatik kopyala"
 
-#: src/prefs.js:409
+#: src/prefs.js:412 src/prefs.js:593
 msgid "Auto-Open Link After Upload"
 msgstr "Yükledikten sonra bağlantıyı otomatik aç"
 
-#: src/prefs.js:435
+#: src/prefs.js:438
+#, fuzzy
+msgid "Enable CloudApp Upload"
+msgstr "Imgur'a yüklemeyi etkinleştir"
+
+#: src/prefs.js:448
+msgid "Email"
+msgstr ""
+
+#: src/prefs.js:481
+msgid "Password"
+msgstr ""
+
+#: src/prefs.js:515
+#, fuzzy
+msgid "Link"
+msgstr "Bağlantıyı aç"
+
+#: src/prefs.js:521
+#, fuzzy
+msgid "Share Link"
+msgstr "Bağlantıyı aç"
+
+#: src/prefs.js:522
+#, fuzzy
+msgid "Direct Link"
+msgstr "Bağlantıyı aç"
+
+#: src/prefs.js:523
+msgid "Download Link"
+msgstr ""
+
+#: src/prefs.js:619
 msgid "Select area"
 msgstr "Alan seç"
 
-#: src/prefs.js:436
+#: src/prefs.js:620
 msgid "Select window"
 msgstr "Pencere seç"
 
-#: src/prefs.js:437
+#: src/prefs.js:621
 msgid "Select whole desktop"
 msgstr "Bütün masaüstünü seç"
 
-#: src/prefs.js:464
+#: src/prefs.js:648
 msgid "Keyboard Shortcut"
 msgstr "Klavye kısayolları"
 
-#: src/prefs.js:504
+#: src/prefs.js:688
 msgid "Modify"
 msgstr "Değiştir"
 
@@ -272,9 +300,32 @@ msgstr "_İptal"
 msgid "_Save"
 msgstr "_Kaydet"
 
-#: src/selection.js:246
-msgid "selected region was too small - please select a larger area"
-msgstr "Seçilen alan çok küçük - lütfen daha büyük bir alan seçin"
+#~ msgid "Capture Delay"
+#~ msgstr "Zaman gecikmesi"
+
+#~ msgid "Clear"
+#~ msgstr "Temizle"
+
+#~ msgid "Save As..."
+#~ msgstr "Farklı kaydet..."
+
+#~ msgid "Imgur"
+#~ msgstr "Imgur"
+
+#~ msgid "Upload"
+#~ msgstr "Yükle"
+
+#~ msgid "Open Link"
+#~ msgstr "Bağlantıyı aç"
+
+#~ msgid "Delete"
+#~ msgstr "Sil"
+
+#~ msgid "Settings"
+#~ msgstr "Ayarlar"
+
+#~ msgid "selected region was too small - please select a larger area"
+#~ msgstr "Seçilen alan çok küçük - lütfen daha büyük bir alan seçin"
 
 #~ msgid "Default Clipboard Content"
 #~ msgstr "Standard Inhalt der Zwischenablage"

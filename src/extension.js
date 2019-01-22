@@ -30,6 +30,7 @@ const Notifications = Local.imports.notifications.exports;
 const Filename = Local.imports.filename.exports;
 
 const UploadImgur = Local.imports.uploadImgur.exports;
+const UploadCloudApp = Local.imports.uploadCloudApp.exports;
 
 const Convenience = Local.imports.convenience.exports;
 
@@ -163,6 +164,91 @@ class Screenshot {
       this.imgurUpload = null;
     });
     this.imgurUpload.deleteRemote();
+  }
+
+  cloudAppStartUpload() {
+    const email = settings.get_string(Config.KeyCloudAppEmail)
+    const password = settings.get_string(Config.KeyCloudAppPassword)
+    const link = settings.get_string(Config.KeyCloudAppLink)
+
+    let urlFn;
+    switch (link) {
+      case Config.CloudAppLinks.SHARE_LINK:
+        urlFn = UploadCloudApp.UrlFn.SHARE;
+        break;
+      case Config.CloudAppLinks.DIRECT_LINK:
+        urlFn = UploadCloudApp.UrlFn.CONTENT;
+        break;
+      case Config.CloudAppLinks.DOWNLOAD_LINK:
+        urlFn = UploadCloudApp.UrlFn.DOWNLOAD;
+        break;
+    }
+
+    this.cloudAppUpload = new UploadCloudApp.Upload(this.srcFile, email, password, urlFn);
+
+    this.cloudAppUpload.connect("error", (obj, err) => {
+      Notifications.notifyError(String(err));
+    });
+
+    if (settings.get_boolean(Config.KeyCloudAppEnableNotification)) {
+      Notifications.notifyCloudAppUpload(this);
+    }
+    this.emit("cloud-app-upload", this.cloudAppUpload);
+
+    this.cloudAppUpload.connect("done", () => {
+      if (settings.get_boolean(Config.KeyCloudAppAutoCopyLink)) {
+        this.cloudAppCopyURL();
+      }
+
+      if (settings.get_boolean(Config.KeyCloudAppAutoOpenLink)) {
+        this.cloudAppOpenURL();
+      }
+    });
+
+    this.cloudAppUpload.start();
+  }
+
+  isCloudAppUploadComplete() {
+    return !!(this.cloudAppUpload && this.cloudAppUpload.responseData);
+  }
+
+  cloudAppOpenURL() {
+    if (!this.isCloudAppUploadComplete()) {
+      logError(new Error("no completed cloud app upload"));
+      return;
+    }
+    const context = global.create_app_launch_context(0, -1);
+    const uri = this.cloudAppUpload.responseData.url;
+    if (!uri) {
+      logError(new Error("no uri in responseData"));
+      return;
+
+    }
+    Gio.AppInfo.launch_default_for_uri(uri, context);
+  }
+
+  cloudAppCopyURL() {
+    if (!this.isCloudAppUploadComplete()) {
+      logError(new Error("no completed cloud app upload"));
+      return;
+    }
+    const uri = this.cloudAppUpload.responseData.url;
+    if (!uri) {
+      logError(new Error("no uri in responseData"));
+      return;
+    }
+    Clipboard.setText(uri);
+  }
+
+  cloudAppDelete() {
+    if (!this.isCloudAppUploadComplete()) {
+      logError(new Error("no completed cloud app upload"));
+      return;
+    }
+    this.cloudAppUpload.connect("deleted", () => {
+      this.cloudAppUpload = null;
+    });
+    this.cloudAppUpload.deleteRemote();
   }
 }
 Signals.addSignalMethods(Screenshot.prototype);
@@ -301,6 +387,13 @@ class Extension {
 
     if (imgurEnabled && imgurAutoUpload) {
       screenshot.imgurStartUpload();
+    }
+
+    const cloudAppEnabled = settings.get_boolean(Config.KeyEnableUploadCloudApp);
+    const cloudAppAutoUpload = settings.get_boolean(Config.KeyCloudAppAutoUpload);
+
+    if (cloudAppEnabled && cloudAppAutoUpload) {
+      screenshot.cloudAppStartUpload();
     }
   }
 

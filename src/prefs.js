@@ -94,6 +94,10 @@ const ScreenshotToolSettingsWidget = new GObject.Class({
     label = new Gtk.Label({label: _("Imgur Upload (Beta)")});
     notebook.append_page(page, label);
 
+    page = this._makePrefsUploadCloudApp();
+    label = new Gtk.Label({label: _("CloudApp Upload (Alpha)")});
+    notebook.append_page(page, label);
+
     page = this._makePrefsKeybindings();
     label = new Gtk.Label({label: _("Keybindings")});
     notebook.append_page(page, label);
@@ -406,6 +410,187 @@ const ScreenshotToolSettingsWidget = new GObject.Class({
 
     const configSwitchOpenLinkOnUpload = buildConfigSwitch(
       _("Auto-Open Link After Upload"), Config.KeyImgurAutoOpenLink
+    );
+    bindSensitivity(
+      configSwitchEnable.gtkSwitch, configSwitchOpenLinkOnUpload.gtkLabel
+    );
+    bindSensitivity(
+      configSwitchEnable.gtkSwitch, configSwitchOpenLinkOnUpload.gtkSwitch
+    );
+
+    prefs.add(configSwitchOpenLinkOnUpload.hbox, {fill: false});
+
+
+    return prefs;
+  },
+
+  _makePrefsUploadCloudApp() {
+    const prefs = new Gtk.Box({
+      orientation: Gtk.Orientation.VERTICAL,
+      margin: 20,
+      margin_top: 10,
+      expand: false
+    });
+
+    /* Enable CloudApp Upload [on|off] */
+
+    const configSwitchEnable = buildConfigSwitch(
+      _("Enable CloudApp Upload"), Config.KeyEnableUploadCloudApp
+    );
+
+    prefs.add(configSwitchEnable.hbox, {fill: false});
+
+    /* Email */
+
+    let hbox = buildHbox();
+
+    const labelEmail = new Gtk.Label({
+      label: _("Email"),
+      xalign: 0,
+      expand: true
+    });
+
+    const inputEmail = new Gtk.Entry();
+
+    hbox.add(labelEmail);
+    hbox.add(inputEmail);
+
+    inputEmail.text =
+      _settings.get_string(Config.KeyCloudAppEmail);
+
+    bindSensitivity(
+      configSwitchEnable.gtkSwitch, labelEmail
+    );
+    bindSensitivity(
+      configSwitchEnable.gtkSwitch, inputEmail
+    );
+
+    ["inserted-text", "deleted-text"].forEach((name) => {
+      inputEmail.get_buffer().connect(name, ({text}) => {
+        _settings.set_string(Config.KeyCloudAppEmail, text);
+      })
+    });
+
+    prefs.add(hbox, {fill: false});
+
+    /* Password */
+
+    hbox = buildHbox();
+
+    const labelPassword = new Gtk.Label({
+      label: _("Password"),
+      xalign: 0,
+      expand: true
+    });
+
+    const inputPassword = new Gtk.Entry();
+
+    hbox.add(labelPassword);
+    hbox.add(inputPassword);
+
+    inputPassword.visibility = false
+    inputPassword.text =
+      _settings.get_string(Config.KeyCloudAppPassword);
+
+    bindSensitivity(
+      configSwitchEnable.gtkSwitch, labelPassword
+    );
+    bindSensitivity(
+      configSwitchEnable.gtkSwitch, inputPassword
+    );
+
+    ["inserted-text", "deleted-text"].forEach((name) => {
+      inputPassword.get_buffer().connect(name, ({text}) => {
+        _settings.set_string(Config.KeyCloudAppPassword, text);
+      });
+    });
+
+    prefs.add(hbox, {fill: false});
+
+    /* Link */
+
+    hbox = buildHbox();
+
+    const labelLink = new Gtk.Label({
+      label: _("Link"),
+      xalign: 0,
+      expand: true
+    });
+
+    const linkOptions = [
+      [_("Share Link"), Config.CloudAppLinks.SHARE_LINK],
+      [_("Direct Link"), Config.CloudAppLinks.DIRECT_LINK],
+      [_("Download Link"), Config.CloudAppLinks.DOWNLOAD_LINK]
+    ];
+
+    const currentLink = _settings.get_string(Config.KeyCloudAppLink);
+
+    const comboBoxLink = this._getComboBox(
+      linkOptions, GObject.TYPE_STRING, currentLink,
+      (value) => _settings.set_string(Config.KeyCloudAppLink, value)
+    );
+
+    hbox.add(labelLink);
+    hbox.add(comboBoxLink);
+
+    bindSensitivity(
+      configSwitchEnable.gtkSwitch, labelLink
+    );
+    bindSensitivity(
+      configSwitchEnable.gtkSwitch, comboBoxLink
+    );
+
+    prefs.add(hbox, {fill: false});
+
+    /* Enable Upload Notification [on|off] */
+
+    const configSwitchEnableNotification = buildConfigSwitch(
+      _("Show Upload Notification"), Config.KeyCloudAppEnableNotification
+    );
+
+    prefs.add(configSwitchEnableNotification.hbox, {fill: false});
+
+    bindSensitivity(
+      configSwitchEnable.gtkSwitch, configSwitchEnableNotification.gtkLabel
+    );
+    bindSensitivity(
+      configSwitchEnable.gtkSwitch, configSwitchEnableNotification.gtkSwitch
+    );
+
+    /* Auto-Upload After Capture [on|off] */
+
+    const configSwitchUploadOnCapture = buildConfigSwitch(
+      _("Auto-Upload After Capture"), Config.KeyCloudAppAutoUpload
+    );
+
+    bindSensitivity(
+      configSwitchEnable.gtkSwitch, configSwitchUploadOnCapture.gtkLabel
+    );
+    bindSensitivity(
+      configSwitchEnable.gtkSwitch, configSwitchUploadOnCapture.gtkSwitch
+    );
+
+    prefs.add(configSwitchUploadOnCapture.hbox, {fill: false});
+
+    /* Auto-Copy Link After Upload [on|off] */
+
+    const configSwitchCopyLinkOnUpload = buildConfigSwitch(
+      _("Auto-Copy Link After Upload"), Config.KeyCloudAppAutoCopyLink
+    );
+
+    bindSensitivity(
+      configSwitchEnable.gtkSwitch, configSwitchCopyLinkOnUpload.gtkLabel
+    );
+    bindSensitivity(
+      configSwitchEnable.gtkSwitch, configSwitchCopyLinkOnUpload.gtkSwitch
+    );
+
+    prefs.add(configSwitchCopyLinkOnUpload.hbox, {fill: false});
+
+    /* Auto-Open Link After Upload [on|off] */
+
+    const configSwitchOpenLinkOnUpload = buildConfigSwitch(
+      _("Auto-Open Link After Upload"), Config.KeyCloudAppAutoOpenLink
     );
     bindSensitivity(
       configSwitchEnable.gtkSwitch, configSwitchOpenLinkOnUpload.gtkLabel

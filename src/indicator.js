@@ -147,6 +147,28 @@ class ScreenshotSection {
 
     menu.addMenuItem(this._imgurMenu);
 
+    // CLOUD APP
+
+    menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
+
+    this._cloudAppMenu = new PopupMenu.PopupSubMenuMenuItem(_("CloudApp"), false);
+    this._cloudAppUpload = new PopupMenu.PopupMenuItem(_("Upload"));
+    this._cloudAppOpen = new PopupMenu.PopupMenuItem(_("Open Link"));
+    this._cloudAppCopyLink = new PopupMenu.PopupMenuItem(_("Copy Link"));
+    this._cloudAppDelete = new PopupMenu.PopupMenuItem(_("Delete"));
+
+    this._cloudAppUpload.connect("activate", this._onCloudAppUpload.bind(this));
+    this._cloudAppOpen.connect("activate", this._onCloudAppOpen.bind(this));
+    this._cloudAppCopyLink.connect("activate", this._onCloudAppCopyLink.bind(this));
+    this._cloudAppDelete.connect("activate", this._onCloudAppDelete.bind(this));
+
+    this._cloudAppMenu.menu.addMenuItem(this._cloudAppUpload);
+    this._cloudAppMenu.menu.addMenuItem(this._cloudAppOpen);
+    this._cloudAppMenu.menu.addMenuItem(this._cloudAppCopyLink);
+    this._cloudAppMenu.menu.addMenuItem(this._cloudAppDelete);
+
+    menu.addMenuItem(this._cloudAppMenu);
+
     menu.connect("open-state-changed", () => {
       this._updateVisibility();
     });
@@ -178,6 +200,23 @@ class ScreenshotSection {
       visible && imgurEnabled && imgurComplete;
     getActorCompat(this._imgurDelete).visible =
       visible && imgurEnabled && imgurComplete;
+
+    const cloudAppEnabled = settings.get_boolean(Config.KeyEnableUploadCloudApp);
+    const cloudAppComplete =
+        this._screenshot &&
+        this._screenshot.cloudAppUpload &&
+        this._screenshot.cloudAppUpload.responseData;
+
+    this._cloudAppMenu.actor.visible =
+      visible && cloudAppEnabled;
+    this._cloudAppUpload.actor.visible =
+      visible && cloudAppEnabled && !cloudAppComplete;
+    this._cloudAppOpen.actor.visible =
+      visible && cloudAppEnabled && cloudAppComplete;
+    this._cloudAppCopyLink.actor.visible =
+      visible && cloudAppEnabled && cloudAppComplete;
+    this._cloudAppDelete.actor.visible =
+      visible && cloudAppEnabled && cloudAppComplete;
   }
 
   _setImage(pixbuf) {
@@ -209,6 +248,11 @@ class ScreenshotSection {
     if (screenshot) {
       this._setImage(screenshot.gtkImage.get_pixbuf());
       this._screenshot.connect("imgur-upload", (obj, upload) => {
+        upload.connect("done", (obj, data) => {
+          this._updateVisibility();
+        });
+      });
+      this._screenshot.connect("cloud-app-upload", (obj, upload) => {
         upload.connect("done", (obj, data) => {
           this._updateVisibility();
         });
@@ -248,6 +292,22 @@ class ScreenshotSection {
 
   _onImgurDelete() {
     this._screenshot.imgurDelete();
+  }
+
+  _onCloudAppUpload() {
+    this._screenshot.cloudAppStartUpload();
+  }
+
+  _onCloudAppOpen() {
+    this._screenshot.cloudAppOpenURL();
+  }
+
+  _onCloudAppCopyLink() {
+    this._screenshot.cloudAppCopyURL();
+  }
+
+  _onCloudAppDelete() {
+    this._screenshot.cloudAppDelete();
   }
 }
 

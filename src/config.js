@@ -49,4 +49,20 @@ var exports = {
   KeyImgurAutoUpload: "imgur-auto-upload",
   KeyImgurAutoCopyLink: "imgur-auto-copy-link",
   KeyImgurAutoOpenLink: "imgur-auto-open-link",
+
+  KeyEnableUploadCloudApp: "enable-cloud-app",
+  KeyCloudAppEmail: "cloud-app-email",
+  KeyCloudAppPassword: "cloud-app-password",
+  // See schemas/org.gnome.shell.extensions.screenshot.gschema.xml
+  KeyCloudAppLink: "cloud-app-link",
+  KeyCloudAppEnableNotification: "cloud-app-enable-notification",
+  KeyCloudAppAutoUpload: "cloud-app-auto-upload",
+  KeyCloudAppAutoCopyLink: "cloud-app-auto-copy-link",
+  KeyCloudAppAutoOpenLink: "cloud-app-auto-open-link",
+
+  CloudAppLinks: {
+    SHARE_LINK: "share-link",
+    DIRECT_LINK: "direct-link",
+    DOWNLOAD_LINK: "download-link"
+  },
 };
