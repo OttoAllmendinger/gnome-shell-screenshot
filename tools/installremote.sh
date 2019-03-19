@@ -7,4 +7,4 @@ git ls-files | tar Tc - |
       tar x -C/tmp/gsext/ && \
       cd /tmp/gsext && \
       make install &&
-      $GSEDEV_REMOTE_RESTART && make restart"
+      ${GSEDEV_REMOTE_RESTART:-true} && make restart"
