@@ -11,7 +11,7 @@ const baseUrl = "https://api.imgur.com/3/";
 const httpSession = new Soup.SessionAsync();
 
 const getMimetype = (file) => {
-  return 'image/png'; // FIXME
+  return "image/png"; // FIXME
 };
 
 const authMessage = (soupMessage) => {
@@ -21,7 +21,7 @@ const authMessage = (soupMessage) => {
 }
 
 const getPostMessage = (file, callback) => {
-  let url = this.baseUrl + "image";
+  const url = this.baseUrl + "image";
 
   file.load_contents_async(null, (f, res) => {
     let contents;
@@ -34,13 +34,13 @@ const getPostMessage = (file, callback) => {
       return;
     }
 
-    let buffer = new Soup.Buffer(contents, contents.length);
-    let mimetype = getMimetype(file);
-    let multipart = new Soup.Multipart(Soup.FORM_MIME_TYPE_MULTIPART);
-    let filename = "image.png";
-    multipart.append_form_file('image', filename, mimetype, buffer);
+    const buffer = new Soup.Buffer(contents, contents.length);
+    const mimetype = getMimetype(file);
+    const multipart = new Soup.Multipart(Soup.FORM_MIME_TYPE_MULTIPART);
+    const filename = "image.png";
+    multipart.append_form_file("image", filename, mimetype, buffer);
 
-    let message = Soup.form_request_new_from_multipart(url, multipart);
+    const message = Soup.form_request_new_from_multipart(url, multipart);
 
     authMessage(message);
 
@@ -57,13 +57,13 @@ const httpError = (status, statusCode, responeData) => {
 const Upload = new Lang.Class({
   Name: "Upload",
 
-  _init: function (file) {
+  _init(file) {
     this._file = file;
   },
 
-  start: function () {
+  start() {
     getPostMessage(this._file, (error, message) => {
-      let total = message.request_body.length;
+      const total = message.request_body.length;
       let uploaded = 0;
 
       if (error) {
@@ -71,7 +71,7 @@ const Upload = new Lang.Class({
         return;
       }
 
-      let signalProgress = message.connect(
+      const signalProgress = message.connect(
         "wrote-body-data",
         (message, buffer) => {
           uploaded += buffer.length;
@@ -82,11 +82,11 @@ const Upload = new Lang.Class({
       httpSession.queue_message(message,
         (session, {status, status_code, response_body}) => {
           if (status_code == 200) {
-            let data = JSON.parse(response_body.data).data;
+            const data = JSON.parse(response_body.data).data;
             this.responseData = data;
-            this.emit('done', data);
+            this.emit("done", data);
           } else {
-            let err = httpError(status, status_code, response_body.data);
+            const err = httpError(status, status_code, response_body.data);
             let errorMessage;
 
             try {
@@ -99,7 +99,7 @@ const Upload = new Lang.Class({
               errorMessage = response_body.data
             }
 
-            this.emit('error', err);
+            this.emit("error", err);
           }
 
           message.disconnect(signalProgress);
@@ -107,20 +107,20 @@ const Upload = new Lang.Class({
     });
   },
 
-  deleteRemote: function () {
+  deleteRemote() {
     if (!this.responseData) {
       throw new Error("no responseData");
     }
-    let {deletehash} = this.responseData;
-    let uri = new Soup.URI(baseUrl + "image/" + deletehash);
-    let message = new Soup.Message({method: "DELETE", uri: uri});
+    const {deletehash} = this.responseData;
+    const uri = new Soup.URI(baseUrl + "image/" + deletehash);
+    const message = new Soup.Message({method: "DELETE", uri});
     authMessage(message);
     httpSession.queue_message(message,
       (session, {status, status_code, response_body}) => {
         if (status_code == 200) {
-          this.emit('deleted');
+          this.emit("deleted");
         } else {
-          this.emit('error', httpError(status, status_code, response_body.data));
+          this.emit("error", httpError(status, status_code, response_body.data));
         }
       }
     );

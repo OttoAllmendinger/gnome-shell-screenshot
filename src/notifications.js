@@ -10,7 +10,7 @@ const GdkPixbuf = imports.gi.GdkPixbuf;
 const Main = imports.ui.main;
 const MessageTray = imports.ui.messageTray;
 
-const Gettext = imports.gettext.domain('gnome-shell-screenshot');
+const Gettext = imports.gettext.domain("gnome-shell-screenshot");
 const _ = Gettext.gettext;
 
 const ExtensionUtils = imports.misc.extensionUtils;
@@ -23,8 +23,8 @@ const Clipboard = Local.imports.clipboard.exports;
 const Thumbnail = Local.imports.thumbnail.exports;
 const Convenience = Local.imports.convenience.exports;
 
-const NotificationIcon = 'camera-photo-symbolic';
-const NotificationSourceName = 'Screenshot Tool';
+const NotificationIcon = "camera-photo-symbolic";
+const NotificationSourceName = "Screenshot Tool";
 
 
 const ICON_SIZE = 64;
@@ -33,7 +33,7 @@ const ICON_SIZE = 64;
 const settings = Convenience.getSettings();
 
 const getSource = () => {
-  let source = new MessageTray.Source(
+  const source = new MessageTray.Source(
     NotificationSourceName, NotificationIcon
   );
   Main.messageTray.add(source);
@@ -44,17 +44,17 @@ const Notification = new Lang.Class({
   Name: "ScreenshotTool.Notification",
   Extends: MessageTray.Notification,
 
-  _title: function () {
+  _title() {
     return _("New Screenshot");
   },
 
-  _banner: function ({gtkImage}) {
-    let {width, height} = gtkImage.get_pixbuf();
-    let banner = _("Size:") + " " + width + "x" + height + ".";
+  _banner({gtkImage}) {
+    const {width, height} = gtkImage.get_pixbuf();
+    const banner = _("Size:") + " " + width + "x" + height + ".";
     return banner;
   },
 
-  _init: function (source, screenshot) {
+  _init(source, screenshot) {
     this.parent(
       source,
       this._title(),
@@ -70,8 +70,8 @@ const Notification = new Lang.Class({
     this._screenshot = screenshot;
   },
 
-  createBanner: function() {
-    let b = this.parent();
+  createBanner() {
+    const b = this.parent();
 
     b._iconBin.child.icon_size = ICON_SIZE;
 
@@ -88,19 +88,19 @@ const Notification = new Lang.Class({
     return b;
   },
 
-  _onActivated: function () {
+  _onActivated() {
     this._screenshot.launchOpen();
   },
 
-  _onCopy: function () {
+  _onCopy() {
     this._screenshot.copyClipboard();
   },
 
-  _onSave: function () {
+  _onSave() {
     this._screenshot.launchSave();
   },
 
-  _onUpload: function () {
+  _onUpload() {
     this._screenshot.imgurStartUpload();
   }
 });
@@ -111,12 +111,12 @@ const ErrorNotification = new Lang.Class({
   Name: "ScreenshotTool.ErrorNotification",
   Extends: MessageTray.Notification,
 
-  _init: function (source, message) {
+  _init(source, message) {
     this.parent(
       source,
       _("Error"),
       String(message),
-      { secondaryGIcon: new Gio.ThemedIcon({name: 'dialog-error'}) }
+      { secondaryGIcon: new Gio.ThemedIcon({name: "dialog-error"}) }
     );
   }
 });
@@ -127,7 +127,7 @@ const ImgurNotification = new Lang.Class({
   Name: "ScreenshotTool.ImgurNotification",
   Extends: MessageTray.Notification,
 
-  _init: function (source, screenshot) {
+  _init(source, screenshot) {
     this.parent(source, _("Imgur Upload"));
     this.setForFeedback(true);
     this.setResident(true);
@@ -141,7 +141,7 @@ const ImgurNotification = new Lang.Class({
     this._upload.connect("progress", (obj, bytes, total) => {
       this.update(
           _("Imgur Upload"),
-          '' + Math.floor(100 * (bytes / total)) + '%'
+          "" + Math.floor(100 * (bytes / total)) + "%"
       );
     });
 
@@ -157,21 +157,21 @@ const ImgurNotification = new Lang.Class({
     });
   },
 
-  _updateCopyButton: function () {
+  _updateCopyButton() {
     if (!this._copyButton) {
       return;
     }
     this._copyButton.visible = this._screenshot.isImgurUploadComplete();
   },
 
-  createBanner: function() {
-    let b = this.parent();
+  createBanner() {
+    const b = this.parent();
     this._copyButton = b.addAction(_("Copy Link"), this._onCopy.bind(this));
     this._updateCopyButton();
     return b;
   },
 
-  _onActivated: function () {
+  _onActivated() {
     if (this._screenshot.isImgurUploadComplete()) {
       this._screenshot.imgurOpenURL();
     } else {
@@ -181,27 +181,27 @@ const ImgurNotification = new Lang.Class({
     }
   },
 
-  _onCopy: function () {
+  _onCopy() {
     this._screenshot.imgurCopyURL();
   },
 });
 
 
 const notifyScreenshot = (screenshot) => {
-  let source = getSource();
-  let notification = new Notification(source, screenshot);
+  const source = getSource();
+  const notification = new Notification(source, screenshot);
   source.notify(notification);
 }
 
 const notifyError = (message) => {
-  let source = getSource();
-  let notification = new ErrorNotification(source, message);
+  const source = getSource();
+  const notification = new ErrorNotification(source, message);
   source.notify(notification);
 }
 
 const notifyImgurUpload = (screenshot) => {
-  let source = getSource();
-  let notification = new ImgurNotification(source, screenshot);
+  const source = getSource();
+  const notification = new ImgurNotification(source, screenshot);
   source.notify(notification);
 }
 

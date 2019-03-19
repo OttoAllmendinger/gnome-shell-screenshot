@@ -1,23 +1,23 @@
 // vi: sts=2 sw=2 et
 
 var exports = {
-  IndicatorName: 'de.ttll.GnomeScreenshot',
+  IndicatorName: "de.ttll.GnomeScreenshot",
 
-  SettingsSchema: 'org.gnome.shell.extensions.screenshot',
+  SettingsSchema: "org.gnome.shell.extensions.screenshot",
 
-  KeyEnableIndicator: 'enable-indicator',
+  KeyEnableIndicator: "enable-indicator",
 
-  KeyEnableNotification: 'enable-notification',
+  KeyEnableNotification: "enable-notification",
 
   KeyShortcuts: [
-    'shortcut-select-area',
-    'shortcut-select-window',
-    'shortcut-select-desktop'
+    "shortcut-select-area",
+    "shortcut-select-window",
+    "shortcut-select-desktop"
   ],
 
 
   // See schemas/org.gnome.shell.extensions.screenshot.gschema.xml
-  KeyClickAction: 'click-action',
+  KeyClickAction: "click-action",
 
   ClickActions: {
     SHOW_MENU: 0,
@@ -26,16 +26,16 @@ var exports = {
     SELECT_DESKTOP: 3
   },
 
-  KeyCaptureDelay: 'capture-delay',
+  KeyCaptureDelay: "capture-delay",
 
-  KeySaveScreenshot: 'save-screenshot',
+  KeySaveScreenshot: "save-screenshot",
 
-  KeySaveLocation: 'save-location',
+  KeySaveLocation: "save-location",
 
-  KeyFilenameTemplate: 'filename-template',
+  KeyFilenameTemplate: "filename-template",
 
   // See schemas/org.gnome.shell.extensions.screenshot.gschema.xml
-  KeyClipboardAction: 'clipboard-action',
+  KeyClipboardAction: "clipboard-action",
 
   ClipboardActions: {
     NONE: "none",
@@ -44,9 +44,9 @@ var exports = {
     SET_REMOTE_URL: "set-remote-url"
   },
 
-  KeyEnableUploadImgur: 'enable-imgur',
-  KeyImgurEnableNotification: 'imgur-enable-notification',
-  KeyImgurAutoUpload: 'imgur-auto-upload',
-  KeyImgurAutoCopyLink: 'imgur-auto-copy-link',
-  KeyImgurAutoOpenLink: 'imgur-auto-open-link',
+  KeyEnableUploadImgur: "enable-imgur",
+  KeyImgurEnableNotification: "imgur-enable-notification",
+  KeyImgurAutoUpload: "imgur-auto-upload",
+  KeyImgurAutoCopyLink: "imgur-auto-copy-link",
+  KeyImgurAutoOpenLink: "imgur-auto-open-link",
 };

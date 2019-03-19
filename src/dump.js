@@ -1,9 +1,9 @@
 // vi: sts=2 sw=2 et
 //
 const dump = (v, opts = {values: true}) => {
-  let segments = [];
-  let indentStr = (i) => Array(i * 2 + 1).join(" ");
-  let makeSegments = (v, objects=[], indent=1) => {
+  const segments = [];
+  const indentStr = (i) => Array(i * 2 + 1).join(" ");
+  const makeSegments = (v, objects=[], indent=1) => {
     if (indent > 10) {
       segments.push(" ... (indent limit)");
       return;
@@ -26,7 +26,7 @@ const dump = (v, opts = {values: true}) => {
       asString = "<???>";
     }
 
-    let isArguments = asString === "[object Arguments]";
+    const isArguments = asString === "[object Arguments]";
     let isUnknown = false;
     let isArray = false;
     let isObject = false;
@@ -48,14 +48,14 @@ const dump = (v, opts = {values: true}) => {
       /* noop */
     }
 
-    let hasKeys = (keys !== null);
+    const hasKeys = (keys !== null);
 
     if (isArguments) {
       v = Array.prototype.slice.call(v);
     }
 
-    let type = typeof v;
-    let isPrimitive =
+    const type = typeof v;
+    const isPrimitive =
       (v == null) || ((type != "object") && (type != "function"));
 
     if (isArray || isArguments || isObject || hasKeys) {
@@ -65,11 +65,11 @@ const dump = (v, opts = {values: true}) => {
       }
     }
 
-    let nextObjects = objects.concat([v]);
+    const nextObjects = objects.concat([v]);
 
     if (isArray || isArguments) {
       segments.push("[");
-      v.forEach((x,i) => {
+      v.forEach((x, i) => {
         if (i > 0) {
           segments.push(", ");
         }
@@ -84,14 +84,14 @@ const dump = (v, opts = {values: true}) => {
       } else {
         keys = Object.keys(v);
       }
-      keys.forEach((k,i) => {
+      keys.forEach((k, i) => {
         if (i > 0) {
           segments.push(", ")
         }
         segments.push(k.toString());
         segments.push(": ");
         if (opts.values) {
-          let props = Object.getOwnPropertyDescriptor(v, k);
+          const props = Object.getOwnPropertyDescriptor(v, k);
           if ("value" in props) {
             makeSegments(v[k], nextObjects, indent+1);
           } else {
@@ -111,13 +111,13 @@ const dump = (v, opts = {values: true}) => {
 }
 
 
-if (window["ARGV"] && ('0' in ARGV) && ARGV[0] === "test") {
+if (window["ARGV"] && ("0" in ARGV) && ARGV[0] === "test") {
   log(dump("string"));
   log(dump(true));
-  log(dump([1,2,3]));
-  log(dump({a:{aa:{aaa:1,aab:2}},b:3}));
+  log(dump([1, 2, 3]));
+  log(dump({a:{aa:{aaa:1, aab:2}}, b:3}));
 
-  const Obj = function () {
+  const Obj = function() {
       this.x = 1;
       this.y = null;
   }

@@ -13,7 +13,7 @@ const Clutter = imports.gi.Clutter;
 const Main = imports.ui.main;
 
 
-const Gettext = imports.gettext.domain('gnome-shell-screenshot');
+const Gettext = imports.gettext.domain("gnome-shell-screenshot");
 const _ = Gettext.gettext;
 
 
@@ -48,7 +48,7 @@ const selectWindow = (windows, px, py) => {
   const filtered = windows.filter((win) => {
     if ((win === undefined)
           || !win.visible
-          || (typeof win.get_meta_window !== 'function')
+          || (typeof win.get_meta_window !== "function")
     ) {
       return false;
     }
@@ -70,9 +70,9 @@ const selectWindow = (windows, px, py) => {
 };
 
 const callHelper = (argv, fileName, callback) => {
-  argv = ['gjs', Local.path + '/auxhelper.js', '--filename', fileName, ...argv];
+  argv = ["gjs", Local.path + "/auxhelper.js", "--filename", fileName, ...argv];
   // log(argv.join(' '));
-  let [success, pid] = GLib.spawn_async(
+  const [success, pid] = GLib.spawn_async(
     null, /* pwd */
     argv,
     null, /* envp */
@@ -80,11 +80,11 @@ const callHelper = (argv, fileName, callback) => {
     null /* child_setup */
   );
   if (!success) {
-    throw new Error(`success=false`);
+    throw new Error("success=false");
   }
   GLib.child_watch_add(GLib.PRIORITY_DEFAULT, pid, (pid, exitCode) => {
     if (exitCode !== 0) {
-      logError(new Error(`cmd: ${argv.join(' ')} exitCode=${exitCode}`));
+      logError(new Error(`cmd: ${argv.join(" ")} exitCode=${exitCode}`));
       return callback(new Error(`exitCode=${exitCode}`, null));
     }
     callback(null, fileName);
@@ -94,31 +94,31 @@ const callHelper = (argv, fileName, callback) => {
 
 const makeAreaScreenshot = ({x, y, w, h}, callback) => {
   const fileName = Filename.getTemp();
-  callHelper(['--area', [x,y,w,h].join(',')], fileName, callback);
+  callHelper(["--area", [x, y, w, h].join(",")], fileName, callback);
 };
 
 const makeWindowScreenshot = (callback) => {
   const fileName = Filename.getTemp();
-  callHelper(['--window'], fileName, callback);
+  callHelper(["--window"], fileName, callback);
 };
 
 const makeDesktopScreenshot = (callback) => {
   const fileName = Filename.getTemp();
-  callHelper(['--desktop'], fileName, callback);
+  callHelper(["--desktop"], fileName, callback);
 };
 
 
 const Capture = new Lang.Class({
   Name: "ScreenshotTool.Capture",
 
-  _init: function () {
+  _init() {
     this._mouseDown = false;
 
     this._container = new Shell.GenericContainer({
-      name: 'area-selection',
-      style_class: 'area-selection',
-      visible:  'true',
-      reactive: 'true',
+      name: "area-selection",
+      style_class: "area-selection",
+      visible:  "true",
+      reactive: "true",
       x: -10,
       y: -10
     });
@@ -127,7 +127,7 @@ const Capture = new Lang.Class({
 
     if (Main.pushModal(this._container)) {
       this._signalCapturedEvent  = global.stage.connect(
-        'captured-event', this._onCaptureEvent.bind(this)
+        "captured-event", this._onCaptureEvent.bind(this)
       );
 
       this._setCaptureCursor();
@@ -136,23 +136,23 @@ const Capture = new Lang.Class({
     }
   },
 
-  _setCursorCompat: function (v) {
-    if (Convenience.currentVersionGreaterEqual('3.29')) {
+  _setCursorCompat(v) {
+    if (Convenience.currentVersionGreaterEqual("3.29")) {
       global.display.set_cursor(v);
     } else {
       global.screen.set_cursor(v);
     }
   },
 
-  _setDefaultCursor: function () {
+  _setDefaultCursor() {
     this._setCursorCompat(Meta.Cursor.DEFAULT);
   },
 
-  _setCaptureCursor: function () {
+  _setCaptureCursor() {
     this._setCursorCompat(Meta.Cursor.CROSSHAIR);
   },
 
-  _onCaptureEvent: function (actor, event) {
+  _onCaptureEvent(actor, event) {
     if (event.type() === Clutter.EventType.KEY_PRESS) {
       if (event.get_key_symbol() === Clutter.Escape) {
         this.stop();
@@ -162,16 +162,16 @@ const Capture = new Lang.Class({
     this.emit("captured-event", event);
   },
 
-  drawContainer: function ({x, y, w, h}) {
+  drawContainer({x, y, w, h}) {
     this._container.set_position(x, y);
     this._container.set_size(w, h);
   },
 
-  clearContainer: function () {
+  clearContainer() {
     this.drawContainer({x: -10, y: -10, w: 0, h: 0});
   },
 
-  stop: function () {
+  stop() {
     this.clearContainer();
     global.stage.disconnect(this._signalCapturedEvent);
     this._setDefaultCursor();
@@ -189,32 +189,32 @@ Signals.addSignalMethods(Capture.prototype);
 const emitScreenshotOnSuccess = (instance) =>
   (error, fileName) => {
     if (error) {
-      return instance.emit('error', error);
+      return instance.emit("error", error);
     }
-    instance.emit('screenshot', fileName);
+    instance.emit("screenshot", fileName);
   }
 
 
 const SelectionArea = new Lang.Class({
   Name: "ScreenshotTool.SelectionArea",
 
-  _init: function (options) {
+  _init(options) {
     this._options = options;
     this._mouseDown = false;
     this._capture = new Capture();
-    this._capture.connect('captured-event', this._onEvent.bind(this));
-    this._capture.connect('stop', this.emit.bind(this, 'stop'));
+    this._capture.connect("captured-event", this._onEvent.bind(this));
+    this._capture.connect("stop", this.emit.bind(this, "stop"));
   },
 
-  _onEvent: function (capture, event) {
-    let type = event.type();
-    let [x, y] = global.get_pointer();
+  _onEvent(capture, event) {
+    const type = event.type();
+    const [x, y] = global.get_pointer();
 
     if (type === Clutter.EventType.BUTTON_PRESS) {
       [this._startX, this._startY] = [x, y];
       this._mouseDown = true;
     } else if (this._mouseDown) {
-      let rect = getRectangle(this._startX, this._startY, x, y);
+      const rect = getRectangle(this._startX, this._startY, x, y);
       if (type === Clutter.EventType.MOTION) {
         this._capture.drawContainer(rect);
       } else if (type === Clutter.EventType.BUTTON_RELEASE) {
@@ -224,8 +224,8 @@ const SelectionArea = new Lang.Class({
     }
   },
 
-  _screenshot: function (region) {
-    let fileName = Filename.getTemp();
+  _screenshot(region) {
+    const fileName = Filename.getTemp();
 
     if ((region.w < 8) || (region.h < 8)) {
       this.emit(
@@ -241,7 +241,7 @@ const SelectionArea = new Lang.Class({
       St.ThemeContext.get_for_stage(global.stage).scale_factor;
 
     if (scaleFactor !== 1) {
-      ['x', 'y', 'w', 'h'].forEach((key) => {
+      ["x", "y", "w", "h"].forEach((key) => {
         region[key] = Math.floor(region[key] / scaleFactor);
       });
     }
@@ -259,17 +259,17 @@ Signals.addSignalMethods(SelectionArea.prototype);
 const SelectionWindow = new Lang.Class({
   Name: "ScreenshotTool.SelectionWindow",
 
-  _init: function (options) {
+  _init(options) {
     this._options = options;
     this._windows = global.get_window_actors();
     this._capture = new Capture();
-    this._capture.connect('captured-event', this._onEvent.bind(this));
-    this._capture.connect('stop', this.emit.bind(this, 'stop'));
+    this._capture.connect("captured-event", this._onEvent.bind(this));
+    this._capture.connect("stop", this.emit.bind(this, "stop"));
   },
 
-  _onEvent: function (capture, event) {
-    let type = event.type();
-    let [x, y] = global.get_pointer();
+  _onEvent(capture, event) {
+    const type = event.type();
+    const [x, y] = global.get_pointer();
 
     this._selectedWindow = selectWindow(this._windows, x, y)
 
@@ -286,15 +286,15 @@ const SelectionWindow = new Lang.Class({
     }
   },
 
-  _highlightWindow: function (win) {
+  _highlightWindow(win) {
     this._capture.drawContainer(getWindowRectangle(win));
   },
 
-  _clearHighlight: function () {
+  _clearHighlight() {
     this._capture.clearContainer();
   },
 
-  _screenshot: function (win) {
+  _screenshot(win) {
     this._capture.stop();
     Mainloop.timeout_add(this._options.captureDelay, () => {
       Main.activateWindow(win.get_meta_window());
@@ -315,11 +315,11 @@ Signals.addSignalMethods(SelectionWindow.prototype);
 const SelectionDesktop = new Lang.Class({
   Name: "ScreenshotTool.SelectionDesktop",
 
-  _init: function (options) {
+  _init(options) {
     this._options = options;
     Mainloop.timeout_add(this._options.captureDelay, () => {
       makeDesktopScreenshot(emitScreenshotOnSuccess(this));
-      this.emit('stop');
+      this.emit("stop");
     });
   }
 });

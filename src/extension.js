@@ -15,7 +15,7 @@ const Shell = imports.gi.Shell;
 
 const Main = imports.ui.main;
 
-const Gettext = imports.gettext.domain('gnome-shell-screenshot');
+const Gettext = imports.gettext.domain("gnome-shell-screenshot");
 // const _ = Gettext.gettext;
 
 const Util = imports.misc.util;
@@ -46,7 +46,7 @@ const getSelectionOptions = () => {
 const Screenshot = new Lang.Class({
   Name: "ScreenshotTool.Screenshot",
 
-  _init: function (filePath) {
+  _init(filePath) {
     if (!filePath) {
       throw new Error(`need argument ${filePath}`);
     }
@@ -56,36 +56,36 @@ const Screenshot = new Lang.Class({
     this.dstFile = null;
   },
 
-  _nextFile: function () {
-    let dir = Path.expand(settings.get_string(Config.KeySaveLocation));
-    let filenameTemplate = settings.get_string(Config.KeyFilenameTemplate);
-    let {width, height} = this.gtkImage.get_pixbuf();
-    let dimensions = {width: width, height: height};
+  _nextFile() {
+    const dir = Path.expand(settings.get_string(Config.KeySaveLocation));
+    const filenameTemplate = settings.get_string(Config.KeyFilenameTemplate);
+    const {width, height} = this.gtkImage.get_pixbuf();
+    const dimensions = {width, height};
     for (var n=0; ; n++) {
-      let newFilename = Filename.get(filenameTemplate, dimensions, n);
-      let newPath = Path.join(dir, newFilename);
-      let file = Gio.File.new_for_path(newPath);
-      let exists = file.query_exists(/* cancellable */ null);
+      const newFilename = Filename.get(filenameTemplate, dimensions, n);
+      const newPath = Path.join(dir, newFilename);
+      const file = Gio.File.new_for_path(newPath);
+      const exists = file.query_exists(/* cancellable */ null);
       if (!exists) {
         return file;
       }
     }
   },
 
-  autosave: function () {
-    let dstFile = this._nextFile();
+  autosave() {
+    const dstFile = this._nextFile();
     this.srcFile.copy(dstFile, Gio.FileCopyFlags.NONE, null, null);
     this.dstFile = dstFile;
   },
 
-  launchOpen: function () {
-    let context = global.create_app_launch_context(0, -1);
-    let file = this.dstFile || this.srcFile;
+  launchOpen() {
+    const context = global.create_app_launch_context(0, -1);
+    const file = this.dstFile || this.srcFile;
     Gio.AppInfo.launch_default_for_uri(file.get_uri(), context);
   },
 
-  launchSave: function () {
-    let newFile = this._nextFile();
+  launchSave() {
+    const newFile = this._nextFile();
     Util.spawn([
       "gjs",
       Local.path + "/saveDlg.js",
@@ -98,12 +98,12 @@ const Screenshot = new Lang.Class({
     ]);
   },
 
-  copyClipboard: function () {
+  copyClipboard() {
     Clipboard.setImage(this.gtkImage);
     this.inClipboard = true;
   },
 
-  imgurStartUpload: function () {
+  imgurStartUpload() {
     this.imgurUpload = new UploadImgur.Upload(this.srcFile);
 
     this.imgurUpload.connect("error", (obj, err) => {
@@ -130,17 +130,17 @@ const Screenshot = new Lang.Class({
     this.imgurUpload.start();
   },
 
-  isImgurUploadComplete: function () {
+  isImgurUploadComplete() {
     return !!(this.imgurUpload && this.imgurUpload.responseData);
   },
 
-  imgurOpenURL: function () {
+  imgurOpenURL() {
     if (!this.isImgurUploadComplete()) {
       logError(new Error("no completed imgur upload"));
       return;
     }
-    let context = global.create_app_launch_context(0, -1);
-    let uri = this.imgurUpload.responseData.link;
+    const context = global.create_app_launch_context(0, -1);
+    const uri = this.imgurUpload.responseData.link;
     if (!uri) {
       logError(new Error("no uri in responseData"));
       return;
@@ -148,21 +148,21 @@ const Screenshot = new Lang.Class({
     Gio.AppInfo.launch_default_for_uri(uri, context);
   },
 
-  imgurCopyURL: function () {
+  imgurCopyURL() {
     if (!this.isImgurUploadComplete()) {
       logError(new Error("no completed imgur upload"));
       return;
     }
-    let uri = this.imgurUpload.responseData.link;
+    const uri = this.imgurUpload.responseData.link;
     Clipboard.setText(uri);
   },
 
-  imgurDelete: function () {
+  imgurDelete() {
     if (!this.isImgurUploadComplete()) {
       logError(new Error("no completed imgur upload"));
       return;
     }
-    this.imgurUpload.connect('deleted', () => {
+    this.imgurUpload.connect("deleted", () => {
       this.imgurUpload = null;
     });
     this.imgurUpload.deleteRemote();
@@ -174,11 +174,11 @@ Signals.addSignalMethods(Screenshot.prototype);
 const Extension = new Lang.Class({
   Name: "ScreenshotTool",
 
-  _init: function () {
+  _init() {
     this._signalSettings = [];
 
     this._signalSettings.push(settings.connect(
-        'changed::' + Config.KeyEnableIndicator,
+        "changed::" + Config.KeyEnableIndicator,
         this._updateIndicator.bind(this)
     ));
 
@@ -187,41 +187,41 @@ const Extension = new Lang.Class({
     this._setKeybindings();
   },
 
-  _setKeybindings: function () {
-    let bindingMode = Shell.ActionMode.NORMAL;
+  _setKeybindings() {
+    const bindingMode = Shell.ActionMode.NORMAL;
 
-    for (let shortcut of Config.KeyShortcuts) {
+    for (const shortcut of Config.KeyShortcuts) {
       Main.wm.addKeybinding(
           shortcut,
           settings,
           Meta.KeyBindingFlags.NONE,
           bindingMode,
-          this.onAction.bind(this, shortcut.replace('shortcut-', ''))
+          this.onAction.bind(this, shortcut.replace("shortcut-", ""))
       );
     }
   },
 
-  _unsetKeybindings: function () {
-    for (let shortcut of Config.KeyShortcuts) {
+  _unsetKeybindings() {
+    for (const shortcut of Config.KeyShortcuts) {
       Main.wm.removeKeybinding(shortcut);
     }
   },
 
-  _createIndicator: function () {
+  _createIndicator() {
     if (!this._indicator) {
       this._indicator = new Indicator.Indicator(this);
       Main.panel.addToStatusArea(Config.IndicatorName, this._indicator);
     }
   },
 
-  _destroyIndicator: function () {
+  _destroyIndicator() {
     if (this._indicator) {
       this._indicator.destroy();
       this._indicator = null;
     }
   },
 
-  _updateIndicator: function () {
+  _updateIndicator() {
     if (settings.get_boolean(Config.KeyEnableIndicator)) {
       this._createIndicator();
     } else {
@@ -229,15 +229,15 @@ const Extension = new Lang.Class({
     }
   },
 
-  onAction: function (action) {
-    let dispatch = {
-      'select-area': this._selectArea.bind(this),
-      'select-window': this._selectWindow.bind(this),
-      'select-desktop': this._selectDesktop.bind(this)
+  onAction(action) {
+    const dispatch = {
+      "select-area": this._selectArea.bind(this),
+      "select-window": this._selectWindow.bind(this),
+      "select-desktop": this._selectDesktop.bind(this)
     };
 
-    let f = dispatch[action] || function () {
-      throw new Error('unknown action: ' + action);
+    const f = dispatch[action] || function() {
+      throw new Error("unknown action: " + action);
     };
 
     try {
@@ -247,7 +247,7 @@ const Extension = new Lang.Class({
     }
   },
 
-  _startSelection: function (selection) {
+  _startSelection(selection) {
     if (this._selection) {
       // prevent reentry
       log("_startSelection() error: selection already in progress");
@@ -267,21 +267,21 @@ const Extension = new Lang.Class({
     });
   },
 
-  _selectArea: function () {
+  _selectArea() {
     this._startSelection(new Selection.SelectionArea(getSelectionOptions()));
   },
 
-  _selectWindow: function() {
+  _selectWindow() {
     this._startSelection(new Selection.SelectionWindow(getSelectionOptions()));
   },
 
-  _selectDesktop: function () {
+  _selectDesktop() {
     this._startSelection(new Selection.SelectionDesktop(getSelectionOptions()));
   },
 
-  _onScreenshot: function (selection, filePath) {
-    let screenshot = new Screenshot(filePath);
-    let clipboardAction = settings.get_string(Config.KeyClipboardAction);
+  _onScreenshot(selection, filePath) {
+    const screenshot = new Screenshot(filePath);
+    const clipboardAction = settings.get_string(Config.KeyClipboardAction);
     if (clipboardAction == Config.ClipboardActions.SET_IMAGE_DATA) {
       screenshot.copyClipboard();
     }
@@ -298,15 +298,15 @@ const Extension = new Lang.Class({
       this._indicator.setScreenshot(screenshot);
     }
 
-    let imgurEnabled = settings.get_boolean(Config.KeyEnableUploadImgur);
-    let imgurAutoUpload = settings.get_boolean(Config.KeyImgurAutoUpload);
+    const imgurEnabled = settings.get_boolean(Config.KeyEnableUploadImgur);
+    const imgurAutoUpload = settings.get_boolean(Config.KeyImgurAutoUpload);
 
     if (imgurEnabled && imgurAutoUpload) {
       screenshot.imgurStartUpload();
     }
   },
 
-  destroy: function () {
+  destroy() {
     this._destroyIndicator();
     this._unsetKeybindings();
 

@@ -5,17 +5,17 @@ const Mainloop = imports.mainloop;
 const Upload = new Lang.Class({
   Name: "Upload",
 
-  _init: function (file) {
+  _init(file) {
   },
 
-  start: function () {
-    const testImage = 'http://i.imgur.com/Vkapy8W.png';
+  start() {
+    const testImage = "http://i.imgur.com/Vkapy8W.png";
     const size = 200000;
     const chunk = 1000;
     const updateMs = 100;
     let progress = 0;
 
-    let update = Lang.bind(this, () => {
+    const update = Lang.bind(this, () => {
       if (progress < size) {
         this.emit("progress", (progress += chunk), size);
         Mainloop.timeout_add(updateMs, update);

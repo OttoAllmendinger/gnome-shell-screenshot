@@ -24,14 +24,14 @@ const expand = (path) => {
 
 
 const mkdirParents = (path) => {
-  let mode = parseInt("0755", 8);
-  let ret = GLib.mkdir_with_parents(path, mode);
+  const mode = parseInt("0755", 8);
+  const ret = GLib.mkdir_with_parents(path, mode);
   if (ret == -1) {
     throw new Error("error in Glib.mkdir_with_parents");
   }
 }
 
-if (window["ARGV"] && ('0' in ARGV) && ARGV[0] === "test") {
+if (window["ARGV"] && ("0" in ARGV) && ARGV[0] === "test") {
   log(expand("$PICTURES///Screenshots"));
 }
 

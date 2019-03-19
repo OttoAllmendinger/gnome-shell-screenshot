@@ -12,7 +12,7 @@ const PanelMenu = imports.ui.panelMenu;
 const PopupMenu = imports.ui.popupMenu;
 const Slider = imports.ui.slider;
 
-const Gettext = imports.gettext.domain('gnome-shell-screenshot');
+const Gettext = imports.gettext.domain("gnome-shell-screenshot");
 const _ = Gettext.gettext;
 
 const ExtensionUtils = imports.misc.extensionUtils;
@@ -24,17 +24,17 @@ const Convenience = Local.imports.convenience.exports;
 const { dump } = Local.imports.dump.exports;
 
 
-const DefaultIcon = 'camera-photo-symbolic';
+const DefaultIcon = "camera-photo-symbolic";
 
 
 const settings = Convenience.getSettings();
 
 const CaptureDelayMenu = new Lang.Class({
-  Name: 'CaptureDelayMenu',
+  Name: "CaptureDelayMenu",
   Extends: PopupMenu.PopupMenuSection,
 
-  createScale: function () {
-    let scale = [0];
+  createScale() {
+    const scale = [0];
     for (let p = 1; p < 4; p ++) {
       for (let x = 1; x <= 10; x += 1) {
         scale.push(x * Math.pow(10, p));
@@ -43,35 +43,35 @@ const CaptureDelayMenu = new Lang.Class({
     return scale;
   },
 
-  _init: function(control) {
+  _init(control) {
     this.parent();
 
     this.scaleMS = this.createScale();
 
     this.delayValueMS = settings.get_int(Config.KeyCaptureDelay);
     this.slider = new Slider.Slider(this.scaleToSlider(this.delayValueMS));
-    this.slider.connect('value-changed', this.onDragEnd.bind(this));
+    this.slider.connect("value-changed", this.onDragEnd.bind(this));
     this.sliderItem = new PopupMenu.PopupBaseMenuItem({ activate: false });
     this.sliderItem.actor.add(this.slider.actor, { expand: true });
     this.addMenuItem(this.sliderItem);
 
     this.delayInfoItem = new PopupMenu.PopupMenuItem(
-      '', { activate: false, hover: false, can_focus: false }
+      "", { activate: false, hover: false, can_focus: false }
     );
     this.addMenuItem(this.delayInfoItem)
 
     this.updateDelayInfo();
   },
 
-  scaleToSlider: function (ms) {
+  scaleToSlider(ms) {
     return this.scaleMS.findIndex((v) => v >= ms) / (this.scaleMS.length-1);
   },
 
-  sliderToScale: function (value) {
+  sliderToScale(value) {
     return this.scaleMS[(value * (this.scaleMS.length-1)) | 0];
   },
 
-  onDragEnd: function(slider, value, property) {
+  onDragEnd(slider, value, property) {
     const newValue = this.sliderToScale(value);
     if (newValue !== this.delayValueMS) {
       this.delayValueMS = newValue;
@@ -80,15 +80,15 @@ const CaptureDelayMenu = new Lang.Class({
     }
   },
 
-  updateDelayInfo: function() {
+  updateDelayInfo() {
     const v = this.delayValueMS;
     let text;
     if (v === 0) {
-      text = _('No Capture Delay');
+      text = _("No Capture Delay");
     } else if (v < 1000) {
-      text = `${v}ms ` + _('Capture Delay');
+      text = `${v}ms ` + _("Capture Delay");
     } else {
-      text = `${v / 1000}s ` + _('Capture Delay');
+      text = `${v / 1000}s ` + _("Capture Delay");
     }
     this.delayInfoItem.label.text = text;
   }
@@ -97,21 +97,21 @@ const CaptureDelayMenu = new Lang.Class({
 const ScreenshotSection = new Lang.Class({
   Name: "ScreenshotTool.ScreenshotSection",
 
-  _init: function (menu) {
+  _init(menu) {
     this._screenshot = null;
 
     this._image = new PopupMenu.PopupBaseMenuItem();
     this._image.actor.content_gravity =
       Clutter.ContentGravity.RESIZE_ASPECT;
 
-    this._clear = new PopupMenu.PopupMenuItem(_('Clear'));
-    this._copy = new PopupMenu.PopupMenuItem(_('Copy'));
-    this._save = new PopupMenu.PopupMenuItem(_('Save As...'));
+    this._clear = new PopupMenu.PopupMenuItem(_("Clear"));
+    this._copy = new PopupMenu.PopupMenuItem(_("Copy"));
+    this._save = new PopupMenu.PopupMenuItem(_("Save As..."));
 
-    this._image.connect('activate', this._onImage.bind(this));
-    this._clear.connect('activate', this._onClear.bind(this));
-    this._copy.connect('activate', this._onCopy.bind(this));
-    this._save.connect('activate', this._onSave.bind(this));
+    this._image.connect("activate", this._onImage.bind(this));
+    this._clear.connect("activate", this._onClear.bind(this));
+    this._copy.connect("activate", this._onCopy.bind(this));
+    this._save.connect("activate", this._onSave.bind(this));
 
     menu.addMenuItem(this._image);
     menu.addMenuItem(this._clear);
@@ -122,16 +122,16 @@ const ScreenshotSection = new Lang.Class({
 
     menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
 
-    this._imgurMenu = new PopupMenu.PopupSubMenuMenuItem(_('Imgur'), false);
-    this._imgurUpload = new PopupMenu.PopupMenuItem(_('Upload'));
-    this._imgurOpen = new PopupMenu.PopupMenuItem(_('Open Link'));
-    this._imgurCopyLink = new PopupMenu.PopupMenuItem(_('Copy Link'));
-    this._imgurDelete = new PopupMenu.PopupMenuItem(_('Delete'));
+    this._imgurMenu = new PopupMenu.PopupSubMenuMenuItem(_("Imgur"), false);
+    this._imgurUpload = new PopupMenu.PopupMenuItem(_("Upload"));
+    this._imgurOpen = new PopupMenu.PopupMenuItem(_("Open Link"));
+    this._imgurCopyLink = new PopupMenu.PopupMenuItem(_("Copy Link"));
+    this._imgurDelete = new PopupMenu.PopupMenuItem(_("Delete"));
 
-    this._imgurUpload.connect('activate', this._onImgurUpload.bind(this));
-    this._imgurOpen.connect('activate', this._onImgurOpen.bind(this));
-    this._imgurCopyLink.connect('activate', this._onImgurCopyLink.bind(this));
-    this._imgurDelete.connect('activate', this._onImgurDelete.bind(this));
+    this._imgurUpload.connect("activate", this._onImgurUpload.bind(this));
+    this._imgurOpen.connect("activate", this._onImgurOpen.bind(this));
+    this._imgurCopyLink.connect("activate", this._onImgurCopyLink.bind(this));
+    this._imgurDelete.connect("activate", this._onImgurDelete.bind(this));
 
     this._imgurMenu.menu.addMenuItem(this._imgurUpload);
     this._imgurMenu.menu.addMenuItem(this._imgurOpen);
@@ -147,16 +147,16 @@ const ScreenshotSection = new Lang.Class({
     this._updateVisibility();
   },
 
-  _updateVisibility: function () {
-    let visible = !!this._screenshot;
+  _updateVisibility() {
+    const visible = !!this._screenshot;
 
     this._image.actor.visible = visible;
     this._clear.actor.visible = visible;
     this._copy.actor.visible = visible;
     this._save.actor.visible = visible;
 
-    let imgurEnabled = settings.get_boolean(Config.KeyEnableUploadImgur);
-    let imgurComplete =
+    const imgurEnabled = settings.get_boolean(Config.KeyEnableUploadImgur);
+    const imgurComplete =
         this._screenshot &&
         this._screenshot.imgurUpload &&
         this._screenshot.imgurUpload.responseData;
@@ -173,13 +173,13 @@ const ScreenshotSection = new Lang.Class({
       visible && imgurEnabled && imgurComplete;
   },
 
-  _setImage: function (pixbuf) {
-    let {width, height} = pixbuf;
+  _setImage(pixbuf) {
+    const {width, height} = pixbuf;
     if (height == 0) {
       return;
     }
-    let image = new Clutter.Image();
-    let success = image.set_data(
+    const image = new Clutter.Image();
+    const success = image.set_data(
       pixbuf.get_pixels(),
       pixbuf.get_has_alpha()
         ? Cogl.PixelFormat.RGBA_8888
@@ -196,7 +196,7 @@ const ScreenshotSection = new Lang.Class({
     this._image.actor.height = 200;
   },
 
-  setScreenshot: function (screenshot) {
+  setScreenshot(screenshot) {
     this._screenshot = screenshot;
 
     if (screenshot) {
@@ -211,35 +211,35 @@ const ScreenshotSection = new Lang.Class({
     this._updateVisibility();
   },
 
-  _onImage: function () {
+  _onImage() {
     this._screenshot.launchOpen();
   },
 
-  _onClear: function () {
+  _onClear() {
     this.setScreenshot(null);
   },
 
-  _onCopy: function () {
+  _onCopy() {
     this._screenshot.copyClipboard();
   },
 
-  _onSave: function () {
+  _onSave() {
     this._screenshot.launchSave();
   },
 
-  _onImgurUpload: function () {
+  _onImgurUpload() {
     this._screenshot.imgurStartUpload();
   },
 
-  _onImgurOpen: function () {
+  _onImgurOpen() {
     this._screenshot.imgurOpenURL();
   },
 
-  _onImgurCopyLink: function () {
+  _onImgurCopyLink() {
     this._screenshot.imgurCopyURL();
   },
 
-  _onImgurDelete: function () {
+  _onImgurDelete() {
     this._screenshot.imgurDelete();
   }
 })
@@ -250,7 +250,7 @@ const Indicator = new Lang.Class({
   Name: "ScreenshotTool.Indicator",
   Extends: PanelMenu.Button,
 
-  _init: function (extension) {
+  _init(extension) {
     this.parent(null, Config.IndicatorName);
 
     this._extension = extension;
@@ -259,23 +259,23 @@ const Indicator = new Lang.Class({
 
     this._icon = new St.Icon({
       icon_name: DefaultIcon,
-      style_class: 'system-status-icon'
+      style_class: "system-status-icon"
     });
 
     this.actor.add_actor(this._icon);
-    this.actor.connect('button-press-event', this._onClick.bind(this));
+    this.actor.connect("button-press-event", this._onClick.bind(this));
 
     this._buildMenu();
   },
 
-  _onClick: function (obj, evt) {
+  _onClick(obj, evt) {
     // only override primary button behavior
     if (evt.get_button() !== Clutter.BUTTON_PRIMARY) {
       return;
     }
 
-    let action = settings.get_string(Config.KeyClickAction);
-    if (action === 'show-menu') {
+    const action = settings.get_string(Config.KeyClickAction);
+    if (action === "show-menu") {
       return;
     }
 
@@ -283,7 +283,7 @@ const Indicator = new Lang.Class({
     this._extension.onAction(action);
   },
 
-  _buildMenu: function () {
+  _buildMenu() {
     // These actions can be triggered via shortcut or popup menu
     const items = [
       ["select-area", _("Select Area")],
@@ -292,9 +292,9 @@ const Indicator = new Lang.Class({
     ];
 
     items.forEach(([action, title]) => {
-      let item = new PopupMenu.PopupMenuItem(title);
+      const item = new PopupMenu.PopupMenuItem(title);
       item.connect(
-        'activate', function (action) {
+        "activate", function(action) {
           this.menu.close();
           this._extension.onAction(action);
         }.bind(this, action)
@@ -316,26 +316,26 @@ const Indicator = new Lang.Class({
     this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
 
     // Settings can only be triggered via menu
-    let settingsItem = new PopupMenu.PopupMenuItem(_('Settings'));
-    settingsItem.connect('activate', () => {
-      let appSys = Shell.AppSystem.get_default();
-      let prefs = appSys.lookup_app('gnome-shell-extension-prefs.desktop');
+    const settingsItem = new PopupMenu.PopupMenuItem(_("Settings"));
+    settingsItem.connect("activate", () => {
+      const appSys = Shell.AppSystem.get_default();
+      const prefs = appSys.lookup_app("gnome-shell-extension-prefs.desktop");
       if (prefs.get_state() == prefs.SHELL_APP_STATE_RUNNING) {
         prefs.activate();
       } else {
         prefs.get_app_info().launch_uris(
-          ['extension:///' + Local.metadata.uuid], null
+          ["extension:///" + Local.metadata.uuid], null
         );
       }
     });
     this.menu.addMenuItem(settingsItem);
   },
 
-  setScreenshot: function (screenshot) {
+  setScreenshot(screenshot) {
     this._screenshotSection.setScreenshot(screenshot);
   },
 
-  destroy: function () {
+  destroy() {
     this.parent();
     this._signalSettings.forEach((signal) => {
       settings.disconnect(signal);

@@ -10,7 +10,7 @@
 const Gio = imports.gi.Gio;
 const Gtk = imports.gi.Gtk;
 
-const domain = 'gnome-shell-screenshot';
+const domain = "gnome-shell-screenshot";
 const Gettext = imports.gettext;
 const _ = Gettext.domain(domain).gettext;
 
@@ -19,11 +19,11 @@ const copy = (srcPath, dstDir, dstName) => {
     print("no srcPath");
     return;
   }
-  let srcFile = Gio.File.new_for_path(srcPath);
+  const srcFile = Gio.File.new_for_path(srcPath);
 
   Gtk.init(null, null);
 
-  let dlg = new Gtk.FileChooserDialog({ action: Gtk.FileChooserAction.SAVE });
+  const dlg = new Gtk.FileChooserDialog({ action: Gtk.FileChooserAction.SAVE });
 
   dlg.add_button( _("_Cancel"), Gtk.ResponseType.CANCEL);
   dlg.add_button( _("_Save"), Gtk.ResponseType.OK);
@@ -31,7 +31,7 @@ const copy = (srcPath, dstDir, dstName) => {
   dlg.set_do_overwrite_confirmation(true);
 
   if (dstDir) {
-    let dstDirFile = Gio.File.new_for_path(dstDir);
+    const dstDirFile = Gio.File.new_for_path(dstDir);
     dlg.set_current_folder_file(dstDirFile);
   }
 
@@ -43,14 +43,14 @@ const copy = (srcPath, dstDir, dstName) => {
       return;
   }
 
-  let dstFile = Gio.File.new_for_path(dlg.get_filename());
+  const dstFile = Gio.File.new_for_path(dlg.get_filename());
   srcFile.copy(dstFile, Gio.FileCopyFlags.OVERWRITE, null, null);
 }
 
 if (window["ARGV"]) {
 
-  let workDir = Gio.File.new_for_path(ARGV[3]);
-  let localeDir = workDir.get_child('locale');
+  const workDir = Gio.File.new_for_path(ARGV[3]);
+  const localeDir = workDir.get_child("locale");
   if (localeDir.query_exists(null))
     Gettext.bindtextdomain(domain, localeDir.get_path());
 

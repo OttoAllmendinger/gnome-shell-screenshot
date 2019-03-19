@@ -1,6 +1,6 @@
 const GLib = imports.gi.GLib;
 
-const Gettext = imports.gettext.domain('gnome-shell-screenshot');
+const Gettext = imports.gettext.domain("gnome-shell-screenshot");
 const _ = Gettext.gettext;
 
 const Local = imports.misc.extensionUtils.getCurrentExtension();
@@ -10,10 +10,10 @@ const Convenience = Local.imports.convenience.exports;
 const DefaultTemplate = "{N}-{Y}{m}{d}-{H}{M}{S}-{w}x{h}";
 
 const parameters = ({width, height}) => {
-  let now = new Date();
-  let hostname = GLib.get_host_name();
+  const now = new Date();
+  const hostname = GLib.get_host_name();
 
-  let padZero = (s, n) => {
+  const padZero = (s, n) => {
     if (String(s).length < n) {
       return padZero("0" + s, n);
     } else {
@@ -21,7 +21,7 @@ const parameters = ({width, height}) => {
     }
   }
 
-  let pad = (s) => padZero(s, 2);
+  const pad = (s) => padZero(s, 2);
 
   return [
     [ "N", _("Screenshot"),           _("Screenshot (literal)")],
@@ -38,7 +38,7 @@ const parameters = ({width, height}) => {
 }
 
 const tooltipText = (dim) => {
-  let head = [_("Parameters:")];
+  const head = [_("Parameters:")];
   return parameters(dim).reduce((arr, [key, value, description]) => {
     arr.push(key + "\t" + description);
     return arr;
@@ -46,11 +46,11 @@ const tooltipText = (dim) => {
 }
 
 const get = (template, dim, n) => {
-  let vars = parameters(dim).reduce((obj, [key, value]) => {
+  const vars = parameters(dim).reduce((obj, [key, value]) => {
     obj[key] = value;
     return obj;
   }, {});
-  let basename = StringFormat.format(template, vars);
+  const basename = StringFormat.format(template, vars);
   let sequence = "";
   if (n > 0) {
     sequence = "_" + String(n);
@@ -59,10 +59,10 @@ const get = (template, dim, n) => {
 }
 
 
-const tempfilePattern = 'gnome-shell-screenshot-XXXXXX.png';
+const tempfilePattern = "gnome-shell-screenshot-XXXXXX.png";
 
-const getTemp = function () {
-  let [fileHandle, fileName] = GLib.file_open_tmp(tempfilePattern);
+const getTemp = function() {
+  const [fileHandle, fileName] = GLib.file_open_tmp(tempfilePattern);
   return fileName;
 };
 

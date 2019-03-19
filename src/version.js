@@ -1,6 +1,6 @@
-let versionArray = (v) => v.split(".").map(Number);
+const versionArray = (v) => v.split(".").map(Number);
 
-let zip = function (a, b) {
+const zip = function(a, b) {
     let headA = a.shift(), headB = b.shift();
     if ((headA !== undefined) || (headB !== undefined)) {
         return [[headA, headB]].concat(zip(a, b));
@@ -27,11 +27,11 @@ function versionSmaller(a, b) {
 }
 
 if (window["ARGV"] && ARGV[0] == "test") {
-    log('zip("1.2.3", "1.2")=' + JSON.stringify(zip(
+    log("zip(\"1.2.3\", \"1.2\")=" + JSON.stringify(zip(
         versionArray("1.2.3"),
         versionArray("1.2"))));
-    log('versionEqual("1.2.3", "1.2")=' + versionEqual("1.2.3", "1.2"));
-    log('versionGreater("3.10.1", "3.10")=' + versionGreater("3.10.1", "3.10"));
+    log("versionEqual(\"1.2.3\", \"1.2\")=" + versionEqual("1.2.3", "1.2"));
+    log("versionGreater(\"3.10.1\", \"3.10\")=" + versionGreater("3.10.1", "3.10"));
 }
 
 var exports = {

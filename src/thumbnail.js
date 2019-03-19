@@ -13,16 +13,16 @@ const emptyImagePath = Local.path + "/empty64.png";
 
 const getIcon = (path) => {
   // creates an scaled with aspect ratio where the larger side is 64px
-  let source = GdkPixbuf.Pixbuf.new_from_file_at_size(path, size, size);
+  const source = GdkPixbuf.Pixbuf.new_from_file_at_size(path, size, size);
 
   // load transparent 64x64 image
-  let dst = GdkPixbuf.Pixbuf.new_from_file_at_size(
+  const dst = GdkPixbuf.Pixbuf.new_from_file_at_size(
     emptyImagePath, size, size
   );
 
-  let {width, height} = source;
-  let offsetX = (size - width)/2;
-  let offsetY = (size - height)/2;
+  const {width, height} = source;
+  const offsetX = (size - width)/2;
+  const offsetY = (size - height)/2;
 
   // put smaller image on top of bigger image
   source.composite(
@@ -36,9 +36,9 @@ const getIcon = (path) => {
   );
 
   // return as file icon
-  let scaledPath = Filename.getTemp();
+  const scaledPath = Filename.getTemp();
   dst.savev(scaledPath, "png", [], []);
-  let scaledFile = Gio.File.new_for_path(scaledPath);
+  const scaledFile = Gio.File.new_for_path(scaledPath);
   return new Gio.FileIcon({ file: scaledFile });
 }
 
