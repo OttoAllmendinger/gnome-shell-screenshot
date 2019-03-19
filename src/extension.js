@@ -4,7 +4,6 @@
 // https://github.com/rjanja/desktop-capture
 // https://github.com/DASPRiD/gnome-shell-extension-area-screenshot
 
-const Lang = imports.lang;
 const Signals = imports.signals;
 const Mainloop = imports.mainloop;
 
@@ -43,10 +42,8 @@ const getSelectionOptions = () => {
   return { captureDelay }
 }
 
-const Screenshot = new Lang.Class({
-  Name: "ScreenshotTool.Screenshot",
-
-  _init(filePath) {
+class Screenshot {
+  constructor(filePath) {
     if (!filePath) {
       throw new Error(`need argument ${filePath}`);
     }
@@ -54,7 +51,7 @@ const Screenshot = new Lang.Class({
     this.inClipboard = false;
     this.srcFile = Gio.File.new_for_path(filePath);
     this.dstFile = null;
-  },
+  }
 
   _nextFile() {
     const dir = Path.expand(settings.get_string(Config.KeySaveLocation));
@@ -70,19 +67,19 @@ const Screenshot = new Lang.Class({
         return file;
       }
     }
-  },
+  }
 
   autosave() {
     const dstFile = this._nextFile();
     this.srcFile.copy(dstFile, Gio.FileCopyFlags.NONE, null, null);
     this.dstFile = dstFile;
-  },
+  }
 
   launchOpen() {
     const context = global.create_app_launch_context(0, -1);
     const file = this.dstFile || this.srcFile;
     Gio.AppInfo.launch_default_for_uri(file.get_uri(), context);
-  },
+  }
 
   launchSave() {
     const newFile = this._nextFile();
@@ -96,12 +93,12 @@ const Screenshot = new Lang.Class({
         Local.dir.get_path()
       ].map(encodeURIComponent)
     ]);
-  },
+  }
 
   copyClipboard() {
     Clipboard.setImage(this.gtkImage);
     this.inClipboard = true;
-  },
+  }
 
   imgurStartUpload() {
     this.imgurUpload = new UploadImgur.Upload(this.srcFile);
@@ -128,11 +125,11 @@ const Screenshot = new Lang.Class({
     });
 
     this.imgurUpload.start();
-  },
+  }
 
   isImgurUploadComplete() {
     return !!(this.imgurUpload && this.imgurUpload.responseData);
-  },
+  }
 
   imgurOpenURL() {
     if (!this.isImgurUploadComplete()) {
@@ -146,7 +143,7 @@ const Screenshot = new Lang.Class({
       return;
     }
     Gio.AppInfo.launch_default_for_uri(uri, context);
-  },
+  }
 
   imgurCopyURL() {
     if (!this.isImgurUploadComplete()) {
@@ -155,7 +152,7 @@ const Screenshot = new Lang.Class({
     }
     const uri = this.imgurUpload.responseData.link;
     Clipboard.setText(uri);
-  },
+  }
 
   imgurDelete() {
     if (!this.isImgurUploadComplete()) {
@@ -167,14 +164,12 @@ const Screenshot = new Lang.Class({
     });
     this.imgurUpload.deleteRemote();
   }
-});
+}
 Signals.addSignalMethods(Screenshot.prototype);
 
 
-const Extension = new Lang.Class({
-  Name: "ScreenshotTool",
-
-  _init() {
+class Extension {
+  constructor() {
     this._signalSettings = [];
 
     this._signalSettings.push(settings.connect(
@@ -185,7 +180,7 @@ const Extension = new Lang.Class({
     this._updateIndicator();
 
     this._setKeybindings();
-  },
+  }
 
   _setKeybindings() {
     const bindingMode = Shell.ActionMode.NORMAL;
@@ -199,27 +194,30 @@ const Extension = new Lang.Class({
           this.onAction.bind(this, shortcut.replace("shortcut-", ""))
       );
     }
-  },
+  }
 
   _unsetKeybindings() {
     for (const shortcut of Config.KeyShortcuts) {
       Main.wm.removeKeybinding(shortcut);
     }
-  },
+  }
 
   _createIndicator() {
     if (!this._indicator) {
       this._indicator = new Indicator.Indicator(this);
-      Main.panel.addToStatusArea(Config.IndicatorName, this._indicator);
+      Main.panel.addToStatusArea(
+        Config.IndicatorName,
+        this._indicator.panelButton
+      );
     }
-  },
+  }
 
   _destroyIndicator() {
     if (this._indicator) {
       this._indicator.destroy();
       this._indicator = null;
     }
-  },
+  }
 
   _updateIndicator() {
     if (settings.get_boolean(Config.KeyEnableIndicator)) {
@@ -227,7 +225,7 @@ const Extension = new Lang.Class({
     } else {
       this._destroyIndicator();
     }
-  },
+  }
 
   onAction(action) {
     const dispatch = {
@@ -245,7 +243,7 @@ const Extension = new Lang.Class({
     } catch (ex) {
       Notifications.notifyError(ex.toString());
     }
-  },
+  }
 
   _startSelection(selection) {
     if (this._selection) {
@@ -265,19 +263,19 @@ const Extension = new Lang.Class({
     this._selection.connect("stop", () => {
       this._selection = null;
     });
-  },
+  }
 
   _selectArea() {
     this._startSelection(new Selection.SelectionArea(getSelectionOptions()));
-  },
+  }
 
   _selectWindow() {
     this._startSelection(new Selection.SelectionWindow(getSelectionOptions()));
-  },
+  }
 
   _selectDesktop() {
     this._startSelection(new Selection.SelectionDesktop(getSelectionOptions()));
-  },
+  }
 
   _onScreenshot(selection, filePath) {
     const screenshot = new Screenshot(filePath);
@@ -304,7 +302,7 @@ const Extension = new Lang.Class({
     if (imgurEnabled && imgurAutoUpload) {
       screenshot.imgurStartUpload();
     }
-  },
+  }
 
   destroy() {
     this._destroyIndicator();
@@ -316,7 +314,7 @@ const Extension = new Lang.Class({
 
     this.disconnectAll();
   }
-});
+}
 
 Signals.addSignalMethods(Extension.prototype);
 

@@ -1,5 +1,4 @@
 // vi: sw=2 sts=2
-const Lang = imports.lang;
 const Signals = imports.signals;
 
 const Gio = imports.gi.Gio;
@@ -54,12 +53,10 @@ const httpError = (status, statusCode, responeData) => {
                    " responseData=" + responeData);
 };
 
-const Upload = new Lang.Class({
-  Name: "Upload",
-
-  _init(file) {
+class Upload {
+  constructor(file) {
     this._file = file;
-  },
+  }
 
   start() {
     getPostMessage(this._file, (error, message) => {
@@ -105,7 +102,7 @@ const Upload = new Lang.Class({
           message.disconnect(signalProgress);
       });
     });
-  },
+  }
 
   deleteRemote() {
     if (!this.responseData) {
@@ -125,7 +122,7 @@ const Upload = new Lang.Class({
       }
     );
   }
-});
+}
 Signals.addSignalMethods(Upload.prototype);
 
 var exports = {

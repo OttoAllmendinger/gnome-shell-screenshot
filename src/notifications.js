@@ -1,5 +1,4 @@
 // vi: sts=2 sw=2 et
-const Lang = imports.lang;
 const Signals = imports.signals;
 
 const St = imports.gi.St;
@@ -40,25 +39,22 @@ const getSource = () => {
   return source;
 }
 
-const Notification = new Lang.Class({
-  Name: "ScreenshotTool.Notification",
-  Extends: MessageTray.Notification,
-
-  _title() {
+class Notification extends MessageTray.Notification {
+  static _title() {
     return _("New Screenshot");
-  },
+  }
 
-  _banner({gtkImage}) {
+  static _banner({gtkImage}) {
     const {width, height} = gtkImage.get_pixbuf();
     const banner = _("Size:") + " " + width + "x" + height + ".";
     return banner;
-  },
+  }
 
-  _init(source, screenshot) {
-    this.parent(
+  constructor(source, screenshot) {
+    super(
       source,
-      this._title(),
-      this._banner(screenshot),
+      Notification._title(),
+      Notification._banner(screenshot),
       { gicon: Thumbnail.getIcon(screenshot.srcFile.get_path()) }
     );
 
@@ -68,10 +64,10 @@ const Notification = new Lang.Class({
     this.setForFeedback(true);
 
     this._screenshot = screenshot;
-  },
+  }
 
   createBanner() {
-    const b = this.parent();
+    const b = super.createBanner();
 
     b._iconBin.child.icon_size = ICON_SIZE;
 
@@ -86,49 +82,43 @@ const Notification = new Lang.Class({
       }
     }
     return b;
-  },
+  }
 
   _onActivated() {
     this._screenshot.launchOpen();
-  },
+  }
 
   _onCopy() {
     this._screenshot.copyClipboard();
-  },
+  }
 
   _onSave() {
     this._screenshot.launchSave();
-  },
+  }
 
   _onUpload() {
     this._screenshot.imgurStartUpload();
   }
-});
+}
 Signals.addSignalMethods(Notification.prototype);
 
 
-const ErrorNotification = new Lang.Class({
-  Name: "ScreenshotTool.ErrorNotification",
-  Extends: MessageTray.Notification,
-
-  _init(source, message) {
-    this.parent(
+class ErrorNotification extends MessageTray.Notification {
+  constructor(source, message) {
+    super(
       source,
       _("Error"),
       String(message),
       { secondaryGIcon: new Gio.ThemedIcon({name: "dialog-error"}) }
     );
   }
-});
+}
 Signals.addSignalMethods(ErrorNotification.prototype);
 
 
-const ImgurNotification = new Lang.Class({
-  Name: "ScreenshotTool.ImgurNotification",
-  Extends: MessageTray.Notification,
-
-  _init(source, screenshot) {
-    this.parent(source, _("Imgur Upload"));
+class ImgurNotification extends MessageTray.Notification {
+  constructor(source, screenshot) {
+    super(source, _("Imgur Upload"));
     this.setForFeedback(true);
     this.setResident(true);
 
@@ -155,21 +145,21 @@ const ImgurNotification = new Lang.Class({
       );
       this._updateCopyButton();
     });
-  },
+  }
 
   _updateCopyButton() {
     if (!this._copyButton) {
       return;
     }
     this._copyButton.visible = this._screenshot.isImgurUploadComplete();
-  },
+  }
 
   createBanner() {
-    const b = this.parent();
+    const b = super.createBanner();
     this._copyButton = b.addAction(_("Copy Link"), this._onCopy.bind(this));
     this._updateCopyButton();
     return b;
-  },
+  }
 
   _onActivated() {
     if (this._screenshot.isImgurUploadComplete()) {
@@ -179,12 +169,12 @@ const ImgurNotification = new Lang.Class({
         this._screenshot.imgurOpenURL();
       });
     }
-  },
+  }
 
   _onCopy() {
     this._screenshot.imgurCopyURL();
-  },
-});
+  }
+}
 
 
 const notifyScreenshot = (screenshot) => {

@@ -1,6 +1,5 @@
 // vi: sts=2 sw=2 et
 
-const Lang = imports.lang;
 const Signals = imports.signals;
 
 const St = imports.gi.St;
@@ -29,10 +28,8 @@ const DefaultIcon = "camera-photo-symbolic";
 
 const settings = Convenience.getSettings();
 
-const CaptureDelayMenu = new Lang.Class({
-  Name: "CaptureDelayMenu",
-  Extends: PopupMenu.PopupMenuSection,
 
+class CaptureDelayMenu extends PopupMenu.PopupMenuSection {
   createScale() {
     const scale = [0];
     for (let p = 1; p < 4; p ++) {
@@ -41,10 +38,10 @@ const CaptureDelayMenu = new Lang.Class({
       }
     }
     return scale;
-  },
+  }
 
-  _init(control) {
-    this.parent();
+  constructor(control) {
+    super();
 
     this.scaleMS = this.createScale();
 
@@ -61,15 +58,15 @@ const CaptureDelayMenu = new Lang.Class({
     this.addMenuItem(this.delayInfoItem)
 
     this.updateDelayInfo();
-  },
+  }
 
   scaleToSlider(ms) {
     return this.scaleMS.findIndex((v) => v >= ms) / (this.scaleMS.length-1);
-  },
+  }
 
   sliderToScale(value) {
     return this.scaleMS[(value * (this.scaleMS.length-1)) | 0];
-  },
+  }
 
   onDragEnd(slider, value, property) {
     const newValue = this.sliderToScale(value);
@@ -78,7 +75,7 @@ const CaptureDelayMenu = new Lang.Class({
       settings.set_int(Config.KeyCaptureDelay, newValue);
       this.updateDelayInfo();
     }
-  },
+  }
 
   updateDelayInfo() {
     const v = this.delayValueMS;
@@ -92,12 +89,11 @@ const CaptureDelayMenu = new Lang.Class({
     }
     this.delayInfoItem.label.text = text;
   }
-});
+}
 
-const ScreenshotSection = new Lang.Class({
-  Name: "ScreenshotTool.ScreenshotSection",
 
-  _init(menu) {
+class ScreenshotSection {
+  constructor(menu) {
     this._screenshot = null;
 
     this._image = new PopupMenu.PopupBaseMenuItem();
@@ -145,7 +141,7 @@ const ScreenshotSection = new Lang.Class({
     });
 
     this._updateVisibility();
-  },
+  }
 
   _updateVisibility() {
     const visible = !!this._screenshot;
@@ -171,7 +167,7 @@ const ScreenshotSection = new Lang.Class({
       visible && imgurEnabled && imgurComplete;
     this._imgurDelete.actor.visible =
       visible && imgurEnabled && imgurComplete;
-  },
+  }
 
   _setImage(pixbuf) {
     const {width, height} = pixbuf;
@@ -194,7 +190,7 @@ const ScreenshotSection = new Lang.Class({
 
     this._image.actor.content = image;
     this._image.actor.height = 200;
-  },
+  }
 
   setScreenshot(screenshot) {
     this._screenshot = screenshot;
@@ -209,64 +205,57 @@ const ScreenshotSection = new Lang.Class({
     }
 
     this._updateVisibility();
-  },
+  }
 
   _onImage() {
     this._screenshot.launchOpen();
-  },
+  }
 
   _onClear() {
     this.setScreenshot(null);
-  },
+  }
 
   _onCopy() {
     this._screenshot.copyClipboard();
-  },
+  }
 
   _onSave() {
     this._screenshot.launchSave();
-  },
+  }
 
   _onImgurUpload() {
     this._screenshot.imgurStartUpload();
-  },
+  }
 
   _onImgurOpen() {
     this._screenshot.imgurOpenURL();
-  },
+  }
 
   _onImgurCopyLink() {
     this._screenshot.imgurCopyURL();
-  },
+  }
 
   _onImgurDelete() {
     this._screenshot.imgurDelete();
   }
-})
+}
 
 
-
-const Indicator = new Lang.Class({
-  Name: "ScreenshotTool.Indicator",
-  Extends: PanelMenu.Button,
-
-  _init(extension) {
-    this.parent(null, Config.IndicatorName);
-
+class Indicator {
+  constructor(extension) {
     this._extension = extension;
 
-    this._signalSettings = [];
-
-    this._icon = new St.Icon({
+    this.panelButton = new PanelMenu.Button(null, Config.IndicatorName);
+    const icon = new St.Icon({
       icon_name: DefaultIcon,
       style_class: "system-status-icon"
     });
-
-    this.actor.add_actor(this._icon);
-    this.actor.connect("button-press-event", this._onClick.bind(this));
+    this.panelButton.actor.add_actor(icon);
+    this.panelButton.actor
+      .connect("button-press-event", this._onClick.bind(this));
 
     this._buildMenu();
-  },
+  }
 
   _onClick(obj, evt) {
     // only override primary button behavior
@@ -279,12 +268,13 @@ const Indicator = new Lang.Class({
       return;
     }
 
-    this.menu.close();
+    this.panelButton.menu.close();
     this._extension.onAction(action);
-  },
+  }
 
   _buildMenu() {
     // These actions can be triggered via shortcut or popup menu
+    const menu = this.panelButton.menu;
     const items = [
       ["select-area", _("Select Area")],
       ["select-window", _("Select Window")],
@@ -295,25 +285,25 @@ const Indicator = new Lang.Class({
       const item = new PopupMenu.PopupMenuItem(title);
       item.connect(
         "activate", function(action) {
-          this.menu.close();
+          menu.close();
           this._extension.onAction(action);
         }.bind(this, action)
       );
-      this.menu.addMenuItem(item);
+      menu.addMenuItem(item);
     })
 
 
     // Delay
 
-    this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
+    menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
 
-    this.menu.addMenuItem(new CaptureDelayMenu());
+    menu.addMenuItem(new CaptureDelayMenu());
 
-    this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
+    menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
 
-    this._screenshotSection = new ScreenshotSection(this.menu);
+    this._screenshotSection = new ScreenshotSection(menu);
 
-    this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
+    menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
 
     // Settings can only be triggered via menu
     const settingsItem = new PopupMenu.PopupMenuItem(_("Settings"));
@@ -328,20 +318,17 @@ const Indicator = new Lang.Class({
         );
       }
     });
-    this.menu.addMenuItem(settingsItem);
-  },
+    menu.addMenuItem(settingsItem);
+  }
 
   setScreenshot(screenshot) {
     this._screenshotSection.setScreenshot(screenshot);
-  },
+  }
 
   destroy() {
-    this.parent();
-    this._signalSettings.forEach((signal) => {
-      settings.disconnect(signal);
-    });
+    this.panelButton.destroy();
   }
-});
+}
 
 var exports = {
   Indicator

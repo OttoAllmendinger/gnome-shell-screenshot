@@ -4,7 +4,6 @@
 // accelerator setting based on
 // https://github.com/ambrice/spatialnavigation-tastycactus.com/blob/master/prefs.js
 
-const Lang = imports.lang;
 const Signals = imports.signals;
 
 const Gtk = imports.gi.Gtk;

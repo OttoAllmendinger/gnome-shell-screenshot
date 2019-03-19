@@ -1,7 +1,8 @@
 const versionArray = (v) => v.split(".").map(Number);
 
 const zip = function(a, b) {
-    let headA = a.shift(), headB = b.shift();
+    const headA = a.shift();
+    const headB = b.shift();
     if ((headA !== undefined) || (headB !== undefined)) {
         return [[headA, headB]].concat(zip(a, b));
     } else {

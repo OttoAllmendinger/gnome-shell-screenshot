@@ -1,6 +1,5 @@
 // vi: sts=2 sw=2 et
 
-const Lang = imports.lang;
 const Signals = imports.signals;
 const Mainloop = imports.mainloop;
 
@@ -108,13 +107,11 @@ const makeDesktopScreenshot = (callback) => {
 };
 
 
-const Capture = new Lang.Class({
-  Name: "ScreenshotTool.Capture",
-
-  _init() {
+class Capture {
+  constructor() {
     this._mouseDown = false;
 
-    this._container = new Shell.GenericContainer({
+    this._container = new St.Widget({
       name: "area-selection",
       style_class: "area-selection",
       visible:  "true",
@@ -134,7 +131,7 @@ const Capture = new Lang.Class({
     } else {
       log("Main.pushModal() === false");
     }
-  },
+  }
 
   _setCursorCompat(v) {
     if (Convenience.currentVersionGreaterEqual("3.29")) {
@@ -142,15 +139,15 @@ const Capture = new Lang.Class({
     } else {
       global.screen.set_cursor(v);
     }
-  },
+  }
 
   _setDefaultCursor() {
     this._setCursorCompat(Meta.Cursor.DEFAULT);
-  },
+  }
 
   _setCaptureCursor() {
     this._setCursorCompat(Meta.Cursor.CROSSHAIR);
-  },
+  }
 
   _onCaptureEvent(actor, event) {
     if (event.type() === Clutter.EventType.KEY_PRESS) {
@@ -160,16 +157,16 @@ const Capture = new Lang.Class({
     }
 
     this.emit("captured-event", event);
-  },
+  }
 
   drawContainer({x, y, w, h}) {
     this._container.set_position(x, y);
     this._container.set_size(w, h);
-  },
+  }
 
   clearContainer() {
     this.drawContainer({x: -10, y: -10, w: 0, h: 0});
-  },
+  }
 
   stop() {
     this.clearContainer();
@@ -181,7 +178,7 @@ const Capture = new Lang.Class({
     this.emit("stop");
     this.disconnectAll();
   }
-});
+}
 
 Signals.addSignalMethods(Capture.prototype);
 
@@ -195,16 +192,14 @@ const emitScreenshotOnSuccess = (instance) =>
   }
 
 
-const SelectionArea = new Lang.Class({
-  Name: "ScreenshotTool.SelectionArea",
-
-  _init(options) {
+class SelectionArea {
+  constructor(options) {
     this._options = options;
     this._mouseDown = false;
     this._capture = new Capture();
     this._capture.connect("captured-event", this._onEvent.bind(this));
     this._capture.connect("stop", this.emit.bind(this, "stop"));
-  },
+  }
 
   _onEvent(capture, event) {
     const type = event.type();
@@ -222,7 +217,7 @@ const SelectionArea = new Lang.Class({
         this._screenshot(rect);
       }
     }
-  },
+  }
 
   _screenshot(region) {
     const fileName = Filename.getTemp();
@@ -250,22 +245,20 @@ const SelectionArea = new Lang.Class({
       makeAreaScreenshot(region, emitScreenshotOnSuccess(this))
     });
   }
-});
+}
 
 Signals.addSignalMethods(SelectionArea.prototype);
 
 
 
-const SelectionWindow = new Lang.Class({
-  Name: "ScreenshotTool.SelectionWindow",
-
-  _init(options) {
+class SelectionWindow {
+  constructor(options) {
     this._options = options;
     this._windows = global.get_window_actors();
     this._capture = new Capture();
     this._capture.connect("captured-event", this._onEvent.bind(this));
     this._capture.connect("stop", this.emit.bind(this, "stop"));
-  },
+  }
 
   _onEvent(capture, event) {
     const type = event.type();
@@ -284,15 +277,15 @@ const SelectionWindow = new Lang.Class({
         this._screenshot(this._selectedWindow);
       }
     }
-  },
+  }
 
   _highlightWindow(win) {
     this._capture.drawContainer(getWindowRectangle(win));
-  },
+  }
 
   _clearHighlight() {
     this._capture.clearContainer();
-  },
+  }
 
   _screenshot(win) {
     this._capture.stop();
@@ -303,7 +296,7 @@ const SelectionWindow = new Lang.Class({
       );
     });
   }
-});
+}
 
 Signals.addSignalMethods(SelectionWindow.prototype);
 
@@ -312,17 +305,15 @@ Signals.addSignalMethods(SelectionWindow.prototype);
 
 
 
-const SelectionDesktop = new Lang.Class({
-  Name: "ScreenshotTool.SelectionDesktop",
-
-  _init(options) {
+class SelectionDesktop {
+  constructor(options) {
     this._options = options;
     Mainloop.timeout_add(this._options.captureDelay, () => {
       makeDesktopScreenshot(emitScreenshotOnSuccess(this));
       this.emit("stop");
     });
   }
-});
+}
 
 Signals.addSignalMethods(SelectionDesktop.prototype);
 
