@@ -6,5 +6,5 @@ git ls-files | tar Tc - |
     mkdir -p /tmp/gsext/ && \
       tar x -C/tmp/gsext/ && \
       cd /tmp/gsext && \
-      make install &&
+      make SKIP_LINT=1 install &&
       ${GSEDEV_REMOTE_RESTART:-true} && make restart"

@@ -61,6 +61,9 @@ src/locale/%/LC_MESSAGES/gnome-shell-screenshot.mo: src/locale/%/*.po
 
 $(ZIPFILE): $(SOURCE) schemas
 	-rm $(ZIPFILE)
+ifndef SKIP_LINT
+	eslint .
+endif
 	cd src && zip -r ../$(ZIPFILE) \
 	   $(patsubst src/%,%,$(SOURCE)) \
 	   $(patsubst src/%,%,$(MO_FILES))
