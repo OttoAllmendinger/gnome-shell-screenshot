@@ -47,7 +47,7 @@ class CaptureDelayMenu extends PopupMenu.PopupMenuSection {
 
     this.delayValueMS = settings.get_int(Config.KeyCaptureDelay);
     this.slider = new Slider.Slider(this.scaleToSlider(this.delayValueMS));
-    this.slider.connect("value-changed", this.onDragEnd.bind(this));
+    this.slider.connect("notify::value", this.onDragEnd.bind(this));
     this.sliderItem = new PopupMenu.PopupBaseMenuItem({ activate: false });
     this.sliderItem.add(this.slider, { expand: true });
     this.addMenuItem(this.sliderItem);
@@ -68,8 +68,8 @@ class CaptureDelayMenu extends PopupMenu.PopupMenuSection {
     return this.scaleMS[(value * (this.scaleMS.length-1)) | 0];
   }
 
-  onDragEnd(slider, value, property) {
-    const newValue = this.sliderToScale(value);
+  onDragEnd(slider, property) {
+    const newValue = this.sliderToScale(slider.value);
     if (newValue !== this.delayValueMS) {
       this.delayValueMS = newValue;
       settings.set_int(Config.KeyCaptureDelay, newValue);
