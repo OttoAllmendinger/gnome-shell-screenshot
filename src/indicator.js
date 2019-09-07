@@ -49,7 +49,7 @@ class CaptureDelayMenu extends PopupMenu.PopupMenuSection {
     this.slider = new Slider.Slider(this.scaleToSlider(this.delayValueMS));
     this.slider.connect("value-changed", this.onDragEnd.bind(this));
     this.sliderItem = new PopupMenu.PopupBaseMenuItem({ activate: false });
-    this.sliderItem.actor.add(this.slider.actor, { expand: true });
+    this.sliderItem.add(this.slider, { expand: true });
     this.addMenuItem(this.sliderItem);
 
     this.delayInfoItem = new PopupMenu.PopupMenuItem(
@@ -97,7 +97,7 @@ class ScreenshotSection {
     this._screenshot = null;
 
     this._image = new PopupMenu.PopupBaseMenuItem();
-    this._image.actor.content_gravity =
+    this._image.content_gravity =
       Clutter.ContentGravity.RESIZE_ASPECT;
 
     this._clear = new PopupMenu.PopupMenuItem(_("Clear"));
@@ -146,10 +146,10 @@ class ScreenshotSection {
   _updateVisibility() {
     const visible = !!this._screenshot;
 
-    this._image.actor.visible = visible;
-    this._clear.actor.visible = visible;
-    this._copy.actor.visible = visible;
-    this._save.actor.visible = visible;
+    this._image.visible = visible;
+    this._clear.visible = visible;
+    this._copy.visible = visible;
+    this._save.visible = visible;
 
     const imgurEnabled = settings.get_boolean(Config.KeyEnableUploadImgur);
     const imgurComplete =
@@ -157,15 +157,15 @@ class ScreenshotSection {
         this._screenshot.imgurUpload &&
         this._screenshot.imgurUpload.responseData;
 
-    this._imgurMenu.actor.visible =
+    this._imgurMenu.visible =
       visible && imgurEnabled;
-    this._imgurUpload.actor.visible =
+    this._imgurUpload.visible =
       visible && imgurEnabled && !imgurComplete;
-    this._imgurOpen.actor.visible =
+    this._imgurOpen.visible =
       visible && imgurEnabled && imgurComplete;
-    this._imgurCopyLink.actor.visible =
+    this._imgurCopyLink.visible =
       visible && imgurEnabled && imgurComplete;
-    this._imgurDelete.actor.visible =
+    this._imgurDelete.visible =
       visible && imgurEnabled && imgurComplete;
   }
 
@@ -188,8 +188,8 @@ class ScreenshotSection {
       throw Error("error creating Clutter.Image()");
     }
 
-    this._image.actor.content = image;
-    this._image.actor.height = 200;
+    this._image.content = image;
+    this._image.height = 200;
   }
 
   setScreenshot(screenshot) {
@@ -250,8 +250,8 @@ class Indicator {
       icon_name: DefaultIcon,
       style_class: "system-status-icon"
     });
-    this.panelButton.actor.add_actor(icon);
-    this.panelButton.actor
+    this.panelButton.add_actor(icon);
+    this.panelButton
       .connect("button-press-event", this._onClick.bind(this));
 
     this._buildMenu();
