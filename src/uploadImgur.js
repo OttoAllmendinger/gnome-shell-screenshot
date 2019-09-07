@@ -20,7 +20,7 @@ const authMessage = (soupMessage) => {
 }
 
 const getPostMessage = (file, callback) => {
-  const url = this.baseUrl + "image";
+  const url = baseUrl + "image";
 
   file.load_contents_async(null, (f, res) => {
     let contents;
