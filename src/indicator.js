@@ -18,6 +18,7 @@ const ExtensionUtils = imports.misc.extensionUtils;
 const Local = ExtensionUtils.getCurrentExtension();
 
 const Config = Local.imports.config.exports;
+const Version = Local.imports.version.exports;
 const Convenience = Local.imports.convenience.exports;
 
 const { dump } = Local.imports.dump.exports;
@@ -28,6 +29,14 @@ const DefaultIcon = "camera-photo-symbolic";
 
 const settings = Convenience.getSettings();
 
+
+
+// remove this when dropping support for < 3.32
+const getActorCompat = (obj) =>
+  Convenience.currentVersionGreater("3.32") ? obj : obj.actor;
+
+const getSliderSignalCompat = (obj) =>
+  Convenience.currentVersionGreater("3.32") ? "notify::value": "value-changed";
 
 class CaptureDelayMenu extends PopupMenu.PopupMenuSection {
   createScale() {
@@ -47,9 +56,11 @@ class CaptureDelayMenu extends PopupMenu.PopupMenuSection {
 
     this.delayValueMS = settings.get_int(Config.KeyCaptureDelay);
     this.slider = new Slider.Slider(this.scaleToSlider(this.delayValueMS));
-    this.slider.connect("notify::value", this.onDragEnd.bind(this));
+    this.slider.connect(getSliderSignalCompat(), this.onDragEnd.bind(this));
     this.sliderItem = new PopupMenu.PopupBaseMenuItem({ activate: false });
-    this.sliderItem.add(this.slider, { expand: true });
+    getActorCompat(this.sliderItem).add(
+      getActorCompat(this.slider), { expand: true }
+    );
     this.addMenuItem(this.sliderItem);
 
     this.delayInfoItem = new PopupMenu.PopupMenuItem(
@@ -68,7 +79,7 @@ class CaptureDelayMenu extends PopupMenu.PopupMenuSection {
     return this.scaleMS[(value * (this.scaleMS.length-1)) | 0];
   }
 
-  onDragEnd(slider, property) {
+  onDragEnd(slider) {
     const newValue = this.sliderToScale(slider.value);
     if (newValue !== this.delayValueMS) {
       this.delayValueMS = newValue;
@@ -97,7 +108,7 @@ class ScreenshotSection {
     this._screenshot = null;
 
     this._image = new PopupMenu.PopupBaseMenuItem();
-    this._image.content_gravity =
+    getActorCompat(this._image).content_gravity =
       Clutter.ContentGravity.RESIZE_ASPECT;
 
     this._clear = new PopupMenu.PopupMenuItem(_("Clear"));
@@ -146,10 +157,10 @@ class ScreenshotSection {
   _updateVisibility() {
     const visible = !!this._screenshot;
 
-    this._image.visible = visible;
-    this._clear.visible = visible;
-    this._copy.visible = visible;
-    this._save.visible = visible;
+    getActorCompat(this._image).visible = visible;
+    getActorCompat(this._clear).visible = visible;
+    getActorCompat(this._copy).visible = visible;
+    getActorCompat(this._save).visible = visible;
 
     const imgurEnabled = settings.get_boolean(Config.KeyEnableUploadImgur);
     const imgurComplete =
@@ -157,15 +168,15 @@ class ScreenshotSection {
         this._screenshot.imgurUpload &&
         this._screenshot.imgurUpload.responseData;
 
-    this._imgurMenu.visible =
+    getActorCompat(this._imgurMenu).visible =
       visible && imgurEnabled;
-    this._imgurUpload.visible =
+    getActorCompat(this._imgurUpload).visible =
       visible && imgurEnabled && !imgurComplete;
-    this._imgurOpen.visible =
+    getActorCompat(this._imgurOpen).visible =
       visible && imgurEnabled && imgurComplete;
-    this._imgurCopyLink.visible =
+    getActorCompat(this._imgurCopyLink).visible =
       visible && imgurEnabled && imgurComplete;
-    this._imgurDelete.visible =
+    getActorCompat(this._imgurDelete).visible =
       visible && imgurEnabled && imgurComplete;
   }
 
@@ -188,8 +199,8 @@ class ScreenshotSection {
       throw Error("error creating Clutter.Image()");
     }
 
-    this._image.content = image;
-    this._image.height = 200;
+    getActorCompat(this._image).content = image;
+    getActorCompat(this._image).height = 200;
   }
 
   setScreenshot(screenshot) {
@@ -250,8 +261,8 @@ class Indicator {
       icon_name: DefaultIcon,
       style_class: "system-status-icon"
     });
-    this.panelButton.add_actor(icon);
-    this.panelButton
+    getActorCompat(this.panelButton).add_actor(icon);
+    getActorCompat(this.panelButton)
       .connect("button-press-event", this._onClick.bind(this));
 
     this._buildMenu();

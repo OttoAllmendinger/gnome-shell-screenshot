@@ -102,9 +102,17 @@ function currentVersionEqual(v) {
     return Version.versionEqual(currentVersion(), v);
 }
 
+function currentVersionGreater(v) {
+    return Version.versionGreater(currentVersion(), v);
+}
+
 function currentVersionGreaterEqual(v) {
     return Version.versionEqual(currentVersion(), v)
         || Version.versionGreater(currentVersion(), v);
+}
+
+function currentVersionSmaller(v) {
+    return Version.versionSmaller(currentVersion(), v);
 }
 
 function currentVersionSmallerEqual(v) {
@@ -117,6 +125,8 @@ var exports = {
   getSettings,
   currentVersion,
   currentVersionEqual,
+  currentVersionGreater,
   currentVersionGreaterEqual,
+  currentVersionSmaller,
   currentVersionSmallerEqual
 };
