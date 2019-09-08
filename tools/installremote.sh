@@ -3,8 +3,9 @@
 REMOTE_RESTART=${GSEDEV_REMOTE_RESTART:-true}
 git ls-files | tar Tc - |
   ssh -v $GSEDEV_REMOTE_SSH_OPTS "
+    rm -rf /tmp/gsext && \
     mkdir -p /tmp/gsext/ && \
-      tar x -C/tmp/gsext/ && \
-      cd /tmp/gsext && \
-      make SKIP_LINT=1 install &&
-      ${GSEDEV_REMOTE_RESTART:-true} && make restart"
+    tar x -C/tmp/gsext/ && \
+    cd /tmp/gsext && \
+    make SKIP_LINT=1 install &&
+    ${GSEDEV_REMOTE_RESTART:-true} && make restart"
