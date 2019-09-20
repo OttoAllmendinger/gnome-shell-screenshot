@@ -31,12 +31,12 @@ const settings = Convenience.getSettings();
 
 
 
-// remove this when dropping support for < 3.32
+// remove this when dropping support for < 3.33
 const getActorCompat = (obj) =>
-  Convenience.currentVersionGreater("3.32.2") ? obj : obj.actor;
+  Convenience.currentVersionGreaterEqual("3.33") ? obj : obj.actor;
 
 const getSliderSignalCompat = (obj) =>
-  Convenience.currentVersionGreater("3.32.2") ? "notify::value": "value-changed";
+  Convenience.currentVersionGreaterEqual("3.33") ? "notify::value": "value-changed";
 
 class CaptureDelayMenu extends PopupMenu.PopupMenuSection {
   createScale() {
