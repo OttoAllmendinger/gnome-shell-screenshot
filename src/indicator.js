@@ -30,6 +30,18 @@ const DefaultIcon = "camera-photo-symbolic";
 const settings = Convenience.getSettings();
 
 
+const addSliderCompat = (sliderObj, slider, opts) => {
+  let menuItem;
+  if ("add" in sliderObj) {
+    menuItem = sliderObj;
+  } else if ("add" in sliderObj.actor) {
+    menuItem = sliderObj.actor;
+  } else {
+    throw new Error("could not determine actor for sliderItem");
+  }
+
+  menuItem.add(slider, opts);
+}
 
 // remove this when dropping support for < 3.33
 const getActorCompat = (obj) =>
@@ -58,8 +70,10 @@ class CaptureDelayMenu extends PopupMenu.PopupMenuSection {
     this.slider = new Slider.Slider(this.scaleToSlider(this.delayValueMS));
     this.slider.connect(getSliderSignalCompat(), this.onDragEnd.bind(this));
     this.sliderItem = new PopupMenu.PopupBaseMenuItem({ activate: false });
-    getActorCompat(this.sliderItem).add(
-      getActorCompat(this.slider), { expand: true }
+    addSliderCompat(
+      this.sliderItem,
+      getActorCompat(this.slider),
+      { expand: true }
     );
     this.addMenuItem(this.sliderItem);
 
