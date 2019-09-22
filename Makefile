@@ -29,6 +29,10 @@ translations: $(MO_FILES)
 
 archive: $(ZIPFILE)
 
+package:
+	make lint
+	make archive
+
 uninstall:
 	-rm -r $(EXTENSION_PATH)
 
@@ -61,9 +65,6 @@ src/locale/%/LC_MESSAGES/gnome-shell-screenshot.mo: src/locale/%/*.po
 
 $(ZIPFILE): $(SOURCE) schemas
 	-rm $(ZIPFILE)
-ifndef SKIP_LINT
-	eslint .
-endif
 	cd src && zip -r ../$(ZIPFILE) \
 	   $(patsubst src/%,%,$(SOURCE)) \
 	   $(patsubst src/%,%,$(MO_FILES))
