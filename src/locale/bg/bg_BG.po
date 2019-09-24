@@ -1,0 +1,281 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-09-24 12:20+0300\n"
+"PO-Revision-Date: 2019-09-24 12:52+0300\n"
+"Last-Translator: Berdy <berdygaming@outlook.com>\n"
+"Language-Team: \n"
+"Language: bg_BG\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.2.1\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: src/filename.js:27
+msgid "Screenshot"
+msgstr "Снимка на екрана"
+
+#: src/filename.js:27
+msgid "Screenshot (literal)"
+msgstr "Скриншот (буквално)"
+
+#: src/filename.js:28
+msgid "Year"
+msgstr "Година"
+
+#: src/filename.js:29
+msgid "Month"
+msgstr "Месец"
+
+#: src/filename.js:30
+msgid "Day"
+msgstr "Ден"
+
+#: src/filename.js:31
+msgid "Hour"
+msgstr "Час"
+
+#: src/filename.js:32
+msgid "Minute"
+msgstr "Минута"
+
+#: src/filename.js:33
+msgid "Second"
+msgstr "Секунда"
+
+#: src/filename.js:34
+msgid "Width"
+msgstr "Широчина"
+
+#: src/filename.js:35
+msgid "Height"
+msgstr "Височина"
+
+#: src/filename.js:36
+msgid "Hostname"
+msgstr "Име на машината"
+
+#: src/filename.js:41
+msgid "Parameters:"
+msgstr "Параметри:"
+
+#: src/indicator.js:87
+msgid "No Capture Delay"
+msgstr "Без закъснение за снимане"
+
+#: src/indicator.js:89 src/indicator.js:91
+msgid "Capture Delay"
+msgstr "Закъснение за снимане"
+
+#: src/indicator.js:107
+msgid "Clear"
+msgstr "Изчистване"
+
+#: src/indicator.js:108 src/notifications.js:78
+msgid "Copy"
+msgstr "Копиране"
+
+#: src/indicator.js:109
+msgid "Save As..."
+msgstr "Съхраняване като..."
+
+#: src/indicator.js:125
+msgid "Imgur"
+msgstr "Imgur"
+
+#: src/indicator.js:126
+msgid "Upload"
+msgstr "Качване"
+
+#: src/indicator.js:127
+msgid "Open Link"
+msgstr "Отвори линк"
+
+#: src/indicator.js:128 src/notifications.js:169
+msgid "Copy Link"
+msgstr "Копирай линк"
+
+#: src/indicator.js:129
+msgid "Delete"
+msgstr "Изтрий"
+
+#: src/indicator.js:289 src/prefs.js:145
+msgid "Select Area"
+msgstr "Избери област"
+
+#: src/indicator.js:290 src/prefs.js:146
+msgid "Select Window"
+msgstr "Избери прозорец"
+
+#: src/indicator.js:291 src/prefs.js:147
+msgid "Select Desktop"
+msgstr "Избери работен плот"
+
+#: src/indicator.js:319
+msgid "Settings"
+msgstr "Настройки"
+
+#: src/notifications.js:48
+msgid "New Screenshot"
+msgstr "Нова снимка"
+
+#: src/notifications.js:53
+msgid "Size:"
+msgstr "Размер:"
+
+#: src/notifications.js:79
+msgid "Save"
+msgstr "Съхрани"
+
+#: src/notifications.js:83
+msgid "Uploading To Imgur..."
+msgstr "Качване в Imgur..."
+
+#: src/notifications.js:85
+msgid "Upload To Imgur"
+msgstr "Качи в Imgur"
+
+#: src/notifications.js:117
+msgid "Error"
+msgstr "Грешка"
+
+#: src/notifications.js:131 src/notifications.js:143
+msgid "Imgur Upload"
+msgstr "Качване в Imgur"
+
+#: src/notifications.js:149
+msgid "Imgur Upload Failed"
+msgstr "Качването в Imgur се провали"
+
+#: src/notifications.js:154
+msgid "Imgur Upload Successful"
+msgstr "Качването в Imgur беше успешно"
+
+#: src/prefs.js:87
+msgid "Indicator"
+msgstr "Индикатор"
+
+#: src/prefs.js:91
+msgid "Storage"
+msgstr "Хранилище"
+
+#: src/prefs.js:95
+msgid "Imgur Upload (Beta)"
+msgstr "Качване в Imgur (Бета)"
+
+#: src/prefs.js:99
+msgid "Keybindings"
+msgstr "Бутони"
+
+#: src/prefs.js:118
+msgid "Show Indicator"
+msgstr "Показване на индикатор"
+
+#: src/prefs.js:127
+msgid "Show Notification After Capture"
+msgstr "Показване на нотификация след качване"
+
+#: src/prefs.js:139
+msgid "Primary Button"
+msgstr "Основен бутон"
+
+#: src/prefs.js:148
+msgid "Show Menu"
+msgstr "Покажи меню"
+
+#: src/prefs.js:169
+msgid "Auto-Copy to Clipboard"
+msgstr "Автоматично копиране в клипборда"
+
+#: src/prefs.js:175
+msgid "Nothing"
+msgstr "Нищо"
+
+#: src/prefs.js:176
+msgid "Image Data"
+msgstr "Изображение"
+
+#: src/prefs.js:212
+msgid "Auto-Save Screenshot"
+msgstr "Автоматично запазване на екранна снимка"
+
+#: src/prefs.js:223
+msgid "Save Location"
+msgstr "Локация за запаметяване"
+
+#: src/prefs.js:230
+msgid "Select"
+msgstr "Избери"
+
+#: src/prefs.js:271
+msgid "Default Filename"
+msgstr "Име на файл по подразбиране"
+
+#: src/prefs.js:296
+msgid "Preview"
+msgstr "Преглед"
+
+#: src/prefs.js:354
+msgid "Enable Imgur Upload"
+msgstr "Включи качване в Imgur"
+
+#: src/prefs.js:362
+msgid "Show Upload Notification"
+msgstr "Показване на нотификация за качване"
+
+#: src/prefs.js:379
+msgid "Auto-Upload After Capture"
+msgstr "Автоматично качване след заснемане"
+
+#: src/prefs.js:394
+msgid "Auto-Copy Link After Upload"
+msgstr "Автоматично копиране на линк след качване"
+
+#: src/prefs.js:409
+msgid "Auto-Open Link After Upload"
+msgstr "Автоматично отваряне на линк след качване"
+
+#: src/prefs.js:435
+msgid "Select area"
+msgstr "Изберете област"
+
+#: src/prefs.js:436
+msgid "Select window"
+msgstr "Изберете прозорец"
+
+#: src/prefs.js:437
+msgid "Select whole desktop"
+msgstr "Изберете целия екран"
+
+#: src/prefs.js:464
+msgid "Keyboard Shortcut"
+msgstr "Бутон за пряк път"
+
+#: src/prefs.js:504
+msgid "Modify"
+msgstr "Променете"
+
+#: src/saveDlg.js:28
+msgid "_Cancel"
+msgstr "_Отказ"
+
+#: src/saveDlg.js:29
+msgid "_Save"
+msgstr "_Запаметяване"
+
+#: src/selection.js:246
+msgid "selected region was too small - please select a larger area"
+msgstr "избраната област е твърде малка - изберете по-голяма област"
+
+#~ msgid "Default Clipboard Content"
+#~ msgstr "Клипбоард по подразбиране"
+
+#~ msgid "Unchanged"
+#~ msgstr "Непроменено"
