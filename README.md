@@ -50,6 +50,7 @@ should work again afterwards.
 * https://github.com/alex-volga -- Ukranian translation
 * https://github.com/iamhefang -- Simplified Chinese translation
 * https://github.com/Mavrikant -- Turkish translation
+* https://github.com/Burday -- Bulgarian translation
 
 Also see contributors for
 [gnome-shell-imgur](https://github.com/OttoAllmendinger/gnome-shell-imgur/).
