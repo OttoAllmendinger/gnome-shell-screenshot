@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-03-23 23:47+0100\n"
-"PO-Revision-Date: 2017-06-07 12:50+0200\n"
-"Last-Translator: Jimmy Scionti <jimmy.scionti@gmail.com>\n"
+"PO-Revision-Date: 2019-10-01 15:29+0200\n"
+"Last-Translator: Giuseppe Pignataro (Fastbyte01) <rogepix@gmail.com>\n"
 "Language-Team: Jimmy Scionti <jimmy.scionti@gmail.com>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.8.7.1\n"
+"X-Generator: Poedit 2.2.3\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: src/filename.js:27
@@ -68,11 +68,11 @@ msgstr "Parametri:"
 
 #: src/indicator.js:87
 msgid "No Capture Delay"
-msgstr ""
+msgstr "Nessun ritardo di acquisizione"
 
 #: src/indicator.js:89 src/indicator.js:91
 msgid "Capture Delay"
-msgstr ""
+msgstr "Ritardo acquisizione"
 
 #: src/indicator.js:107
 msgid "Clear"
@@ -180,7 +180,7 @@ msgstr "Mostra l'indicatore"
 
 #: src/prefs.js:127
 msgid "Show Notification After Capture"
-msgstr ""
+msgstr "Mostra notifica dopo l'acquisizione"
 
 #: src/prefs.js:139
 msgid "Primary Button"
@@ -192,11 +192,11 @@ msgstr "Mostra il menu"
 
 #: src/prefs.js:169
 msgid "Auto-Copy to Clipboard"
-msgstr ""
+msgstr "Compia automaticamente negli appunti"
 
 #: src/prefs.js:175
 msgid "Nothing"
-msgstr ""
+msgstr "Niente"
 
 #: src/prefs.js:176
 msgid "Image Data"
@@ -228,7 +228,7 @@ msgstr "Abilità l'upload su Imgur"
 
 #: src/prefs.js:362
 msgid "Show Upload Notification"
-msgstr ""
+msgstr "Mostra notifica di caricamento"
 
 #: src/prefs.js:379
 msgid "Auto-Upload After Capture"
