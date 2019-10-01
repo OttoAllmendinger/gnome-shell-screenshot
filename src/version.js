@@ -19,7 +19,7 @@ function versionEqual(a, b) {
 function versionGreater(a, b) {
     return (!versionEqual(a, b))
         && zip(versionArray(a), versionArray(b)).reduce(
-            (prev, [a, b], index) => prev && (a >= (b || 0))
+            (prev, [a, b], index) => prev || (a > (b || 0))
     , true);
 }
 
