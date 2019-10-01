@@ -42,7 +42,7 @@ should work again afterwards.
 * https://github.com/RaphaelRochet, https://github.com/peetcamron -- French translation
 * https://github.com/gsantner -- German translation
 * https://github.com/pkomur, https://github.com/orschiro, https://github.com/MartinPL -- Polish translation
-* https://github.com/amivaleo -- Italian translation
+* https://github.com/amivaleo, https://github.com/Fastbyte01 -- Italian translation
 * https://github.com/ge0rgecz -- Czech translation
 * https://github.com/dirosis -- Greek translation
 * https://github.com/AlexGluck, https://github.com/alex-volga -- Russian translation
