@@ -6,5 +6,5 @@
     "description": "Conveniently create, copy, store and upload screenshots",
     "settings-schema":  "org.gnome.shell.extensions.screenshot",
     "gettext-domain": "gnome-shell-screenshot",
-    "git-version": "v40-5-gb837-dirty"
+    "git-version": "_gitversion_"
 }

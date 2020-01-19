@@ -66,200 +66,200 @@ msgstr "Όνομα οικοδεσπότη"
 msgid "Parameters:"
 msgstr "Παράμετροι:"
 
-#: src/indicator.js:87
+#: src/indicator.js:95
 msgid "No Capture Delay"
 msgstr ""
 
-#: src/indicator.js:89 src/indicator.js:91
+#: src/indicator.js:97 src/indicator.js:99
 msgid "Capture Delay"
 msgstr ""
 
-#: src/indicator.js:107
+#: src/indicator.js:114
 msgid "Clear"
 msgstr ""
 
-#: src/indicator.js:108 src/notifications.js:78
+#: src/indicator.js:115 src/notifications.js:74
 msgid "Copy"
 msgstr "Αντιγραφή"
 
-#: src/indicator.js:109
+#: src/indicator.js:116
 msgid "Save As..."
 msgstr "Αποθήκευση ως..."
 
-#: src/indicator.js:125
+#: src/indicator.js:132
 msgid "Imgur"
 msgstr "Imgur"
 
-#: src/indicator.js:126
+#: src/indicator.js:133
 msgid "Upload"
 msgstr "Αποσολή"
 
-#: src/indicator.js:127
+#: src/indicator.js:134
 msgid "Open Link"
 msgstr "Άνοιγμα συνδέσμου"
 
-#: src/indicator.js:128 src/notifications.js:169
+#: src/indicator.js:135 src/notifications.js:159
 msgid "Copy Link"
 msgstr "Αντιγραφή συνδέσμου"
 
-#: src/indicator.js:129
+#: src/indicator.js:136
 msgid "Delete"
 msgstr ""
 
-#: src/indicator.js:289 src/prefs.js:145
+#: src/indicator.js:290 src/prefs.js:144
 msgid "Select Area"
 msgstr "Επιλογή περιοχής"
 
-#: src/indicator.js:290 src/prefs.js:146
+#: src/indicator.js:291 src/prefs.js:145
 msgid "Select Window"
 msgstr "Επιλογή παραθύρου"
 
-#: src/indicator.js:291 src/prefs.js:147
+#: src/indicator.js:292 src/prefs.js:146
 msgid "Select Desktop"
 msgstr "Επιλογή επιφάνειας εργασίας"
 
-#: src/indicator.js:319
+#: src/indicator.js:320
 msgid "Settings"
 msgstr "Ρυθμίσεις"
 
-#: src/notifications.js:48
+#: src/notifications.js:44
 msgid "New Screenshot"
 msgstr "Νέο στιγμιότυπο"
 
-#: src/notifications.js:53
+#: src/notifications.js:49
 msgid "Size:"
 msgstr "Μέγεθος:"
 
-#: src/notifications.js:79
+#: src/notifications.js:75
 msgid "Save"
 msgstr "Αποθήκευση"
 
-#: src/notifications.js:83
+#: src/notifications.js:79
 #, fuzzy
 msgid "Uploading To Imgur..."
 msgstr "Αποστολή στο Imgur"
 
-#: src/notifications.js:85
+#: src/notifications.js:81
 msgid "Upload To Imgur"
 msgstr "Αποστολή στο Imgur"
 
-#: src/notifications.js:117
+#: src/notifications.js:110
 msgid "Error"
 msgstr "Σφάλμα"
 
-#: src/notifications.js:131 src/notifications.js:143
+#: src/notifications.js:121 src/notifications.js:133
 msgid "Imgur Upload"
 msgstr "Αποστολή στο Imgur"
 
-#: src/notifications.js:149
+#: src/notifications.js:139
 msgid "Imgur Upload Failed"
 msgstr "Ανεπιτυχής αποστολή στο Imgur"
 
-#: src/notifications.js:154
+#: src/notifications.js:144
 msgid "Imgur Upload Successful"
 msgstr "Επιτυχής αποστολή στο Imgur"
 
-#: src/prefs.js:87
+#: src/prefs.js:86
 msgid "Indicator"
 msgstr "Δείκτης"
 
-#: src/prefs.js:91
+#: src/prefs.js:90
 msgid "Storage"
 msgstr "Αποθήκευση"
 
-#: src/prefs.js:95
+#: src/prefs.js:94
 msgid "Imgur Upload (Beta)"
 msgstr "Αποστολή στο Imgur (Beta)"
 
-#: src/prefs.js:99
+#: src/prefs.js:98
 msgid "Keybindings"
 msgstr "Συντομεύσεις πληκτρογίου"
 
-#: src/prefs.js:118
+#: src/prefs.js:117
 msgid "Show Indicator"
 msgstr "Εμφάνιση δείκτη"
 
-#: src/prefs.js:127
+#: src/prefs.js:126
 msgid "Show Notification After Capture"
 msgstr ""
 
-#: src/prefs.js:139
+#: src/prefs.js:138
 msgid "Primary Button"
 msgstr "Κυρίως κουμπί"
 
-#: src/prefs.js:148
+#: src/prefs.js:147
 msgid "Show Menu"
 msgstr "Εμφάνιση μενού"
 
-#: src/prefs.js:169
+#: src/prefs.js:168
 msgid "Auto-Copy to Clipboard"
 msgstr ""
 
-#: src/prefs.js:175
+#: src/prefs.js:174
 msgid "Nothing"
 msgstr ""
 
-#: src/prefs.js:176
+#: src/prefs.js:175
 msgid "Image Data"
 msgstr "Δεδομένα εικόνας"
 
-#: src/prefs.js:212
+#: src/prefs.js:211
 msgid "Auto-Save Screenshot"
 msgstr "Αυτόματη αποθήκευση στιγμιοτύπου"
 
-#: src/prefs.js:223
+#: src/prefs.js:222
 msgid "Save Location"
 msgstr "Τοποθεσία αποθήκευσης"
 
-#: src/prefs.js:230
+#: src/prefs.js:229
 msgid "Select"
 msgstr "Επιλογή"
 
-#: src/prefs.js:271
+#: src/prefs.js:270
 msgid "Default Filename"
 msgstr "Προεπιλεγμένο όνομα αρχείου"
 
-#: src/prefs.js:296
+#: src/prefs.js:295
 msgid "Preview"
 msgstr "Προεπισκόπηση"
 
-#: src/prefs.js:354
+#: src/prefs.js:353
 msgid "Enable Imgur Upload"
 msgstr "Ενεργοποίηση αποστολής στο Imgur"
 
-#: src/prefs.js:362
+#: src/prefs.js:361
 msgid "Show Upload Notification"
 msgstr ""
 
-#: src/prefs.js:379
+#: src/prefs.js:378
 msgid "Auto-Upload After Capture"
 msgstr ""
 
-#: src/prefs.js:394
+#: src/prefs.js:393
 msgid "Auto-Copy Link After Upload"
 msgstr ""
 
-#: src/prefs.js:409
+#: src/prefs.js:408
 msgid "Auto-Open Link After Upload"
 msgstr ""
 
-#: src/prefs.js:435
+#: src/prefs.js:434
 msgid "Select area"
 msgstr "Επιλογή περιοχής"
 
-#: src/prefs.js:436
+#: src/prefs.js:435
 msgid "Select window"
 msgstr "Επιλογή παραθύρου"
 
-#: src/prefs.js:437
+#: src/prefs.js:436
 msgid "Select whole desktop"
 msgstr "Επιλογή όλης της επιφάνειας εργασίας"
 
-#: src/prefs.js:464
+#: src/prefs.js:463
 msgid "Keyboard Shortcut"
 msgstr "Συντομεύσεις πληκτρολογίου"
 
-#: src/prefs.js:504
+#: src/prefs.js:503
 msgid "Modify"
 msgstr "Τροποποίηση"
 
@@ -271,7 +271,7 @@ msgstr "_Αναίρεση"
 msgid "_Save"
 msgstr "_Αποθήκευση"
 
-#: src/selection.js:246
+#: src/selection.js:228
 msgid "selected region was too small - please select a larger area"
 msgstr ""
 "η επιλεγμένη περιοχή ήταν πολύ μικρή - παρακαλώ επιλέξτε μεγαλύτερη περιοχή"

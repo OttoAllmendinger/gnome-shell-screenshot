@@ -1,0 +1,3 @@
+[submodule "gselib"]
+	path = gselib
+	url = https://github.com/OttoAllmendinger/gselib.git

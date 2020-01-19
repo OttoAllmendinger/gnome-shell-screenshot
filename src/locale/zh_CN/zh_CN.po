@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 0.0.1\n"
-"Report-Msgid-Bugs-To: he@hefang.link\n"
+"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-03-23 23:47+0100\n"
 "PO-Revision-Date: 2018-07-07 16:52\n"
 "Last-Translator: hefang <he@hefang.ink>\n"
@@ -65,199 +65,199 @@ msgstr "主机名"
 msgid "Parameters:"
 msgstr "参数"
 
-#: src/indicator.js:87
+#: src/indicator.js:95
 msgid "No Capture Delay"
 msgstr "无延时截屏"
 
-#: src/indicator.js:89 src/indicator.js:91
+#: src/indicator.js:97 src/indicator.js:99
 msgid "Capture Delay"
 msgstr "截屏延时"
 
-#: src/indicator.js:107
+#: src/indicator.js:114
 msgid "Clear"
 msgstr "清除"
 
-#: src/indicator.js:108 src/notifications.js:78
+#: src/indicator.js:115 src/notifications.js:74
 msgid "Copy"
 msgstr "复制"
 
-#: src/indicator.js:109
+#: src/indicator.js:116
 msgid "Save As..."
 msgstr "另存为..."
 
-#: src/indicator.js:125
+#: src/indicator.js:132
 msgid "Imgur"
 msgstr "Imgur"
 
-#: src/indicator.js:126
+#: src/indicator.js:133
 msgid "Upload"
 msgstr "上传"
 
-#: src/indicator.js:127
+#: src/indicator.js:134
 msgid "Open Link"
 msgstr "打开连接"
 
-#: src/indicator.js:128 src/notifications.js:169
+#: src/indicator.js:135 src/notifications.js:159
 msgid "Copy Link"
 msgstr "复制连接"
 
-#: src/indicator.js:129
+#: src/indicator.js:136
 msgid "Delete"
 msgstr "删除"
 
-#: src/indicator.js:289 src/prefs.js:145
+#: src/indicator.js:290 src/prefs.js:144
 msgid "Select Area"
 msgstr "选择区域"
 
-#: src/indicator.js:290 src/prefs.js:146
+#: src/indicator.js:291 src/prefs.js:145
 msgid "Select Window"
 msgstr "选择窗口"
 
-#: src/indicator.js:291 src/prefs.js:147
+#: src/indicator.js:292 src/prefs.js:146
 msgid "Select Desktop"
 msgstr "选择桌面"
 
-#: src/indicator.js:319
+#: src/indicator.js:320
 msgid "Settings"
 msgstr "设置"
 
-#: src/notifications.js:48
+#: src/notifications.js:44
 msgid "New Screenshot"
 msgstr "新截屏"
 
-#: src/notifications.js:53
+#: src/notifications.js:49
 msgid "Size:"
 msgstr "尺寸："
 
-#: src/notifications.js:79
+#: src/notifications.js:75
 msgid "Save"
 msgstr "保存"
 
-#: src/notifications.js:83
+#: src/notifications.js:79
 msgid "Uploading To Imgur..."
 msgstr "正在上传到 Imgur..."
 
-#: src/notifications.js:85
+#: src/notifications.js:81
 msgid "Upload To Imgur"
 msgstr "上传到 Imgur"
 
-#: src/notifications.js:117
+#: src/notifications.js:110
 msgid "Error"
 msgstr "错误"
 
-#: src/notifications.js:131 src/notifications.js:143
+#: src/notifications.js:121 src/notifications.js:133
 msgid "Imgur Upload"
 msgstr "上传到 Imgur"
 
-#: src/notifications.js:149
+#: src/notifications.js:139
 msgid "Imgur Upload Failed"
 msgstr "上传到 Imgur 失败"
 
-#: src/notifications.js:154
+#: src/notifications.js:144
 msgid "Imgur Upload Successful"
 msgstr "上传到 Imgur 成功"
 
-#: src/prefs.js:87
+#: src/prefs.js:86
 msgid "Indicator"
 msgstr "指示器"
 
-#: src/prefs.js:91
+#: src/prefs.js:90
 msgid "Storage"
 msgstr "储存"
 
-#: src/prefs.js:95
+#: src/prefs.js:94
 msgid "Imgur Upload (Beta)"
 msgstr "上传到 Imgur (测试版)"
 
-#: src/prefs.js:99
+#: src/prefs.js:98
 msgid "Keybindings"
 msgstr "快捷键"
 
-#: src/prefs.js:118
+#: src/prefs.js:117
 msgid "Show Indicator"
 msgstr "显示指示符"
 
-#: src/prefs.js:127
+#: src/prefs.js:126
 msgid "Show Notification After Capture"
 msgstr "截屏后显示通知"
 
-#: src/prefs.js:139
+#: src/prefs.js:138
 msgid "Primary Button"
 msgstr "主按钮"
 
-#: src/prefs.js:148
+#: src/prefs.js:147
 msgid "Show Menu"
 msgstr "显示菜单"
 
-#: src/prefs.js:169
+#: src/prefs.js:168
 msgid "Auto-Copy to Clipboard"
 msgstr "自动复制到粘贴板"
 
-#: src/prefs.js:175
+#: src/prefs.js:174
 msgid "Nothing"
 msgstr "空数据"
 
-#: src/prefs.js:176
+#: src/prefs.js:175
 msgid "Image Data"
 msgstr "图片数据"
 
-#: src/prefs.js:212
+#: src/prefs.js:211
 msgid "Auto-Save Screenshot"
 msgstr "自动保存截图"
 
-#: src/prefs.js:223
+#: src/prefs.js:222
 msgid "Save Location"
 msgstr "保存位置"
 
-#: src/prefs.js:230
+#: src/prefs.js:229
 msgid "Select"
 msgstr "选择"
 
-#: src/prefs.js:271
+#: src/prefs.js:270
 msgid "Default Filename"
 msgstr "默认文件名"
 
-#: src/prefs.js:296
+#: src/prefs.js:295
 msgid "Preview"
 msgstr "预览"
 
-#: src/prefs.js:354
+#: src/prefs.js:353
 msgid "Enable Imgur Upload"
 msgstr "允许上传到Imgur"
 
-#: src/prefs.js:362
+#: src/prefs.js:361
 msgid "Show Upload Notification"
 msgstr "显示上传通知"
 
-#: src/prefs.js:379
+#: src/prefs.js:378
 msgid "Auto-Upload After Capture"
 msgstr "截屏后自动上传"
 
-#: src/prefs.js:394
+#: src/prefs.js:393
 msgid "Auto-Copy Link After Upload"
 msgstr "上传后自动复制连接"
 
-#: src/prefs.js:409
+#: src/prefs.js:408
 msgid "Auto-Open Link After Upload"
 msgstr "上传后自动打开连接"
 
-#: src/prefs.js:435
+#: src/prefs.js:434
 msgid "Select area"
 msgstr "选择区域"
 
-#: src/prefs.js:436
+#: src/prefs.js:435
 msgid "Select window"
 msgstr "选择窗口"
 
-#: src/prefs.js:437
+#: src/prefs.js:436
 msgid "Select whole desktop"
 msgstr "选择整个桌面"
 
-#: src/prefs.js:464
+#: src/prefs.js:463
 msgid "Keyboard Shortcut"
 msgstr "快捷键"
 
-#: src/prefs.js:504
+#: src/prefs.js:503
 msgid "Modify"
 msgstr "修改"
 
@@ -269,6 +269,6 @@ msgstr "(_C)取消"
 msgid "_Save"
 msgstr "(_S)保存"
 
-#: src/selection.js:246
+#: src/selection.js:228
 msgid "selected region was too small - please select a larger area"
 msgstr "选择的区域太小了，请重新选择一个大点的区域"
