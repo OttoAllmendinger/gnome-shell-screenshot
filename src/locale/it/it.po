@@ -192,7 +192,7 @@ msgstr "Mostra il menu"
 
 #: src/prefs.js:169
 msgid "Auto-Copy to Clipboard"
-msgstr "Compia automaticamente negli appunti"
+msgstr "Copia automaticamente negli appunti"
 
 #: src/prefs.js:175
 msgid "Nothing"
