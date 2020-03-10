@@ -58,7 +58,7 @@ class CaptureDelayMenu extends PopupMenu.PopupMenuSection {
     this.slider = new Slider.Slider(this.scaleToSlider(this.delayValueMS));
     this.slider.connect(getSliderSignalCompat(), this.onDragEnd.bind(this));
     this.sliderItem = new PopupMenu.PopupBaseMenuItem({ activate: false });
-    getActorCompat(this.sliderItem).add(
+    getActorCompat(this.sliderItem).add_actor(
       getActorCompat(this.slider), { expand: true }
     );
     this.addMenuItem(this.sliderItem);
