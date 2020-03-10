@@ -4,6 +4,7 @@ const Signals = imports.signals;
 const St = imports.gi.St;
 const Gio = imports.gi.Gio;
 const Gtk = imports.gi.Gtk;
+const GObject = imports.gi.GObject;
 const GdkPixbuf = imports.gi.GdkPixbuf;
 
 const Main = imports.ui.main;
@@ -39,7 +40,7 @@ const getSource = () => {
   return source;
 }
 
-class Notification extends MessageTray.Notification {
+const Notification = GObject.registerClass(class Notification extends MessageTray.Notification {
   static _title() {
     return _("New Screenshot");
   }
@@ -50,8 +51,8 @@ class Notification extends MessageTray.Notification {
     return banner;
   }
 
-  constructor(source, screenshot) {
-    super(
+  _init(source, screenshot) {
+    super._init(
       source,
       Notification._title(),
       Notification._banner(screenshot),
@@ -99,26 +100,28 @@ class Notification extends MessageTray.Notification {
   _onUpload() {
     this._screenshot.imgurStartUpload();
   }
-}
-Signals.addSignalMethods(Notification.prototype);
+});
 
 
-class ErrorNotification extends MessageTray.Notification {
-  constructor(source, message) {
-    super(
+var ErrorNotification = GObject.registerClass(
+  class ErrorNotification extends MessageTray.Notification {
+
+  _init(source, message) {
+    super._init(
       source,
       _("Error"),
       String(message),
       { secondaryGIcon: new Gio.ThemedIcon({name: "dialog-error"}) }
     );
   }
-}
-Signals.addSignalMethods(ErrorNotification.prototype);
+});
 
 
-class ImgurNotification extends MessageTray.Notification {
-  constructor(source, screenshot) {
-    super(source, _("Imgur Upload"));
+var ImgurNotification = GObject.registerClass(
+  class ImgurNotification extends MessageTray.Notification {
+
+  _init(source, screenshot) {
+    super._init(source, _("Imgur Upload"));
     this.setForFeedback(true);
     this.setResident(true);
 
@@ -174,25 +177,25 @@ class ImgurNotification extends MessageTray.Notification {
   _onCopy() {
     this._screenshot.imgurCopyURL();
   }
-}
+});
 
 
 const notifyScreenshot = (screenshot) => {
   const source = getSource();
   const notification = new Notification(source, screenshot);
-  source.notify(notification);
+  source.showNotification(notification);
 }
 
 const notifyError = (message) => {
   const source = getSource();
   const notification = new ErrorNotification(source, message);
-  source.notify(notification);
+  source.showNotification(notification);
 }
 
 const notifyImgurUpload = (screenshot) => {
   const source = getSource();
   const notification = new ImgurNotification(source, screenshot);
-  source.notify(notification);
+  source.showNotification(notification);
 }
 
 var exports = {
