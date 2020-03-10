@@ -33,7 +33,7 @@ const getPostMessage = (file, callback) => {
       return;
     }
 
-    const buffer = new Soup.Buffer(contents, contents.length);
+    const buffer = Soup.Buffer.new(contents);
     const mimetype = getMimetype(file);
     const multipart = new Soup.Multipart(Soup.FORM_MIME_TYPE_MULTIPART);
     const filename = "image.png";
