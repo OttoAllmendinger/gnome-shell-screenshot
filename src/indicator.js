@@ -320,7 +320,16 @@ class Indicator {
     const settingsItem = new PopupMenu.PopupMenuItem(_("Settings"));
     settingsItem.connect("activate", () => {
       const appSys = Shell.AppSystem.get_default();
-      const prefs = appSys.lookup_app("gnome-shell-extension-prefs.desktop");
+      const appId = Convenience.currentVersionGreaterEqual("3.36")
+        ? "org.gnome.Extensions.desktop"
+        : "gnome-shell-extension-prefs.desktop";
+      const prefs = appSys.lookup_app(appId);
+
+      if (!prefs) {
+        logError(new Error("could not find prefs app"));
+        return;
+      }
+
       if (prefs.get_state() == prefs.SHELL_APP_STATE_RUNNING) {
         prefs.activate();
       } else {
