@@ -78,7 +78,7 @@ msgstr "Délai de capture"
 msgid "Clear"
 msgstr "Effacer"
 
-#: src/indicator.js:115 src/notifications.js:74
+#: src/indicator.js:115 src/notifications.js:75
 msgid "Copy"
 msgstr "Copier"
 
@@ -98,7 +98,7 @@ msgstr "Téléverser"
 msgid "Open Link"
 msgstr "Ouvrir le lien"
 
-#: src/indicator.js:135 src/notifications.js:159
+#: src/indicator.js:135 src/notifications.js:162
 msgid "Copy Link"
 msgstr "Copier le lien"
 
@@ -122,39 +122,39 @@ msgstr "Sélectionner le bureau"
 msgid "Settings"
 msgstr "Paramètres"
 
-#: src/notifications.js:44
+#: src/notifications.js:45
 msgid "New Screenshot"
 msgstr "Nouvelle capture d'écran"
 
-#: src/notifications.js:49
+#: src/notifications.js:50
 msgid "Size:"
 msgstr "Taille:"
 
-#: src/notifications.js:75
+#: src/notifications.js:76
 msgid "Save"
 msgstr "Enregistrer"
 
-#: src/notifications.js:79
+#: src/notifications.js:80
 msgid "Uploading To Imgur..."
 msgstr "Téléversement sur Imgur..."
 
-#: src/notifications.js:81
+#: src/notifications.js:82
 msgid "Upload To Imgur"
 msgstr "Téléverser sur Imgur"
 
-#: src/notifications.js:110
+#: src/notifications.js:112
 msgid "Error"
 msgstr "Erreur"
 
-#: src/notifications.js:121 src/notifications.js:133
+#: src/notifications.js:124 src/notifications.js:136
 msgid "Imgur Upload"
 msgstr "Téléversement Imgur"
 
-#: src/notifications.js:139
+#: src/notifications.js:142
 msgid "Imgur Upload Failed"
 msgstr "Erreur lors du téléversement sur Imgur"
 
-#: src/notifications.js:144
+#: src/notifications.js:147
 msgid "Imgur Upload Successful"
 msgstr "Téléversement sur Imgur reussi"
 

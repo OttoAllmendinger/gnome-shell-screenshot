@@ -78,7 +78,7 @@ msgstr ""
 msgid "Clear"
 msgstr "Limpar"
 
-#: src/indicator.js:115 src/notifications.js:74
+#: src/indicator.js:115 src/notifications.js:75
 msgid "Copy"
 msgstr "Copiar"
 
@@ -98,7 +98,7 @@ msgstr "Upload"
 msgid "Open Link"
 msgstr "Abrir Link"
 
-#: src/indicator.js:135 src/notifications.js:159
+#: src/indicator.js:135 src/notifications.js:162
 msgid "Copy Link"
 msgstr "Copiar Link"
 
@@ -122,39 +122,39 @@ msgstr "Selecionar Área de Trabalho"
 msgid "Settings"
 msgstr "Configurações"
 
-#: src/notifications.js:44
+#: src/notifications.js:45
 msgid "New Screenshot"
 msgstr "Nova Captura de Tela"
 
-#: src/notifications.js:49
+#: src/notifications.js:50
 msgid "Size:"
 msgstr "Tamanho:"
 
-#: src/notifications.js:75
+#: src/notifications.js:76
 msgid "Save"
 msgstr "Salvar"
 
-#: src/notifications.js:79
+#: src/notifications.js:80
 msgid "Uploading To Imgur..."
 msgstr "Fazendo upload para o Imgur"
 
-#: src/notifications.js:81
+#: src/notifications.js:82
 msgid "Upload To Imgur"
 msgstr "Fazer Upload para o Imgur"
 
-#: src/notifications.js:110
+#: src/notifications.js:112
 msgid "Error"
 msgstr "Erro"
 
-#: src/notifications.js:121 src/notifications.js:133
+#: src/notifications.js:124 src/notifications.js:136
 msgid "Imgur Upload"
 msgstr "Upload do Imgur"
 
-#: src/notifications.js:139
+#: src/notifications.js:142
 msgid "Imgur Upload Failed"
 msgstr "Upload para o Imgur falhou"
 
-#: src/notifications.js:144
+#: src/notifications.js:147
 msgid "Imgur Upload Successful"
 msgstr "Upload para o Imgur feito com sucesso"
 

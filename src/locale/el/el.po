@@ -78,7 +78,7 @@ msgstr ""
 msgid "Clear"
 msgstr ""
 
-#: src/indicator.js:115 src/notifications.js:74
+#: src/indicator.js:115 src/notifications.js:75
 msgid "Copy"
 msgstr "Αντιγραφή"
 
@@ -98,7 +98,7 @@ msgstr "Αποσολή"
 msgid "Open Link"
 msgstr "Άνοιγμα συνδέσμου"
 
-#: src/indicator.js:135 src/notifications.js:159
+#: src/indicator.js:135 src/notifications.js:162
 msgid "Copy Link"
 msgstr "Αντιγραφή συνδέσμου"
 
@@ -122,40 +122,40 @@ msgstr "Επιλογή επιφάνειας εργασίας"
 msgid "Settings"
 msgstr "Ρυθμίσεις"
 
-#: src/notifications.js:44
+#: src/notifications.js:45
 msgid "New Screenshot"
 msgstr "Νέο στιγμιότυπο"
 
-#: src/notifications.js:49
+#: src/notifications.js:50
 msgid "Size:"
 msgstr "Μέγεθος:"
 
-#: src/notifications.js:75
+#: src/notifications.js:76
 msgid "Save"
 msgstr "Αποθήκευση"
 
-#: src/notifications.js:79
+#: src/notifications.js:80
 #, fuzzy
 msgid "Uploading To Imgur..."
 msgstr "Αποστολή στο Imgur"
 
-#: src/notifications.js:81
+#: src/notifications.js:82
 msgid "Upload To Imgur"
 msgstr "Αποστολή στο Imgur"
 
-#: src/notifications.js:110
+#: src/notifications.js:112
 msgid "Error"
 msgstr "Σφάλμα"
 
-#: src/notifications.js:121 src/notifications.js:133
+#: src/notifications.js:124 src/notifications.js:136
 msgid "Imgur Upload"
 msgstr "Αποστολή στο Imgur"
 
-#: src/notifications.js:139
+#: src/notifications.js:142
 msgid "Imgur Upload Failed"
 msgstr "Ανεπιτυχής αποστολή στο Imgur"
 
-#: src/notifications.js:144
+#: src/notifications.js:147
 msgid "Imgur Upload Successful"
 msgstr "Επιτυχής αποστολή στο Imgur"
 

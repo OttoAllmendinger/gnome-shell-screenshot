@@ -78,7 +78,7 @@ msgstr "Ritardo acquisizione"
 msgid "Clear"
 msgstr "Svuota"
 
-#: src/indicator.js:115 src/notifications.js:74
+#: src/indicator.js:115 src/notifications.js:75
 msgid "Copy"
 msgstr "Copia"
 
@@ -98,7 +98,7 @@ msgstr "Upload"
 msgid "Open Link"
 msgstr "Apri link"
 
-#: src/indicator.js:135 src/notifications.js:159
+#: src/indicator.js:135 src/notifications.js:162
 msgid "Copy Link"
 msgstr "Copia link"
 
@@ -122,39 +122,39 @@ msgstr "Seleziona la scrivania"
 msgid "Settings"
 msgstr "Impostazioni"
 
-#: src/notifications.js:44
+#: src/notifications.js:45
 msgid "New Screenshot"
 msgstr "Nuovo screenshot"
 
-#: src/notifications.js:49
+#: src/notifications.js:50
 msgid "Size:"
 msgstr "Dimensione:"
 
-#: src/notifications.js:75
+#: src/notifications.js:76
 msgid "Save"
 msgstr "Salva"
 
-#: src/notifications.js:79
+#: src/notifications.js:80
 msgid "Uploading To Imgur..."
 msgstr "Caricamento su Imgur..."
 
-#: src/notifications.js:81
+#: src/notifications.js:82
 msgid "Upload To Imgur"
 msgstr "Carica su Imgur"
 
-#: src/notifications.js:110
+#: src/notifications.js:112
 msgid "Error"
 msgstr "Errore"
 
-#: src/notifications.js:121 src/notifications.js:133
+#: src/notifications.js:124 src/notifications.js:136
 msgid "Imgur Upload"
 msgstr "Upload su Imgur"
 
-#: src/notifications.js:139
+#: src/notifications.js:142
 msgid "Imgur Upload Failed"
 msgstr "L'upload su Imgur è fallito"
 
-#: src/notifications.js:144
+#: src/notifications.js:147
 msgid "Imgur Upload Successful"
 msgstr "L'upload su Imgur è terminato con successo"
 

@@ -79,7 +79,7 @@ msgstr "Задержка захвата"
 msgid "Clear"
 msgstr "Очистить"
 
-#: src/indicator.js:115 src/notifications.js:74
+#: src/indicator.js:115 src/notifications.js:75
 msgid "Copy"
 msgstr "Копировать"
 
@@ -99,7 +99,7 @@ msgstr "Загрузить"
 msgid "Open Link"
 msgstr "Открыть ссылку"
 
-#: src/indicator.js:135 src/notifications.js:159
+#: src/indicator.js:135 src/notifications.js:162
 msgid "Copy Link"
 msgstr "Копировать ссылку"
 
@@ -123,39 +123,39 @@ msgstr "Выбрать рабочий стол"
 msgid "Settings"
 msgstr "Настройки"
 
-#: src/notifications.js:44
+#: src/notifications.js:45
 msgid "New Screenshot"
 msgstr "Новый снимок"
 
-#: src/notifications.js:49
+#: src/notifications.js:50
 msgid "Size:"
 msgstr "Размер:"
 
-#: src/notifications.js:75
+#: src/notifications.js:76
 msgid "Save"
 msgstr "Сохранить"
 
-#: src/notifications.js:79
+#: src/notifications.js:80
 msgid "Uploading To Imgur..."
 msgstr "Загрузить в Imgur..."
 
-#: src/notifications.js:81
+#: src/notifications.js:82
 msgid "Upload To Imgur"
 msgstr "Загрузить в Imgur"
 
-#: src/notifications.js:110
+#: src/notifications.js:112
 msgid "Error"
 msgstr "Ошибка"
 
-#: src/notifications.js:121 src/notifications.js:133
+#: src/notifications.js:124 src/notifications.js:136
 msgid "Imgur Upload"
 msgstr "Загрузка в Imgur"
 
-#: src/notifications.js:139
+#: src/notifications.js:142
 msgid "Imgur Upload Failed"
 msgstr "Загрузка в Imgur провалилась"
 
-#: src/notifications.js:144
+#: src/notifications.js:147
 msgid "Imgur Upload Successful"
 msgstr "Загрузка в Imgur успешна"
 

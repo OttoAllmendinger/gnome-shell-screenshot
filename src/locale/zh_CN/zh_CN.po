@@ -77,7 +77,7 @@ msgstr "截屏延时"
 msgid "Clear"
 msgstr "清除"
 
-#: src/indicator.js:115 src/notifications.js:74
+#: src/indicator.js:115 src/notifications.js:75
 msgid "Copy"
 msgstr "复制"
 
@@ -97,7 +97,7 @@ msgstr "上传"
 msgid "Open Link"
 msgstr "打开连接"
 
-#: src/indicator.js:135 src/notifications.js:159
+#: src/indicator.js:135 src/notifications.js:162
 msgid "Copy Link"
 msgstr "复制连接"
 
@@ -121,39 +121,39 @@ msgstr "选择桌面"
 msgid "Settings"
 msgstr "设置"
 
-#: src/notifications.js:44
+#: src/notifications.js:45
 msgid "New Screenshot"
 msgstr "新截屏"
 
-#: src/notifications.js:49
+#: src/notifications.js:50
 msgid "Size:"
 msgstr "尺寸："
 
-#: src/notifications.js:75
+#: src/notifications.js:76
 msgid "Save"
 msgstr "保存"
 
-#: src/notifications.js:79
+#: src/notifications.js:80
 msgid "Uploading To Imgur..."
 msgstr "正在上传到 Imgur..."
 
-#: src/notifications.js:81
+#: src/notifications.js:82
 msgid "Upload To Imgur"
 msgstr "上传到 Imgur"
 
-#: src/notifications.js:110
+#: src/notifications.js:112
 msgid "Error"
 msgstr "错误"
 
-#: src/notifications.js:121 src/notifications.js:133
+#: src/notifications.js:124 src/notifications.js:136
 msgid "Imgur Upload"
 msgstr "上传到 Imgur"
 
-#: src/notifications.js:139
+#: src/notifications.js:142
 msgid "Imgur Upload Failed"
 msgstr "上传到 Imgur 失败"
 
-#: src/notifications.js:144
+#: src/notifications.js:147
 msgid "Imgur Upload Successful"
 msgstr "上传到 Imgur 成功"
 
