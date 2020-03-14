@@ -4,9 +4,11 @@ SCHEMA = org.gnome.shell.extensions.screenshot.gschema.xml
 
 LANGUAGES = bg cs de el fr it pl pt_BR ru tr uk zh_CN
 
+all: update_dependencies
+	make archive
+	
 update_dependencies:
 	git submodule update --init
-	make archive
 
 -include gselib/make/gnome-shell-extension.mk
 
