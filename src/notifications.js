@@ -40,7 +40,27 @@ const getSource = () => {
   return source;
 }
 
-const Notification = GObject.registerClass(class Notification extends MessageTray.Notification {
+
+const registerClassCompat = (cls) => {
+  if (Convenience.currentVersionGreater("3.34")) {
+    return GObject.registerClass(cls);
+  } else {
+    Signals.addSignalMethods(cls.prototype);
+    return cls;
+  }
+}
+
+
+const showNotificationCompat = (source, notification) => {
+  if (Convenience.currentVersionGreater("3.34")) {
+    return source.showNotification(notification);
+  } else {
+    return source.notify(notification);
+  }
+}
+
+
+const Notification = registerClassCompat(class Notification extends MessageTray.Notification {
   static _title() {
     return _("New Screenshot");
   }
@@ -103,7 +123,7 @@ const Notification = GObject.registerClass(class Notification extends MessageTra
 });
 
 
-var ErrorNotification = GObject.registerClass(
+var ErrorNotification = registerClassCompat(
   class ErrorNotification extends MessageTray.Notification {
 
   _init(source, message) {
@@ -117,7 +137,7 @@ var ErrorNotification = GObject.registerClass(
 });
 
 
-var ImgurNotification = GObject.registerClass(
+var ImgurNotification = registerClassCompat(
   class ImgurNotification extends MessageTray.Notification {
 
   _init(source, screenshot) {
@@ -183,19 +203,19 @@ var ImgurNotification = GObject.registerClass(
 const notifyScreenshot = (screenshot) => {
   const source = getSource();
   const notification = new Notification(source, screenshot);
-  source.showNotification(notification);
+  showNotificationCompat(source, notification);
 }
 
 const notifyError = (message) => {
   const source = getSource();
   const notification = new ErrorNotification(source, message);
-  source.showNotification(notification);
+  showNotificationCompat(source, notification);
 }
 
 const notifyImgurUpload = (screenshot) => {
   const source = getSource();
   const notification = new ImgurNotification(source, screenshot);
-  source.showNotification(notification);
+  showNotificationCompat(source, notification);
 }
 
 var exports = {
