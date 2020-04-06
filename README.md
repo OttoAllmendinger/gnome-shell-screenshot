@@ -28,6 +28,20 @@ gnome-tweak-tool.
 
 ## Known Issues
 
+### Firejail: `Error: exitCode=256`
+
+When using Firejail, please add this configration:
+
+
+File `/etc/firejail/gjs.local`:
+
+```
+noblacklist ${HOME}/.local/share/gnome-shell
+```
+
+
+
+
 ### Clipboard stops working in Gnome 3.20
 
 On Gnome 3.20, the clipboard stops working after the lock screen appears.
@@ -36,6 +50,7 @@ See https://github.com/OttoAllmendinger/gnome-shell-screenshot/issues/4
 
 As a workaround, restart the shell: `Ctrl-F2` `r` `Enter`. The clipboard
 should work again afterwards.
+
 
 ## Contributors
 
