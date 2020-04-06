@@ -65,95 +65,95 @@ msgstr "主机名"
 msgid "Parameters:"
 msgstr "参数"
 
-#: src/indicator.js:95
+#: src/indicator.js:102
 msgid "No Capture Delay"
 msgstr "无延时截屏"
 
-#: src/indicator.js:97 src/indicator.js:99
+#: src/indicator.js:104 src/indicator.js:106
 msgid "Capture Delay"
 msgstr "截屏延时"
 
-#: src/indicator.js:114
+#: src/indicator.js:121
 msgid "Clear"
 msgstr "清除"
 
-#: src/indicator.js:115 src/notifications.js:75
+#: src/indicator.js:122 src/notifications.js:95
 msgid "Copy"
 msgstr "复制"
 
-#: src/indicator.js:116
+#: src/indicator.js:123
 msgid "Save As..."
 msgstr "另存为..."
 
-#: src/indicator.js:132
+#: src/indicator.js:139
 msgid "Imgur"
 msgstr "Imgur"
 
-#: src/indicator.js:133
+#: src/indicator.js:140
 msgid "Upload"
 msgstr "上传"
 
-#: src/indicator.js:134
+#: src/indicator.js:141
 msgid "Open Link"
 msgstr "打开连接"
 
-#: src/indicator.js:135 src/notifications.js:162
+#: src/indicator.js:142 src/notifications.js:182
 msgid "Copy Link"
 msgstr "复制连接"
 
-#: src/indicator.js:136
+#: src/indicator.js:143
 msgid "Delete"
 msgstr "删除"
 
-#: src/indicator.js:290 src/prefs.js:144
+#: src/indicator.js:297 src/prefs.js:144
 msgid "Select Area"
 msgstr "选择区域"
 
-#: src/indicator.js:291 src/prefs.js:145
+#: src/indicator.js:298 src/prefs.js:145
 msgid "Select Window"
 msgstr "选择窗口"
 
-#: src/indicator.js:292 src/prefs.js:146
+#: src/indicator.js:299 src/prefs.js:146
 msgid "Select Desktop"
 msgstr "选择桌面"
 
-#: src/indicator.js:320
+#: src/indicator.js:327
 msgid "Settings"
 msgstr "设置"
 
-#: src/notifications.js:45
+#: src/notifications.js:65
 msgid "New Screenshot"
 msgstr "新截屏"
 
-#: src/notifications.js:50
+#: src/notifications.js:70
 msgid "Size:"
 msgstr "尺寸："
 
-#: src/notifications.js:76
+#: src/notifications.js:96
 msgid "Save"
 msgstr "保存"
 
-#: src/notifications.js:80
+#: src/notifications.js:100
 msgid "Uploading To Imgur..."
 msgstr "正在上传到 Imgur..."
 
-#: src/notifications.js:82
+#: src/notifications.js:102
 msgid "Upload To Imgur"
 msgstr "上传到 Imgur"
 
-#: src/notifications.js:112
+#: src/notifications.js:132
 msgid "Error"
 msgstr "错误"
 
-#: src/notifications.js:124 src/notifications.js:136
+#: src/notifications.js:144 src/notifications.js:156
 msgid "Imgur Upload"
 msgstr "上传到 Imgur"
 
-#: src/notifications.js:142
+#: src/notifications.js:162
 msgid "Imgur Upload Failed"
 msgstr "上传到 Imgur 失败"
 
-#: src/notifications.js:147
+#: src/notifications.js:167
 msgid "Imgur Upload Successful"
 msgstr "上传到 Imgur 成功"
 
