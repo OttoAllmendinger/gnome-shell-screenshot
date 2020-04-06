@@ -38,6 +38,11 @@ const getActorCompat = (obj) =>
 const getSliderSignalCompat = (obj) =>
   Convenience.currentVersionGreaterEqual("3.33") ? "notify::value": "value-changed";
 
+const addActorCompat = (actor, child) =>
+  Convenience.currentVersionGreater("3.36")
+    ? actor.add_child(child)
+    : actor.add(child, { expand: true })
+
 class CaptureDelayMenu extends PopupMenu.PopupMenuSection {
   createScale() {
     const scale = [0];
@@ -58,8 +63,10 @@ class CaptureDelayMenu extends PopupMenu.PopupMenuSection {
     this.slider = new Slider.Slider(this.scaleToSlider(this.delayValueMS));
     this.slider.connect(getSliderSignalCompat(), this.onDragEnd.bind(this));
     this.sliderItem = new PopupMenu.PopupBaseMenuItem({ activate: false });
-    getActorCompat(this.sliderItem).add_actor(
-      getActorCompat(this.slider), { expand: true }
+
+    addActorCompat(
+      getActorCompat(this.sliderItem),
+      getActorCompat(this.slider)
     );
     this.addMenuItem(this.sliderItem);
 
