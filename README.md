@@ -67,8 +67,3 @@ should work again afterwards.
 
 Also see contributors for
 [gnome-shell-imgur](https://github.com/OttoAllmendinger/gnome-shell-imgur/).
-
-## Tip Address
-
-Bitcoin tip address 1Nh2msr4uwSxTz4Na6DUBj4cEtP5VrjPAg
-
