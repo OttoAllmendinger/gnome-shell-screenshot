@@ -42,7 +42,7 @@ const getSource = () => {
 
 
 const registerClassCompat = (cls) => {
-  if (Convenience.currentVersionGreater("3.34")) {
+  if (Convenience.currentVersionGreaterEqual("3.36")) {
     return GObject.registerClass(cls);
   } else {
     Signals.addSignalMethods(cls.prototype);
@@ -52,7 +52,7 @@ const registerClassCompat = (cls) => {
 
 
 const showNotificationCompat = (source, notification) => {
-  if (Convenience.currentVersionGreater("3.34")) {
+  if (Convenience.currentVersionGreaterEqual("3.36")) {
     return source.showNotification(notification);
   } else {
     return source.notify(notification);
