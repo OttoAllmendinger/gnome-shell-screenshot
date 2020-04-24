@@ -71,14 +71,26 @@ const Notification = registerClassCompat(class Notification extends MessageTray.
     return banner;
   }
 
-  _init(source, screenshot) {
-    super._init(
+  static ctrArgs(source, screenshot) {
+    return [
       source,
       Notification._title(),
       Notification._banner(screenshot),
       { gicon: Thumbnail.getIcon(screenshot.srcFile.get_path()) }
-    );
+    ];
+  }
 
+  constructor(source, screenshot) {
+    super(...Notification.ctrArgs(...arguments));
+    this.initCompat(...arguments);
+  }
+
+  _init(source, screenshot) {
+    super._init(...Notification.ctrArgs(...arguments));
+    this.initCompat(...arguments);
+  }
+
+  initCompat(source, screenshot) {
     this.connect("activated", this._onActivated.bind(this));
 
     // makes banner expand on hover
@@ -126,13 +138,21 @@ const Notification = registerClassCompat(class Notification extends MessageTray.
 var ErrorNotification = registerClassCompat(
   class ErrorNotification extends MessageTray.Notification {
 
-  _init(source, message) {
-    super._init(
+  static ctrArgs(source, message) {
+    return [
       source,
       _("Error"),
       String(message),
       { secondaryGIcon: new Gio.ThemedIcon({name: "dialog-error"}) }
-    );
+    ]
+  }
+
+  constructor(source, message) {
+    super(...ErrorNotification.ctrArgs(...arguments));
+  }
+
+  _init(source, message) {
+    super._init(...ErrorNotification.ctrArgs(...arguments));
   }
 });
 
@@ -140,8 +160,17 @@ var ErrorNotification = registerClassCompat(
 var ImgurNotification = registerClassCompat(
   class ImgurNotification extends MessageTray.Notification {
 
+  constructor(source, screenshot) {
+    super(source, _("Imgur Upload"));
+    this.initCompat(...arguments);
+  }
+
   _init(source, screenshot) {
     super._init(source, _("Imgur Upload"));
+    this.initCompat(...arguments);
+  }
+
+  initCompat(source, screenshot) {
     this.setForFeedback(true);
     this.setResident(true);
 
