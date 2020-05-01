@@ -1,0 +1,277 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2020-05-01 11:30+0200\n"
+"Last-Translator: Joan Coll Cerdán <johan.az@gmail.com>\n"
+"Language-Team: \n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.3\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: src/filename.js:27
+msgid "Screenshot"
+msgstr "Captura de pantalla"
+
+#: src/filename.js:27
+msgid "Screenshot (literal)"
+msgstr "Captura de pantalla (literal)"
+
+#: src/filename.js:28
+msgid "Year"
+msgstr "Año"
+
+#: src/filename.js:29
+msgid "Month"
+msgstr "Mes"
+
+#: src/filename.js:30
+msgid "Day"
+msgstr "Día"
+
+#: src/filename.js:31
+msgid "Hour"
+msgstr "Hora"
+
+#: src/filename.js:32
+msgid "Minute"
+msgstr "Minuto"
+
+#: src/filename.js:33
+msgid "Second"
+msgstr "Segundo"
+
+#: src/filename.js:34
+msgid "Width"
+msgstr "Anchura"
+
+#: src/filename.js:35
+msgid "Height"
+msgstr "Altura"
+
+#: src/filename.js:36
+msgid "Hostname"
+msgstr "Hostname"
+
+#: src/filename.js:41
+msgid "Parameters:"
+msgstr "Parámetros:"
+
+#: src/indicator.js:102
+msgid "No Capture Delay"
+msgstr "Sin retardo de captura"
+
+#: src/indicator.js:104 src/indicator.js:106
+msgid "Capture Delay"
+msgstr "Retardo de captura"
+
+#: src/indicator.js:121
+msgid "Clear"
+msgstr "Descartar"
+
+#: src/indicator.js:122 src/notifications.js:109
+msgid "Copy"
+msgstr "Copiar"
+
+#: src/indicator.js:123
+msgid "Save As..."
+msgstr "Guardar como..."
+
+#: src/indicator.js:139
+msgid "Imgur"
+msgstr "Imgur"
+
+#: src/indicator.js:140
+msgid "Upload"
+msgstr "Subir"
+
+#: src/indicator.js:141
+msgid "Open Link"
+msgstr "Abrir enlace"
+
+#: src/indicator.js:142 src/notifications.js:213
+msgid "Copy Link"
+msgstr "Copiar enlace"
+
+#: src/indicator.js:143
+msgid "Delete"
+msgstr "Eliminar"
+
+#: src/indicator.js:297 src/prefs.js:144
+msgid "Select Area"
+msgstr "Seleccionar área"
+
+#: src/indicator.js:298 src/prefs.js:145
+msgid "Select Window"
+msgstr "Seleccionar ventana"
+
+#: src/indicator.js:299 src/prefs.js:146
+msgid "Select Desktop"
+msgstr "Seleccionar escritorio"
+
+#: src/indicator.js:327
+msgid "Settings"
+msgstr "Configuración"
+
+#: src/notifications.js:67
+msgid "New Screenshot"
+msgstr "Nueva captura de pantalla"
+
+#: src/notifications.js:72
+msgid "Size:"
+msgstr "Tamaño:"
+
+#: src/notifications.js:110
+msgid "Save"
+msgstr "Guardar"
+
+#: src/notifications.js:114
+msgid "Uploading To Imgur..."
+msgstr "Subiendo a Imgur..."
+
+#: src/notifications.js:116
+msgid "Upload To Imgur"
+msgstr "Subir a Imgur"
+
+#: src/notifications.js:146
+msgid "Error"
+msgstr "Error"
+
+#: src/notifications.js:166 src/notifications.js:171 src/notifications.js:187
+msgid "Imgur Upload"
+msgstr "Subida a Imgur"
+
+#: src/notifications.js:193
+msgid "Imgur Upload Failed"
+msgstr "Subida a Imgur fallida"
+
+#: src/notifications.js:198
+msgid "Imgur Upload Successful"
+msgstr "Subida a Imgur completada"
+
+#: src/prefs.js:86
+msgid "Indicator"
+msgstr "Indicador"
+
+#: src/prefs.js:90
+msgid "Storage"
+msgstr "Almacenamiento"
+
+#: src/prefs.js:94
+msgid "Imgur Upload (Beta)"
+msgstr "Subida a Imgur (Beta)"
+
+#: src/prefs.js:98
+msgid "Keybindings"
+msgstr "Atajos"
+
+#: src/prefs.js:117
+msgid "Show Indicator"
+msgstr "Mostrar indicador"
+
+#: src/prefs.js:126
+msgid "Show Notification After Capture"
+msgstr "Mostrar notificación tras la captura"
+
+#: src/prefs.js:138
+msgid "Primary Button"
+msgstr "Botón primario"
+
+#: src/prefs.js:147
+msgid "Show Menu"
+msgstr "Mostrar menú"
+
+#: src/prefs.js:168
+msgid "Auto-Copy to Clipboard"
+msgstr "Copiar automáticamente al portapapeles"
+
+#: src/prefs.js:174
+msgid "Nothing"
+msgstr "Nada"
+
+#: src/prefs.js:175
+msgid "Image Data"
+msgstr "Datos de la imagen"
+
+#: src/prefs.js:211
+msgid "Auto-Save Screenshot"
+msgstr "Guardar captura automáticamente"
+
+#: src/prefs.js:222
+msgid "Save Location"
+msgstr "Ubicación de guardado"
+
+#: src/prefs.js:229
+msgid "Select"
+msgstr "Seleccionar"
+
+#: src/prefs.js:270
+msgid "Default Filename"
+msgstr "Nombre predeterminado"
+
+#: src/prefs.js:295
+msgid "Preview"
+msgstr "Previsualizar"
+
+#: src/prefs.js:353
+msgid "Enable Imgur Upload"
+msgstr "Activar subida a Imgur"
+
+#: src/prefs.js:361
+msgid "Show Upload Notification"
+msgstr "Mostrar notificación de subida"
+
+#: src/prefs.js:378
+msgid "Auto-Upload After Capture"
+msgstr "Subir automáticamente tras la captura"
+
+#: src/prefs.js:393
+msgid "Auto-Copy Link After Upload"
+msgstr "Copiar enlace automáticamente tras la subida"
+
+#: src/prefs.js:408
+msgid "Auto-Open Link After Upload"
+msgstr "Abrir enlace automáticamente tras la subida"
+
+#: src/prefs.js:434
+msgid "Select area"
+msgstr "Seleccionar área"
+
+#: src/prefs.js:435
+msgid "Select window"
+msgstr "Seleccionar ventana"
+
+#: src/prefs.js:436
+msgid "Select whole desktop"
+msgstr "Seleccionar escritorio completo"
+
+#: src/prefs.js:463
+msgid "Keyboard Shortcut"
+msgstr "Atajo de teclado"
+
+#: src/prefs.js:503
+msgid "Modify"
+msgstr "Modificar"
+
+#: src/saveDlg.js:28
+msgid "_Cancel"
+msgstr "_Cancelar"
+
+#: src/saveDlg.js:29
+msgid "_Save"
+msgstr "_Guardar"
+
+#: src/selection.js:229
+msgid "selected region was too small - please select a larger area"
+msgstr ""
+"la región seleccionada es demasiado pequeña - por favor, seleccione un área "
+"más grande"
