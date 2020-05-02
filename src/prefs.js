@@ -173,7 +173,7 @@ const ScreenshotToolSettingsWidget = new GObject.Class({
     const comboBoxOptions = [
       [_("Nothing"), Config.ClipboardActions.NONE],
       [_("Image Data"), Config.ClipboardActions.SET_IMAGE_DATA],
-      // [_("Local Path")    , Config.ClipboardActions.SET_LOCAL_PATH]
+      [_("Local Path")    , Config.ClipboardActions.SET_LOCAL_PATH]
       // TODO
       // [_("Remote URL")    , Config.ClipboardActions.SET_REMOTE_URL]
     ];
