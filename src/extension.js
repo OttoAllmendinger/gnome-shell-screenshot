@@ -99,6 +99,13 @@ class Screenshot {
     Clipboard.setImage(this.gtkImage);
     this.inClipboard = true;
   }
+  
+  linkClipboard() {
+	if(this.dstFile)
+		Clipboard.setText(this.dstFile.get_path());
+	else if(this.srcFile)
+		Clipboard.setText(this.srcFile.get_path());
+  }
 
   imgurStartUpload() {
     this.imgurUpload = new UploadImgur.Upload(this.srcFile);
@@ -279,15 +286,18 @@ class Extension {
 
   _onScreenshot(selection, filePath) {
     const screenshot = new Screenshot(filePath);
-    const clipboardAction = settings.get_string(Config.KeyClipboardAction);
-    if (clipboardAction == Config.ClipboardActions.SET_IMAGE_DATA) {
-      screenshot.copyClipboard();
-    }
 
     if (settings.get_boolean(Config.KeySaveScreenshot)) {
       screenshot.autosave();
     }
 
+    const clipboardAction = settings.get_string(Config.KeyClipboardAction);
+    if (clipboardAction == Config.ClipboardActions.SET_IMAGE_DATA) {
+      screenshot.copyClipboard();
+    }else if(clipboardAction == Config.ClipboardActions.SET_LOCAL_PATH) {
+		 screenshot.linkClipboard()
+    }
+    
     if (settings.get_boolean(Config.KeyEnableNotification)) {
       Notifications.notifyScreenshot(screenshot);
     }
