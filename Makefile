@@ -2,7 +2,7 @@ NAME = gnome-shell-screenshot
 UUID = $(NAME)@ttll.de
 SCHEMA = org.gnome.shell.extensions.screenshot.gschema.xml
 
-LANGUAGES = bg cs de el es fr it pl pt_BR ru tr uk zh_CN
+LANGUAGES = bg ca cs de el es fr it pl pt_BR ru tr uk zh_CN
 
 all: update_dependencies
 	make archive
