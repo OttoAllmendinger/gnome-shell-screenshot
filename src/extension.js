@@ -39,7 +39,8 @@ const settings = Convenience.getSettings();
 
 const getSelectionOptions = () => {
   const captureDelay = settings.get_int(Config.KeyCaptureDelay);
-  return { captureDelay }
+  const ignoreDbusOk = settings.get_boolean(Config.KeyAuxHelperIgnoreDBusOK);
+  return { captureDelay, ignoreDbusOk };
 }
 
 class Screenshot {

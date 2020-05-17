@@ -49,4 +49,6 @@ var exports = {
   KeyImgurAutoUpload: "imgur-auto-upload",
   KeyImgurAutoCopyLink: "imgur-auto-copy-link",
   KeyImgurAutoOpenLink: "imgur-auto-open-link",
+
+  KeyAuxHelperIgnoreDBusOK: "auxhelper-ignore-dbus-ok",
 };

@@ -69,8 +69,14 @@ const selectWindow = (windows, px, py) => {
   return filtered[0];
 };
 
-const callHelper = (argv, fileName, callback) => {
-  argv = ["gjs", Local.path + "/auxhelper.js", "--filename", fileName, ...argv];
+const callHelper = (options, appendArgv, fileName, callback) => {
+  const argv = ["gjs", Local.path + "/auxhelper.js"];
+  if (options.ignoreDbusOk) {
+    argv.push("--ignore-dbus-ok");
+  }
+  argv.push("--filename", fileName, ...appendArgv);
+
+  // log(JSON.stringify(options));
   // log(argv.join(' '));
   const [success, pid] = GLib.spawn_async(
     null, /* pwd */
@@ -92,19 +98,19 @@ const callHelper = (argv, fileName, callback) => {
 }
 
 
-const makeAreaScreenshot = ({x, y, w, h}, callback) => {
+const makeAreaScreenshot = (options, {x, y, w, h}, callback) => {
   const fileName = Filename.getTemp();
-  callHelper(["--area", [x, y, w, h].join(",")], fileName, callback);
+  callHelper(options, ["--area", [x, y, w, h].join(",")], fileName, callback);
 };
 
-const makeWindowScreenshot = (callback) => {
+const makeWindowScreenshot = (options, callback) => {
   const fileName = Filename.getTemp();
-  callHelper(["--window"], fileName, callback);
+  callHelper(options, ["--window"], fileName, callback);
 };
 
-const makeDesktopScreenshot = (callback) => {
+const makeDesktopScreenshot = (options, callback) => {
   const fileName = Filename.getTemp();
-  callHelper(["--desktop"], fileName, callback);
+  callHelper(options, ["--desktop"], fileName, callback);
 };
 
 
@@ -243,7 +249,7 @@ class SelectionArea {
     }
 
     Mainloop.timeout_add(this._options.captureDelay, () => {
-      makeAreaScreenshot(region, emitScreenshotOnSuccess(this))
+      makeAreaScreenshot(this._options, region, emitScreenshotOnSuccess(this))
     });
   }
 }
@@ -293,7 +299,7 @@ class SelectionWindow {
     Mainloop.timeout_add(this._options.captureDelay, () => {
       Main.activateWindow(win.get_meta_window());
       Mainloop.idle_add(() =>
-        makeWindowScreenshot(emitScreenshotOnSuccess(this))
+        makeWindowScreenshot(this._options, emitScreenshotOnSuccess(this))
       );
     });
   }
@@ -310,7 +316,7 @@ class SelectionDesktop {
   constructor(options) {
     this._options = options;
     Mainloop.timeout_add(this._options.captureDelay, () => {
-      makeDesktopScreenshot(emitScreenshotOnSuccess(this));
+      makeDesktopScreenshot(this._options, emitScreenshotOnSuccess(this));
       this.emit("stop");
     });
   }

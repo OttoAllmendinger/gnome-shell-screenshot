@@ -89,8 +89,12 @@
     <key name="imgur-auto-open-link" type="b">
       <default>false</default>
     </key>
+
+    <key name="auxhelper-ignore-dbus-ok" type="b">
+      <default>false</default>
+    </key>
   </schema>
 </schemalist>
 <!--
-vi:sts=2:st=2:et
+vi:sts=2:et
 -->

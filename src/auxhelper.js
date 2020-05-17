@@ -122,6 +122,7 @@ const params = {
   "--flash"             : "flash",
   "--filename FILENAME" : "output file",
   "--spawntest"         : "test GLib spawn call",
+  "--ignore-dbus-ok"    : "ignore `ok` result of dbus call",
   "--debug"             : "print debug output",
   "--help"              : "show this"
 }
@@ -203,8 +204,14 @@ const main = () => {
   logDebug("calling func...");
   const [ok, fileNameUsed] = func();
   if (!ok) {
-    throw new Error("ok=false");
+    const err = new Error("ok=false");
+    if (opts.ignoreDbusOk) {
+      logError(`${err} - ignoreDbusOk set, continuing...`);
+    } else {
+      throw err;
+    }
   }
+
   if (fileName !== fileNameUsed) {
     throw new Error(`path mismatch fileName=${fileName} fileNameUsed=${fileNameUsed}`)
   }
