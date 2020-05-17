@@ -234,7 +234,7 @@ class ScreenshotSection {
   }
 
   _onCopy() {
-    this._screenshot.copyClipboard();
+    this._screenshot.copyClipboard(settings.get_string(Config.KeyCopyButtonAction));
   }
 
   _onSave() {
