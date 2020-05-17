@@ -1,0 +1,272 @@
+# Basque translations for PACKAGE package.
+# Copyright (C) 2020 THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Ibai Oihanguren Sala <ibai@oihanguren.com>, 2020.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2020-05-07 21:07+0200\n"
+"Last-Translator: Ibai Oihanguren Sala <ibai@oihanguren.com>\n"
+"Language-Team: Basque\n"
+"Language: eu\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ASCII\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/filename.js:27
+msgid "Screenshot"
+msgstr "Pantaila-argazkia"
+
+#: src/filename.js:27
+msgid "Screenshot (literal)"
+msgstr "Pantaila-argazkia (literala)"
+
+#: src/filename.js:28
+msgid "Year"
+msgstr "Urtea"
+
+#: src/filename.js:29
+msgid "Month"
+msgstr "Hila"
+
+#: src/filename.js:30
+msgid "Day"
+msgstr "Eguna"
+
+#: src/filename.js:31
+msgid "Hour"
+msgstr "Ordua"
+
+#: src/filename.js:32
+msgid "Minute"
+msgstr "Minutua"
+
+#: src/filename.js:33
+msgid "Second"
+msgstr "Segundoa"
+
+#: src/filename.js:34
+msgid "Width"
+msgstr "Zabalera"
+
+#: src/filename.js:35
+msgid "Height"
+msgstr "Altuera"
+
+#: src/filename.js:36
+msgid "Hostname"
+msgstr "Ostalari-izena"
+
+#: src/filename.js:41
+msgid "Parameters:"
+msgstr "Parametroak:"
+
+#: src/indicator.js:102
+msgid "No Capture Delay"
+msgstr "Ateratzeko atzerapenik ez"
+
+#: src/indicator.js:104 src/indicator.js:106
+msgid "Capture Delay"
+msgstr "Ateratzeko atzerapena"
+
+#: src/indicator.js:121
+msgid "Clear"
+msgstr "Garbitu"
+
+#: src/indicator.js:122 src/notifications.js:95
+msgid "Copy"
+msgstr "Kopiatu"
+
+#: src/indicator.js:123
+msgid "Save As..."
+msgstr "Gorde honela..."
+
+#: src/indicator.js:139
+msgid "Imgur"
+msgstr "Imgur"
+
+#: src/indicator.js:140
+msgid "Upload"
+msgstr "Igo"
+
+#: src/indicator.js:141
+msgid "Open Link"
+msgstr "Ireki esteka"
+
+#: src/indicator.js:142 src/notifications.js:182
+msgid "Copy Link"
+msgstr "Kopiatu esteka"
+
+#: src/indicator.js:143
+msgid "Delete"
+msgstr "Ezabatu"
+
+#: src/indicator.js:297 src/prefs.js:144
+msgid "Select Area"
+msgstr "Hautatu eremua"
+
+#: src/indicator.js:298 src/prefs.js:145
+msgid "Select Window"
+msgstr "Hautatu leihoa"
+
+#: src/indicator.js:299 src/prefs.js:146
+msgid "Select Desktop"
+msgstr "Hautatu mahaigaina"
+
+#: src/indicator.js:327
+msgid "Settings"
+msgstr "Ezarpenak"
+
+#: src/notifications.js:65
+msgid "New Screenshot"
+msgstr "Pantaila-argazki berria"
+
+#: src/notifications.js:70
+msgid "Size:"
+msgstr "Tamaina:"
+
+#: src/notifications.js:96
+msgid "Save"
+msgstr "Gorde"
+
+#: src/notifications.js:100
+msgid "Uploading To Imgur..."
+msgstr "Igo Imgur-era..."
+
+#: src/notifications.js:102
+msgid "Upload To Imgur"
+msgstr "Igo Imgur-era"
+
+#: src/notifications.js:132
+msgid "Error"
+msgstr "Errorea"
+
+#: src/notifications.js:144 src/notifications.js:156
+msgid "Imgur Upload"
+msgstr "Imgur-era igoera"
+
+#: src/notifications.js:162
+msgid "Imgur Upload Failed"
+msgstr "Huts egin du Imgur-era igotzeak"
+
+#: src/notifications.js:167
+msgid "Imgur Upload Successful"
+msgstr "Imgur-era behar bezala igo da"
+
+#: src/prefs.js:86
+msgid "Indicator"
+msgstr "Adierazlea"
+
+#: src/prefs.js:90
+msgid "Storage"
+msgstr "Biltegiratzea"
+
+#: src/prefs.js:94
+msgid "Imgur Upload (Beta)"
+msgstr "Imgur-era igoera (Beta)"
+
+#: src/prefs.js:98
+msgid "Keybindings"
+msgstr "Laster-teklak"
+
+#: src/prefs.js:117
+msgid "Show Indicator"
+msgstr "Erakutsi adierazlea"
+
+#: src/prefs.js:126
+msgid "Show Notification After Capture"
+msgstr "Erakutsi jakinarazpena argazkia atera ondoren"
+
+#: src/prefs.js:138
+msgid "Primary Button"
+msgstr "Botoi nagusia"
+
+#: src/prefs.js:147
+msgid "Show Menu"
+msgstr "Erakutsi menua"
+
+#: src/prefs.js:168
+msgid "Auto-Copy to Clipboard"
+msgstr "Kopiatu arbelera automatikoki"
+
+#: src/prefs.js:174
+msgid "Nothing"
+msgstr "Ezer ez"
+
+#: src/prefs.js:175
+msgid "Image Data"
+msgstr "Irudia"
+
+#: src/prefs.js:211
+msgid "Auto-Save Screenshot"
+msgstr "Gorde pantaila-argazkia automatikoki"
+
+#: src/prefs.js:222
+msgid "Save Location"
+msgstr "Gordetzeko kokalekua"
+
+#: src/prefs.js:229
+msgid "Select"
+msgstr "Hautatu"
+
+#: src/prefs.js:270
+msgid "Default Filename"
+msgstr "Fitxategi-izen lehenetsia"
+
+#: src/prefs.js:295
+msgid "Preview"
+msgstr "Aurrebista"
+
+#: src/prefs.js:353
+msgid "Enable Imgur Upload"
+msgstr "Gaitu Imgur-era igotzea"
+
+#: src/prefs.js:361
+msgid "Show Upload Notification"
+msgstr "Erakutsi igoeraren jakinarazpena"
+
+#: src/prefs.js:378
+msgid "Auto-Upload After Capture"
+msgstr "Argazkia atera ondoren, igo automatikoki"
+
+#: src/prefs.js:393
+msgid "Auto-Copy Link After Upload"
+msgstr "Igo ondoren, kopiatu esteka automatikoki"
+
+#: src/prefs.js:408
+msgid "Auto-Open Link After Upload"
+msgstr "Igo ondoren, ireki esteka automatikoki"
+
+#: src/prefs.js:434
+msgid "Select area"
+msgstr "Hautatu eremua"
+
+#: src/prefs.js:435
+msgid "Select window"
+msgstr "Hautatu leihoa"
+
+#: src/prefs.js:436
+msgid "Select whole desktop"
+msgstr "Hautatu mahaigain osoa"
+
+#: src/prefs.js:463
+msgid "Keyboard Shortcut"
+msgstr "Laster-tekla"
+
+#: src/prefs.js:503
+msgid "Modify"
+msgstr "Aldatu"
+
+#: src/saveDlg.js:28
+msgid "_Cancel"
+msgstr "_Utzi"
+
+#: src/saveDlg.js:29
+msgid "_Save"
+msgstr "_Gorde"
+
+#: src/selection.js:228
+msgid "selected region was too small - please select a larger area"
+msgstr "hautatutako eremua txikiegia zen - hautatu eremu handiagoa"
