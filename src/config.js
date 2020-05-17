@@ -34,8 +34,10 @@ var exports = {
 
   KeyFilenameTemplate: "filename-template",
 
-  // See schemas/org.gnome.shell.extensions.screenshot.gschema.xml
+  // "Auto-Copy to Clipboard" action
   KeyClipboardAction: "clipboard-action",
+  // Copy button action
+  KeyCopyButtonAction: "copy-button-action",
 
   ClipboardActions: {
     NONE: "none",
