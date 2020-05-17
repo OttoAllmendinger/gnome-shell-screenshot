@@ -70,6 +70,12 @@
       <default>'none'</default>
     </key>
 
+    <key
+        name="copy-button-action"
+        enum="org.gnome.shell.extensions.screenshot.clipboard-action">
+      <default>'set-image-data'</default>
+    </key>
+
     <key name="enable-imgur" type="b">
       <default>false</default>
     </key>

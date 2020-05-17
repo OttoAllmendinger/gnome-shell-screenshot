@@ -48,7 +48,6 @@ class Screenshot {
       throw new Error(`need argument ${filePath}`);
     }
     this.gtkImage = new Gtk.Image({file: filePath});
-    this.inClipboard = false;
     this.srcFile = Gio.File.new_for_path(filePath);
     this.dstFile = null;
   }
@@ -95,9 +94,22 @@ class Screenshot {
     ]);
   }
 
-  copyClipboard() {
-    Clipboard.setImage(this.gtkImage);
-    this.inClipboard = true;
+  copyClipboard(action) {
+    if (action === Config.ClipboardActions.NONE) {
+      return;
+    } else if (action === Config.ClipboardActions.SET_IMAGE_DATA) {
+      return Clipboard.setImage(this.gtkImage);
+    } else if (action === Config.ClipboardActions.SET_LOCAL_PATH) {
+      if (this.dstFile) {
+        return Clipboard.setText(this.dstFile.get_path());
+      } else if (this.srcFile) {
+        return Clipboard.setText(this.srcFile.get_path());
+      }
+
+      return logError(new Error("no dstFile and no srcFile"));
+    }
+
+    logError(new Error(`unknown action ${action}`));
   }
 
   imgurStartUpload() {
@@ -279,14 +291,12 @@ class Extension {
 
   _onScreenshot(selection, filePath) {
     const screenshot = new Screenshot(filePath);
-    const clipboardAction = settings.get_string(Config.KeyClipboardAction);
-    if (clipboardAction == Config.ClipboardActions.SET_IMAGE_DATA) {
-      screenshot.copyClipboard();
-    }
 
     if (settings.get_boolean(Config.KeySaveScreenshot)) {
       screenshot.autosave();
     }
+
+    screenshot.copyClipboard(settings.get_string(Config.KeyClipboardAction));
 
     if (settings.get_boolean(Config.KeyEnableNotification)) {
       Notifications.notifyScreenshot(screenshot);

@@ -162,35 +162,53 @@ const ScreenshotToolSettingsWidget = new GObject.Class({
 
     /* Clipboard Action [dropdown] */
 
-    hbox = buildHbox();
-
-    const labelAutoCopy = new Gtk.Label({
-      label: _("Auto-Copy to Clipboard"),
-      xalign: 0,
-      expand: true
-    });
-
-    const comboBoxOptions = [
+    const [
+      optionNothing,
+      optionImageData,
+      optionLocalPath
+    ] = [
       [_("Nothing"), Config.ClipboardActions.NONE],
       [_("Image Data"), Config.ClipboardActions.SET_IMAGE_DATA],
-      // [_("Local Path")    , Config.ClipboardActions.SET_LOCAL_PATH]
+      [_("Local Path"), Config.ClipboardActions.SET_LOCAL_PATH]
       // TODO
       // [_("Remote URL")    , Config.ClipboardActions.SET_REMOTE_URL]
     ];
 
+    const clipboardActionDropdown = (label, { options, configKey }) => {
+      hbox = buildHbox();
 
-    const currentClipboardAction =
-      _settings.get_string(Config.KeyClipboardAction);
+      const labelAutoCopy = new Gtk.Label({
+        label,
+        xalign: 0,
+        expand: true
+      });
 
-    const comboBoxClipboardContent = this._getComboBox(
-      comboBoxOptions, GObject.TYPE_STRING, currentClipboardAction,
-      (value) => _settings.set_string(Config.KeyClipboardAction, value)
+      const currentValue = _settings.get_string(configKey);
+
+      const comboBoxClipboardContent = this._getComboBox(
+        options, GObject.TYPE_STRING, currentValue,
+        (value) => _settings.set_string(configKey, value)
+      );
+
+      hbox.add(labelAutoCopy);
+      hbox.add(comboBoxClipboardContent);
+
+      prefs.add(hbox, {fill: false});
+    }
+
+    clipboardActionDropdown(
+      _("Copy Button"), {
+        options: [optionImageData, optionLocalPath],
+        configKey: Config.KeyCopyButtonAction,
+      }
     );
 
-    hbox.add(labelAutoCopy);
-    hbox.add(comboBoxClipboardContent);
-
-    prefs.add(hbox, {fill: false});
+    clipboardActionDropdown(
+      _("Auto-Copy to Clipboard"), {
+        options: [optionNothing, optionImageData, optionLocalPath],
+        configKey: Config.KeyClipboardAction,
+      }
+    );
 
     return prefs;
   },
