@@ -62,7 +62,7 @@ should work again afterwards.
 * https://github.com/dirosis -- Greek translation
 * https://github.com/AlexGluck, https://github.com/alex-volga -- Russian translation
 * https://github.com/trinaldi -- Portuguese (Brazil) translation
-* https://github.com/alex-volga -- Ukranian translation
+* https://github.com/alex-volga -- Ukrainian translation
 * https://github.com/iamhefang -- Simplified Chinese translation
 * https://github.com/Mavrikant -- Turkish translation
 * https://github.com/Burday -- Bulgarian translation
