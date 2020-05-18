@@ -28,7 +28,10 @@ gnome-tweak-tool.
 
 ## Known Issues
 
-### Firejail: `Error: exitCode=256`
+### `Error: exitCode=256`
+
+
+#### Firejail
 
 When using Firejail, please add this configration:
 
@@ -39,7 +42,16 @@ File `/etc/firejail/gjs.local`:
 noblacklist ${HOME}/.local/share/gnome-shell
 ```
 
+([Reported here](https://github.com/OttoAllmendinger/gnome-shell-screenshot/issues/80))
 
+#### Extension "No Flash for Clipboard Screenshots"
+
+The extension [available here](https://extensions.gnome.org/extension/1474/no-flash-for-clipboard-screenshots/)
+is known to cause problems when used together with gnome-shell-screenshot.
+
+Please deactivate `no-flash-for-clipboard-screenshots` when using gnome-shell-screenshot.
+
+([Reported here](https://github.com/OttoAllmendinger/gnome-shell-screenshot/issues/122))
 
 
 ### Clipboard stops working in Gnome 3.20
