@@ -1,5 +1,5 @@
 {
-    "shell-version": ["3.34", "3.36"],
+    "shell-version": ["3.32", "3.34", "3.36"],
     "uuid": "gnome-shell-screenshot@ttll.de",
     "name": "Screenshot Tool",
     "url": "https://github.com/OttoAllmendinger/gnome-shell-screenshot/",
