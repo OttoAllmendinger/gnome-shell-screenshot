@@ -1,3 +1,6 @@
 [submodule "gselib"]
 	path = gselib
 	url = https://github.com/OttoAllmendinger/gselib.git
+[submodule "ts-for-gjs"]
+	path = ts-for-gjs
+	url = https://github.com/sammydre/ts-for-gjs

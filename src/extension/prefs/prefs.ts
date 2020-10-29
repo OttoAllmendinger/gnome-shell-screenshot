@@ -1,34 +1,30 @@
-/*jshint moz:true */
-// vi: sts=2 sw=2 et
-//
 // accelerator setting based on
 // https://github.com/ambrice/spatialnavigation-tastycactus.com/blob/master/prefs.js
 
-const Signals = imports.signals;
+import * as Gtk from '@imports/Gtk-3.0';
+import * as GLib from '@imports/GLib-2.0';
+import * as GObject from '@imports/GObject-2.0';
 
-const Gtk = imports.gi.Gtk;
-const GLib = imports.gi.GLib;
-const GObject = imports.gi.GObject;
+import * as Path from '../path';
+import * as Config from '../config';
+import * as Filename from '../filename';
+import * as Convenience from '../convenience';
 
-const Gettext = imports.gettext.domain("gnome-shell-screenshot");
+const Gettext = imports.gettext.domain('gnome-shell-screenshot');
 const _ = Gettext.gettext;
-
-const Local = imports.misc.extensionUtils.getCurrentExtension();
-const Path = Local.imports.path.exports;
-const Config = Local.imports.config.exports;
-const Filename = Local.imports.filename.exports;
-const Convenience = Local.imports.convenience.exports;
-
-
 
 let _settings;
 
+declare module '@imports/GObject-2.0' {
+  const TYPE_STRING: GObject.Type;
+  const TYPE_INT: GObject.Type;
+}
 
 const buildHbox = () => {
   return new Gtk.Box({
     orientation: Gtk.Orientation.HORIZONTAL,
     margin_top: 5,
-    expand: false
+    expand: false,
   });
 };
 
@@ -38,44 +34,40 @@ const buildConfigSwitch = (label, configKey) => {
   const gtkLabel = new Gtk.Label({
     label,
     xalign: 0,
-    expand: true
+    expand: true,
   });
 
   const gtkSwitch = new Gtk.Switch();
 
-  gtkSwitch.connect("notify::active", (button) => {
+  gtkSwitch.connect('notify::active', (button) => {
     _settings.set_boolean(configKey, button.active);
   });
 
   gtkSwitch.active = _settings.get_boolean(configKey);
 
   hbox.add(gtkLabel);
-  hbox.add(gtkSwitch);
+  hbox.add((gtkSwitch as unknown) as Gtk.Widget);
 
   return {
     hbox,
     gtkLabel,
-    gtkSwitch
+    gtkSwitch,
   };
 };
 
 const bindSensitivity = (source, target) => {
   const set = () => {
-    target.set_sensitive(source.active)
+    target.set_sensitive(source.active);
   };
-  source.connect("notify::active", set);
+  source.connect('notify::active', set);
   set();
-}
+};
 
-const ScreenshotToolSettingsWidget = new GObject.Class({
-  Name: "ScreenshotToolSettingsWidget",
-  GTypeName: "ScreenshotToolSettingsWidget",
-  Extends: Gtk.Box,
-
+class BaseScreenshotToolSettingsWidget extends Gtk.Box {
   _init(params) {
-    this.parent(params);
+    super._init(params);
     this._initLayout();
-  },
+  }
 
   _initLayout() {
     const notebook = new Gtk.Notebook();
@@ -83,93 +75,86 @@ const ScreenshotToolSettingsWidget = new GObject.Class({
     let page, label;
 
     page = this._makePrefsIndicator();
-    label = new Gtk.Label({label: _("Indicator")});
+    label = new Gtk.Label({ label: _('Indicator') });
     notebook.append_page(page, label);
 
     page = this._makePrefsStorage();
-    label = new Gtk.Label({label: _("Storage")});
+    label = new Gtk.Label({ label: _('Storage') });
     notebook.append_page(page, label);
 
     page = this._makePrefsUploadImgur();
-    label = new Gtk.Label({label: _("Imgur Upload (Beta)")});
+    label = new Gtk.Label({ label: _('Imgur Upload (Beta)') });
     notebook.append_page(page, label);
 
     page = this._makePrefsKeybindings();
-    label = new Gtk.Label({label: _("Keybindings")});
+    label = new Gtk.Label({ label: _('Keybindings') });
     notebook.append_page(page, label);
 
     this.add(notebook);
-  },
+  }
 
   _makePrefsIndicator() {
     const prefs = new Gtk.Box({
       orientation: Gtk.Orientation.VERTICAL,
       margin: 20,
       margin_top: 10,
-      expand: false
+      expand: false,
     });
 
     let hbox;
 
     /* Show indicator [on|off] */
 
-    const switchShowIndicator = buildConfigSwitch(
-      _("Show Indicator"),
-      Config.KeyEnableIndicator
-    );
+    const switchShowIndicator = buildConfigSwitch(_('Show Indicator'), Config.KeyEnableIndicator);
 
-    prefs.add(switchShowIndicator.hbox, {fill: false});
+    prefs.add(switchShowIndicator.hbox);
 
     /* Show notification [on|off] */
 
     const switchShowNotification = buildConfigSwitch(
-      _("Show Notification After Capture"),
-      Config.KeyEnableNotification
+      _('Show Notification After Capture'),
+      Config.KeyEnableNotification,
     );
 
-    prefs.add(switchShowNotification.hbox, {fill: false});
-
+    prefs.add(switchShowNotification.hbox);
 
     /* Default click action [dropdown] */
 
     hbox = buildHbox();
 
     const labelDefaultClickAction = new Gtk.Label({
-      label: _("Primary Button"),
+      label: _('Primary Button'),
       xalign: 0,
-      expand: true
+      expand: true,
     });
 
     const clickActionOptions = [
-      [_("Select Area"), Config.ClickActions.SELECT_AREA],
-      [_("Select Window"), Config.ClickActions.SELECT_WINDOW],
-      [_("Select Desktop"), Config.ClickActions.SELECT_DESKTOP],
-      [_("Show Menu"), Config.ClickActions.SHOW_MENU]
+      [_('Select Area'), Config.ClickActions.SELECT_AREA],
+      [_('Select Window'), Config.ClickActions.SELECT_WINDOW],
+      [_('Select Desktop'), Config.ClickActions.SELECT_DESKTOP],
+      [_('Show Menu'), Config.ClickActions.SHOW_MENU],
     ];
 
     const currentClickAction = _settings.get_enum(Config.KeyClickAction);
 
     const comboBoxDefaultClickAction = this._getComboBox(
-      clickActionOptions, GObject.TYPE_INT, currentClickAction,
-      (value) => _settings.set_enum(Config.KeyClickAction, value)
+      clickActionOptions,
+      GObject.TYPE_INT,
+      currentClickAction,
+      (value) => _settings.set_enum(Config.KeyClickAction, value),
     );
 
     hbox.add(labelDefaultClickAction);
     hbox.add(comboBoxDefaultClickAction);
 
-    prefs.add(hbox, {fill: false});
-
+    prefs.add(hbox);
 
     /* Clipboard Action [dropdown] */
 
-    const [
-      optionNothing,
-      optionImageData,
-      optionLocalPath
-    ] = [
-      [_("Nothing"), Config.ClipboardActions.NONE],
-      [_("Image Data"), Config.ClipboardActions.SET_IMAGE_DATA],
-      [_("Local Path"), Config.ClipboardActions.SET_LOCAL_PATH]
+    const [optionNothing, optionImageData, optionLocalPath] = [
+      [_('Nothing'), Config.ClipboardActions.NONE],
+      [_('Image Data'), Config.ClipboardActions.SET_IMAGE_DATA],
+      [_('Local Path'), Config.ClipboardActions.SET_LOCAL_PATH],
       // TODO
       // [_("Remote URL")    , Config.ClipboardActions.SET_REMOTE_URL]
     ];
@@ -180,87 +165,78 @@ const ScreenshotToolSettingsWidget = new GObject.Class({
       const labelAutoCopy = new Gtk.Label({
         label,
         xalign: 0,
-        expand: true
+        expand: true,
       });
 
       const currentValue = _settings.get_string(configKey);
 
-      const comboBoxClipboardContent = this._getComboBox(
-        options, GObject.TYPE_STRING, currentValue,
-        (value) => _settings.set_string(configKey, value)
+      const comboBoxClipboardContent = this._getComboBox(options, GObject.TYPE_STRING, currentValue, (value) =>
+        _settings.set_string(configKey, value),
       );
 
       hbox.add(labelAutoCopy);
       hbox.add(comboBoxClipboardContent);
 
-      prefs.add(hbox, {fill: false});
-    }
+      prefs.add(hbox);
+    };
 
-    clipboardActionDropdown(
-      _("Copy Button"), {
-        options: [optionImageData, optionLocalPath],
-        configKey: Config.KeyCopyButtonAction,
-      }
-    );
+    clipboardActionDropdown(_('Copy Button'), {
+      options: [optionImageData, optionLocalPath],
+      configKey: Config.KeyCopyButtonAction,
+    });
 
-    clipboardActionDropdown(
-      _("Auto-Copy to Clipboard"), {
-        options: [optionNothing, optionImageData, optionLocalPath],
-        configKey: Config.KeyClipboardAction,
-      }
-    );
+    clipboardActionDropdown(_('Auto-Copy to Clipboard'), {
+      options: [optionNothing, optionImageData, optionLocalPath],
+      configKey: Config.KeyClipboardAction,
+    });
 
     return prefs;
-  },
+  }
 
   _makePrefsStorage() {
     const prefs = new Gtk.Box({
       orientation: Gtk.Orientation.VERTICAL,
       margin: 20,
       margin_top: 10,
-      expand: false
+      expand: false,
     });
 
     let hbox;
 
     /* Save Screenshot [on|off] */
 
-    const switchSaveScreenshot = buildConfigSwitch(
-      _("Auto-Save Screenshot"), Config.KeySaveScreenshot
-    );
+    const switchSaveScreenshot = buildConfigSwitch(_('Auto-Save Screenshot'), Config.KeySaveScreenshot);
 
-    prefs.add(switchSaveScreenshot.hbox, {fill: false});
-
+    prefs.add(switchSaveScreenshot.hbox);
 
     /* Save Location [filechooser] */
 
     hbox = buildHbox();
 
     const labelSaveLocation = new Gtk.Label({
-      label: _("Save Location"),
+      label: _('Save Location'),
       xalign: 0,
-      expand: true
+      expand: true,
     });
 
-
     const chooserSaveLocation = new Gtk.FileChooserButton({
-      title: _("Select"),
+      title: _('Select'),
       local_only: true,
     });
     chooserSaveLocation.set_action(Gtk.FileChooserAction.SELECT_FOLDER);
 
     try {
-      const saveLocation = Path.expand(
-        _settings.get_string(Config.KeySaveLocation)
-      );
+      const saveLocation = Path.expand(_settings.get_string(Config.KeySaveLocation));
       chooserSaveLocation.set_filename(saveLocation);
     } catch (e) {
       logError(e);
     }
-    chooserSaveLocation.connect("file-set", () => {
-      const [filename, err] = GLib.filename_from_uri(
-        chooserSaveLocation.get_uri()
-      );
+    chooserSaveLocation.connect('file-set', () => {
+      const uri = chooserSaveLocation.get_uri();
+      if (!uri) {
+        throw new Error();
+      }
+      const [filename, err] = GLib.filename_from_uri(uri);
       if (err) {
         throw new Error("can't resolve uri");
       }
@@ -273,19 +249,17 @@ const ScreenshotToolSettingsWidget = new GObject.Class({
     hbox.add(labelSaveLocation);
     hbox.add(chooserSaveLocation);
 
-    prefs.add(hbox, {fill: false});
-
+    prefs.add(hbox);
 
     /* Filename */
     hbox = buildHbox();
 
-    const [defaultTemplate, ] =
-      _settings.get_default_value(Config.KeyFilenameTemplate).get_string();
+    const [defaultTemplate] = _settings.get_default_value(Config.KeyFilenameTemplate).get_string();
 
-    const mockDimensions = {width: 800, height: 600};
+    const mockDimensions = { width: 800, height: 600 };
 
     const labelFilenameTemplate = new Gtk.Label({
-      label: _("Default Filename"),
+      label: _('Default Filename'),
       xalign: 0,
       expand: true,
     });
@@ -293,26 +267,24 @@ const ScreenshotToolSettingsWidget = new GObject.Class({
     const inputFilenameTemplate = new Gtk.Entry({
       expand: true,
       tooltip_text: Filename.tooltipText(mockDimensions),
-      secondary_icon_name: "document-revert",
+      secondary_icon_name: 'document-revert',
     });
 
     hbox.add(labelFilenameTemplate);
     hbox.add(inputFilenameTemplate);
 
-    inputFilenameTemplate.text =
-      _settings.get_string(Config.KeyFilenameTemplate);
+    inputFilenameTemplate.text = _settings.get_string(Config.KeyFilenameTemplate);
 
-
-    prefs.add(hbox, {fill: false});
+    prefs.add(hbox);
 
     /* Filename Preview */
 
     hbox = buildHbox();
 
     const labelPreview = new Gtk.Label({
-      label: _("Preview"),
+      label: _('Preview'),
       expand: true,
-      xalign: 0
+      xalign: 0,
     });
 
     const textPreview = new Gtk.Label({
@@ -321,27 +293,27 @@ const ScreenshotToolSettingsWidget = new GObject.Class({
 
     const setPreview = (tpl) => {
       try {
-        if (tpl == "") {
+        if (tpl == '') {
           return;
         }
-        inputFilenameTemplate.get_style_context().remove_class("error");
+        inputFilenameTemplate.get_style_context().remove_class('error');
         const label = Filename.get(tpl, mockDimensions);
         textPreview.label = label;
         _settings.set_string(Config.KeyFilenameTemplate, tpl);
       } catch (e) {
         logError(e);
-        textPreview.label = "";
-        inputFilenameTemplate.get_style_context().add_class("error");
+        textPreview.label = '';
+        inputFilenameTemplate.get_style_context().add_class('error');
       }
-    }
+    };
 
-    ["inserted-text", "deleted-text"].forEach((name) => {
-      inputFilenameTemplate.get_buffer().connect(name, ({text}) => {
+    ['inserted-text', 'deleted-text'].forEach((name) => {
+      inputFilenameTemplate.get_buffer().connect(name, ({ text }) => {
         setPreview(text);
-      })
-    })
+      });
+    });
 
-    inputFilenameTemplate.connect("icon-press", () => {
+    inputFilenameTemplate.connect('icon-press', () => {
       inputFilenameTemplate.text = defaultTemplate;
     });
 
@@ -352,110 +324,82 @@ const ScreenshotToolSettingsWidget = new GObject.Class({
 
     prefs.add(hbox);
 
-
-
     return prefs;
-  },
+  }
 
   _makePrefsUploadImgur() {
     const prefs = new Gtk.Box({
       orientation: Gtk.Orientation.VERTICAL,
       margin: 20,
       margin_top: 10,
-      expand: false
+      expand: false,
     });
 
     /* Enable Imgur Upload [on|off] */
 
-    const configSwitchEnable = buildConfigSwitch(
-      _("Enable Imgur Upload"), Config.KeyEnableUploadImgur
-    );
+    const configSwitchEnable = buildConfigSwitch(_('Enable Imgur Upload'), Config.KeyEnableUploadImgur);
 
-    prefs.add(configSwitchEnable.hbox, {fill: false});
-
+    prefs.add(configSwitchEnable.hbox);
 
     /* Enable Upload Notification [on|off] */
     const configSwitchEnableNotification = buildConfigSwitch(
-      _("Show Upload Notification"), Config.KeyImgurEnableNotification
+      _('Show Upload Notification'),
+      Config.KeyImgurEnableNotification,
     );
 
-    prefs.add(configSwitchEnableNotification.hbox, {fill: false});
+    prefs.add(configSwitchEnableNotification.hbox);
 
-    bindSensitivity(
-      configSwitchEnable.gtkSwitch, configSwitchEnableNotification.gtkLabel
-    );
-    bindSensitivity(
-      configSwitchEnable.gtkSwitch, configSwitchEnableNotification.gtkSwitch
-    );
-
-
+    bindSensitivity(configSwitchEnable.gtkSwitch, configSwitchEnableNotification.gtkLabel);
+    bindSensitivity(configSwitchEnable.gtkSwitch, configSwitchEnableNotification.gtkSwitch);
 
     /* Auto-Upload After Capture [on|off] */
 
-    const configSwitchUploadOnCapture = buildConfigSwitch(
-      _("Auto-Upload After Capture"), Config.KeyImgurAutoUpload
-    );
+    const configSwitchUploadOnCapture = buildConfigSwitch(_('Auto-Upload After Capture'), Config.KeyImgurAutoUpload);
 
-    bindSensitivity(
-      configSwitchEnable.gtkSwitch, configSwitchUploadOnCapture.gtkLabel
-    );
-    bindSensitivity(
-      configSwitchEnable.gtkSwitch, configSwitchUploadOnCapture.gtkSwitch
-    );
+    bindSensitivity(configSwitchEnable.gtkSwitch, configSwitchUploadOnCapture.gtkLabel);
+    bindSensitivity(configSwitchEnable.gtkSwitch, configSwitchUploadOnCapture.gtkSwitch);
 
-    prefs.add(configSwitchUploadOnCapture.hbox, {fill: false});
+    prefs.add(configSwitchUploadOnCapture.hbox);
 
     /* Auto-Copy Link After Upload [on|off] */
 
     const configSwitchCopyLinkOnUpload = buildConfigSwitch(
-      _("Auto-Copy Link After Upload"), Config.KeyImgurAutoCopyLink
+      _('Auto-Copy Link After Upload'),
+      Config.KeyImgurAutoCopyLink,
     );
 
-    bindSensitivity(
-      configSwitchEnable.gtkSwitch, configSwitchCopyLinkOnUpload.gtkLabel
-    );
-    bindSensitivity(
-      configSwitchEnable.gtkSwitch, configSwitchCopyLinkOnUpload.gtkSwitch
-    );
+    bindSensitivity(configSwitchEnable.gtkSwitch, configSwitchCopyLinkOnUpload.gtkLabel);
+    bindSensitivity(configSwitchEnable.gtkSwitch, configSwitchCopyLinkOnUpload.gtkSwitch);
 
-    prefs.add(configSwitchCopyLinkOnUpload.hbox, {fill: false});
+    prefs.add(configSwitchCopyLinkOnUpload.hbox);
 
     /* Auto-Open Link After Upload [on|off] */
 
     const configSwitchOpenLinkOnUpload = buildConfigSwitch(
-      _("Auto-Open Link After Upload"), Config.KeyImgurAutoOpenLink
+      _('Auto-Open Link After Upload'),
+      Config.KeyImgurAutoOpenLink,
     );
-    bindSensitivity(
-      configSwitchEnable.gtkSwitch, configSwitchOpenLinkOnUpload.gtkLabel
-    );
-    bindSensitivity(
-      configSwitchEnable.gtkSwitch, configSwitchOpenLinkOnUpload.gtkSwitch
-    );
+    bindSensitivity(configSwitchEnable.gtkSwitch, configSwitchOpenLinkOnUpload.gtkLabel);
+    bindSensitivity(configSwitchEnable.gtkSwitch, configSwitchOpenLinkOnUpload.gtkSwitch);
 
-    prefs.add(configSwitchOpenLinkOnUpload.hbox, {fill: false});
-
+    prefs.add(configSwitchOpenLinkOnUpload.hbox);
 
     return prefs;
-  },
+  }
 
   _makePrefsKeybindings() {
     const model = new Gtk.ListStore();
 
-    model.set_column_types([
-        GObject.TYPE_STRING,
-        GObject.TYPE_STRING,
-        GObject.TYPE_INT,
-        GObject.TYPE_INT
-    ]);
+    model.set_column_types([GObject.TYPE_STRING, GObject.TYPE_STRING, GObject.TYPE_INT, GObject.TYPE_INT]);
 
     const bindings = [
-      ["shortcut-select-area", _("Select area")],
-      ["shortcut-select-window", _("Select window")],
-      ["shortcut-select-desktop", _("Select whole desktop")]
+      ['shortcut-select-area', _('Select area')],
+      ['shortcut-select-window', _('Select window')],
+      ['shortcut-select-desktop', _('Select whole desktop')],
     ];
 
     for (const [name, description] of bindings) {
-      log("binding: " + name + " description: " + description);
+      log('binding: ' + name + ' description: ' + description);
       const binding = _settings.get_strv(name)[0];
 
       let key, mods;
@@ -472,31 +416,31 @@ const ScreenshotToolSettingsWidget = new GObject.Class({
     }
 
     const treeview = new Gtk.TreeView({
-        "expand": true,
-        model
+      expand: true,
+      model,
     });
 
     let cellrend = new Gtk.CellRendererText();
     let col = new Gtk.TreeViewColumn({
-      "title": _("Keyboard Shortcut"),
-      "expand": true
+      title: _('Keyboard Shortcut'),
+      expand: true,
     });
 
     col.pack_start(cellrend, true);
-    col.add_attribute(cellrend, "text", 1);
+    col.add_attribute(cellrend, 'text', 1);
     treeview.append_column(col);
 
     cellrend = new Gtk.CellRendererAccel({
-      "editable": true,
-      "accel-mode": Gtk.CellRendererAccelMode.GTK
+      editable: true,
+      accel_mode: Gtk.CellRendererAccelMode.GTK,
     });
 
-    cellrend.connect("accel-edited", (rend, iter, key, mods) => {
+    cellrend.connect('accel-edited', (rend, iter, key, mods) => {
       const value = Gtk.accelerator_name(key, mods);
       const [succ, iterator] = model.get_iter_from_string(iter);
 
       if (!succ) {
-        throw new Error("Error updating keybinding");
+        throw new Error('Error updating keybinding');
       }
 
       const name = model.get_value(iterator, 0);
@@ -505,11 +449,11 @@ const ScreenshotToolSettingsWidget = new GObject.Class({
       _settings.set_strv(name, [value]);
     });
 
-    cellrend.connect("accel-cleared", (rend, iter, key, mods) => {
+    cellrend.connect('accel-cleared', (rend, iter, _key, _mods) => {
       const [succ, iterator] = model.get_iter_from_string(iter);
 
       if (!succ) {
-        throw new Error("Error clearing keybinding");
+        throw new Error('Error clearing keybinding');
       }
 
       const name = model.get_value(iterator, 0);
@@ -518,15 +462,15 @@ const ScreenshotToolSettingsWidget = new GObject.Class({
       _settings.set_strv(name, []);
     });
 
-    col = new Gtk.TreeViewColumn({"title": _("Modify"), min_width: 200});
+    col = new Gtk.TreeViewColumn({ title: _('Modify'), min_width: 200 });
 
     col.pack_end(cellrend, false);
-    col.add_attribute(cellrend, "accel-mods", 2);
-    col.add_attribute(cellrend, "accel-key", 3);
+    col.add_attribute(cellrend, 'accel-mods', 2);
+    col.add_attribute(cellrend, 'accel-key', 3);
     treeview.append_column(col);
 
     return treeview;
-  },
+  }
 
   _getComboBox(options, valueType, defaultValue, callback) {
     const model = new Gtk.ListStore();
@@ -535,31 +479,27 @@ const ScreenshotToolSettingsWidget = new GObject.Class({
 
     model.set_column_types([GObject.TYPE_STRING, valueType]);
 
-    const comboBox = new Gtk.ComboBox({model});
+    const comboBox = new Gtk.ComboBox({ model });
     const renderer = new Gtk.CellRendererText();
 
     comboBox.pack_start(renderer, true);
-    comboBox.add_attribute(renderer, "text", 0);
+    comboBox.add_attribute(renderer, 'text', 0);
 
     for (const [label, value] of options) {
       let iter;
 
-      model.set(
-          iter = model.append(),
-          [Columns.LABEL, Columns.VALUE],
-          [label, value]
-      );
+      model.set((iter = model.append()), [Columns.LABEL, Columns.VALUE], [label, value]);
 
       if (value === defaultValue) {
-          comboBox.set_active_iter(iter);
+        comboBox.set_active_iter(iter);
       }
     }
 
-    comboBox.connect("changed", (entry) => {
+    comboBox.connect('changed', (_entry) => {
       const [success, iter] = comboBox.get_active_iter();
 
       if (!success) {
-          return;
+        return;
       }
 
       const value = model.get_value(iter, Columns.VALUE);
@@ -569,7 +509,18 @@ const ScreenshotToolSettingsWidget = new GObject.Class({
 
     return comboBox;
   }
-});
+}
+
+const ScreenshotToolSettingsWidget = (GObject.registerClass(
+  {
+    Name: 'ScreenshotToolSettingsWidget',
+    GTypeName: 'ScreenshotToolSettingsWidget',
+    Extends: Gtk.Box,
+  },
+  BaseScreenshotToolSettingsWidget,
+) as unknown) as {
+  new (): BaseScreenshotToolSettingsWidget;
+};
 
 function init() {
   _settings = Convenience.getSettings();
@@ -582,3 +533,5 @@ function buildPrefsWidget() {
 
   return widget;
 }
+
+export default { init, buildPrefsWidget };

@@ -1,9 +1,15 @@
+import { SignalEmitter } from '..';
+
 const Signals = imports.signals;
 const Mainloop = imports.mainloop;
 
-class Upload {
+export declare interface Upload extends SignalEmitter {}
+
+export class Upload {
+  private responseData?: { link: string };
+
   start() {
-    const testImage = "http://i.imgur.com/Vkapy8W.png";
+    const testImage = 'http://i.imgur.com/Vkapy8W.png';
     const size = 200000;
     const chunk = 1000;
     const updateMs = 100;
@@ -11,11 +17,11 @@ class Upload {
 
     const update = () => {
       if (progress < size) {
-        this.emit("progress", (progress += chunk), size);
+        this.emit('progress', (progress += chunk), size);
         Mainloop.timeout_add(updateMs, update);
       } else {
-        this.responseData = {link: testImage};
-        this.emit("done", this.responseData);
+        this.responseData = { link: testImage };
+        this.emit('done', this.responseData);
       }
     };
 
@@ -24,7 +30,3 @@ class Upload {
 }
 
 Signals.addSignalMethods(Upload.prototype);
-
-var exports = {
-  Upload
-};

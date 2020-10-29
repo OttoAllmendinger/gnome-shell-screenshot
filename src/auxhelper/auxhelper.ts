@@ -1,18 +1,16 @@
-#!/usr/bin/env gjs
-// vi: sts=2 sw=2 et
-//
 //  Create screenshot using dbus interface
-const Gio = imports.gi.Gio;
-const GLib = imports.gi.GLib;
-const System = imports.system;
 
+import * as Gio from '@imports/Gio-2.0';
+import * as GLib from '@imports/GLib-2.0';
+
+const System = imports.system;
 
 let debug = false;
 const logDebug = (msg) => {
   if (debug) {
     log(msg);
   }
-}
+};
 
 // https://gitlab.gnome.org/GNOME/gnome-shell/blob/master/data/org.gnome.Shell.Screenshot.xml
 const ScreenshotServiceIFace = `
@@ -49,51 +47,45 @@ const ScreenshotServiceIFace = `
 </node>
 `;
 
-const ScreenshotServiceProxy = Gio.DBusProxy.makeProxyWrapper(ScreenshotServiceIFace);
+const ScreenshotServiceProxy = (Gio.DBusProxy as any).makeProxyWrapper(ScreenshotServiceIFace);
 
 const getScreenshotService = () => {
   return new ScreenshotServiceProxy(
-    Gio.DBus.session,
-    "org.gnome.Shell.Screenshot",
-    "/org/gnome/Shell/Screenshot"
+    (Gio as any).DBus.session,
+    'org.gnome.Shell.Screenshot',
+    '/org/gnome/Shell/Screenshot',
   );
-}
+};
 
-const ScreenshotDesktopIncludeCursor = false;
-const ScreenshotFlash = true;
-
-const makeDesktopScreenshot = (fileName, { includeCursor, flash }, callback) => {
-  logDebug("creating desktop screenshot...");
+const makeDesktopScreenshot = (fileName, { includeCursor, flash }) => {
+  logDebug('creating desktop screenshot...');
   return getScreenshotService().ScreenshotSync(includeCursor, flash, fileName);
-}
+};
 
-const makeWindowScreenshot = (fileName, { includeFrame, includeCursor, flash }, callback) => {
-  logDebug("creating window screenshot...");
+const makeWindowScreenshot = (fileName, { includeFrame, includeCursor, flash }) => {
+  logDebug('creating window screenshot...');
   return getScreenshotService().ScreenshotWindowSync(includeFrame, includeCursor, flash, fileName);
 };
 
-
-const makeAreaScreenshot = (fileName, {x, y, w, h}, { flash }, callback) => {
-  logDebug("creating area screenshot...");
+const makeAreaScreenshot = (fileName, { x, y, w, h }, { flash }) => {
+  logDebug('creating area screenshot...');
   return getScreenshotService().ScreenshotAreaSync(x, y, w, h, flash, fileName);
 };
 
 const parseOptions = (params, argv) =>
   [...argv].reduce((acc, arg, i, argv) => {
-    const fullArg = Object.keys(params).find((p) => p === arg || p.startsWith(arg + " "));
+    const fullArg = Object.keys(params).find((p) => p === arg || p.startsWith(arg + ' '));
     if (!fullArg) {
       throw new Error(`no such parameter ${arg}`);
     }
     const isSwitch = fullArg === arg;
 
-    const name = arg
-      .replace(/^--/, "")
-      .replace(/-[a-z]/, ([, c]) => c.toUpperCase());
+    const name = arg.replace(/^--/, '').replace(/-[a-z]/, ([, c]) => c.toUpperCase());
 
     let val;
     if (isSwitch) {
-      val = true
-    } else if ((i + 1) in argv) {
+      val = true;
+    } else if (i + 1 in argv) {
       val = argv[i + 1];
       delete argv[i + 1];
     } else {
@@ -105,26 +97,29 @@ const parseOptions = (params, argv) =>
   }, {});
 
 const dumpOptions = (params) => {
-  const pad = (str, n) => str + Array(Math.max(0, n - str.length)).fill(" ").join("");
-  print("Usage:");
-  // gnome3.24 - no `(const p in params)`
-  for (var p in params) {
+  const pad = (str, n) =>
+    str +
+    Array(Math.max(0, n - str.length))
+      .fill(' ')
+      .join('');
+  print('Usage:');
+  for (const p in params) {
     print(`  ${pad(p, 32)} ${params[p]}`);
   }
-}
+};
 
 const params = {
-  "--desktop"           : "make desktop screenshot",
-  "--window"            : "make window screenshot",
-  "--area COORDS"       : "make area screenshot (x,y,w,h)",
-  "--include-cursor"    : "include cursor (desktop only)",
-  "--include-frame"     : "include frame (window only)",
-  "--flash"             : "flash",
-  "--filename FILENAME" : "output file",
-  "--spawntest"         : "test GLib spawn call",
-  "--debug"             : "print debug output",
-  "--help"              : "show this"
-}
+  '--desktop': 'make desktop screenshot',
+  '--window': 'make window screenshot',
+  '--area COORDS': 'make area screenshot (x,y,w,h)',
+  '--include-cursor': 'include cursor (desktop only)',
+  '--include-frame': 'include frame (window only)',
+  '--flash': 'flash',
+  '--filename FILENAME': 'output file',
+  '--spawntest': 'test GLib spawn call',
+  '--debug': 'print debug output',
+  '--help': 'show this',
+};
 
 const main = () => {
   const opts = parseOptions(params, ARGV);
@@ -134,26 +129,26 @@ const main = () => {
   }
 
   if (opts.debug) {
-    debug = true
+    debug = true;
   }
 
   if (opts.spawntest) {
-    const newOpts = ARGV.filter((a) => a.toLowerCase() !== "--spawntest");
+    const newOpts = ARGV.filter((a) => a.toLowerCase() !== '--spawntest');
     if (parseOptions(params, newOpts).spawntest) {
       throw new Error();
     }
-    const newArgv = ["gjs", "./src/auxhelper.js", ...newOpts];
+    const newArgv = ['gjs', './src/auxhelper.js', ...newOpts];
     const [success, pid] = GLib.spawn_async(
-      null, /* pwd */
+      null /* pwd */,
       newArgv,
-      null, /* envp */
+      null /* envp */,
       GLib.SpawnFlags.SEARCH_PATH | GLib.SpawnFlags.DO_NOT_REAP_CHILD,
-      null /* child_setup */
+      null /* child_setup */,
     );
-    if (!success) {
+    if (!success || pid === null) {
       throw new Error();
     }
-    GLib.child_watch_add(GLib.PRIORITY_DEFAULT, pid, (pid, exitCode) => {
+    GLib.child_watch_add(GLib.PRIORITY_DEFAULT, pid, (_pid, _exitCode) => {
       imports.mainloop.quit();
     });
     imports.mainloop.run();
@@ -162,55 +157,58 @@ const main = () => {
 
   const { filename: fileName } = opts;
   if (!fileName) {
-    throw new Error("required argument --filename");
+    throw new Error('required argument --filename');
   }
-  if (!fileName.startsWith("/")) {
-    throw new Error("filename path must be absolute");
+  if (!fileName.startsWith('/')) {
+    throw new Error('filename path must be absolute');
   }
 
   // gnome3.24 - no destructuring with defaults
-  const { flash, includeCursor, includeFrame } = Object.assign({
-    flash: false,
-    includeCursor: false,
-    includeFrame: true
-  }, opts);
+  const { flash, includeCursor, includeFrame } = Object.assign(
+    {
+      flash: false,
+      includeCursor: false,
+      includeFrame: true,
+    },
+    opts,
+  );
   const screenshotOpts = { flash, includeCursor, includeFrame };
 
-  let func = [];
+  type Callback = () => [boolean, string];
+  const funcs: Callback[] = [];
   if (opts.desktop) {
-    func.push(() => makeDesktopScreenshot(fileName, screenshotOpts));
+    funcs.push(() => makeDesktopScreenshot(fileName, screenshotOpts));
   }
 
   if (opts.area) {
-    const coords = opts.area.split(",").map(Number);
+    const coords = opts.area.split(',').map(Number);
     if (coords.some(isNaN)) {
       throw new Error("invalid --area coords (must be 'x,y,w,h')");
     }
     const [x, y, w, h] = coords;
-    func.push(() => makeAreaScreenshot(fileName, {x, y, w, h}, screenshotOpts));
+    funcs.push(() => makeAreaScreenshot(fileName, { x, y, w, h }, screenshotOpts));
   }
 
   if (opts.window) {
-    func.push(() => makeWindowScreenshot(fileName, screenshotOpts));
+    funcs.push(() => makeWindowScreenshot(fileName, screenshotOpts));
   }
 
-  if (func.length !== 1) {
-    throw new Error("must use --desktop, --area or --window");
+  const func = funcs.pop();
+  if (!func || funcs.length > 0) {
+    throw new Error('must use --desktop, --area or --window');
   }
 
-  func = func.pop();
-
-  logDebug("calling func...");
+  logDebug('calling func...');
   const [ok, fileNameUsed] = func();
   if (!ok) {
-    throw new Error("ok=false");
+    throw new Error('ok=false');
   }
   if (fileName !== fileNameUsed) {
-    throw new Error(`path mismatch fileName=${fileName} fileNameUsed=${fileNameUsed}`)
+    throw new Error(`path mismatch fileName=${fileName} fileNameUsed=${fileNameUsed}`);
   }
 
   logDebug(`written ${fileNameUsed}`);
-}
+};
 
 try {
   main();

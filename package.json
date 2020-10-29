@@ -1,0 +1,34 @@
+{
+  "name": "gnome-shell-screenshot",
+  "version": "1.0.0",
+  "description": "Gnome-Shell Extension to conveniently create, copy, store and upload screenshots",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OttoAllmendinger/gnome-shell-screenshot.git"
+  },
+  "author": "Otto Allmendinger <otto.allmendinger@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/OttoAllmendinger/gnome-shell-screenshot/issues"
+  },
+  "homepage": "https://github.com/OttoAllmendinger/gnome-shell-screenshot#readme",
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^15.1.0",
+    "@rollup/plugin-node-resolve": "^9.0.0",
+    "@rollup/plugin-typescript": "^6.0.0",
+    "@typescript-eslint/eslint-plugin": "^4.5.0",
+    "@typescript-eslint/parser": "^4.5.0",
+    "eslint": "^7.11.0",
+    "eslint-config-prettier": "^6.12.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "prettier": "^2.1.2",
+    "rollup": "^2.30.0",
+    "rollup-plugin-copy": "^3.3.0",
+    "rollup-plugin-scss": "^2.6.1",
+    "tslib": "^2.0.3",
+    "typescript": "^4.0.3"
+  }
+}
