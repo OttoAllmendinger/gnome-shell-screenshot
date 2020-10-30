@@ -16,3 +16,4 @@ templates/
 @types/
 .eslintrc.js
 dist/*
+src/**/*js

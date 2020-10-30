@@ -7,3 +7,4 @@ dist/
 build/
 @types/
 *.iml
+src/**/*js
