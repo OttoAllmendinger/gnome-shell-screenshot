@@ -177,16 +177,12 @@ Signals.addSignalMethods(Screenshot.prototype);
 export declare interface Extension extends SignalEmitter {}
 
 export class Extension {
-  private _signalSettings: number[];
+  private _signalSettings: number[] = [];
   private _indicator?: Indicator.Indicator;
   private _selection?: Selection.Selection;
 
   constructor() {
-    this._signalSettings = [];
-
-    this._signalSettings.push(
-      settings.connect('changed::' + Config.KeyEnableIndicator, this._updateIndicator.bind(this)),
-    );
+    Convenience.initTranslations();
   }
 
   _setKeybindings() {
@@ -323,11 +319,10 @@ export class Extension {
     this.disconnectAll();
   }
 
-  init() {
-    Convenience.initTranslations();
-  }
-
   enable() {
+    this._signalSettings.push(
+      settings.connect('changed::' + Config.KeyEnableIndicator, this._updateIndicator.bind(this)),
+    );
     this._updateIndicator();
     this._setKeybindings();
   }
