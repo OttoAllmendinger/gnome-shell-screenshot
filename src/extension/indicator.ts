@@ -8,7 +8,7 @@ import { openPrefs } from '../gselib/openPrefs';
 import * as Config from './config';
 import * as Convenience from './convenience';
 import * as Extension from './extension';
-import { Screenshot } from './extension';
+import { Screenshot } from './screenshot';
 
 const PanelMenu = imports.ui.panelMenu;
 const PopupMenu = imports.ui.popupMenu;
