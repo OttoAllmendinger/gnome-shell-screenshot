@@ -216,11 +216,15 @@ class ScreenshotSection {
     this._updateVisibility();
   }
 
-  _onImage() {
+  get screenshot(): Screenshot {
     if (!this._screenshot) {
-      throw new Error();
+      throw new Error('screenshot not set');
     }
-    this._screenshot.launchOpen();
+    return this._screenshot;
+  }
+
+  _onImage() {
+    this.screenshot.launchOpen();
   }
 
   _onClear() {
@@ -228,45 +232,27 @@ class ScreenshotSection {
   }
 
   _onCopy() {
-    if (!this._screenshot) {
-      throw new Error();
-    }
-    this._screenshot.copyClipboard(settings.get_string(Config.KeyCopyButtonAction));
+    this.screenshot.copyClipboard(settings.get_string(Config.KeyCopyButtonAction));
   }
 
   _onSave() {
-    if (!this._screenshot) {
-      throw new Error();
-    }
-    this._screenshot.launchSave();
+    this.screenshot.launchSave();
   }
 
   _onImgurUpload() {
-    if (!this._screenshot) {
-      throw new Error();
-    }
-    this._screenshot.imgurStartUpload();
+    this.screenshot.imgurStartUpload();
   }
 
   _onImgurOpen() {
-    if (!this._screenshot) {
-      throw new Error();
-    }
-    this._screenshot.imgurOpenURL();
+    this.screenshot.imgurOpenURL();
   }
 
   _onImgurCopyLink() {
-    if (!this._screenshot) {
-      throw new Error();
-    }
-    this._screenshot.imgurCopyURL();
+    this.screenshot.imgurCopyURL();
   }
 
   _onImgurDelete() {
-    if (!this._screenshot) {
-      throw new Error();
-    }
-    this._screenshot.imgurDelete();
+    this.screenshot.imgurDelete();
   }
 }
 
