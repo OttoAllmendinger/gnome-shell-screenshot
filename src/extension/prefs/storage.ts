@@ -7,15 +7,10 @@ import * as Config from '../config';
 import * as Filename from '../filename';
 import * as Path from '../path';
 
-import { buildConfigSwitch, bindSensitivity, buildConfigRow } from './widgets';
+import { buildConfigSwitch, bindSensitivity, buildConfigRow, buildPage } from './widgets';
 
 export function getPage(settings) {
-  const prefs = new Gtk.Box({
-    orientation: Gtk.Orientation.VERTICAL,
-    margin: 20,
-    margin_top: 10,
-    expand: false,
-  });
+  const prefs = buildPage();
 
   /* Save Screenshot [on|off] */
 

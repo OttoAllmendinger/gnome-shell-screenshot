@@ -1,18 +1,11 @@
-import * as Gtk from '@imports/Gtk-3.0';
-
 import { _ } from '../../gettext';
 
 import * as Config from '../config';
 
-import { buildConfigSwitch, bindSensitivity } from './widgets';
+import { buildPage, buildConfigSwitch, bindSensitivity } from './widgets';
 
 export function getPage(settings) {
-  const prefs = new Gtk.Box({
-    orientation: Gtk.Orientation.VERTICAL,
-    margin: 20,
-    margin_top: 10,
-    expand: false,
-  });
+  const prefs = buildPage();
 
   /* Enable Imgur Upload [on|off] */
 

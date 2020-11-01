@@ -5,15 +5,10 @@ import { _ } from '../../gettext';
 
 import * as Config from '../config';
 
-import { buildConfigSwitch, getComboBox, buildConfigRow } from './widgets';
+import { buildConfigSwitch, getComboBox, buildConfigRow, buildPage } from './widgets';
 
 export function getPage(settings) {
-  const prefs = new Gtk.Box({
-    orientation: Gtk.Orientation.VERTICAL,
-    margin: 20,
-    margin_top: 10,
-    expand: false,
-  });
+  const prefs = buildPage();
 
   /* Show indicator [on|off] */
 

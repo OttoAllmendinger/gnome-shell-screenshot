@@ -10,11 +10,23 @@ export function bindSensitivity(source, target) {
   set();
 }
 
+export function buildPage() {
+  return new Gtk.Box({
+    orientation: Gtk.Orientation.VERTICAL,
+    margin: 20,
+    margin_top: 10,
+    expand: false,
+  });
+}
+
 export function buildHbox() {
   return new Gtk.Box({
     orientation: Gtk.Orientation.HORIZONTAL,
     margin_top: 5,
     expand: false,
+    hexpand: false,
+    vexpand: false,
+    margin_bottom: 10,
   });
 }
 
