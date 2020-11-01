@@ -5,7 +5,7 @@ import { _ } from '../../gettext';
 
 import * as Config from '../config';
 
-import { buildConfigSwitch, getComboBox, buildHbox } from './widgets';
+import { buildConfigSwitch, getComboBox, buildConfigRow } from './widgets';
 
 export function getPage(settings) {
   const prefs = new Gtk.Box({
@@ -14,8 +14,6 @@ export function getPage(settings) {
     margin_top: 10,
     expand: false,
   });
-
-  let hbox;
 
   /* Show indicator [on|off] */
 
@@ -34,8 +32,6 @@ export function getPage(settings) {
   prefs.add(switchShowNotification.hbox);
 
   /* Default click action [dropdown] */
-
-  hbox = buildHbox();
 
   const labelDefaultClickAction = new Gtk.Label({
     label: _('Primary Button'),
@@ -56,10 +52,7 @@ export function getPage(settings) {
     settings.set_enum(Config.KeyClickAction, value),
   );
 
-  hbox.add(labelDefaultClickAction);
-  hbox.add(comboBoxDefaultClickAction);
-
-  prefs.add(hbox);
+  prefs.add(buildConfigRow(labelDefaultClickAction, comboBoxDefaultClickAction));
 
   /* Clipboard Action [dropdown] */
 
@@ -72,8 +65,6 @@ export function getPage(settings) {
   ];
 
   const clipboardActionDropdown = (label, { options, configKey }) => {
-    hbox = buildHbox();
-
     const labelAutoCopy = new Gtk.Label({
       label,
       xalign: 0,
@@ -86,10 +77,7 @@ export function getPage(settings) {
       settings.set_string(configKey, value),
     );
 
-    hbox.add(labelAutoCopy);
-    hbox.add(comboBoxClipboardContent);
-
-    prefs.add(hbox);
+    prefs.add(buildConfigRow(labelAutoCopy, comboBoxClipboardContent));
   };
 
   clipboardActionDropdown(_('Copy Button'), {

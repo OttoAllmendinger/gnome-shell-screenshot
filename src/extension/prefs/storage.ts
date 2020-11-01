@@ -7,7 +7,7 @@ import * as Config from '../config';
 import * as Filename from '../filename';
 import * as Path from '../path';
 
-import { buildConfigSwitch, buildHbox, bindSensitivity } from './widgets';
+import { buildConfigSwitch, bindSensitivity, buildConfigRow } from './widgets';
 
 export function getPage(settings) {
   const prefs = new Gtk.Box({
@@ -17,8 +17,6 @@ export function getPage(settings) {
     expand: false,
   });
 
-  let hbox;
-
   /* Save Screenshot [on|off] */
 
   const switchSaveScreenshot = buildConfigSwitch(settings, _('Auto-Save Screenshot'), Config.KeySaveScreenshot);
@@ -26,8 +24,6 @@ export function getPage(settings) {
   prefs.add(switchSaveScreenshot.hbox);
 
   /* Save Location [filechooser] */
-
-  hbox = buildHbox();
 
   const labelSaveLocation = new Gtk.Label({
     label: _('Save Location'),
@@ -62,14 +58,9 @@ export function getPage(settings) {
   bindSensitivity(switchSaveScreenshot.gtkSwitch, labelSaveLocation);
   bindSensitivity(switchSaveScreenshot.gtkSwitch, chooserSaveLocation);
 
-  hbox.add(labelSaveLocation);
-  hbox.add(chooserSaveLocation);
-
-  prefs.add(hbox);
+  prefs.add(buildConfigRow(labelSaveLocation, chooserSaveLocation));
 
   /* Filename */
-  hbox = buildHbox();
-
   const [defaultTemplate] = settings.get_default_value(Config.KeyFilenameTemplate).get_string();
 
   const mockDimensions = { width: 800, height: 600 };
@@ -86,16 +77,11 @@ export function getPage(settings) {
     secondary_icon_name: 'document-revert',
   });
 
-  hbox.add(labelFilenameTemplate);
-  hbox.add(inputFilenameTemplate);
-
   inputFilenameTemplate.text = settings.get_string(Config.KeyFilenameTemplate);
 
-  prefs.add(hbox);
+  prefs.add(buildConfigRow(labelFilenameTemplate, inputFilenameTemplate));
 
   /* Filename Preview */
-
-  hbox = buildHbox();
 
   const labelPreview = new Gtk.Label({
     label: _('Preview'),
@@ -135,10 +121,7 @@ export function getPage(settings) {
 
   setPreview(inputFilenameTemplate.text);
 
-  hbox.add(labelPreview);
-  hbox.add(textPreview);
-
-  prefs.add(hbox);
+  prefs.add(buildConfigRow(labelPreview, textPreview));
 
   return prefs;
 }

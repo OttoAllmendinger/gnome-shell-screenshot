@@ -1,5 +1,6 @@
 import * as Gtk from '@imports/Gtk-3.0';
 import * as GObject from '@imports/GObject-2.0';
+import { Settings } from '@imports/Gio-2.0';
 
 export function bindSensitivity(source, target) {
   const set = () => {
@@ -55,9 +56,14 @@ export function getComboBox(options, valueType, defaultValue, callback) {
   return comboBox;
 }
 
-export function buildConfigSwitch(settings, label, configKey) {
+export function buildConfigRow(label, widget) {
   const hbox = buildHbox();
+  hbox.add(label);
+  hbox.add(widget);
+  return hbox;
+}
 
+export function buildConfigSwitch(settings: Settings, label: string, configKey: string) {
   const gtkLabel = new Gtk.Label({
     label,
     xalign: 0,
@@ -72,11 +78,8 @@ export function buildConfigSwitch(settings, label, configKey) {
 
   gtkSwitch.active = settings.get_boolean(configKey);
 
-  hbox.add(gtkLabel);
-  hbox.add((gtkSwitch as unknown) as Gtk.Widget);
-
   return {
-    hbox,
+    hbox: buildConfigRow(gtkLabel, gtkSwitch),
     gtkLabel,
     gtkSwitch,
   };
