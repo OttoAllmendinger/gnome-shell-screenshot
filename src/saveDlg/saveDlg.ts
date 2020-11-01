@@ -7,9 +7,7 @@
 import * as Gio from '@imports/Gio-2.0';
 import * as Gtk from '@imports/Gtk-3.0';
 
-const domain = 'gnome-shell-screenshot';
-const Gettext = imports.gettext;
-const _ = Gettext.domain(domain).gettext;
+import { _, init as initTranslations } from '../gettext';
 
 const copy = (srcPath, dstDir, dstName) => {
   if (!srcPath) {
@@ -51,9 +49,7 @@ const copy = (srcPath, dstDir, dstName) => {
 };
 
 if (window['ARGV']) {
-  const workDir = Gio.File.new_for_path(ARGV[3]);
-  const localeDir = workDir.get_child('locale');
-  if (localeDir.query_exists(null)) Gettext.bindtextdomain(domain, localeDir.get_path());
+  initTranslations(ARGV[3]);
 
   const [srcPath, dstDir, dstName] = [ARGV[0], ARGV[1], ARGV[2]].map(decodeURIComponent);
   copy(srcPath, dstDir, dstName);

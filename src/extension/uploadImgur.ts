@@ -1,8 +1,8 @@
+import * as Soup from '@imports/Soup-2.4';
+
 import { SignalEmitter } from '..';
 
 const Signals = imports.signals;
-
-import * as Soup from '@imports/Soup-2.4';
 
 const clientId = 'c5c1369fb46f29e';
 const baseUrl = 'https://api.imgur.com/3/';

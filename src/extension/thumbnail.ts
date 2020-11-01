@@ -1,7 +1,8 @@
 import * as Gio from '@imports/Gio-2.0';
 import * as GdkPixbuf from '@imports/GdkPixbuf-2.0';
 
-const ExtensionUtils = imports.misc.extensionUtils;
+import ExtensionUtils from './extensionUtils';
+
 const Local = ExtensionUtils.getCurrentExtension();
 
 import * as Filename from './filename';

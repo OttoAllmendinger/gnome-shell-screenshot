@@ -6,24 +6,22 @@ import { currentVersion } from '../gselib/version';
 import { openPrefs } from '../gselib/openPrefs';
 
 import * as Config from './config';
-import * as Convenience from './convenience';
 import * as Extension from './extension';
 import { Screenshot } from './screenshot';
+import ExtensionUtils from './extensionUtils';
+import { _ } from '../gettext';
 
 const PanelMenu = imports.ui.panelMenu;
 const PopupMenu = imports.ui.popupMenu;
 const Slider = imports.ui.slider;
 
-const Gettext = imports.gettext.domain('gnome-shell-screenshot');
-const _ = Gettext.gettext;
-
-const Local = imports.misc.extensionUtils.getCurrentExtension();
+const Local = ExtensionUtils.getCurrentExtension();
 
 const version = currentVersion();
 
 const DefaultIcon = 'camera-photo-symbolic';
 
-const settings = Convenience.getSettings();
+const settings = ExtensionUtils.getSettings();
 
 // remove this when dropping support for < 3.33
 const getActorCompat = (obj) => (version.greaterEqual('3.33') ? obj : obj.actor);

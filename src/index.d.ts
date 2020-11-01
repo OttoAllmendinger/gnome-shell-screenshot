@@ -1,3 +1,4 @@
+import { Settings, File } from '@imports/Gio-2.0';
 import '@imports/Gjs';
 
 type Callback = (...v: any[]) => void;
@@ -8,6 +9,16 @@ declare interface SignalEmitter {
   disconnectAll();
 
   connect(k: string, c: Callback);
+}
+
+interface ExtensionUtils {
+  initTranslations(): void;
+  getSettings(): Settings;
+  getCurrentExtension(): {
+    path: string;
+    metadata: any;
+    dir: File;
+  };
 }
 
 declare global {

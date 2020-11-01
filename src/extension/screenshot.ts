@@ -7,17 +7,17 @@ import * as Config from './config';
 import * as Clipboard from './clipboard';
 import * as Filename from './filename';
 import * as UploadImgur from './uploadImgur';
-import * as Convenience from './convenience';
 import * as Notifications from './notifications';
+import ExtensionUtils from './extensionUtils';
 
 const Signals = imports.signals;
 
 import { SignalEmitter } from '..';
 
 const Util = imports.misc.util;
-const Local = imports.misc.extensionUtils.getCurrentExtension();
+const Local = ExtensionUtils.getCurrentExtension();
 
-const settings = Convenience.getSettings();
+const settings = ExtensionUtils.getSettings();
 
 export declare interface Screenshot extends SignalEmitter {}
 
@@ -66,13 +66,18 @@ export class Screenshot {
 
   launchSave() {
     const newFile = this._nextFile();
-    Util.spawn([
-      'gjs',
-      Local.path + '/saveDlg.js',
-      ...[this.srcFile.get_path(), Path.expand('$PICTURES'), newFile.get_basename(), Local.dir.get_path()].map(
-        encodeURIComponent,
-      ),
-    ]);
+    const pathComponents = [
+      this.srcFile.get_path(),
+      Path.expand('$PICTURES'),
+      newFile.get_basename(),
+      Local.dir.get_path(),
+    ] as string[];
+    pathComponents.forEach((v) => {
+      if (!v) {
+        throw new Error(`unexpected path component in ${pathComponents}`);
+      }
+    });
+    Util.spawn(['gjs', Local.path + '/saveDlg.js', ...pathComponents.map(encodeURIComponent)]);
   }
 
   copyClipboard(action) {

@@ -2,17 +2,15 @@ import * as Gio from '@imports/Gio-2.0';
 import * as GObject from '@imports/GObject-2.0';
 
 import { currentVersion } from '../gselib/version';
+import { _ } from '../gettext';
 
 import * as Config from './config';
 import * as Thumbnail from './thumbnail';
-import * as Convenience from './convenience';
+import ExtensionUtils from './extensionUtils';
 
 const Signals = imports.signals;
 const Main = imports.ui.main;
 const MessageTray = imports.ui.messageTray;
-
-const Gettext = imports.gettext.domain('gnome-shell-screenshot');
-const _ = Gettext.gettext;
 
 const version = currentVersion();
 
@@ -21,7 +19,7 @@ const NotificationSourceName = 'Screenshot Tool';
 
 const ICON_SIZE = 64;
 
-const settings = Convenience.getSettings();
+const settings = ExtensionUtils.getSettings();
 
 const getSource = () => {
   const source = new MessageTray.Source(NotificationSourceName, NotificationIcon);

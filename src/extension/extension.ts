@@ -9,15 +9,15 @@ import * as Config from './config';
 import * as Indicator from './indicator';
 import * as Selection from './selection';
 import * as Notifications from './notifications';
-import * as Convenience from './convenience';
 import { Screenshot } from './screenshot';
+import ExtensionUtils from './extensionUtils';
 
 import { SignalEmitter } from '..';
 
 const Signals = imports.signals;
 const Main = imports.ui.main;
 
-const settings = Convenience.getSettings();
+const settings = ExtensionUtils.getSettings();
 
 const getSelectionOptions = () => {
   const captureDelay = settings.get_int(Config.KeyCaptureDelay);
@@ -32,7 +32,7 @@ export class Extension {
   private _selection?: Selection.Selection;
 
   constructor() {
-    Convenience.initTranslations();
+    ExtensionUtils.initTranslations();
   }
 
   _setKeybindings() {

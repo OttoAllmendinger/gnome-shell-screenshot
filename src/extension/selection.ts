@@ -4,20 +4,19 @@ import * as Meta from '@imports/Meta-7';
 import * as Clutter from '@imports/Clutter-7';
 import * as Shell from '@imports/Shell-0.1';
 
-import * as Filename from './filename';
 import { currentVersion } from '../gselib/version';
-
 import { SignalEmitter } from '..';
+
+import * as Filename from './filename';
+import ExtensionUtils from './extensionUtils';
 
 const Signals = imports.signals;
 const Mainloop = imports.mainloop;
 
 const Main = imports.ui.main;
 
-const Gettext = imports.gettext.domain('gnome-shell-screenshot');
-const _ = Gettext.gettext;
+import { _ } from '../gettext';
 
-const ExtensionUtils = imports.misc.extensionUtils;
 const Local = ExtensionUtils.getCurrentExtension();
 
 const version = currentVersion();

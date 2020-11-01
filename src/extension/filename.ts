@@ -1,8 +1,7 @@
 import * as GLib from '@imports/GLib-2.0';
 import * as StringFormat from '../vendor/stringformat';
 
-const Gettext = imports.gettext.domain('gnome-shell-screenshot');
-const _ = Gettext.gettext;
+import { _ } from '../gettext';
 
 const parameters = ({ width, height }) => {
   const now = new Date();
