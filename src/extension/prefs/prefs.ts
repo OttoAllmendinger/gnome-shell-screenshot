@@ -6,6 +6,7 @@ import { _ } from '../../gettext';
 import ExtensionUtils from '../extensionUtils';
 
 import * as Indicator from './indicator';
+import * as Effects from './effects';
 import * as Storage from './storage';
 import * as Imgur from './imgur';
 import * as Keybindings from './keybindings';
@@ -22,6 +23,10 @@ class BaseScreenshotToolSettingsWidget extends Gtk.Box {
 
     page = Indicator.getPage(settings);
     label = new Gtk.Label({ label: _('Indicator') });
+    notebook.append_page(page, label);
+
+    page = Effects.getPage(settings);
+    label = new Gtk.Label({ label: _('Effects') });
     notebook.append_page(page, label);
 
     page = Storage.getPage(settings);

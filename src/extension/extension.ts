@@ -9,7 +9,7 @@ import * as Config from './config';
 import * as Indicator from './indicator';
 import * as Selection from './selection';
 import * as Notifications from './notifications';
-import { Screenshot } from './screenshot';
+import { Rescale, Screenshot } from './screenshot';
 import ExtensionUtils from './extensionUtils';
 
 import { SignalEmitter } from '..';
@@ -97,7 +97,7 @@ export class Extension {
     }
   }
 
-  _startSelection(selection) {
+  _startSelection(selection: Selection.Selection) {
     if (this._selection) {
       // prevent reentry
       log('_startSelection() error: selection already in progress');
@@ -133,8 +133,9 @@ export class Extension {
     this._startSelection(new Selection.SelectionDesktop(getSelectionOptions()));
   }
 
-  _onScreenshot(selection, filePath) {
-    const screenshot = new Screenshot(filePath);
+  _onScreenshot(selection: Selection.Selection, filePath: string) {
+    const effects = [new Rescale(settings.get_int(Config.KeyEffectRescale) / 100.0)];
+    const screenshot = new Screenshot(filePath, effects);
 
     if (settings.get_boolean(Config.KeySaveScreenshot)) {
       screenshot.autosave();

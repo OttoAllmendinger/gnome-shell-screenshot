@@ -95,5 +95,9 @@
         <key name="imgur-auto-open-link" type="b">
             <default>false</default>
         </key>
+
+        <key name="effect-rescale" type="i">
+            <default>100</default>
+        </key>
     </schema>
 </schemalist>

@@ -43,3 +43,5 @@ export const KeyImgurEnableNotification = 'imgur-enable-notification';
 export const KeyImgurAutoUpload = 'imgur-auto-upload';
 export const KeyImgurAutoCopyLink = 'imgur-auto-copy-link';
 export const KeyImgurAutoOpenLink = 'imgur-auto-open-link';
+
+export const KeyEffectRescale = 'effect-rescale';

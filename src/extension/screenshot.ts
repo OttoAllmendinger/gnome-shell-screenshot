@@ -1,6 +1,9 @@
 import * as Gio from '@imports/Gio-2.0';
 import * as Gtk from '@imports/Gtk-3.0';
 import * as Shell from '@imports/Shell-0.1';
+import { InterpType } from '@imports/GdkPixbuf-2.0';
+
+import { SignalEmitter } from '..';
 
 import * as Path from './path';
 import * as Config from './config';
@@ -12,8 +15,6 @@ import ExtensionUtils from './extensionUtils';
 
 const Signals = imports.signals;
 
-import { SignalEmitter } from '..';
-
 const Util = imports.misc.util;
 const Local = ExtensionUtils.getCurrentExtension();
 
@@ -21,17 +22,47 @@ const settings = ExtensionUtils.getSettings();
 
 export declare interface Screenshot extends SignalEmitter {}
 
+export interface Effect {
+  apply(image: Gtk.Image): void;
+}
+
+export class Rescale implements Effect {
+  constructor(public scale: number) {
+    if (Number.isNaN(scale) || scale <= 0) {
+      throw new Error(`invalid argument ${scale}`);
+    }
+  }
+
+  apply(image: Gtk.Image): void {
+    if (this.scale === 1) {
+      return;
+    }
+
+    const newPixbuf = image.pixbuf.scale_simple(
+      image.pixbuf.get_width() * this.scale,
+      image.pixbuf.get_height() * this.scale,
+      InterpType.BILINEAR,
+    );
+
+    image.set_from_pixbuf(newPixbuf);
+  }
+}
+
 export class Screenshot {
   public gtkImage: Gtk.Image;
   public srcFile: Gio.File;
   public dstFile: Gio.File | null;
   public imgurUpload?: UploadImgur.Upload;
 
-  constructor(filePath) {
+  constructor(filePath: string, effects: Effect[] = []) {
     if (!filePath) {
       throw new Error(`need argument ${filePath}`);
     }
+
     this.gtkImage = new Gtk.Image({ file: filePath });
+    effects.forEach((e) => e.apply(this.gtkImage));
+    this.gtkImage.pixbuf.savev(filePath, 'png', [], []);
+
     this.srcFile = Gio.File.new_for_path(filePath);
     this.dstFile = null;
   }
