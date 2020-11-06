@@ -19,258 +19,276 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
-#: src/filename.js:27
-msgid "Screenshot"
-msgstr "Скріншот"
-
-#: src/filename.js:27
-msgid "Screenshot (literal)"
-msgstr "Скріншот (прописом)"
-
-#: src/filename.js:28
-msgid "Year"
-msgstr "Рік"
-
-#: src/filename.js:29
-msgid "Month"
-msgstr "Місяць"
-
-#: src/filename.js:30
-msgid "Day"
-msgstr "День"
-
-#: src/filename.js:31
-msgid "Hour"
-msgstr "Година"
-
-#: src/filename.js:32
-msgid "Minute"
-msgstr "Хвилина"
-
-#: src/filename.js:33
-msgid "Second"
-msgstr "Секунда"
-
-#: src/filename.js:34
-msgid "Width"
-msgstr "Ширина"
-
-#: src/filename.js:35
-msgid "Height"
-msgstr "Висота"
-
-#: src/filename.js:36
-msgid "Hostname"
-msgstr "Ім'я хоста"
-
-#: src/filename.js:41
-msgid "Parameters:"
-msgstr "Параметри:"
-
-#: src/indicator.js:102
-msgid "No Capture Delay"
-msgstr "Без затримки"
-
-#: src/indicator.js:104 src/indicator.js:106
-msgid "Capture Delay"
-msgstr "Затримка захоплення"
-
-#: src/indicator.js:121
-msgid "Clear"
-msgstr "Очистити"
-
-#: src/indicator.js:122 src/notifications.js:95
-msgid "Copy"
-msgstr "Копіювати"
-
-#: src/indicator.js:123
-msgid "Save As..."
-msgstr "Зберегти як..."
-
-#: src/indicator.js:139
-msgid "Imgur"
-msgstr "Imgur"
-
-#: src/indicator.js:140
-msgid "Upload"
-msgstr "Завантажити"
-
-#: src/indicator.js:141
-msgid "Open Link"
-msgstr "Відкрити посилання"
-
-#: src/indicator.js:142 src/notifications.js:182
-msgid "Copy Link"
-msgstr "Копіювати посилання"
-
-#: src/indicator.js:143
-msgid "Delete"
-msgstr "Видалити"
-
-#: src/indicator.js:297 src/prefs.js:144
-msgid "Select Area"
-msgstr "Вибрати область"
-
-#: src/indicator.js:298 src/prefs.js:145
-msgid "Select Window"
-msgstr "Вибрати вікно"
-
-#: src/indicator.js:299 src/prefs.js:146
-msgid "Select Desktop"
-msgstr "Вибрати тло"
-
-#: src/indicator.js:327
-msgid "Settings"
-msgstr "Налаштування"
-
-#: src/notifications.js:65
-msgid "New Screenshot"
-msgstr "Новий скріншот"
-
-#: src/notifications.js:70
-msgid "Size:"
-msgstr "Розмір:"
-
-#: src/notifications.js:96
-msgid "Save"
-msgstr "Зберегти"
-
-#: src/notifications.js:100
-msgid "Uploading To Imgur..."
-msgstr "Завантажується на Imgur..."
-
-#: src/notifications.js:102
-msgid "Upload To Imgur"
-msgstr "Завантажити на Imgur"
-
-#: src/notifications.js:132
-msgid "Error"
-msgstr "Помилка"
-
-#: src/notifications.js:144 src/notifications.js:156
-msgid "Imgur Upload"
-msgstr "Завантаження на Imgur"
-
-#: src/notifications.js:162
-msgid "Imgur Upload Failed"
-msgstr "Не вдалося завантажити на Imgur"
-
-#: src/notifications.js:167
-msgid "Imgur Upload Successful"
-msgstr "Успішно завантажено на Imgur"
-
-#: src/prefs.js:86
-msgid "Indicator"
-msgstr "Індикатор"
-
-#: src/prefs.js:90
-msgid "Storage"
-msgstr "Сховище"
-
-#: src/prefs.js:94
-msgid "Imgur Upload (Beta)"
-msgstr "Завантаження на Imgur (Beta)"
-
-#: src/prefs.js:98
-msgid "Keybindings"
-msgstr "Комбінації клавіш"
-
-#: src/prefs.js:117
-msgid "Show Indicator"
-msgstr "Показати індикатор"
-
-#: src/prefs.js:126
-msgid "Show Notification After Capture"
-msgstr "Показати сповіщення після захоплення"
-
-#: src/prefs.js:138
-msgid "Primary Button"
-msgstr "Основна кнопка"
-
-#: src/prefs.js:147
-msgid "Show Menu"
-msgstr "Показати меню"
-
-#: src/prefs.js:168
-msgid "Auto-Copy to Clipboard"
-msgstr "Автокопіювання до буфера обміну"
-
-#: src/prefs.js:174
-msgid "Nothing"
-msgstr "Нічого"
-
-#: src/prefs.js:175
-msgid "Image Data"
-msgstr "Дані зображення"
-
-#: src/prefs.js:211
-msgid "Auto-Save Screenshot"
-msgstr "Автокопіювання скріншота"
-
-#: src/prefs.js:222
-msgid "Save Location"
-msgstr "Місце зберігання"
-
-#: src/prefs.js:229
-msgid "Select"
-msgstr "Виберіть"
-
-#: src/prefs.js:270
-msgid "Default Filename"
-msgstr "Файл за замовчуванням"
-
-#: src/prefs.js:295
-msgid "Preview"
-msgstr "Попередній перегляд"
-
-#: src/prefs.js:353
-msgid "Enable Imgur Upload"
-msgstr "Увімкнути завантаження на Imgur"
-
-#: src/prefs.js:361
-msgid "Show Upload Notification"
-msgstr "Показати сповіщення про завантаження"
-
-#: src/prefs.js:378
-msgid "Auto-Upload After Capture"
-msgstr "Автоматичне завантаження після зйомки"
-
-#: src/prefs.js:393
-msgid "Auto-Copy Link After Upload"
-msgstr "Автокопіювати посилання після завантаження"
-
-#: src/prefs.js:408
-msgid "Auto-Open Link After Upload"
-msgstr "Автоматично відкривати посилання після завантаження"
-
-#: src/prefs.js:434
-msgid "Select area"
-msgstr "Виберіть область"
-
-#: src/prefs.js:435
-msgid "Select window"
-msgstr "Виберіть вікно"
-
-#: src/prefs.js:436
-msgid "Select whole desktop"
-msgstr "Виберіть весь робочий стіл"
-
-#: src/prefs.js:463
-msgid "Keyboard Shortcut"
-msgstr "Клавіатурне скорочення"
-
-#: src/prefs.js:503
-msgid "Modify"
-msgstr "Зменити"
-
-#: src/saveDlg.js:28
+#: src/saveDlg/saveDlg.ts:23
 msgid "_Cancel"
 msgstr "_Відмінити"
 
-#: src/saveDlg.js:29
+#: src/saveDlg/saveDlg.ts:24
 msgid "_Save"
 msgstr "_Зберегти"
 
-#: src/selection.js:228
+#: src/extension/prefs/imgur.ts:45
+msgid "Auto-Copy Link After Upload"
+msgstr "Автокопіювати посилання після завантаження"
+
+#: src/extension/prefs/indicator.ts:83
+msgid "Auto-Copy to Clipboard"
+msgstr "Автокопіювання до буфера обміну"
+
+#: src/extension/prefs/imgur.ts:58
+msgid "Auto-Open Link After Upload"
+msgstr "Автоматично відкривати посилання після завантаження"
+
+#: src/extension/prefs/storage.ts:17
+msgid "Auto-Save Screenshot"
+msgstr "Автокопіювання скріншота"
+
+#: src/extension/prefs/imgur.ts:32
+msgid "Auto-Upload After Capture"
+msgstr "Автоматичне завантаження після зйомки"
+
+#: src/extension/indicator.ts:89 src/extension/indicator.ts:91
+msgid "Capture Delay"
+msgstr "Затримка захоплення"
+
+#: src/extension/indicator.ts:120
+msgid "Clear"
+msgstr "Очистити"
+
+#: src/extension/indicator.ts:121 src/extension/notifications.ts:93
+msgid "Copy"
+msgstr "Копіювати"
+
+#: src/extension/prefs/indicator.ts:78
+#, fuzzy
+msgid "Copy Button"
+msgstr "Основна кнопка"
+
+#: src/extension/indicator.ts:141 src/extension/notifications.ts:187
+msgid "Copy Link"
+msgstr "Копіювати посилання"
+
+#: src/extension/filename.ts:24
+msgid "Day"
+msgstr "День"
+
+#: src/extension/prefs/storage.ts:64
+msgid "Default Filename"
+msgstr "Файл за замовчуванням"
+
+#: src/extension/indicator.ts:142
+msgid "Delete"
+msgstr "Видалити"
+
+#: src/extension/prefs/prefs.ts:29
+msgid "Effects"
+msgstr ""
+
+#: src/extension/prefs/imgur.ts:12
+msgid "Enable Imgur Upload"
+msgstr "Увімкнути завантаження на Imgur"
+
+#: src/extension/notifications.ts:129
+msgid "Error"
+msgstr "Помилка"
+
+#: src/extension/filename.ts:29
+msgid "Height"
+msgstr "Висота"
+
+#: src/extension/filename.ts:30
+msgid "Hostname"
+msgstr "Ім'я хоста"
+
+#: src/extension/filename.ts:25
+msgid "Hour"
+msgstr "Година"
+
+#: src/extension/prefs/indicator.ts:56
+msgid "Image Data"
+msgstr "Дані зображення"
+
+#: src/extension/indicator.ts:138
+msgid "Imgur"
+msgstr "Imgur"
+
+#: src/extension/notifications.ts:145 src/extension/notifications.ts:150
+#: src/extension/notifications.ts:165
+msgid "Imgur Upload"
+msgstr "Завантаження на Imgur"
+
+#: src/extension/prefs/prefs.ts:37
+msgid "Imgur Upload (Beta)"
+msgstr "Завантаження на Imgur (Beta)"
+
+#: src/extension/notifications.ts:169
+msgid "Imgur Upload Failed"
+msgstr "Не вдалося завантажити на Imgur"
+
+#: src/extension/notifications.ts:173
+msgid "Imgur Upload Successful"
+msgstr "Успішно завантажено на Imgur"
+
+#: src/extension/prefs/prefs.ts:25
+msgid "Indicator"
+msgstr "Індикатор"
+
+#: src/extension/prefs/prefs.ts:41
+msgid "Keybindings"
+msgstr "Комбінації клавіш"
+
+#: src/extension/prefs/keybindings.ts:44
+msgid "Keyboard Shortcut"
+msgstr "Клавіатурне скорочення"
+
+#: src/extension/prefs/indicator.ts:57
+msgid "Local Path"
+msgstr ""
+
+#: src/extension/filename.ts:26
+msgid "Minute"
+msgstr "Хвилина"
+
+#: src/extension/prefs/keybindings.ts:84
+msgid "Modify"
+msgstr "Зменити"
+
+#: src/extension/filename.ts:23
+msgid "Month"
+msgstr "Місяць"
+
+#: src/extension/notifications.ts:50
+msgid "New Screenshot"
+msgstr "Новий скріншот"
+
+#: src/extension/indicator.ts:87
+msgid "No Capture Delay"
+msgstr "Без затримки"
+
+#: src/extension/prefs/indicator.ts:55
+msgid "Nothing"
+msgstr "Нічого"
+
+#: src/extension/indicator.ts:140
+msgid "Open Link"
+msgstr "Відкрити посилання"
+
+#: src/extension/filename.ts:35
+msgid "Parameters:"
+msgstr "Параметри:"
+
+#: src/extension/prefs/storage.ts:82
+msgid "Preview"
+msgstr "Попередній перегляд"
+
+#: src/extension/prefs/indicator.ts:32
+msgid "Primary Button"
+msgstr "Основна кнопка"
+
+#: src/extension/prefs/effects.ts:16
+msgid "Rescale"
+msgstr ""
+
+#: src/extension/notifications.ts:94
+msgid "Save"
+msgstr "Зберегти"
+
+#: src/extension/indicator.ts:122
+msgid "Save As..."
+msgstr "Зберегти як..."
+
+#: src/extension/prefs/storage.ts:24
+msgid "Save Location"
+msgstr "Місце зберігання"
+
+#: src/extension/filename.ts:21
+msgid "Screenshot"
+msgstr "Скріншот"
+
+#: src/extension/filename.ts:21
+msgid "Screenshot (literal)"
+msgstr "Скріншот (прописом)"
+
+#: src/extension/filename.ts:27
+msgid "Second"
+msgstr "Секунда"
+
+#: src/extension/prefs/storage.ts:30
+msgid "Select"
+msgstr "Виберіть"
+
+#: src/extension/prefs/keybindings.ts:15
+msgid "Select area"
+msgstr "Виберіть область"
+
+#: src/extension/indicator.ts:295 src/extension/prefs/indicator.ts:38
+msgid "Select Area"
+msgstr "Вибрати область"
+
+#: src/extension/indicator.ts:297 src/extension/prefs/indicator.ts:40
+msgid "Select Desktop"
+msgstr "Вибрати тло"
+
+#: src/extension/prefs/keybindings.ts:17
+msgid "Select whole desktop"
+msgstr "Виберіть весь робочий стіл"
+
+#: src/extension/prefs/keybindings.ts:16
+msgid "Select window"
+msgstr "Виберіть вікно"
+
+#: src/extension/indicator.ts:296 src/extension/prefs/indicator.ts:39
+msgid "Select Window"
+msgstr "Вибрати вікно"
+
+#: src/extension/selection.ts:229
 msgid "selected region was too small - please select a larger area"
 msgstr "вибрана область була замалою - будь ласка, виберіть більшу область"
+
+#: src/extension/indicator.ts:322
+msgid "Settings"
+msgstr "Налаштування"
+
+#: src/extension/prefs/indicator.ts:15
+msgid "Show Indicator"
+msgstr "Показати індикатор"
+
+#: src/extension/prefs/indicator.ts:41
+msgid "Show Menu"
+msgstr "Показати меню"
+
+#: src/extension/prefs/indicator.ts:23
+msgid "Show Notification After Capture"
+msgstr "Показати сповіщення після захоплення"
+
+#: src/extension/prefs/imgur.ts:19
+msgid "Show Upload Notification"
+msgstr "Показати сповіщення про завантаження"
+
+#: src/extension/notifications.ts:56
+msgid "Size:"
+msgstr "Розмір:"
+
+#: src/extension/prefs/prefs.ts:33
+msgid "Storage"
+msgstr "Сховище"
+
+#: src/extension/indicator.ts:139
+msgid "Upload"
+msgstr "Завантажити"
+
+#: src/extension/notifications.ts:102
+msgid "Upload To Imgur"
+msgstr "Завантажити на Imgur"
+
+#: src/extension/notifications.ts:98
+msgid "Uploading To Imgur..."
+msgstr "Завантажується на Imgur..."
+
+#: src/extension/filename.ts:28
+msgid "Width"
+msgstr "Ширина"
+
+#: src/extension/filename.ts:22
+msgid "Year"
+msgstr "Рік"

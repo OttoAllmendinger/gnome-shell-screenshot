@@ -7,269 +7,289 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
 "PO-Revision-Date: 2020-05-02 21:13+0200\n"
+"Last-Translator: Joan Coll Cerdán <johan.az@gmail.com>\n"
 "Language-Team: \n"
+"Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: \n"
 "X-Generator: Poedit 2.3\n"
-"Last-Translator: Joan Coll Cerdán <johan.az@gmail.com>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"Language: ca\n"
 
-#: src/filename.js:27
-msgid "Screenshot"
-msgstr "Captura de pantalla"
-
-#: src/filename.js:27
-msgid "Screenshot (literal)"
-msgstr "Captura de pantalla (literal)"
-
-#: src/filename.js:28
-msgid "Year"
-msgstr "Any"
-
-#: src/filename.js:29
-msgid "Month"
-msgstr "Mes"
-
-#: src/filename.js:30
-msgid "Day"
-msgstr "Día"
-
-#: src/filename.js:31
-msgid "Hour"
-msgstr "Hora"
-
-#: src/filename.js:32
-msgid "Minute"
-msgstr "Minut"
-
-#: src/filename.js:33
-msgid "Second"
-msgstr "Segon"
-
-#: src/filename.js:34
-msgid "Width"
-msgstr "Amplada"
-
-#: src/filename.js:35
-msgid "Height"
-msgstr "Alçada"
-
-#: src/filename.js:36
-msgid "Hostname"
-msgstr "Hostname"
-
-#: src/filename.js:41
-msgid "Parameters:"
-msgstr "Paràmetres:"
-
-#: src/indicator.js:102
-msgid "No Capture Delay"
-msgstr "Sense retard de captura"
-
-#: src/indicator.js:104 src/indicator.js:106
-msgid "Capture Delay"
-msgstr "Retard de captura"
-
-#: src/indicator.js:121
-msgid "Clear"
-msgstr "Neteja-ho"
-
-#: src/indicator.js:122 src/notifications.js:95
-msgid "Copy"
-msgstr "Copia"
-
-#: src/indicator.js:123
-msgid "Save As..."
-msgstr "Anomena i desa..."
-
-#: src/indicator.js:139
-msgid "Imgur"
-msgstr "Imgur"
-
-#: src/indicator.js:140
-msgid "Upload"
-msgstr "Carrega"
-
-#: src/indicator.js:141
-msgid "Open Link"
-msgstr "Obrir enllaç"
-
-#: src/indicator.js:142 src/notifications.js:182
-msgid "Copy Link"
-msgstr "Copiar enllaç"
-
-#: src/indicator.js:143
-msgid "Delete"
-msgstr "Esborrar"
-
-#: src/indicator.js:297 src/prefs.js:144
-msgid "Select Area"
-msgstr "Seleccionar àrea"
-
-#: src/indicator.js:298 src/prefs.js:145
-msgid "Select Window"
-msgstr "Seleccionar finestra"
-
-#: src/indicator.js:299 src/prefs.js:146
-msgid "Select Desktop"
-msgstr "Seleccionar escriptori"
-
-#: src/indicator.js:327
-msgid "Settings"
-msgstr "Paràmetres"
-
-#: src/notifications.js:65
-msgid "New Screenshot"
-msgstr "Nova captura de pantalla"
-
-#: src/notifications.js:70
-msgid "Size:"
-msgstr "Mida:"
-
-#: src/notifications.js:96
-msgid "Save"
-msgstr "Desa"
-
-#: src/notifications.js:100
-msgid "Uploading To Imgur..."
-msgstr "Carregant a Imgur..."
-
-#: src/notifications.js:102
-msgid "Upload To Imgur"
-msgstr "Carregar-ho a Imgur"
-
-#: src/notifications.js:132
-msgid "Error"
-msgstr "Error"
-
-#: src/notifications.js:144 src/notifications.js:156
-msgid "Imgur Upload"
-msgstr "Carrega a Imgur"
-
-#: src/notifications.js:162
-msgid "Imgur Upload Failed"
-msgstr "Carrega a Imgur fallida"
-
-#: src/notifications.js:167
-msgid "Imgur Upload Successful"
-msgstr "Carrega a Imgur confirmada"
-
-#: src/prefs.js:86
-msgid "Indicator"
-msgstr "Indicador"
-
-#: src/prefs.js:90
-msgid "Storage"
-msgstr "Emmagatzematge"
-
-#: src/prefs.js:94
-msgid "Imgur Upload (Beta)"
-msgstr "Carrega a Imgur (Beta)"
-
-#: src/prefs.js:98
-msgid "Keybindings"
-msgstr "Dreceres"
-
-#: src/prefs.js:117
-msgid "Show Indicator"
-msgstr "Mostrar indicador"
-
-#: src/prefs.js:126
-msgid "Show Notification After Capture"
-msgstr "Mostrar notificació després de la captura"
-
-#: src/prefs.js:138
-msgid "Primary Button"
-msgstr "Botó primari"
-
-#: src/prefs.js:147
-msgid "Show Menu"
-msgstr "Mostrar menú"
-
-#: src/prefs.js:168
-msgid "Auto-Copy to Clipboard"
-msgstr "Copiar automàticament al portapapers"
-
-#: src/prefs.js:174
-msgid "Nothing"
-msgstr "No fer res"
-
-#: src/prefs.js:175
-msgid "Image Data"
-msgstr "Dades de la imatge"
-
-#: src/prefs.js:211
-msgid "Auto-Save Screenshot"
-msgstr "Desar captura de pantalla automàticament"
-
-#: src/prefs.js:222
-msgid "Save Location"
-msgstr "Ubicació d'emmagatzematge"
-
-#: src/prefs.js:229
-msgid "Select"
-msgstr "Seleccionar"
-
-#: src/prefs.js:270
-msgid "Default Filename"
-msgstr "Nom de fitxer predeterminat"
-
-#: src/prefs.js:295
-msgid "Preview"
-msgstr "Previsualització"
-
-#: src/prefs.js:353
-msgid "Enable Imgur Upload"
-msgstr "Activar càrrega a Imgur"
-
-#: src/prefs.js:361
-msgid "Show Upload Notification"
-msgstr "Mostrar notificació de la càrrega"
-
-#: src/prefs.js:378
-msgid "Auto-Upload After Capture"
-msgstr "Carregar automàticament després de la captura"
-
-#: src/prefs.js:393
-msgid "Auto-Copy Link After Upload"
-msgstr "Copiar enllaç automàticament després de la càrrega"
-
-#: src/prefs.js:408
-msgid "Auto-Open Link After Upload"
-msgstr "Obrir enllaç automàticament després de la càrrega"
-
-#: src/prefs.js:434
-msgid "Select area"
-msgstr "Seleccionar àrea"
-
-#: src/prefs.js:435
-msgid "Select window"
-msgstr "Seleccionar finestra"
-
-#: src/prefs.js:436
-msgid "Select whole desktop"
-msgstr "Seleccionar escriptori sencer"
-
-#: src/prefs.js:463
-msgid "Keyboard Shortcut"
-msgstr "Drecera de teclat"
-
-#: src/prefs.js:503
-msgid "Modify"
-msgstr "Modificar"
-
-#: src/saveDlg.js:28
+#: src/saveDlg/saveDlg.ts:23
 msgid "_Cancel"
 msgstr "_Cancel·la"
 
-#: src/saveDlg.js:29
+#: src/saveDlg/saveDlg.ts:24
 msgid "_Save"
 msgstr "_Desa"
 
-#: src/selection.js:228
+#: src/extension/prefs/imgur.ts:45
+msgid "Auto-Copy Link After Upload"
+msgstr "Copiar enllaç automàticament després de la càrrega"
+
+#: src/extension/prefs/indicator.ts:83
+msgid "Auto-Copy to Clipboard"
+msgstr "Copiar automàticament al portapapers"
+
+#: src/extension/prefs/imgur.ts:58
+msgid "Auto-Open Link After Upload"
+msgstr "Obrir enllaç automàticament després de la càrrega"
+
+#: src/extension/prefs/storage.ts:17
+msgid "Auto-Save Screenshot"
+msgstr "Desar captura de pantalla automàticament"
+
+#: src/extension/prefs/imgur.ts:32
+msgid "Auto-Upload After Capture"
+msgstr "Carregar automàticament després de la captura"
+
+#: src/extension/indicator.ts:89 src/extension/indicator.ts:91
+msgid "Capture Delay"
+msgstr "Retard de captura"
+
+#: src/extension/indicator.ts:120
+msgid "Clear"
+msgstr "Neteja-ho"
+
+#: src/extension/indicator.ts:121 src/extension/notifications.ts:93
+msgid "Copy"
+msgstr "Copia"
+
+#: src/extension/prefs/indicator.ts:78
+#, fuzzy
+msgid "Copy Button"
+msgstr "Botó primari"
+
+#: src/extension/indicator.ts:141 src/extension/notifications.ts:187
+msgid "Copy Link"
+msgstr "Copiar enllaç"
+
+#: src/extension/filename.ts:24
+msgid "Day"
+msgstr "Día"
+
+#: src/extension/prefs/storage.ts:64
+msgid "Default Filename"
+msgstr "Nom de fitxer predeterminat"
+
+#: src/extension/indicator.ts:142
+msgid "Delete"
+msgstr "Esborrar"
+
+#: src/extension/prefs/prefs.ts:29
+msgid "Effects"
+msgstr ""
+
+#: src/extension/prefs/imgur.ts:12
+msgid "Enable Imgur Upload"
+msgstr "Activar càrrega a Imgur"
+
+#: src/extension/notifications.ts:129
+msgid "Error"
+msgstr "Error"
+
+#: src/extension/filename.ts:29
+msgid "Height"
+msgstr "Alçada"
+
+#: src/extension/filename.ts:30
+msgid "Hostname"
+msgstr "Hostname"
+
+#: src/extension/filename.ts:25
+msgid "Hour"
+msgstr "Hora"
+
+#: src/extension/prefs/indicator.ts:56
+msgid "Image Data"
+msgstr "Dades de la imatge"
+
+#: src/extension/indicator.ts:138
+msgid "Imgur"
+msgstr "Imgur"
+
+#: src/extension/notifications.ts:145 src/extension/notifications.ts:150
+#: src/extension/notifications.ts:165
+msgid "Imgur Upload"
+msgstr "Carrega a Imgur"
+
+#: src/extension/prefs/prefs.ts:37
+msgid "Imgur Upload (Beta)"
+msgstr "Carrega a Imgur (Beta)"
+
+#: src/extension/notifications.ts:169
+msgid "Imgur Upload Failed"
+msgstr "Carrega a Imgur fallida"
+
+#: src/extension/notifications.ts:173
+msgid "Imgur Upload Successful"
+msgstr "Carrega a Imgur confirmada"
+
+#: src/extension/prefs/prefs.ts:25
+msgid "Indicator"
+msgstr "Indicador"
+
+#: src/extension/prefs/prefs.ts:41
+msgid "Keybindings"
+msgstr "Dreceres"
+
+#: src/extension/prefs/keybindings.ts:44
+msgid "Keyboard Shortcut"
+msgstr "Drecera de teclat"
+
+#: src/extension/prefs/indicator.ts:57
+msgid "Local Path"
+msgstr ""
+
+#: src/extension/filename.ts:26
+msgid "Minute"
+msgstr "Minut"
+
+#: src/extension/prefs/keybindings.ts:84
+msgid "Modify"
+msgstr "Modificar"
+
+#: src/extension/filename.ts:23
+msgid "Month"
+msgstr "Mes"
+
+#: src/extension/notifications.ts:50
+msgid "New Screenshot"
+msgstr "Nova captura de pantalla"
+
+#: src/extension/indicator.ts:87
+msgid "No Capture Delay"
+msgstr "Sense retard de captura"
+
+#: src/extension/prefs/indicator.ts:55
+msgid "Nothing"
+msgstr "No fer res"
+
+#: src/extension/indicator.ts:140
+msgid "Open Link"
+msgstr "Obrir enllaç"
+
+#: src/extension/filename.ts:35
+msgid "Parameters:"
+msgstr "Paràmetres:"
+
+#: src/extension/prefs/storage.ts:82
+msgid "Preview"
+msgstr "Previsualització"
+
+#: src/extension/prefs/indicator.ts:32
+msgid "Primary Button"
+msgstr "Botó primari"
+
+#: src/extension/prefs/effects.ts:16
+msgid "Rescale"
+msgstr ""
+
+#: src/extension/notifications.ts:94
+msgid "Save"
+msgstr "Desa"
+
+#: src/extension/indicator.ts:122
+msgid "Save As..."
+msgstr "Anomena i desa..."
+
+#: src/extension/prefs/storage.ts:24
+msgid "Save Location"
+msgstr "Ubicació d'emmagatzematge"
+
+#: src/extension/filename.ts:21
+msgid "Screenshot"
+msgstr "Captura de pantalla"
+
+#: src/extension/filename.ts:21
+msgid "Screenshot (literal)"
+msgstr "Captura de pantalla (literal)"
+
+#: src/extension/filename.ts:27
+msgid "Second"
+msgstr "Segon"
+
+#: src/extension/prefs/storage.ts:30
+msgid "Select"
+msgstr "Seleccionar"
+
+#: src/extension/prefs/keybindings.ts:15
+msgid "Select area"
+msgstr "Seleccionar àrea"
+
+#: src/extension/indicator.ts:295 src/extension/prefs/indicator.ts:38
+msgid "Select Area"
+msgstr "Seleccionar àrea"
+
+#: src/extension/indicator.ts:297 src/extension/prefs/indicator.ts:40
+msgid "Select Desktop"
+msgstr "Seleccionar escriptori"
+
+#: src/extension/prefs/keybindings.ts:17
+msgid "Select whole desktop"
+msgstr "Seleccionar escriptori sencer"
+
+#: src/extension/prefs/keybindings.ts:16
+msgid "Select window"
+msgstr "Seleccionar finestra"
+
+#: src/extension/indicator.ts:296 src/extension/prefs/indicator.ts:39
+msgid "Select Window"
+msgstr "Seleccionar finestra"
+
+#: src/extension/selection.ts:229
 msgid "selected region was too small - please select a larger area"
-msgstr "la regió seleccionada era massa petita - si us plau, seleccioni un àrea més gran"
+msgstr ""
+"la regió seleccionada era massa petita - si us plau, seleccioni un àrea més "
+"gran"
+
+#: src/extension/indicator.ts:322
+msgid "Settings"
+msgstr "Paràmetres"
+
+#: src/extension/prefs/indicator.ts:15
+msgid "Show Indicator"
+msgstr "Mostrar indicador"
+
+#: src/extension/prefs/indicator.ts:41
+msgid "Show Menu"
+msgstr "Mostrar menú"
+
+#: src/extension/prefs/indicator.ts:23
+msgid "Show Notification After Capture"
+msgstr "Mostrar notificació després de la captura"
+
+#: src/extension/prefs/imgur.ts:19
+msgid "Show Upload Notification"
+msgstr "Mostrar notificació de la càrrega"
+
+#: src/extension/notifications.ts:56
+msgid "Size:"
+msgstr "Mida:"
+
+#: src/extension/prefs/prefs.ts:33
+msgid "Storage"
+msgstr "Emmagatzematge"
+
+#: src/extension/indicator.ts:139
+msgid "Upload"
+msgstr "Carrega"
+
+#: src/extension/notifications.ts:102
+msgid "Upload To Imgur"
+msgstr "Carregar-ho a Imgur"
+
+#: src/extension/notifications.ts:98
+msgid "Uploading To Imgur..."
+msgstr "Carregant a Imgur..."
+
+#: src/extension/filename.ts:28
+msgid "Width"
+msgstr "Amplada"
+
+#: src/extension/filename.ts:22
+msgid "Year"
+msgstr "Any"
