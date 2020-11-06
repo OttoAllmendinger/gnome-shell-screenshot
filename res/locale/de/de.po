@@ -83,7 +83,7 @@ msgstr "Löschen"
 
 #: src/extension/prefs/prefs.ts:29
 msgid "Effects"
-msgstr ""
+msgstr "Effekte"
 
 #: src/extension/prefs/imgur.ts:12
 msgid "Enable Imgur Upload"
@@ -144,7 +144,7 @@ msgstr "Tastaturkürzel"
 
 #: src/extension/prefs/indicator.ts:57
 msgid "Local Path"
-msgstr ""
+msgstr "Lokaler Pfad"
 
 #: src/extension/filename.ts:26
 msgid "Minute"
@@ -188,7 +188,7 @@ msgstr "Primärtaste"
 
 #: src/extension/prefs/effects.ts:16
 msgid "Rescale"
-msgstr ""
+msgstr "Skalierung"
 
 #: src/extension/notifications.ts:94
 msgid "Save"
