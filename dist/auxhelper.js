@@ -133,12 +133,7 @@
       if (!fileName.startsWith('/')) {
           throw new Error('filename path must be absolute');
       }
-      // gnome3.24 - no destructuring with defaults
-      const { flash, includeCursor, includeFrame } = Object.assign({
-          flash: false,
-          includeCursor: false,
-          includeFrame: true,
-      }, opts);
+      const { flash = false, includeCursor = false, includeFrame = true } = opts;
       const screenshotOpts = { flash, includeCursor, includeFrame };
       const funcs = [];
       if (opts.desktop) {

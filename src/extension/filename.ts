@@ -1,7 +1,7 @@
 import * as GLib from '@imports/GLib-2.0';
 import * as StringFormat from '../vendor/stringformat';
 
-import { _ } from '../gettext';
+import { _ } from '../gselib/gettext';
 
 const parameters = ({ width, height }) => {
   const now = new Date();

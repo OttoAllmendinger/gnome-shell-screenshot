@@ -1,7 +1,7 @@
 import * as Gtk from '@imports/Gtk-3.0';
 import * as GObject from '@imports/GObject-2.0';
 
-import { _ } from '../../gettext';
+import { _ } from '../../gselib/gettext';
 
 // accelerator setting based on
 // https://github.com/ambrice/spatialnavigation-tastycactus.com/blob/master/prefs.js

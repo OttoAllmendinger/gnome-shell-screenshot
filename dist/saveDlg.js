@@ -1,10 +1,18 @@
 (function (Gio, Gtk) {
     'use strict';
 
+    var uuid = "gnome-shell-screenshot@ttll.de";
+
+    const _ = imports.gettext.domain(uuid).gettext;
+    function init(extensionDir) {
+        const workDir = Gio.File.new_for_path(extensionDir);
+        const localeDir = workDir.get_child('locale');
+        if (localeDir.query_exists(null)) {
+            imports.gettext.bindtextdomain(uuid, localeDir.get_path());
+        }
+    }
+
     // Copies a file to user-defined destination.
-    const domain = 'gnome-shell-screenshot';
-    const Gettext = imports.gettext;
-    const _ = Gettext.domain(domain).gettext;
     const copy = (srcPath, dstDir, dstName) => {
         if (!srcPath) {
             print('no srcPath');
@@ -34,10 +42,7 @@
         srcFile.copy(dstFile, Gio.FileCopyFlags.OVERWRITE, null, null);
     };
     if (window['ARGV']) {
-        const workDir = Gio.File.new_for_path(ARGV[3]);
-        const localeDir = workDir.get_child('locale');
-        if (localeDir.query_exists(null))
-            Gettext.bindtextdomain(domain, localeDir.get_path());
+        init(ARGV[3]);
         const [srcPath, dstDir, dstName] = [ARGV[0], ARGV[1], ARGV[2]].map(decodeURIComponent);
         copy(srcPath, dstDir, dstName);
     }

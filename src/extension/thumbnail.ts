@@ -1,7 +1,7 @@
 import * as Gio from '@imports/Gio-2.0';
 import * as GdkPixbuf from '@imports/GdkPixbuf-2.0';
 
-import ExtensionUtils from './extensionUtils';
+import ExtensionUtils from '../gselib/extensionUtils';
 
 const Local = ExtensionUtils.getCurrentExtension();
 

@@ -1,4 +1,4 @@
-import { _ } from '../../gettext';
+import { _ } from '../../gselib/gettext';
 
 import * as Config from '../config';
 

@@ -4,18 +4,18 @@ import * as Meta from '@imports/Meta-7';
 import * as Clutter from '@imports/Clutter-7';
 import * as Shell from '@imports/Shell-0.1';
 
-import { currentVersion } from '../gselib/version';
 import { SignalEmitter } from '..';
 
+import { currentVersion } from '../gselib/version';
+import ExtensionUtils from '../gselib/extensionUtils';
+import { _ } from '../gselib/gettext';
+
 import * as Filename from './filename';
-import ExtensionUtils from './extensionUtils';
 
 const Signals = imports.signals;
 const Mainloop = imports.mainloop;
 
 const Main = imports.ui.main;
-
-import { _ } from '../gettext';
 
 const Local = ExtensionUtils.getCurrentExtension();
 

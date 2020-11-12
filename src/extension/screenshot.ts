@@ -11,7 +11,7 @@ import * as Clipboard from './clipboard';
 import * as Filename from './filename';
 import * as UploadImgur from './uploadImgur';
 import * as Notifications from './notifications';
-import ExtensionUtils from './extensionUtils';
+import ExtensionUtils from '../gselib/extensionUtils';
 
 const Signals = imports.signals;
 

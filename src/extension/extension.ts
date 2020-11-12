@@ -5,14 +5,14 @@
 import * as Meta from '@imports/Meta-7';
 import * as Shell from '@imports/Shell-0.1';
 
+import { SignalEmitter } from '..';
+import ExtensionUtils from '../gselib/extensionUtils';
+
 import * as Config from './config';
 import * as Indicator from './indicator';
 import * as Selection from './selection';
 import * as Notifications from './notifications';
 import { Rescale, Screenshot } from './screenshot';
-import ExtensionUtils from './extensionUtils';
-
-import { SignalEmitter } from '..';
 
 const Signals = imports.signals;
 const Main = imports.ui.main;

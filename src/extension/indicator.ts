@@ -4,12 +4,12 @@ import * as Clutter from '@imports/Clutter-7';
 
 import { currentVersion } from '../gselib/version';
 import { openPrefs } from '../gselib/openPrefs';
+import { _ } from '../gselib/gettext';
+import ExtensionUtils from '../gselib/extensionUtils';
 
 import * as Config from './config';
 import * as Extension from './extension';
 import { Screenshot } from './screenshot';
-import ExtensionUtils from './extensionUtils';
-import { _ } from '../gettext';
 
 const PanelMenu = imports.ui.panelMenu;
 const PopupMenu = imports.ui.popupMenu;

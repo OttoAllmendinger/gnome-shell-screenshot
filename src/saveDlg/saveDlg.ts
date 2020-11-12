@@ -7,7 +7,7 @@
 import * as Gio from '@imports/Gio-2.0';
 import * as Gtk from '@imports/Gtk-3.0';
 
-import { _, init as initTranslations } from '../gettext';
+import { _, init as initTranslations } from '../gselib/gettext';
 
 const copy = (srcPath, dstDir, dstName) => {
   if (!srcPath) {

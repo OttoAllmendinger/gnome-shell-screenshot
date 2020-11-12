@@ -1,7 +1,7 @@
 import * as Gtk from '@imports/Gtk-3.0';
 import * as GObject from '@imports/GObject-2.0';
 
-import { _ } from '../../gettext';
+import { _ } from '../../gselib/gettext';
 
 import * as Config from '../config';
 

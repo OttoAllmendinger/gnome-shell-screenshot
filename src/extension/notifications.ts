@@ -1,12 +1,12 @@
 import * as Gio from '@imports/Gio-2.0';
 import * as GObject from '@imports/GObject-2.0';
 
+import ExtensionUtils from '../gselib/extensionUtils';
 import { currentVersion } from '../gselib/version';
-import { _ } from '../gettext';
+import { _ } from '../gselib/gettext';
 
 import * as Config from './config';
 import * as Thumbnail from './thumbnail';
-import ExtensionUtils from './extensionUtils';
 
 const Signals = imports.signals;
 const Main = imports.ui.main;
