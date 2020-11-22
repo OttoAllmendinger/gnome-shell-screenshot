@@ -357,95 +357,114 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
         }
     }
 
-    /* global define, module */
+    var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
-    //  ValueError :: String -> Error
-    var ValueError = function (message) {
-      var err = new Error(message);
-      err.name = 'ValueError';
-      return err;
-    };
+    function createCommonjsModule(fn, basedir, module) {
+    	return module = {
+    		path: basedir,
+    		exports: {},
+    		require: function (path, base) {
+    			return commonjsRequire(path, (base === undefined || base === null) ? module.path : base);
+    		}
+    	}, fn(module, module.exports), module.exports;
+    }
 
-    //  defaultTo :: a,a? -> a
-    var defaultTo = function (x, y) {
-      return y == null ? x : y;
-    };
+    function commonjsRequire () {
+    	throw new Error('Dynamic requires are not currently supported by @rollup/plugin-commonjs');
+    }
 
-    // NOTE
-    // this works around inconsistencies in the Regex implementations
-    // of different gjs versions
-    var isEmptyString = function (string) {
-      return (string == "") || (string == null);
-    };
+    var stringFormat = createCommonjsModule(function (module) {
+    void function(global) {
 
-    //  create :: Object -> String,*... -> String
-    var create = function (transformers) {
-      return function (template) {
-        var args = Array.prototype.slice.call(arguments, 1);
-        var idx = 0;
-        var state = 'UNDEFINED';
-
-        return template.replace(
-          /([{}])\1|[{](.*?)(?:!(.+?))?[}]/g,
-          function (match, literal, key, xf) {
-            if (!isEmptyString(literal)) {
-              return literal;
-            }
-            if (key.length > 0) {
-              if (state === 'IMPLICIT') {
-                throw ValueError('cannot switch from ' +
-                  'implicit to explicit numbering');
-              }
-              state = 'EXPLICIT';
-            } else {
-              if (state === 'EXPLICIT') {
-                throw ValueError('cannot switch from ' +
-                  'explicit to implicit numbering');
-              }
-              state = 'IMPLICIT';
-              key = String(idx);
-              idx += 1;
-            }
-            var value = defaultTo('', lookup(args, key.split('.')));
-
-            if (isEmptyString(xf)) {
-              return value;
-            } else if (Object.prototype.hasOwnProperty.call(transformers, xf)) {
-              return transformers[xf](value);
-            } else {
-              throw ValueError('no transformer named "' + xf + '"');
-            }
-          }
-        );
-      };
-    };
-
-    var lookup = function (obj, path) {
-      if (!/^\d+$/.test(path[0])) {
-        path = ['0'].concat(path);
+      //  ValueError :: String -> Error
+      function ValueError(message) {
+        var err = new Error(message);
+        err.name = 'ValueError';
+        return err;
       }
-      for (var idx = 0; idx < path.length; idx += 1) {
-        var key = path[idx];
-        obj = typeof obj[key] === 'function' ? obj[key]() : obj[key];
+
+      //  create :: Object -> String,*... -> String
+      function create(transformers) {
+        return function(template) {
+          var args = Array.prototype.slice.call(arguments, 1);
+          var idx = 0;
+          var state = 'UNDEFINED';
+
+          return template.replace(
+            /([{}])\1|[{](.*?)(?:!(.+?))?[}]/g,
+            function(match, literal, _key, xf) {
+              if (literal != null) {
+                return literal;
+              }
+              var key = _key;
+              if (key.length > 0) {
+                if (state === 'IMPLICIT') {
+                  throw ValueError('cannot switch from ' +
+                                   'implicit to explicit numbering');
+                }
+                state = 'EXPLICIT';
+              } else {
+                if (state === 'EXPLICIT') {
+                  throw ValueError('cannot switch from ' +
+                                   'explicit to implicit numbering');
+                }
+                state = 'IMPLICIT';
+                key = String(idx);
+                idx += 1;
+              }
+
+              //  1.  Split the key into a lookup path.
+              //  2.  If the first path component is not an index, prepend '0'.
+              //  3.  Reduce the lookup path to a single result. If the lookup
+              //      succeeds the result is a singleton array containing the
+              //      value at the lookup path; otherwise the result is [].
+              //  4.  Unwrap the result by reducing with '' as the default value.
+              var path = key.split('.');
+              var value = (/^\d+$/.test(path[0]) ? path : ['0'].concat(path))
+                .reduce(function(maybe, key) {
+                  return maybe.reduce(function(_, x) {
+                    return x != null && key in Object(x) ?
+                      [typeof x[key] === 'function' ? x[key]() : x[key]] :
+                      [];
+                  }, []);
+                }, [args])
+                .reduce(function(_, x) { return x; }, '');
+
+              if (xf == null) {
+                return value;
+              } else if (Object.prototype.hasOwnProperty.call(transformers, xf)) {
+                return transformers[xf](value);
+              } else {
+                throw ValueError('no transformer named "' + xf + '"');
+              }
+            }
+          );
+        };
       }
-      return obj;
-    };
 
-    //  format :: String,*... -> String
-    const format = create({});
+      //  format :: String,*... -> String
+      var format = create({});
 
-    //  format.create :: Object -> String,*... -> String
-    format.create = create;
+      //  format.create :: Object -> String,*... -> String
+      format.create = create;
 
-    //  format.extend :: Object,Object -> ()
-    format.extend = function (prototype, transformers) {
-      var $format = create(transformers);
-      prototype.format = function () {
-        var args = Array.prototype.slice.call(arguments);
-        args.unshift(this);
-        return $format.apply(global, args);
+      //  format.extend :: Object,Object -> ()
+      format.extend = function(prototype, transformers) {
+        var $format = create(transformers);
+        prototype.format = function() {
+          var args = Array.prototype.slice.call(arguments);
+          args.unshift(this);
+          return $format.apply(global, args);
+        };
       };
-    };
+
+      /* istanbul ignore else */
+      {
+        module.exports = format;
+      }
+
+    }.call(commonjsGlobal, commonjsGlobal);
+    });
 
     const parameters = ({ width, height }) => {
         const now = new Date();
@@ -477,7 +496,7 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
             obj[key] = value;
             return obj;
         }, {});
-        const basename = format(template, vars);
+        const basename = stringFormat(template, vars);
         let sequence = '';
         if (n > 0) {
             sequence = '_' + String(n);
@@ -1246,7 +1265,14 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
             if (!this._selection) {
                 throw new Error('selection undefined');
             }
-            this._selection.connect('screenshot', this._onScreenshot.bind(this));
+            this._selection.connect('screenshot', (screenshot, file) => {
+                try {
+                    this._onScreenshot(screenshot, file);
+                }
+                catch (e) {
+                    notifyError(e.message);
+                }
+            });
             this._selection.connect('error', (selection, message) => {
                 notifyError(message);
             });

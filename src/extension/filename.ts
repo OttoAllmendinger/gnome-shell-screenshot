@@ -1,5 +1,5 @@
 import * as GLib from '@imports/GLib-2.0';
-import * as StringFormat from '../vendor/stringformat';
+import StringFormat from 'string-format';
 
 import { _ } from '../gselib/gettext';
 
@@ -46,7 +46,7 @@ export const get = (template, dim, n?) => {
     obj[key] = value;
     return obj;
   }, {});
-  const basename = StringFormat.format(template, vars);
+  const basename = StringFormat(template, vars);
   let sequence = '';
   if (n > 0) {
     sequence = '_' + String(n);
