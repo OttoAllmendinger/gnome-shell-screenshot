@@ -20,9 +20,3 @@ interface ExtensionUtils {
     dir: File;
   };
 }
-
-declare global {
-  const window: {
-    ARGV: string[];
-  };
-}
