@@ -80,6 +80,7 @@ should work again afterwards.
 * https://github.com/Burday -- Bulgarian translation
 * https://github.com/johanbcn -- Spanish and Catalan translation
 * https://github.com/ibaios -- Basque translation
+* https://github.com/kudaliar032 -- Indonesian Translation
 
 Also see contributors for
 [gnome-shell-imgur](https://github.com/OttoAllmendinger/gnome-shell-imgur/).
