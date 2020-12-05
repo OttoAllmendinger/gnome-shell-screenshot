@@ -756,177 +756,6 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
         return new Gio.FileIcon({ file: scaledFile });
     };
 
-    const Signals$1 = imports.signals;
-    const Main$1 = imports.ui.main;
-    const MessageTray = imports.ui.messageTray;
-    const version$2 = currentVersion();
-    const NotificationIcon = 'camera-photo-symbolic';
-    const NotificationSourceName = 'Screenshot Tool';
-    const ICON_SIZE = 64;
-    const settings$1 = ExtensionUtils.getSettings();
-    const getSource = () => {
-        const source = new MessageTray.Source(NotificationSourceName, NotificationIcon);
-        Main$1.messageTray.add(source);
-        return source;
-    };
-    const registerClassCompat = (cls) => {
-        if (version$2.greaterEqual('3.36')) {
-            return GObject.registerClass(cls);
-        }
-        else {
-            Signals$1.addSignalMethods(cls.prototype);
-            return cls;
-        }
-    };
-    const showNotificationCompat = (source, notification) => {
-        if (version$2.greaterEqual('3.36')) {
-            return source.showNotification(notification);
-        }
-        else {
-            return source.notify(notification);
-        }
-    };
-    const Notification = registerClassCompat(class Notification extends MessageTray.Notification {
-        static _title() {
-            return _('New Screenshot');
-        }
-        static _banner(obj) {
-            const { gtkImage } = obj;
-            const { width, height } = gtkImage.get_pixbuf();
-            const banner = _('Size:') + ' ' + width + 'x' + height + '.';
-            return banner;
-        }
-        static ctrArgs(source, screenshot) {
-            return [
-                source,
-                Notification._title(),
-                Notification._banner(screenshot),
-                { gicon: getIcon(screenshot.srcFile.get_path()) },
-            ];
-        }
-        constructor(source, screenshot) {
-            super(...Notification.ctrArgs(source, screenshot));
-            this.initCompat(source, screenshot);
-        }
-        _init(source, screenshot) {
-            super._init(...Notification.ctrArgs(source, screenshot));
-            this.initCompat(source, screenshot);
-        }
-        initCompat(source, screenshot) {
-            this.connect('activated', this._onActivated.bind(this));
-            // makes banner expand on hover
-            this.setForFeedback(true);
-            this._screenshot = screenshot;
-        }
-        createBanner() {
-            const b = super.createBanner();
-            b._iconBin.child.icon_size = ICON_SIZE;
-            b.addAction(_('Copy'), this._onCopy.bind(this));
-            b.addAction(_('Save'), this._onSave.bind(this));
-            if (settings$1.get_boolean(KeyEnableUploadImgur)) {
-                if (settings$1.get_boolean(KeyImgurAutoUpload)) {
-                    b.addAction(_('Uploading To Imgur...'), () => {
-                        /* noop */
-                    });
-                }
-                else {
-                    b.addAction(_('Upload To Imgur'), this._onUpload.bind(this));
-                }
-            }
-            return b;
-        }
-        _onActivated() {
-            this._screenshot.launchOpen();
-        }
-        _onCopy() {
-            this._screenshot.copyClipboard(settings$1.get_string(KeyCopyButtonAction));
-        }
-        _onSave() {
-            this._screenshot.launchSave();
-        }
-        _onUpload() {
-            this._screenshot.imgurStartUpload();
-        }
-    });
-    const ErrorNotification = registerClassCompat(class ErrorNotification extends MessageTray.Notification {
-        static ctrArgs(source, message) {
-            return [source, _('Error'), String(message), { secondaryGIcon: new Gio.ThemedIcon({ name: 'dialog-error' }) }];
-        }
-        constructor(source, message) {
-            super(...ErrorNotification.ctrArgs(source, message));
-        }
-        _init(source, message) {
-            super._init(...ErrorNotification.ctrArgs(source, message));
-        }
-    });
-    const ImgurNotification = registerClassCompat(class ImgurNotification extends MessageTray.Notification {
-        constructor(source, screenshot) {
-            super(source, _('Imgur Upload'));
-            this.initCompat(source, screenshot);
-        }
-        _init(source, screenshot) {
-            super._init(source, _('Imgur Upload'));
-            this.initCompat(source, screenshot);
-        }
-        initCompat(source, screenshot) {
-            this.setForFeedback(true);
-            this.setResident(true);
-            this.connect('activated', this._onActivated.bind(this));
-            this._screenshot = screenshot;
-            this._upload = screenshot.imgurUpload;
-            this._upload.connect('progress', (obj, bytes, total) => {
-                this.update(_('Imgur Upload'), '' + Math.floor(100 * (bytes / total)) + '%');
-            });
-            this._upload.connect('error', (obj, msg) => {
-                this.update(_('Imgur Upload Failed'), msg);
-            });
-            this._upload.connect('done', () => {
-                this.update(_('Imgur Upload Successful'), this._upload.responseData.link);
-                this._updateCopyButton();
-            });
-        }
-        _updateCopyButton() {
-            if (!this._copyButton) {
-                return;
-            }
-            this._copyButton.visible = this._screenshot.isImgurUploadComplete();
-        }
-        createBanner() {
-            const b = super.createBanner();
-            this._copyButton = b.addAction(_('Copy Link'), this._onCopy.bind(this));
-            this._updateCopyButton();
-            return b;
-        }
-        _onActivated() {
-            if (this._screenshot.isImgurUploadComplete()) {
-                this._screenshot.imgurOpenURL();
-            }
-            else {
-                this._upload.connect('done', () => {
-                    this._screenshot.imgurOpenURL();
-                });
-            }
-        }
-        _onCopy() {
-            this._screenshot.imgurCopyURL();
-        }
-    });
-    const notifyScreenshot = (screenshot) => {
-        const source = getSource();
-        const notification = new Notification(source, screenshot);
-        showNotificationCompat(source, notification);
-    };
-    const notifyError = (message) => {
-        const source = getSource();
-        const notification = new ErrorNotification(source, message);
-        showNotificationCompat(source, notification);
-    };
-    const notifyImgurUpload = (screenshot) => {
-        const source = getSource();
-        const notification = new ImgurNotification(source, screenshot);
-        showNotificationCompat(source, notification);
-    };
-
     const PATH_SEPARATOR = '/';
     const join = (...segments) => {
         return [''].concat(segments.filter((e) => e !== '')).join(PATH_SEPARATOR);
@@ -957,7 +786,7 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
         getClipboard().set_text(text, -1);
     }
 
-    const Signals$2 = imports.signals;
+    const Signals$1 = imports.signals;
     const clientId = 'c5c1369fb46f29e';
     const baseUrl = 'https://api.imgur.com/3/';
     const httpSession = new Soup.SessionAsync();
@@ -1047,12 +876,22 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
             });
         }
     }
-    Signals$2.addSignalMethods(Upload.prototype);
+    Signals$1.addSignalMethods(Upload.prototype);
 
-    const Signals$3 = imports.signals;
+    const Signals$2 = imports.signals;
     const Util = imports.misc.util;
     const Local$3 = ExtensionUtils.getCurrentExtension();
-    const settings$2 = ExtensionUtils.getSettings();
+    const settings$1 = ExtensionUtils.getSettings();
+    class ErrorInvalidSettings extends Error {
+        constructor(message) {
+            super(message);
+        }
+    }
+    class ErrorAutosaveDirNotExists extends ErrorInvalidSettings {
+        constructor(dir) {
+            super(_('Auto-Save location does not exist: ' + dir));
+        }
+    }
     class Rescale {
         constructor(scale) {
             this.scale = scale;
@@ -1079,13 +918,19 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
             this.srcFile = Gio.File.new_for_path(filePath);
             this.dstFile = null;
         }
-        _nextFile() {
-            const dir = expand(settings$2.get_string(KeySaveLocation));
-            const filenameTemplate = settings$2.get_string(KeyFilenameTemplate);
+        getFilename(n = 0) {
+            const filenameTemplate = settings$1.get_string(KeyFilenameTemplate);
             const { width, height } = this.gtkImage.get_pixbuf();
-            const dimensions = { width, height };
+            return get(filenameTemplate, { width, height }, n);
+        }
+        getNextFile() {
+            const dir = expand(settings$1.get_string(KeySaveLocation));
+            const dirExists = Gio.File.new_for_path(dir).query_exists(/* cancellable */ null);
+            if (!dirExists) {
+                throw new ErrorAutosaveDirNotExists(dir);
+            }
             for (let n = 0;; n++) {
-                const newFilename = get(filenameTemplate, dimensions, n);
+                const newFilename = this.getFilename(n);
                 const newPath = join(dir, newFilename);
                 const file = Gio.File.new_for_path(newPath);
                 const exists = file.query_exists(/* cancellable */ null);
@@ -1095,7 +940,7 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
             }
         }
         autosave() {
-            const dstFile = this._nextFile();
+            const dstFile = this.getNextFile();
             this.srcFile.copy(dstFile, Gio.FileCopyFlags.NONE, null, null);
             this.dstFile = dstFile;
         }
@@ -1105,11 +950,10 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
             Gio.AppInfo.launch_default_for_uri(file.get_uri(), context);
         }
         launchSave() {
-            const newFile = this._nextFile();
             const pathComponents = [
                 this.srcFile.get_path(),
                 expand('$PICTURES'),
-                newFile.get_basename(),
+                this.getFilename(),
                 Local$3.dir.get_path(),
             ];
             pathComponents.forEach((v) => {
@@ -1143,15 +987,15 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
                 logError(err);
                 notifyError(String(err));
             });
-            if (settings$2.get_boolean(KeyImgurEnableNotification)) {
+            if (settings$1.get_boolean(KeyImgurEnableNotification)) {
                 notifyImgurUpload(this);
             }
             this.emit('imgur-upload', this.imgurUpload);
             this.imgurUpload.connect('done', () => {
-                if (settings$2.get_boolean(KeyImgurAutoCopyLink)) {
+                if (settings$1.get_boolean(KeyImgurAutoCopyLink)) {
                     this.imgurCopyURL();
                 }
-                if (settings$2.get_boolean(KeyImgurAutoOpenLink)) {
+                if (settings$1.get_boolean(KeyImgurAutoOpenLink)) {
                     this.imgurOpenURL();
                 }
             });
@@ -1192,7 +1036,208 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
             this.imgurUpload.deleteRemote();
         }
     }
-    Signals$3.addSignalMethods(Screenshot.prototype);
+    Signals$2.addSignalMethods(Screenshot.prototype);
+
+    const Signals$3 = imports.signals;
+    const Main$1 = imports.ui.main;
+    const MessageTray = imports.ui.messageTray;
+    const version$2 = currentVersion();
+    const NotificationIcon = 'camera-photo-symbolic';
+    const NotificationSourceName = 'Screenshot Tool';
+    const ICON_SIZE = 64;
+    const settings$2 = ExtensionUtils.getSettings();
+    var ErrorActions;
+    (function (ErrorActions) {
+        ErrorActions[ErrorActions["OPEN_SETTINGS"] = 0] = "OPEN_SETTINGS";
+    })(ErrorActions || (ErrorActions = {}));
+    const getSource = () => {
+        const source = new MessageTray.Source(NotificationSourceName, NotificationIcon);
+        Main$1.messageTray.add(source);
+        return source;
+    };
+    const registerClassCompat = (cls) => {
+        if (version$2.greaterEqual('3.36')) {
+            return GObject.registerClass(cls);
+        }
+        else {
+            Signals$3.addSignalMethods(cls.prototype);
+            return cls;
+        }
+    };
+    const showNotificationCompat = (source, notification) => {
+        if (version$2.greaterEqual('3.36')) {
+            return source.showNotification(notification);
+        }
+        else {
+            return source.notify(notification);
+        }
+    };
+    const Notification = registerClassCompat(class Notification extends MessageTray.Notification {
+        static _title() {
+            return _('New Screenshot');
+        }
+        static _banner(obj) {
+            const { gtkImage } = obj;
+            const { width, height } = gtkImage.get_pixbuf();
+            const banner = _('Size:') + ' ' + width + 'x' + height + '.';
+            return banner;
+        }
+        static ctrArgs(source, screenshot) {
+            return [
+                source,
+                Notification._title(),
+                Notification._banner(screenshot),
+                { gicon: getIcon(screenshot.srcFile.get_path()) },
+            ];
+        }
+        constructor(source, screenshot) {
+            super(...Notification.ctrArgs(source, screenshot));
+            this.initCompat(source, screenshot);
+        }
+        _init(source, screenshot) {
+            super._init(...Notification.ctrArgs(source, screenshot));
+            this.initCompat(source, screenshot);
+        }
+        initCompat(source, screenshot) {
+            this.connect('activated', this._onActivated.bind(this));
+            // makes banner expand on hover
+            this.setForFeedback(true);
+            this._screenshot = screenshot;
+        }
+        createBanner() {
+            const b = super.createBanner();
+            b._iconBin.child.icon_size = ICON_SIZE;
+            b.addAction(_('Copy'), this._onCopy.bind(this));
+            b.addAction(_('Save'), this._onSave.bind(this));
+            if (settings$2.get_boolean(KeyEnableUploadImgur)) {
+                if (settings$2.get_boolean(KeyImgurAutoUpload)) {
+                    b.addAction(_('Uploading To Imgur...'), () => {
+                        /* noop */
+                    });
+                }
+                else {
+                    b.addAction(_('Upload To Imgur'), this._onUpload.bind(this));
+                }
+            }
+            return b;
+        }
+        _onActivated() {
+            this._screenshot.launchOpen();
+        }
+        _onCopy() {
+            this._screenshot.copyClipboard(settings$2.get_string(KeyCopyButtonAction));
+        }
+        _onSave() {
+            this._screenshot.launchSave();
+        }
+        _onUpload() {
+            this._screenshot.imgurStartUpload();
+        }
+    });
+    const ErrorNotification = registerClassCompat(class ErrorNotification extends MessageTray.Notification {
+        constructor(source, message, buttons) {
+            super(...ErrorNotification.ctrArgs(source, message));
+            this.initCompat(message, buttons);
+        }
+        static ctrArgs(source, message) {
+            return [source, _('Error'), String(message), { secondaryGIcon: new Gio.ThemedIcon({ name: 'dialog-error' }) }];
+        }
+        _init(source, message, buttons) {
+            super._init(...ErrorNotification.ctrArgs(source, message));
+            this.initCompat(message, buttons);
+        }
+        initCompat(_message, buttons) {
+            this.buttons = buttons;
+        }
+        createBanner() {
+            const banner = super.createBanner();
+            for (const b of this.buttons) {
+                switch (b) {
+                    case ErrorActions.OPEN_SETTINGS:
+                        banner.addAction(_('Settings'), () => {
+                            openPrefs(version$2, uuid, { shell: imports.gi.Shell });
+                        });
+                        break;
+                    default:
+                        logError(new Error('unknown button ' + b));
+                }
+            }
+            return banner;
+        }
+    });
+    const ImgurNotification = registerClassCompat(class ImgurNotification extends MessageTray.Notification {
+        constructor(source, screenshot) {
+            super(source, _('Imgur Upload'));
+            this.initCompat(source, screenshot);
+        }
+        _init(source, screenshot) {
+            super._init(source, _('Imgur Upload'));
+            this.initCompat(source, screenshot);
+        }
+        initCompat(source, screenshot) {
+            this.setForFeedback(true);
+            this.setResident(true);
+            this.connect('activated', this._onActivated.bind(this));
+            this._screenshot = screenshot;
+            this._upload = screenshot.imgurUpload;
+            this._upload.connect('progress', (obj, bytes, total) => {
+                this.update(_('Imgur Upload'), '' + Math.floor(100 * (bytes / total)) + '%');
+            });
+            this._upload.connect('error', (obj, msg) => {
+                this.update(_('Imgur Upload Failed'), msg);
+            });
+            this._upload.connect('done', () => {
+                this.update(_('Imgur Upload Successful'), this._upload.responseData.link);
+                this._updateCopyButton();
+            });
+        }
+        _updateCopyButton() {
+            if (!this._copyButton) {
+                return;
+            }
+            this._copyButton.visible = this._screenshot.isImgurUploadComplete();
+        }
+        createBanner() {
+            const b = super.createBanner();
+            this._copyButton = b.addAction(_('Copy Link'), this._onCopy.bind(this));
+            this._updateCopyButton();
+            return b;
+        }
+        _onActivated() {
+            if (this._screenshot.isImgurUploadComplete()) {
+                this._screenshot.imgurOpenURL();
+            }
+            else {
+                this._upload.connect('done', () => {
+                    this._screenshot.imgurOpenURL();
+                });
+            }
+        }
+        _onCopy() {
+            this._screenshot.imgurCopyURL();
+        }
+    });
+    function notifyScreenshot(screenshot) {
+        const source = getSource();
+        const notification = new Notification(source, screenshot);
+        showNotificationCompat(source, notification);
+    }
+    function notifyError(error) {
+        const buttons = [];
+        if (error instanceof Error) {
+            if (error instanceof ErrorInvalidSettings) {
+                buttons.push(ErrorActions.OPEN_SETTINGS);
+            }
+        }
+        const source = getSource();
+        const notification = new ErrorNotification(source, error, buttons);
+        showNotificationCompat(source, notification);
+    }
+    function notifyImgurUpload(screenshot) {
+        const source = getSource();
+        const notification = new ImgurNotification(source, screenshot);
+        showNotificationCompat(source, notification);
+    }
 
     // props to
     const Signals$4 = imports.signals;
@@ -1270,7 +1315,7 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
                     this._onScreenshot(screenshot, file);
                 }
                 catch (e) {
-                    notifyError(e.message);
+                    notifyError(e);
                 }
             });
             this._selection.connect('error', (selection, message) => {

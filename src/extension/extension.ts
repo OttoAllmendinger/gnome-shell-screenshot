@@ -110,7 +110,13 @@ export class Extension {
       throw new Error('selection undefined');
     }
 
-    this._selection.connect('screenshot', this._onScreenshot.bind(this));
+    this._selection.connect('screenshot', (screenshot, file) => {
+      try {
+        this._onScreenshot(screenshot, file);
+      } catch (e) {
+        Notifications.notifyError(e);
+      }
+    });
 
     this._selection.connect('error', (selection, message) => {
       Notifications.notifyError(message);

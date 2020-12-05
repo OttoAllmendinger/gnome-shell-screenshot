@@ -5,6 +5,8 @@ import { InterpType } from '@imports/GdkPixbuf-2.0';
 
 import { SignalEmitter } from '..';
 
+import { _ } from '../gselib/gettext';
+
 import * as Path from './path';
 import * as Config from './config';
 import * as Clipboard from './clipboard';
@@ -19,6 +21,18 @@ const Util = imports.misc.util;
 const Local = ExtensionUtils.getCurrentExtension();
 
 const settings = ExtensionUtils.getSettings();
+
+export class ErrorInvalidSettings extends Error {
+  constructor(message: string) {
+    super(message);
+  }
+}
+
+class ErrorAutosaveDirNotExists extends ErrorInvalidSettings {
+  constructor(dir: string) {
+    super(_('Auto-Save location does not exist: ' + dir));
+  }
+}
 
 export declare interface Screenshot extends SignalEmitter {}
 
@@ -67,13 +81,20 @@ export class Screenshot {
     this.dstFile = null;
   }
 
-  _nextFile() {
-    const dir = Path.expand(settings.get_string(Config.KeySaveLocation));
+  getFilename(n = 0): string {
     const filenameTemplate = settings.get_string(Config.KeyFilenameTemplate);
     const { width, height } = (this.gtkImage.get_pixbuf() as unknown) as { width: number; height: number };
-    const dimensions = { width, height };
+    return Filename.get(filenameTemplate, { width, height }, n);
+  }
+
+  getNextFile(): Gio.File {
+    const dir = Path.expand(settings.get_string(Config.KeySaveLocation));
+    const dirExists = Gio.File.new_for_path(dir).query_exists(/* cancellable */ null);
+    if (!dirExists) {
+      throw new ErrorAutosaveDirNotExists(dir);
+    }
     for (let n = 0; ; n++) {
-      const newFilename = Filename.get(filenameTemplate, dimensions, n);
+      const newFilename = this.getFilename(n);
       const newPath = Path.join(dir, newFilename);
       const file = Gio.File.new_for_path(newPath);
       const exists = file.query_exists(/* cancellable */ null);
@@ -83,24 +104,23 @@ export class Screenshot {
     }
   }
 
-  autosave() {
-    const dstFile = this._nextFile();
+  autosave(): void {
+    const dstFile = this.getNextFile();
     this.srcFile.copy(dstFile, Gio.FileCopyFlags.NONE, null, null);
     this.dstFile = dstFile;
   }
 
-  launchOpen() {
+  launchOpen(): void {
     const context = Shell.Global.get().create_app_launch_context(0, -1);
     const file = this.dstFile || this.srcFile;
     Gio.AppInfo.launch_default_for_uri(file.get_uri(), context);
   }
 
-  launchSave() {
-    const newFile = this._nextFile();
+  launchSave(): void {
     const pathComponents = [
       this.srcFile.get_path(),
       Path.expand('$PICTURES'),
-      newFile.get_basename(),
+      this.getFilename(),
       Local.dir.get_path(),
     ] as string[];
     pathComponents.forEach((v) => {
@@ -111,7 +131,7 @@ export class Screenshot {
     Util.spawn(['gjs', Local.path + '/saveDlg.js', ...pathComponents.map(encodeURIComponent)]);
   }
 
-  copyClipboard(action) {
+  copyClipboard(action: string): void {
     if (action === Config.ClipboardActions.NONE) {
       return;
     } else if (action === Config.ClipboardActions.SET_IMAGE_DATA) {
@@ -129,7 +149,7 @@ export class Screenshot {
     logError(new Error(`unknown action ${action}`));
   }
 
-  imgurStartUpload() {
+  imgurStartUpload(): void {
     this.imgurUpload = new UploadImgur.Upload(this.srcFile);
 
     this.imgurUpload.connect('error', (obj, err) => {
@@ -155,11 +175,11 @@ export class Screenshot {
     this.imgurUpload.start();
   }
 
-  isImgurUploadComplete() {
+  isImgurUploadComplete(): boolean {
     return !!(this.imgurUpload && this.imgurUpload.responseData);
   }
 
-  imgurOpenURL() {
+  imgurOpenURL(): void {
     if (!this.isImgurUploadComplete()) {
       logError(new Error('no completed imgur upload'));
       return;
@@ -173,7 +193,7 @@ export class Screenshot {
     Gio.AppInfo.launch_default_for_uri(uri, context);
   }
 
-  imgurCopyURL() {
+  imgurCopyURL(): void {
     if (!this.isImgurUploadComplete()) {
       logError(new Error('no completed imgur upload'));
       return;
@@ -182,7 +202,7 @@ export class Screenshot {
     Clipboard.setText(uri);
   }
 
-  imgurDelete() {
+  imgurDelete(): void {
     if (!this.isImgurUploadComplete()) {
       logError(new Error('no completed imgur upload'));
       return;

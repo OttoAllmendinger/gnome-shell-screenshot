@@ -1,12 +1,16 @@
 import * as Gio from '@imports/Gio-2.0';
 import * as GObject from '@imports/GObject-2.0';
 
+import { uuid } from '../metadata.json';
+
 import ExtensionUtils from '../gselib/extensionUtils';
+import { openPrefs } from '../gselib/openPrefs';
 import { currentVersion } from '../gselib/version';
 import { _ } from '../gselib/gettext';
 
 import * as Config from './config';
 import * as Thumbnail from './thumbnail';
+import { ErrorInvalidSettings, Screenshot } from './screenshot';
 
 const Signals = imports.signals;
 const Main = imports.ui.main;
@@ -20,6 +24,10 @@ const NotificationSourceName = 'Screenshot Tool';
 const ICON_SIZE = 64;
 
 const settings = ExtensionUtils.getSettings();
+
+enum ErrorActions {
+  OPEN_SETTINGS,
+}
 
 const getSource = () => {
   const source = new MessageTray.Source(NotificationSourceName, NotificationIcon);
@@ -125,16 +133,42 @@ const Notification = registerClassCompat(
 
 const ErrorNotification = registerClassCompat(
   class ErrorNotification extends MessageTray.Notification {
-    static ctrArgs(source, message) {
+    buttons?: ErrorActions[];
+
+    static ctrArgs(source, message: string) {
       return [source, _('Error'), String(message), { secondaryGIcon: new Gio.ThemedIcon({ name: 'dialog-error' }) }];
     }
 
-    constructor(source, message) {
+    constructor(source, message: string, buttons: ErrorActions[]) {
       super(...ErrorNotification.ctrArgs(source, message));
+      this.initCompat(message, buttons);
     }
 
-    _init(source, message) {
+    _init(source, message, buttons) {
       super._init(...ErrorNotification.ctrArgs(source, message));
+      this.initCompat(message, buttons);
+    }
+
+    initCompat(_message, buttons) {
+      this.buttons = buttons;
+    }
+
+    createBanner() {
+      const banner = super.createBanner();
+
+      for (const b of this.buttons!) {
+        switch (b) {
+          case ErrorActions.OPEN_SETTINGS:
+            banner.addAction(_('Settings'), () => {
+              openPrefs(version, uuid, { shell: imports.gi.Shell });
+            });
+            break;
+          default:
+            logError(new Error('unknown button ' + b));
+        }
+      }
+
+      return banner;
     }
   },
 );
@@ -205,20 +239,26 @@ const ImgurNotification = registerClassCompat(
   },
 );
 
-export const notifyScreenshot = (screenshot) => {
+export function notifyScreenshot(screenshot: Screenshot): void {
   const source = getSource();
   const notification = new Notification(source, screenshot);
   showNotificationCompat(source, notification);
-};
+}
 
-export const notifyError = (message) => {
+export function notifyError(error: string | Error): void {
+  const buttons: ErrorActions[] = [];
+  if (error instanceof Error) {
+    if (error instanceof ErrorInvalidSettings) {
+      buttons.push(ErrorActions.OPEN_SETTINGS);
+    }
+  }
   const source = getSource();
-  const notification = new ErrorNotification(source, message);
+  const notification = new ErrorNotification(source, error, buttons);
   showNotificationCompat(source, notification);
-};
+}
 
-export const notifyImgurUpload = (screenshot) => {
+export function notifyImgurUpload(screenshot: Screenshot): void {
   const source = getSource();
   const notification = new ImgurNotification(source, screenshot);
   showNotificationCompat(source, notification);
-};
+}
