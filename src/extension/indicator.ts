@@ -10,6 +10,7 @@ import ExtensionUtils from '../gselib/extensionUtils';
 import * as Config from './config';
 import * as Extension from './extension';
 import { Screenshot } from './screenshot';
+import { wrapNotifyError } from './notifications';
 
 const PanelMenu = imports.ui.panelMenu;
 const PopupMenu = imports.ui.popupMenu;
@@ -57,7 +58,11 @@ class CaptureDelayMenu extends PopupMenu.PopupMenuSection {
     addActorCompat(getActorCompat(this.sliderItem), getActorCompat(this.slider));
     this.addMenuItem(this.sliderItem);
 
-    this.delayInfoItem = new PopupMenu.PopupMenuItem('', { activate: false, hover: false, can_focus: false });
+    this.delayInfoItem = new PopupMenu.PopupMenuItem('', {
+      activate: false,
+      hover: false,
+      can_focus: false,
+    });
     this.addMenuItem(this.delayInfoItem);
 
     this.updateDelayInfo();
@@ -121,10 +126,22 @@ class ScreenshotSection {
     this._copy = new PopupMenu.PopupMenuItem(_('Copy'));
     this._save = new PopupMenu.PopupMenuItem(_('Save As...'));
 
-    this._image.connect('activate', this._onImage.bind(this));
-    this._clear.connect('activate', this._onClear.bind(this));
-    this._copy.connect('activate', this._onCopy.bind(this));
-    this._save.connect('activate', this._onSave.bind(this));
+    this._image.connect(
+      'activate',
+      wrapNotifyError(() => this._onImage()),
+    );
+    this._clear.connect(
+      'activate',
+      wrapNotifyError(() => this._onClear()),
+    );
+    this._copy.connect(
+      'activate',
+      wrapNotifyError(() => this._onCopy()),
+    );
+    this._save.connect(
+      'activate',
+      wrapNotifyError(() => this._onSave()),
+    );
 
     menu.addMenuItem(this._image);
     menu.addMenuItem(this._clear);
@@ -141,10 +158,22 @@ class ScreenshotSection {
     this._imgurCopyLink = new PopupMenu.PopupMenuItem(_('Copy Link'));
     this._imgurDelete = new PopupMenu.PopupMenuItem(_('Delete'));
 
-    this._imgurUpload.connect('activate', this._onImgurUpload.bind(this));
-    this._imgurOpen.connect('activate', this._onImgurOpen.bind(this));
-    this._imgurCopyLink.connect('activate', this._onImgurCopyLink.bind(this));
-    this._imgurDelete.connect('activate', this._onImgurDelete.bind(this));
+    this._imgurUpload.connect(
+      'activate',
+      wrapNotifyError(() => this._onImgurUpload()),
+    );
+    this._imgurOpen.connect(
+      'activate',
+      wrapNotifyError(() => this._onImgurOpen()),
+    );
+    this._imgurCopyLink.connect(
+      'activate',
+      wrapNotifyError(() => this._onImgurCopyLink()),
+    );
+    this._imgurDelete.connect(
+      'activate',
+      wrapNotifyError(() => this._onImgurDelete()),
+    );
 
     this._imgurMenu.menu.addMenuItem(this._imgurUpload);
     this._imgurMenu.menu.addMenuItem(this._imgurOpen);
@@ -259,7 +288,7 @@ export class Indicator {
   public panelButton: St.Button & { menu: any };
   private _screenshotSection?: ScreenshotSection;
 
-  constructor(extension) {
+  constructor(extension: Extension.Extension) {
     this._extension = extension;
 
     this.panelButton = new PanelMenu.Button(null, Config.IndicatorName);
@@ -268,12 +297,15 @@ export class Indicator {
       style_class: 'system-status-icon',
     });
     getActorCompat(this.panelButton).add_actor(icon);
-    getActorCompat(this.panelButton).connect('button-press-event', this._onClick.bind(this));
+    getActorCompat(this.panelButton).connect(
+      'button-press-event',
+      wrapNotifyError((obj, evt) => this._onClick(obj, evt)),
+    );
 
     this._buildMenu();
   }
 
-  _onClick(obj, evt) {
+  _onClick(_obj: unknown, evt: Clutter.Event): void {
     // only override primary button behavior
     if (evt.get_button() !== Clutter.BUTTON_PRIMARY) {
       return;
@@ -288,7 +320,7 @@ export class Indicator {
     this._extension.onAction(action);
   }
 
-  _buildMenu() {
+  _buildMenu(): void {
     // These actions can be triggered via shortcut or popup menu
     const menu = this.panelButton.menu;
     const items = [
@@ -326,14 +358,14 @@ export class Indicator {
     menu.addMenuItem(settingsItem);
   }
 
-  setScreenshot(screenshot) {
+  setScreenshot(screenshot: Screenshot): void {
     if (!this._screenshotSection) {
       throw new Error();
     }
     this._screenshotSection.setScreenshot(screenshot);
   }
 
-  destroy() {
+  destroy(): void {
     this.panelButton.destroy();
   }
 }

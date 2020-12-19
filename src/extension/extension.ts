@@ -12,6 +12,7 @@ import * as Config from './config';
 import * as Indicator from './indicator';
 import * as Selection from './selection';
 import * as Notifications from './notifications';
+import { wrapNotifyError } from './notifications';
 import { Rescale, Screenshot } from './screenshot';
 
 const Signals = imports.signals;
@@ -90,11 +91,7 @@ export class Extension {
         throw new Error('unknown action: ' + action);
       };
 
-    try {
-      f();
-    } catch (ex) {
-      Notifications.notifyError(ex.toString());
-    }
+    wrapNotifyError(f)();
   }
 
   startSelection(selection: Selection.Selection): void {

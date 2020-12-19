@@ -262,3 +262,14 @@ export function notifyImgurUpload(screenshot: Screenshot): void {
   const notification = new ImgurNotification(source, screenshot);
   showNotificationCompat(source, notification);
 }
+
+export function wrapNotifyError<T extends (...args: any[]) => any>(f: T): T {
+  return <T>function (...args: unknown[]) {
+    try {
+      return f(...args);
+    } catch (e) {
+      notifyError(e);
+      throw e;
+    }
+  };
+}

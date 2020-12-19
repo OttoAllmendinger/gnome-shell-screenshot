@@ -181,22 +181,19 @@ export class Screenshot {
 
   imgurOpenURL(): void {
     if (!this.isImgurUploadComplete()) {
-      logError(new Error('no completed imgur upload'));
-      return;
+      throw new Error('no completed imgur upload');
     }
     const context = Shell.Global.get().create_app_launch_context(0, -1);
     const uri = this.imgurUpload!.responseData.link;
     if (!uri) {
-      logError(new Error('no uri in responseData'));
-      return;
+      throw new Error('no uri in responseData');
     }
     Gio.AppInfo.launch_default_for_uri(uri, context);
   }
 
   imgurCopyURL(): void {
     if (!this.isImgurUploadComplete()) {
-      logError(new Error('no completed imgur upload'));
-      return;
+      throw new Error('no completed imgur upload');
     }
     const uri = this.imgurUpload!.responseData.link;
     Clipboard.setText(uri);
@@ -204,8 +201,7 @@ export class Screenshot {
 
   imgurDelete(): void {
     if (!this.isImgurUploadComplete()) {
-      logError(new Error('no completed imgur upload'));
-      return;
+      throw new Error('no completed imgur upload');
     }
     this.imgurUpload!.connect('deleted', () => {
       this.imgurUpload = undefined;
