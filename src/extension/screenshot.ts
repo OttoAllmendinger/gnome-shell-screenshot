@@ -110,10 +110,13 @@ export class Screenshot {
     this.dstFile = dstFile;
   }
 
+  getFinalFile(): Gio.File {
+    return this.dstFile || this.srcFile;
+  }
+
   launchOpen(): void {
     const context = Shell.Global.get().create_app_launch_context(0, -1);
-    const file = this.dstFile || this.srcFile;
-    Gio.AppInfo.launch_default_for_uri(file.get_uri(), context);
+    Gio.AppInfo.launch_default_for_uri(this.getFinalFile().get_uri(), context);
   }
 
   launchSave(): void {
@@ -137,16 +140,10 @@ export class Screenshot {
     } else if (action === Config.ClipboardActions.SET_IMAGE_DATA) {
       return Clipboard.setImage(this.gtkImage);
     } else if (action === Config.ClipboardActions.SET_LOCAL_PATH) {
-      if (this.dstFile) {
-        return Clipboard.setText(this.dstFile.get_path());
-      } else if (this.srcFile) {
-        return Clipboard.setText(this.srcFile.get_path());
-      }
-
-      return logError(new Error('no dstFile and no srcFile'));
+      return Clipboard.setText(this.getFinalFile().get_path());
     }
 
-    logError(new Error(`unknown action ${action}`));
+    throw new Error(`unknown action ${action}`);
   }
 
   imgurStartUpload(): void {
