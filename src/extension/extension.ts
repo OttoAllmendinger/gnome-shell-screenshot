@@ -27,15 +27,15 @@ const getSelectionOptions = () => {
 export declare interface Extension extends SignalEmitter {}
 
 export class Extension {
-  private _signalSettings: number[] = [];
-  private _indicator?: Indicator.Indicator;
-  private _selection?: Selection.Selection;
+  private signalSettings: number[] = [];
+  private indicator?: Indicator.Indicator;
+  private selection?: Selection.Selection;
 
   constructor() {
     ExtensionUtils.initTranslations();
   }
 
-  _setKeybindings() {
+  setKeybindings(): void {
     const bindingMode = Shell.ActionMode.NORMAL;
 
     for (const shortcut of Config.KeyShortcuts) {
@@ -49,39 +49,39 @@ export class Extension {
     }
   }
 
-  _unsetKeybindings() {
+  unsetKeybindings(): void {
     for (const shortcut of Config.KeyShortcuts) {
       Main.wm.removeKeybinding(shortcut);
     }
   }
 
-  _createIndicator() {
-    if (!this._indicator) {
-      this._indicator = new Indicator.Indicator(this);
-      Main.panel.addToStatusArea(Config.IndicatorName, this._indicator.panelButton);
+  createIndicator(): void {
+    if (!this.indicator) {
+      this.indicator = new Indicator.Indicator(this);
+      Main.panel.addToStatusArea(Config.IndicatorName, this.indicator.panelButton);
     }
   }
 
-  _destroyIndicator() {
-    if (this._indicator) {
-      this._indicator.destroy();
-      this._indicator = undefined;
+  destroyIndicator(): void {
+    if (this.indicator) {
+      this.indicator.destroy();
+      this.indicator = undefined;
     }
   }
 
-  _updateIndicator() {
+  updateIndicator(): void {
     if (settings.get_boolean(Config.KeyEnableIndicator)) {
-      this._createIndicator();
+      this.createIndicator();
     } else {
-      this._destroyIndicator();
+      this.destroyIndicator();
     }
   }
 
-  onAction(action) {
+  onAction(action: string): void {
     const dispatch = {
-      'select-area': this._selectArea.bind(this),
-      'select-window': this._selectWindow.bind(this),
-      'select-desktop': this._selectDesktop.bind(this),
+      'select-area': this.selectArea.bind(this),
+      'select-window': this.selectWindow.bind(this),
+      'select-desktop': this.selectDesktop.bind(this),
     };
 
     const f =
@@ -97,49 +97,49 @@ export class Extension {
     }
   }
 
-  _startSelection(selection: Selection.Selection) {
-    if (this._selection) {
+  startSelection(selection: Selection.Selection): void {
+    if (this.selection) {
       // prevent reentry
       log('_startSelection() error: selection already in progress');
       return;
     }
 
-    this._selection = selection;
+    this.selection = selection;
 
-    if (!this._selection) {
+    if (!this.selection) {
       throw new Error('selection undefined');
     }
 
-    this._selection.connect('screenshot', (screenshot, file) => {
+    this.selection.connect('screenshot', (screenshot, file) => {
       try {
-        this._onScreenshot(screenshot, file);
+        this.onScreenshot(screenshot, file);
       } catch (e) {
         Notifications.notifyError(e);
       }
     });
 
-    this._selection.connect('error', (selection, message) => {
+    this.selection.connect('error', (selection, message) => {
       Notifications.notifyError(message);
     });
 
-    this._selection.connect('stop', () => {
-      this._selection = undefined;
+    this.selection.connect('stop', () => {
+      this.selection = undefined;
     });
   }
 
-  _selectArea() {
-    this._startSelection(new Selection.SelectionArea(getSelectionOptions()));
+  selectArea(): void {
+    this.startSelection(new Selection.SelectionArea(getSelectionOptions()));
   }
 
-  _selectWindow() {
-    this._startSelection(new Selection.SelectionWindow(getSelectionOptions()));
+  selectWindow(): void {
+    this.startSelection(new Selection.SelectionWindow(getSelectionOptions()));
   }
 
-  _selectDesktop() {
-    this._startSelection(new Selection.SelectionDesktop(getSelectionOptions()));
+  selectDesktop(): void {
+    this.startSelection(new Selection.SelectionDesktop(getSelectionOptions()));
   }
 
-  _onScreenshot(selection: Selection.Selection, filePath: string) {
+  onScreenshot(selection: Selection.Selection, filePath: string): void {
     const effects = [new Rescale(settings.get_int(Config.KeyEffectRescale) / 100.0)];
     const screenshot = new Screenshot(filePath, effects);
 
@@ -153,8 +153,8 @@ export class Extension {
       Notifications.notifyScreenshot(screenshot);
     }
 
-    if (this._indicator) {
-      this._indicator.setScreenshot(screenshot);
+    if (this.indicator) {
+      this.indicator.setScreenshot(screenshot);
     }
 
     const imgurEnabled = settings.get_boolean(Config.KeyEnableUploadImgur);
@@ -165,26 +165,26 @@ export class Extension {
     }
   }
 
-  destroy() {
-    this._destroyIndicator();
-    this._unsetKeybindings();
+  destroy(): void {
+    this.destroyIndicator();
+    this.unsetKeybindings();
 
-    this._signalSettings.forEach((signal) => {
+    this.signalSettings.forEach((signal) => {
       settings.disconnect(signal);
     });
 
     this.disconnectAll();
   }
 
-  enable() {
-    this._signalSettings.push(
-      settings.connect('changed::' + Config.KeyEnableIndicator, this._updateIndicator.bind(this)),
+  enable(): void {
+    this.signalSettings.push(
+      settings.connect('changed::' + Config.KeyEnableIndicator, this.updateIndicator.bind(this)),
     );
-    this._updateIndicator();
-    this._setKeybindings();
+    this.updateIndicator();
+    this.setKeybindings();
   }
 
-  disable() {
+  disable(): void {
     this.destroy();
   }
 }
