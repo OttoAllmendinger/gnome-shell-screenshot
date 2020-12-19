@@ -16,30 +16,17 @@ const ScreenshotToolSettingsWidget = extendGObject(
       super._init(params);
 
       const settings = ExtensionUtils.getSettings();
-
       const notebook = new Gtk.Notebook();
 
-      let page, label;
+      function addPage(label: string, page: Gtk.Widget) {
+        notebook.append_page(page, new Gtk.Label({ label }));
+      }
 
-      page = Indicator.getPage(settings);
-      label = new Gtk.Label({ label: _('Indicator') });
-      notebook.append_page(page, label);
-
-      page = Effects.getPage(settings);
-      label = new Gtk.Label({ label: _('Effects') });
-      notebook.append_page(page, label);
-
-      page = Storage.getPage(settings);
-      label = new Gtk.Label({ label: _('Storage') });
-      notebook.append_page(page, label);
-
-      page = Imgur.getPage(settings);
-      label = new Gtk.Label({ label: _('Imgur Upload (Beta)') });
-      notebook.append_page(page, label);
-
-      page = Keybindings.getPage(settings);
-      label = new Gtk.Label({ label: _('Keybindings') });
-      notebook.append_page(page, label);
+      addPage(_('Indicator'), Indicator.getPage(settings));
+      addPage(_('Effects'), Effects.getPage(settings));
+      addPage(_('Storage'), Storage.getPage(settings));
+      addPage(_('Imgur Upload'), Imgur.getPage(settings));
+      addPage(_('Keybindings'), Keybindings.getPage(settings));
 
       this.add(notebook);
     }

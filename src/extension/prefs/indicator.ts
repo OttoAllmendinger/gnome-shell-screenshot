@@ -1,5 +1,6 @@
 import * as Gtk from '@imports/Gtk-3.0';
 import * as GObject from '@imports/GObject-2.0';
+import * as Gio from '@imports/Gio-2.0';
 
 import { _ } from '../../gselib/gettext';
 
@@ -7,7 +8,7 @@ import * as Config from '../config';
 
 import { buildConfigSwitch, getComboBox, buildConfigRow, buildPage } from './widgets';
 
-export function getPage(settings) {
+export function getPage(settings: Gio.Settings): Gtk.Box {
   const prefs = buildPage();
 
   /* Show indicator [on|off] */
@@ -28,11 +29,7 @@ export function getPage(settings) {
 
   /* Default click action [dropdown] */
 
-  const labelDefaultClickAction = new Gtk.Label({
-    label: _('Primary Button'),
-    xalign: 0,
-    expand: true,
-  });
+  const labelDefaultClickAction = _('Primary Button');
 
   const clickActionOptions = [
     [_('Select Area'), Config.ClickActions.SELECT_AREA],
@@ -44,7 +41,7 @@ export function getPage(settings) {
   const currentClickAction = settings.get_enum(Config.KeyClickAction);
 
   const comboBoxDefaultClickAction = getComboBox(clickActionOptions, GObject.TYPE_INT, currentClickAction, (value) =>
-    settings.set_enum(Config.KeyClickAction, value),
+    settings.set_enum(Config.KeyClickAction, value as number),
   );
 
   prefs.add(buildConfigRow(labelDefaultClickAction, comboBoxDefaultClickAction));
@@ -60,19 +57,13 @@ export function getPage(settings) {
   ];
 
   const clipboardActionDropdown = (label, { options, configKey }) => {
-    const labelAutoCopy = new Gtk.Label({
-      label,
-      xalign: 0,
-      expand: true,
-    });
-
     const currentValue = settings.get_string(configKey);
 
     const comboBoxClipboardContent = getComboBox(options, GObject.TYPE_STRING, currentValue, (value) =>
       settings.set_string(configKey, value),
     );
 
-    prefs.add(buildConfigRow(labelAutoCopy, comboBoxClipboardContent));
+    prefs.add(buildConfigRow(label, comboBoxClipboardContent));
   };
 
   clipboardActionDropdown(_('Copy Button'), {

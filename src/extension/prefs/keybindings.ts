@@ -1,4 +1,5 @@
 import * as Gtk from '@imports/Gtk-3.0';
+import * as Gio from '@imports/Gio-2.0';
 import * as GObject from '@imports/GObject-2.0';
 
 import { _ } from '../../gselib/gettext';
@@ -6,7 +7,7 @@ import { _ } from '../../gselib/gettext';
 // accelerator setting based on
 // https://github.com/ambrice/spatialnavigation-tastycactus.com/blob/master/prefs.js
 
-export function getPage(settings) {
+export function getPage(settings: Gio.Settings): Gtk.Widget {
   const model = new Gtk.ListStore();
 
   model.set_column_types([GObject.TYPE_STRING, GObject.TYPE_STRING, GObject.TYPE_INT, GObject.TYPE_INT]);

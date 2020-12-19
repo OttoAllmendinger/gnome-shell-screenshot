@@ -1,4 +1,5 @@
 import * as Gtk from '@imports/Gtk-3.0';
+import * as Gio from '@imports/Gio-2.0';
 import * as GLib from '@imports/GLib-2.0';
 
 import { _ } from '../../gselib/gettext';
@@ -9,7 +10,7 @@ import * as Path from '../path';
 
 import { buildConfigSwitch, bindSensitivity, buildConfigRow, buildPage } from './widgets';
 
-export function getPage(settings) {
+export function getPage(settings: Gio.Settings): Gtk.Box {
   const prefs = buildPage();
 
   /* Save Screenshot [on|off] */
@@ -20,11 +21,7 @@ export function getPage(settings) {
 
   /* Save Location [filechooser] */
 
-  const labelSaveLocation = new Gtk.Label({
-    label: _('Save Location'),
-    xalign: 0,
-    expand: true,
-  });
+  const labelSaveLocation = _('Save Location');
 
   const chooserSaveLocation = new Gtk.FileChooserButton({
     title: _('Select'),
@@ -50,21 +47,17 @@ export function getPage(settings) {
     settings.set_string(Config.KeySaveLocation, filename);
   });
 
-  bindSensitivity(switchSaveScreenshot.gtkSwitch, labelSaveLocation);
-  bindSensitivity(switchSaveScreenshot.gtkSwitch, chooserSaveLocation);
+  const box = buildConfigRow(labelSaveLocation, chooserSaveLocation);
+  bindSensitivity(switchSaveScreenshot.gtkSwitch, box);
 
-  prefs.add(buildConfigRow(labelSaveLocation, chooserSaveLocation));
+  prefs.add(box);
 
   /* Filename */
-  const [defaultTemplate] = settings.get_default_value(Config.KeyFilenameTemplate).get_string();
+  const [defaultTemplate] = settings.get_default_value(Config.KeyFilenameTemplate)!.get_string();
 
   const mockDimensions = { width: 800, height: 600 };
 
-  const labelFilenameTemplate = new Gtk.Label({
-    label: _('Default Filename'),
-    xalign: 0,
-    expand: true,
-  });
+  const labelFilenameTemplate = _('Default Filename');
 
   const inputFilenameTemplate = new Gtk.Entry({
     expand: true,
@@ -78,12 +71,7 @@ export function getPage(settings) {
 
   /* Filename Preview */
 
-  const labelPreview = new Gtk.Label({
-    label: _('Preview'),
-    expand: true,
-    xalign: 0,
-  });
-
+  const labelPreview = _('Preview');
   const textPreview = new Gtk.Label({
     xalign: 0,
   });

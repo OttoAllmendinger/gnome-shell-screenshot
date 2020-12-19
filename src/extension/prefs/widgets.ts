@@ -2,7 +2,7 @@ import * as Gtk from '@imports/Gtk-3.0';
 import * as GObject from '@imports/GObject-2.0';
 import { Settings } from '@imports/Gio-2.0';
 
-export function bindSensitivity(source, target) {
+export function bindSensitivity(source: Gtk.Switch, target: Gtk.Widget | Gtk.Switch): void {
   const set = () => {
     target.set_sensitive(source.active);
   };
@@ -10,7 +10,7 @@ export function bindSensitivity(source, target) {
   set();
 }
 
-export function buildPage() {
+export function buildPage(): Gtk.Box {
   return new Gtk.Box({
     orientation: Gtk.Orientation.VERTICAL,
     margin: 20,
@@ -19,7 +19,7 @@ export function buildPage() {
   });
 }
 
-export function buildHbox() {
+export function buildHbox(): Gtk.Box {
   return new Gtk.Box({
     orientation: Gtk.Orientation.HORIZONTAL,
     margin_top: 5,
@@ -30,7 +30,12 @@ export function buildHbox() {
   });
 }
 
-export function getComboBox(options, valueType, defaultValue, callback) {
+export function getComboBox<T>(
+  options: T[][],
+  valueType: GObject.Type,
+  defaultValue: T,
+  callback: (v: T) => void,
+): Gtk.ComboBox {
   const model = new Gtk.ListStore();
 
   const Columns = { LABEL: 0, VALUE: 1 };
@@ -68,20 +73,32 @@ export function getComboBox(options, valueType, defaultValue, callback) {
   return comboBox;
 }
 
-export function buildConfigRow(label, widget) {
+export function buildLabel(label: string): Gtk.Label {
+  return new Gtk.Label({
+    label,
+    xalign: 0,
+    expand: true,
+  });
+}
+
+export function buildConfigRow(label: string | Gtk.Widget, widget: Gtk.Widget): Gtk.Box {
+  if (typeof label === 'string') {
+    return buildConfigRow(buildLabel(label), widget);
+  }
   const hbox = buildHbox();
   hbox.add(label);
   hbox.add(widget);
   return hbox;
 }
 
-export function buildConfigSwitch(settings: Settings, label: string, configKey: string) {
-  const gtkLabel = new Gtk.Label({
-    label,
-    xalign: 0,
-    expand: true,
-  });
-
+export function buildConfigSwitch(
+  settings: Settings,
+  label: string,
+  configKey: string,
+): {
+  hbox: Gtk.Box;
+  gtkSwitch: Gtk.Switch;
+} {
   const gtkSwitch = new Gtk.Switch();
 
   gtkSwitch.connect('notify::active', (button) => {
@@ -91,8 +108,7 @@ export function buildConfigSwitch(settings: Settings, label: string, configKey: 
   gtkSwitch.active = settings.get_boolean(configKey);
 
   return {
-    hbox: buildConfigRow(gtkLabel, gtkSwitch),
-    gtkLabel,
+    hbox: buildConfigRow(label, (gtkSwitch as unknown) as Gtk.Widget),
     gtkSwitch,
   };
 }
