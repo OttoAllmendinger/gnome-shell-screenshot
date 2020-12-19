@@ -28,6 +28,15 @@ gnome-tweak-tool.
 
 ## Known Issues
 
+### Error after updating extension (Gnome-Shell 3.37 and above)
+
+Since Gnome-Shell version `3.37.2`, extensions that are updated are unavailable
+(in an error state) until the user logs out and back in again.
+([See commit 6ddd43f3 in gnome-shell](https://gitlab.gnome.org/GNOME/gnome-shell/-/commit/6ddd43f36178939d0e1873a40f1cf66f26c61140))
+
+If the error persists, please open a bug report.
+
+
 ### `Error: exitCode=256`
 
 
