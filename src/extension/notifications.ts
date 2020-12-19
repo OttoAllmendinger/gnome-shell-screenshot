@@ -52,8 +52,8 @@ const showNotificationCompat = (source, notification) => {
   }
 };
 
-const Notification = registerClassCompat(
-  class Notification extends MessageTray.Notification {
+const NotificationNewScreenshot = registerClassCompat(
+  class NotificationNewScreenshot extends MessageTray.Notification {
     static _title() {
       return _('New Screenshot');
     }
@@ -68,19 +68,19 @@ const Notification = registerClassCompat(
     static ctrArgs(source, screenshot) {
       return [
         source,
-        Notification._title(),
-        Notification._banner(screenshot),
+        NotificationNewScreenshot._title(),
+        NotificationNewScreenshot._banner(screenshot),
         { gicon: Thumbnail.getIcon(screenshot.srcFile.get_path()) },
       ];
     }
 
     constructor(source, screenshot) {
-      super(...Notification.ctrArgs(source, screenshot));
+      super(...NotificationNewScreenshot.ctrArgs(source, screenshot));
       this.initCompat(source, screenshot);
     }
 
     _init(source, screenshot) {
-      super._init(...Notification.ctrArgs(source, screenshot));
+      super._init(...NotificationNewScreenshot.ctrArgs(source, screenshot));
       this.initCompat(source, screenshot);
     }
 
@@ -241,7 +241,7 @@ const ImgurNotification = registerClassCompat(
 
 export function notifyScreenshot(screenshot: Screenshot): void {
   const source = getSource();
-  const notification = new Notification(source, screenshot);
+  const notification = new NotificationNewScreenshot(source, screenshot);
   showNotificationCompat(source, notification);
 }
 
