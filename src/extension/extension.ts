@@ -11,6 +11,7 @@ import ExtensionUtils from '../gselib/extensionUtils';
 import * as Config from './config';
 import * as Indicator from './indicator';
 import * as Selection from './selection';
+import * as Commands from './commands';
 import * as Notifications from './notifications';
 import { wrapNotifyError } from './notifications';
 import { Rescale, Screenshot } from './screenshot';
@@ -152,6 +153,15 @@ export class Extension {
 
     if (this.indicator) {
       this.indicator.setScreenshot(screenshot);
+    }
+
+    const commandEnabled = settings.get_boolean(Config.KeyEnableRunCommand);
+    if (commandEnabled) {
+      const file = screenshot.getFinalFile();
+      // Notifications.notifyCommand(Commands.getCommand(file));
+      Commands.exec(file)
+        .then((command) => log(`command ${command} complete`))
+        .catch((e) => Notifications.notifyError(e));
     }
 
     const imgurEnabled = settings.get_boolean(Config.KeyEnableUploadImgur);

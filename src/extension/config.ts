@@ -45,3 +45,6 @@ export const KeyImgurAutoCopyLink = 'imgur-auto-copy-link';
 export const KeyImgurAutoOpenLink = 'imgur-auto-open-link';
 
 export const KeyEffectRescale = 'effect-rescale';
+
+export const KeyEnableRunCommand = 'enable-run-command';
+export const KeyRunCommand = 'run-command';

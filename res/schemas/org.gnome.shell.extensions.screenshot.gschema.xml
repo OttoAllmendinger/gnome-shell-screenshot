@@ -99,5 +99,13 @@
         <key name="effect-rescale" type="i">
             <default>100</default>
         </key>
+
+        <key name="enable-run-command" type="b">
+            <default>false</default>
+        </key>
+
+        <key name="run-command" type="s">
+            <default>'gimp {f}'</default>
+        </key>
     </schema>
 </schemalist>

@@ -263,6 +263,12 @@ export function notifyImgurUpload(screenshot: Screenshot): void {
   showNotificationCompat(source, notification);
 }
 
+export function notifyCommand(command: string): void {
+  const source = getSource();
+  const notification = new MessageTray.Notification(source, _('Command'), command);
+  showNotificationCompat(source, notification);
+}
+
 export function wrapNotifyError<T extends (...args: any[]) => any>(f: T): T {
   return <T>function (...args: unknown[]) {
     try {

@@ -6,6 +6,7 @@ import { _ } from '../../gselib/gettext';
 
 import * as Indicator from './indicator';
 import * as Effects from './effects';
+import * as Commands from './commands';
 import * as Storage from './storage';
 import * as Imgur from './imgur';
 import * as Keybindings from './keybindings';
@@ -24,6 +25,7 @@ const ScreenshotToolSettingsWidget = extendGObject(
 
       addPage(_('Indicator'), Indicator.getPage(settings));
       addPage(_('Effects'), Effects.getPage(settings));
+      addPage(_('Commands'), Commands.getPage(settings));
       addPage(_('Storage'), Storage.getPage(settings));
       addPage(_('Imgur Upload'), Imgur.getPage(settings));
       addPage(_('Keybindings'), Keybindings.getPage(settings));
