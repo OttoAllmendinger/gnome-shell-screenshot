@@ -48,6 +48,8 @@ var prefs = (function (Gtk, GObject, Gio, GLib) {
     const KeyImgurAutoCopyLink = 'imgur-auto-copy-link';
     const KeyImgurAutoOpenLink = 'imgur-auto-open-link';
     const KeyEffectRescale = 'effect-rescale';
+    const KeyEnableRunCommand = 'enable-run-command';
+    const KeyRunCommand = 'run-command';
 
     function bindSensitivity(source, target) {
         const set = () => {
@@ -99,26 +101,30 @@ var prefs = (function (Gtk, GObject, Gio, GLib) {
         });
         return comboBox;
     }
+    function buildLabel(label) {
+        return new Gtk.Label({
+            label,
+            xalign: 0,
+            expand: true,
+        });
+    }
     function buildConfigRow(label, widget) {
+        if (typeof label === 'string') {
+            return buildConfigRow(buildLabel(label), widget);
+        }
         const hbox = buildHbox();
         hbox.add(label);
         hbox.add(widget);
         return hbox;
     }
     function buildConfigSwitch(settings, label, configKey) {
-        const gtkLabel = new Gtk.Label({
-            label,
-            xalign: 0,
-            expand: true,
-        });
         const gtkSwitch = new Gtk.Switch();
         gtkSwitch.connect('notify::active', (button) => {
             settings.set_boolean(configKey, button.active);
         });
         gtkSwitch.active = settings.get_boolean(configKey);
         return {
-            hbox: buildConfigRow(gtkLabel, gtkSwitch),
-            gtkLabel,
+            hbox: buildConfigRow(label, gtkSwitch),
             gtkSwitch,
         };
     }
@@ -132,11 +138,7 @@ var prefs = (function (Gtk, GObject, Gio, GLib) {
         const switchShowNotification = buildConfigSwitch(settings, _('Show Notification After Capture'), KeyEnableNotification);
         prefs.add(switchShowNotification.hbox);
         /* Default click action [dropdown] */
-        const labelDefaultClickAction = new Gtk.Label({
-            label: _('Primary Button'),
-            xalign: 0,
-            expand: true,
-        });
+        const labelDefaultClickAction = _('Primary Button');
         const clickActionOptions = [
             [_('Select Area'), ClickActions.SELECT_AREA],
             [_('Select Window'), ClickActions.SELECT_WINDOW],
@@ -153,14 +155,9 @@ var prefs = (function (Gtk, GObject, Gio, GLib) {
             [_('Local Path'), ClipboardActions.SET_LOCAL_PATH],
         ];
         const clipboardActionDropdown = (label, { options, configKey }) => {
-            const labelAutoCopy = new Gtk.Label({
-                label,
-                xalign: 0,
-                expand: true,
-            });
             const currentValue = settings.get_string(configKey);
             const comboBoxClipboardContent = getComboBox(options, GObject.TYPE_STRING, currentValue, (value) => settings.set_string(configKey, value));
-            prefs.add(buildConfigRow(labelAutoCopy, comboBoxClipboardContent));
+            prefs.add(buildConfigRow(label, comboBoxClipboardContent));
         };
         clipboardActionDropdown(_('Copy Button'), {
             options: [optionImageData, optionLocalPath],
@@ -176,11 +173,7 @@ var prefs = (function (Gtk, GObject, Gio, GLib) {
     function getPage$1(settings) {
         const prefs = buildPage();
         /* Rescale [dropdown] */
-        const labelRescale = new Gtk.Label({
-            label: _('Rescale'),
-            xalign: 0,
-            expand: true,
-        });
+        const labelRescale = _('Rescale');
         const rescaleOptions = [
             ['100%', 100],
             ['50%', 50],
@@ -300,7 +293,44 @@ var prefs = (function (Gtk, GObject, Gio, GLib) {
     }.call(commonjsGlobal, commonjsGlobal);
     });
 
-    const parameters = ({ width, height }) => {
+    function toTooltipText(parameters, caption = _('Parameters:')) {
+        return parameters
+            .reduce((arr, [key, _value, description]) => {
+            arr.push(key + '\t' + description);
+            return arr;
+        }, [caption])
+            .join('\n');
+    }
+    function toObject(parameters) {
+        return parameters.reduce((obj, [key, value]) => {
+            obj[key] = value;
+            return obj;
+        }, {});
+    }
+
+    const settings = ExtensionUtils.getSettings();
+    function parameters(v) {
+        return [['f', GLib.shell_quote(v.filename), _('Filename')]];
+    }
+    function tooltipText() {
+        return toTooltipText(parameters({ filename: '/path/to/file.png' }));
+    }
+
+    function getPage$2(settings) {
+        const prefs = buildPage();
+        const configRowEnableRunCommand = buildConfigSwitch(settings, _('Run Command After Capture'), KeyEnableRunCommand);
+        prefs.add(configRowEnableRunCommand.hbox);
+        const configRowRunCommand = buildConfigRow(_('Command'), new Gtk.Entry({
+            expand: true,
+            tooltip_text: tooltipText(),
+            text: settings.get_string(KeyRunCommand),
+        }));
+        bindSensitivity(configRowEnableRunCommand.gtkSwitch, configRowRunCommand);
+        prefs.add(configRowRunCommand);
+        return prefs;
+    }
+
+    function parameters$1({ width, height }) {
         const now = new Date();
         const hostname = GLib.get_host_name();
         const padZero = (s, n) => {
@@ -324,28 +354,18 @@ var prefs = (function (Gtk, GObject, Gio, GLib) {
             ['h', height, _('Height')],
             ['hn', hostname, _('Hostname')],
         ];
-    };
-    const tooltipText = (dim) => {
-        const head = [_('Parameters:')];
-        return parameters(dim)
-            .reduce((arr, [key, _value, description]) => {
-            arr.push(key + '\t' + description);
-            return arr;
-        }, head)
-            .join('\n');
-    };
-    const get = (template, dim, n) => {
-        const vars = parameters(dim).reduce((obj, [key, value]) => {
-            obj[key] = value;
-            return obj;
-        }, {});
-        const basename = stringFormat(template, vars);
+    }
+    function tooltipText$1(vars) {
+        return toTooltipText(parameters$1(vars));
+    }
+    function get(template, vars, n) {
+        const basename = stringFormat(template, toObject(parameters$1(vars)));
         let sequence = '';
-        if (n > 0) {
+        if (n && n > 0) {
             sequence = '_' + String(n);
         }
         return basename + sequence + '.png';
-    };
+    }
 
     const PATH_SEPARATOR = '/';
     const join = (...segments) => {
@@ -363,17 +383,13 @@ var prefs = (function (Gtk, GObject, Gio, GLib) {
         return join(...path.split(PATH_SEPARATOR).map(expandUserDir));
     };
 
-    function getPage$2(settings) {
+    function getPage$3(settings) {
         const prefs = buildPage();
         /* Save Screenshot [on|off] */
         const switchSaveScreenshot = buildConfigSwitch(settings, _('Auto-Save Screenshot'), KeySaveScreenshot);
         prefs.add(switchSaveScreenshot.hbox);
         /* Save Location [filechooser] */
-        const labelSaveLocation = new Gtk.Label({
-            label: _('Save Location'),
-            xalign: 0,
-            expand: true,
-        });
+        const labelSaveLocation = _('Save Location');
         const chooserSaveLocation = new Gtk.FileChooserButton({
             title: _('Select'),
             local_only: true,
@@ -397,30 +413,22 @@ var prefs = (function (Gtk, GObject, Gio, GLib) {
             }
             settings.set_string(KeySaveLocation, filename);
         });
-        bindSensitivity(switchSaveScreenshot.gtkSwitch, labelSaveLocation);
-        bindSensitivity(switchSaveScreenshot.gtkSwitch, chooserSaveLocation);
-        prefs.add(buildConfigRow(labelSaveLocation, chooserSaveLocation));
+        const box = buildConfigRow(labelSaveLocation, chooserSaveLocation);
+        bindSensitivity(switchSaveScreenshot.gtkSwitch, box);
+        prefs.add(box);
         /* Filename */
         const [defaultTemplate] = settings.get_default_value(KeyFilenameTemplate).get_string();
         const mockDimensions = { width: 800, height: 600 };
-        const labelFilenameTemplate = new Gtk.Label({
-            label: _('Default Filename'),
-            xalign: 0,
-            expand: true,
-        });
+        const labelFilenameTemplate = _('Default Filename');
         const inputFilenameTemplate = new Gtk.Entry({
             expand: true,
-            tooltip_text: tooltipText(mockDimensions),
+            tooltip_text: tooltipText$1(mockDimensions),
             secondary_icon_name: 'document-revert',
         });
         inputFilenameTemplate.text = settings.get_string(KeyFilenameTemplate);
         prefs.add(buildConfigRow(labelFilenameTemplate, inputFilenameTemplate));
         /* Filename Preview */
-        const labelPreview = new Gtk.Label({
-            label: _('Preview'),
-            expand: true,
-            xalign: 0,
-        });
+        const labelPreview = _('Preview');
         const textPreview = new Gtk.Label({
             xalign: 0,
         });
@@ -453,7 +461,7 @@ var prefs = (function (Gtk, GObject, Gio, GLib) {
         return prefs;
     }
 
-    function getPage$3(settings) {
+    function getPage$4(settings) {
         const prefs = buildPage();
         /* Enable Imgur Upload [on|off] */
         const configSwitchEnable = buildConfigSwitch(settings, _('Enable Imgur Upload'), KeyEnableUploadImgur);
@@ -461,29 +469,25 @@ var prefs = (function (Gtk, GObject, Gio, GLib) {
         /* Enable Upload Notification [on|off] */
         const configSwitchEnableNotification = buildConfigSwitch(settings, _('Show Upload Notification'), KeyImgurEnableNotification);
         prefs.add(configSwitchEnableNotification.hbox);
-        bindSensitivity(configSwitchEnable.gtkSwitch, configSwitchEnableNotification.gtkLabel);
-        bindSensitivity(configSwitchEnable.gtkSwitch, configSwitchEnableNotification.gtkSwitch);
+        bindSensitivity(configSwitchEnable.gtkSwitch, configSwitchEnableNotification.hbox);
         /* Auto-Upload After Capture [on|off] */
         const configSwitchUploadOnCapture = buildConfigSwitch(settings, _('Auto-Upload After Capture'), KeyImgurAutoUpload);
-        bindSensitivity(configSwitchEnable.gtkSwitch, configSwitchUploadOnCapture.gtkLabel);
-        bindSensitivity(configSwitchEnable.gtkSwitch, configSwitchUploadOnCapture.gtkSwitch);
+        bindSensitivity(configSwitchEnable.gtkSwitch, configSwitchUploadOnCapture.hbox);
         prefs.add(configSwitchUploadOnCapture.hbox);
         /* Auto-Copy Link After Upload [on|off] */
         const configSwitchCopyLinkOnUpload = buildConfigSwitch(settings, _('Auto-Copy Link After Upload'), KeyImgurAutoCopyLink);
-        bindSensitivity(configSwitchEnable.gtkSwitch, configSwitchCopyLinkOnUpload.gtkLabel);
-        bindSensitivity(configSwitchEnable.gtkSwitch, configSwitchCopyLinkOnUpload.gtkSwitch);
+        bindSensitivity(configSwitchEnable.gtkSwitch, configSwitchCopyLinkOnUpload.hbox);
         prefs.add(configSwitchCopyLinkOnUpload.hbox);
         /* Auto-Open Link After Upload [on|off] */
         const configSwitchOpenLinkOnUpload = buildConfigSwitch(settings, _('Auto-Open Link After Upload'), KeyImgurAutoOpenLink);
-        bindSensitivity(configSwitchEnable.gtkSwitch, configSwitchOpenLinkOnUpload.gtkLabel);
-        bindSensitivity(configSwitchEnable.gtkSwitch, configSwitchOpenLinkOnUpload.gtkSwitch);
+        bindSensitivity(configSwitchEnable.gtkSwitch, configSwitchOpenLinkOnUpload.hbox);
         prefs.add(configSwitchOpenLinkOnUpload.hbox);
         return prefs;
     }
 
     // accelerator setting based on
     // https://github.com/ambrice/spatialnavigation-tastycactus.com/blob/master/prefs.js
-    function getPage$4(settings) {
+    function getPage$5(settings) {
         const model = new Gtk.ListStore();
         model.set_column_types([GObject.TYPE_STRING, GObject.TYPE_STRING, GObject.TYPE_INT, GObject.TYPE_INT]);
         const bindings = [
@@ -552,22 +556,15 @@ var prefs = (function (Gtk, GObject, Gio, GLib) {
             super._init(params);
             const settings = ExtensionUtils.getSettings();
             const notebook = new Gtk.Notebook();
-            let page, label;
-            page = getPage(settings);
-            label = new Gtk.Label({ label: _('Indicator') });
-            notebook.append_page(page, label);
-            page = getPage$1(settings);
-            label = new Gtk.Label({ label: _('Effects') });
-            notebook.append_page(page, label);
-            page = getPage$2(settings);
-            label = new Gtk.Label({ label: _('Storage') });
-            notebook.append_page(page, label);
-            page = getPage$3(settings);
-            label = new Gtk.Label({ label: _('Imgur Upload (Beta)') });
-            notebook.append_page(page, label);
-            page = getPage$4(settings);
-            label = new Gtk.Label({ label: _('Keybindings') });
-            notebook.append_page(page, label);
+            function addPage(label, page) {
+                notebook.append_page(page, new Gtk.Label({ label }));
+            }
+            addPage(_('Indicator'), getPage(settings));
+            addPage(_('Effects'), getPage$1(settings));
+            addPage(_('Commands'), getPage$2(settings));
+            addPage(_('Storage'), getPage$3(settings));
+            addPage(_('Imgur Upload'), getPage$4(settings));
+            addPage(_('Keybindings'), getPage$5(settings));
             this.add(notebook);
         }
     }, Gtk.Box);
