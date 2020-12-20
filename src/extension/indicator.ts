@@ -101,113 +101,113 @@ class CaptureDelayMenu extends PopupMenu.PopupMenuSection {
 
 interface PopupMenuItem extends St.BoxLayout {
   menu: {
-    addMenuItem(v: St.Widget);
+    addMenuItem(v: St.Widget | PopupMenuItem);
   };
 }
 
 class ScreenshotSection {
   private _screenshot?: Screenshot;
 
-  private _image: PopupMenuItem;
-  private _clear: PopupMenuItem;
-  private _copy: PopupMenuItem;
-  private _save: PopupMenuItem;
-  private _imgurMenu: PopupMenuItem;
-  private _imgurUpload: PopupMenuItem;
-  private _imgurOpen: PopupMenuItem;
-  private _imgurCopyLink: PopupMenuItem;
-  private _imgurDelete: PopupMenuItem;
+  private readonly image: PopupMenuItem;
+  private readonly clear: PopupMenuItem;
+  private readonly copy: PopupMenuItem;
+  private readonly save: PopupMenuItem;
+  private readonly imgurMenu: PopupMenuItem;
+  private readonly imgurUpload: PopupMenuItem;
+  private readonly imgurOpen: PopupMenuItem;
+  private readonly imgurCopyLink: PopupMenuItem;
+  private readonly imgurDelete: PopupMenuItem;
 
   constructor(menu) {
-    this._image = new PopupMenu.PopupBaseMenuItem();
-    getActorCompat(this._image).content_gravity = Clutter.ContentGravity.RESIZE_ASPECT;
+    this.image = new PopupMenu.PopupBaseMenuItem();
+    getActorCompat(this.image).content_gravity = Clutter.ContentGravity.RESIZE_ASPECT;
 
-    this._clear = new PopupMenu.PopupMenuItem(_('Clear'));
-    this._copy = new PopupMenu.PopupMenuItem(_('Copy'));
-    this._save = new PopupMenu.PopupMenuItem(_('Save As...'));
+    this.clear = new PopupMenu.PopupMenuItem(_('Clear'));
+    this.copy = new PopupMenu.PopupMenuItem(_('Copy'));
+    this.save = new PopupMenu.PopupMenuItem(_('Save As...'));
 
-    this._image.connect(
+    this.image.connect(
       'activate',
-      wrapNotifyError(() => this._onImage()),
+      wrapNotifyError(() => this.onImage()),
     );
-    this._clear.connect(
+    this.clear.connect(
       'activate',
-      wrapNotifyError(() => this._onClear()),
+      wrapNotifyError(() => this.onClear()),
     );
-    this._copy.connect(
+    this.copy.connect(
       'activate',
-      wrapNotifyError(() => this._onCopy()),
+      wrapNotifyError(() => this.onCopy()),
     );
-    this._save.connect(
+    this.save.connect(
       'activate',
-      wrapNotifyError(() => this._onSave()),
+      wrapNotifyError(() => this.onSave()),
     );
 
-    menu.addMenuItem(this._image);
-    menu.addMenuItem(this._clear);
-    menu.addMenuItem(this._copy);
-    menu.addMenuItem(this._save);
+    menu.addMenuItem(this.image);
+    menu.addMenuItem(this.clear);
+    menu.addMenuItem(this.copy);
+    menu.addMenuItem(this.save);
 
     // IMGUR
 
     menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
 
-    this._imgurMenu = new PopupMenu.PopupSubMenuMenuItem(_('Imgur'), false);
-    this._imgurUpload = new PopupMenu.PopupMenuItem(_('Upload'));
-    this._imgurOpen = new PopupMenu.PopupMenuItem(_('Open Link'));
-    this._imgurCopyLink = new PopupMenu.PopupMenuItem(_('Copy Link'));
-    this._imgurDelete = new PopupMenu.PopupMenuItem(_('Delete'));
+    this.imgurMenu = new PopupMenu.PopupSubMenuMenuItem(_('Imgur'), false);
+    this.imgurUpload = new PopupMenu.PopupMenuItem(_('Upload'));
+    this.imgurOpen = new PopupMenu.PopupMenuItem(_('Open Link'));
+    this.imgurCopyLink = new PopupMenu.PopupMenuItem(_('Copy Link'));
+    this.imgurDelete = new PopupMenu.PopupMenuItem(_('Delete'));
 
-    this._imgurUpload.connect(
+    this.imgurUpload.connect(
       'activate',
-      wrapNotifyError(() => this._onImgurUpload()),
+      wrapNotifyError(() => this.onImgurUpload()),
     );
-    this._imgurOpen.connect(
+    this.imgurOpen.connect(
       'activate',
-      wrapNotifyError(() => this._onImgurOpen()),
+      wrapNotifyError(() => this.onImgurOpen()),
     );
-    this._imgurCopyLink.connect(
+    this.imgurCopyLink.connect(
       'activate',
-      wrapNotifyError(() => this._onImgurCopyLink()),
+      wrapNotifyError(() => this.onImgurCopyLink()),
     );
-    this._imgurDelete.connect(
+    this.imgurDelete.connect(
       'activate',
-      wrapNotifyError(() => this._onImgurDelete()),
+      wrapNotifyError(() => this.onImgurDelete()),
     );
 
-    this._imgurMenu.menu.addMenuItem(this._imgurUpload);
-    this._imgurMenu.menu.addMenuItem(this._imgurOpen);
-    this._imgurMenu.menu.addMenuItem(this._imgurCopyLink);
-    this._imgurMenu.menu.addMenuItem(this._imgurDelete);
+    this.imgurMenu.menu.addMenuItem(this.imgurUpload);
+    this.imgurMenu.menu.addMenuItem(this.imgurOpen);
+    this.imgurMenu.menu.addMenuItem(this.imgurCopyLink);
+    this.imgurMenu.menu.addMenuItem(this.imgurDelete);
 
-    menu.addMenuItem(this._imgurMenu);
+    menu.addMenuItem(this.imgurMenu);
 
     menu.connect('open-state-changed', () => {
-      this._updateVisibility();
+      this.updateVisibility();
     });
 
-    this._updateVisibility();
+    this.updateVisibility();
   }
 
-  _updateVisibility() {
+  updateVisibility() {
     const visible = !!this._screenshot;
 
-    getActorCompat(this._image).visible = visible;
-    getActorCompat(this._clear).visible = visible;
-    getActorCompat(this._copy).visible = visible;
-    getActorCompat(this._save).visible = visible;
+    getActorCompat(this.image).visible = visible;
+    getActorCompat(this.clear).visible = visible;
+    getActorCompat(this.copy).visible = visible;
+    getActorCompat(this.save).visible = visible;
 
     const imgurEnabled = settings.get_boolean(Config.KeyEnableUploadImgur);
     const imgurComplete = this._screenshot && this._screenshot.imgurUpload && this._screenshot.imgurUpload.responseData;
 
-    getActorCompat(this._imgurMenu).visible = visible && imgurEnabled;
-    getActorCompat(this._imgurUpload).visible = visible && imgurEnabled && !imgurComplete;
-    getActorCompat(this._imgurOpen).visible = visible && imgurEnabled && imgurComplete;
-    getActorCompat(this._imgurCopyLink).visible = visible && imgurEnabled && imgurComplete;
-    getActorCompat(this._imgurDelete).visible = visible && imgurEnabled && imgurComplete;
+    getActorCompat(this.imgurMenu).visible = visible && imgurEnabled;
+    getActorCompat(this.imgurUpload).visible = visible && imgurEnabled && !imgurComplete;
+    getActorCompat(this.imgurOpen).visible = visible && imgurEnabled && imgurComplete;
+    getActorCompat(this.imgurCopyLink).visible = visible && imgurEnabled && imgurComplete;
+    getActorCompat(this.imgurDelete).visible = visible && imgurEnabled && imgurComplete;
   }
 
-  _setImage(pixbuf) {
+  setImage(pixbuf) {
     const { width, height } = pixbuf;
     if (height == 0) {
       return;
@@ -224,23 +224,23 @@ class ScreenshotSection {
       throw Error('error creating Clutter.Image()');
     }
 
-    getActorCompat(this._image).content = image;
-    getActorCompat(this._image).height = 200;
+    getActorCompat(this.image).content = image;
+    getActorCompat(this.image).height = 200;
   }
 
   setScreenshot(screenshot: Screenshot | undefined) {
     this._screenshot = screenshot;
 
     if (this._screenshot) {
-      this._setImage(this._screenshot.gtkImage.get_pixbuf());
+      this.setImage(this._screenshot.gtkImage.get_pixbuf());
       this._screenshot.connect('imgur-upload', (obj, upload) => {
         upload.connect('done', (_obj, _data) => {
-          this._updateVisibility();
+          this.updateVisibility();
         });
       });
     }
 
-    this._updateVisibility();
+    this.updateVisibility();
   }
 
   get screenshot(): Screenshot {
@@ -250,46 +250,47 @@ class ScreenshotSection {
     return this._screenshot;
   }
 
-  _onImage() {
+  onImage() {
     this.screenshot.launchOpen();
   }
 
-  _onClear() {
+  onClear() {
     this.setScreenshot(undefined);
   }
 
-  _onCopy() {
+  onCopy() {
     this.screenshot.copyClipboard(settings.get_string(Config.KeyCopyButtonAction));
   }
 
-  _onSave() {
+  onSave() {
     this.screenshot.launchSave();
   }
 
-  _onImgurUpload() {
+  onImgurUpload() {
     this.screenshot.imgurStartUpload();
   }
 
-  _onImgurOpen() {
+  onImgurOpen() {
     this.screenshot.imgurOpenURL();
   }
 
-  _onImgurCopyLink() {
+  onImgurCopyLink() {
     this.screenshot.imgurCopyURL();
   }
 
-  _onImgurDelete() {
+  onImgurDelete() {
     this.screenshot.imgurDelete();
   }
 }
 
 export class Indicator {
-  private _extension: Extension.Extension;
+  private extension: Extension.Extension;
+  private screenshotSection?: ScreenshotSection;
+
   public panelButton: St.Button & { menu: any };
-  private _screenshotSection?: ScreenshotSection;
 
   constructor(extension: Extension.Extension) {
-    this._extension = extension;
+    this.extension = extension;
 
     this.panelButton = new PanelMenu.Button(null, Config.IndicatorName);
     const icon = new St.Icon({
@@ -299,13 +300,13 @@ export class Indicator {
     getActorCompat(this.panelButton).add_actor(icon);
     getActorCompat(this.panelButton).connect(
       'button-press-event',
-      wrapNotifyError((obj, evt) => this._onClick(obj, evt)),
+      wrapNotifyError((obj, evt) => this.onClick(obj, evt)),
     );
 
-    this._buildMenu();
+    this.buildMenu();
   }
 
-  _onClick(_obj: unknown, evt: Clutter.Event): void {
+  onClick(_obj: unknown, evt: Clutter.Event): void {
     // only override primary button behavior
     if (evt.get_button() !== Clutter.BUTTON_PRIMARY) {
       return;
@@ -317,10 +318,10 @@ export class Indicator {
     }
 
     this.panelButton.menu.close();
-    this._extension.onAction(action);
+    this.extension.onAction(action);
   }
 
-  _buildMenu(): void {
+  buildMenu(): void {
     // These actions can be triggered via shortcut or popup menu
     const menu = this.panelButton.menu;
     const items = [
@@ -333,7 +334,7 @@ export class Indicator {
       const item = new PopupMenu.PopupMenuItem(title);
       item.connect('activate', () => {
         menu.close();
-        this._extension.onAction(action);
+        this.extension.onAction(action);
       });
       menu.addMenuItem(item);
     });
@@ -346,7 +347,7 @@ export class Indicator {
 
     menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
 
-    this._screenshotSection = new ScreenshotSection(menu);
+    this.screenshotSection = new ScreenshotSection(menu);
 
     menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
 
@@ -359,10 +360,10 @@ export class Indicator {
   }
 
   setScreenshot(screenshot: Screenshot): void {
-    if (!this._screenshotSection) {
+    if (!this.screenshotSection) {
       throw new Error();
     }
-    this._screenshotSection.setScreenshot(screenshot);
+    this.screenshotSection.setScreenshot(screenshot);
   }
 
   destroy(): void {
