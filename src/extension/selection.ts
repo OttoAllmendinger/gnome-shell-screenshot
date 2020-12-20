@@ -1,5 +1,4 @@
 import * as St from '@imports/St-1.0';
-import * as GLib from '@imports/GLib-2.0';
 import * as Meta from '@imports/Meta-7';
 import * as Clutter from '@imports/Clutter-7';
 import * as Shell from '@imports/Shell-0.1';
@@ -11,6 +10,7 @@ import ExtensionUtils from '../gselib/extensionUtils';
 import { _ } from '../gselib/gettext';
 
 import * as Filename from './filename';
+import { spawnAsync } from './spawnUtil';
 
 const Signals = imports.signals;
 const Mainloop = imports.mainloop;
@@ -59,27 +59,9 @@ const selectWindow = (windows, px, py) => {
 
 const callHelper = (argv, fileName, callback: ScreenshotCallback) => {
   argv = ['gjs', Local.path + '/auxhelper.js', '--filename', fileName, ...argv];
-  // log(argv.join(' '));
-  const [success, pid] = GLib.spawn_async(
-    null /* pwd */,
-    argv,
-    null /* envp */,
-    GLib.SpawnFlags.SEARCH_PATH | GLib.SpawnFlags.DO_NOT_REAP_CHILD,
-    null /* child_setup */,
-  );
-  if (!success) {
-    throw new Error('success=false');
-  }
-  if (pid === null) {
-    throw new Error('pid === null');
-  }
-  GLib.child_watch_add(GLib.PRIORITY_DEFAULT, pid, (pid, exitCode) => {
-    if (exitCode !== 0) {
-      logError(new Error(`cmd: ${argv.join(' ')} exitCode=${exitCode}`));
-      return callback(new Error(`exitCode=${exitCode}`), null);
-    }
-    callback(null, fileName);
-  });
+  spawnAsync(argv)
+    .catch((err) => callback(err, null))
+    .then(() => callback(null, fileName));
 };
 
 const makeAreaScreenshot = ({ x, y, w, h }, callback) => {
