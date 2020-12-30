@@ -2,13 +2,32 @@
     'use strict';
 
     var uuid = "gnome-shell-screenshot@ttll.de";
+    var name = "Screenshot Tool";
+    var url = "https://github.com/OttoAllmendinger/gnome-shell-screenshot/";
+    var description = "Conveniently create, copy, store and upload screenshots";
+    var metadata = {
+    	"shell-version": [
+    	"3.32",
+    	"3.34",
+    	"3.36",
+    	"3.38"
+    ],
+    	uuid: uuid,
+    	name: name,
+    	url: url,
+    	description: description,
+    	"settings-schema": "org.gnome.shell.extensions.screenshot",
+    	"gettext-domain": "gnome-shell-screenshot",
+    	"git-version": "_gitversion_"
+    };
 
-    const _ = imports.gettext.domain(uuid).gettext;
+    const domain = metadata['gettext-domain'];
+    const _ = imports.gettext.domain(domain).gettext;
     function init(extensionDir) {
         const workDir = Gio.File.new_for_path(extensionDir);
         const localeDir = workDir.get_child('locale');
         if (localeDir.query_exists(null)) {
-            imports.gettext.bindtextdomain(uuid, localeDir.get_path());
+            imports.gettext.bindtextdomain(domain, localeDir.get_path());
         }
     }
 

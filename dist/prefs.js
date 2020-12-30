@@ -16,8 +16,27 @@ var prefs = (function (Gtk, GObject, Gio, GLib) {
     }
 
     var uuid = "gnome-shell-screenshot@ttll.de";
+    var name = "Screenshot Tool";
+    var url = "https://github.com/OttoAllmendinger/gnome-shell-screenshot/";
+    var description = "Conveniently create, copy, store and upload screenshots";
+    var metadata = {
+    	"shell-version": [
+    	"3.32",
+    	"3.34",
+    	"3.36",
+    	"3.38"
+    ],
+    	uuid: uuid,
+    	name: name,
+    	url: url,
+    	description: description,
+    	"settings-schema": "org.gnome.shell.extensions.screenshot",
+    	"gettext-domain": "gnome-shell-screenshot",
+    	"git-version": "_gitversion_"
+    };
 
-    const _ = imports.gettext.domain(uuid).gettext;
+    const domain = metadata['gettext-domain'];
+    const _ = imports.gettext.domain(domain).gettext;
 
     const KeyEnableIndicator = 'enable-indicator';
     const KeyEnableNotification = 'enable-notification';
