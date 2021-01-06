@@ -26,11 +26,11 @@ msgstr "_Annuler"
 msgid "_Save"
 msgstr "_Enregistrer"
 
-#: src/extension/prefs/imgur.ts:45
+#: src/extension/prefs/imgur.ts:46
 msgid "Auto-Copy Link After Upload"
 msgstr "Copier automatiquement le lien après le téléversement"
 
-#: src/extension/prefs/indicator.ts:83
+#: src/extension/prefs/indicator.ts:74
 msgid "Auto-Copy to Clipboard"
 msgstr "Copier automatiquement dans le presse-papiers"
 
@@ -38,145 +38,153 @@ msgstr "Copier automatiquement dans le presse-papiers"
 msgid "Auto-Open Link After Upload"
 msgstr "Ouvrir automatiquement le lien après le téléversement"
 
-#: src/extension/prefs/storage.ts:17
+#: src/extension/prefs/storage.ts:18
 msgid "Auto-Save Screenshot"
 msgstr "Sauvegarde automatique"
 
-#: src/extension/prefs/imgur.ts:32
+#: src/extension/prefs/imgur.ts:34
 msgid "Auto-Upload After Capture"
 msgstr "Téléverser automatiquement après les captures"
 
-#: src/extension/indicator.ts:89 src/extension/indicator.ts:91
+#: src/extension/indicator.ts:94 src/extension/indicator.ts:96
 msgid "Capture Delay"
 msgstr "Délai de capture"
 
-#: src/extension/indicator.ts:120
+#: src/extension/indicator.ts:125
 msgid "Clear"
 msgstr "Effacer"
 
-#: src/extension/indicator.ts:121 src/extension/notifications.ts:93
+#: src/extension/notifications.ts:268 src/extension/prefs/commands.ts:33
+msgid "Command"
+msgstr ""
+
+#: src/extension/prefs/prefs.ts:28
+msgid "Commands"
+msgstr ""
+
+#: src/extension/indicator.ts:126 src/extension/notifications.ts:101
 msgid "Copy"
 msgstr "Copier"
 
-#: src/extension/prefs/indicator.ts:78
+#: src/extension/prefs/indicator.ts:69
 #, fuzzy
 msgid "Copy Button"
 msgstr "Boutton principal"
 
-#: src/extension/indicator.ts:141 src/extension/notifications.ts:187
+#: src/extension/indicator.ts:158 src/extension/notifications.ts:221
 msgid "Copy Link"
 msgstr "Copier le lien"
 
-#: src/extension/filename.ts:24
+#: src/extension/filename.ts:27
 msgid "Day"
 msgstr "Jour"
 
-#: src/extension/prefs/storage.ts:64
+#: src/extension/prefs/storage.ts:60
 msgid "Default Filename"
 msgstr "Nom de fichier par défaut"
 
-#: src/extension/indicator.ts:142
+#: src/extension/indicator.ts:159
 msgid "Delete"
 msgstr "Supprimer"
 
-#: src/extension/prefs/prefs.ts:29
+#: src/extension/prefs/prefs.ts:27
 msgid "Effects"
 msgstr ""
 
-#: src/extension/prefs/imgur.ts:12
+#: src/extension/prefs/imgur.ts:15
 msgid "Enable Imgur Upload"
 msgstr "Activer le téléversement Imgur"
 
-#: src/extension/notifications.ts:129
+#: src/extension/notifications.ts:139
 msgid "Error"
 msgstr "Erreur"
 
-#: src/extension/filename.ts:29
+#: src/extension/commands.ts:21
+msgid "Filename"
+msgstr ""
+
+#: src/extension/filename.ts:32
 msgid "Height"
 msgstr "Hauteur"
 
-#: src/extension/filename.ts:30
+#: src/extension/filename.ts:33
 msgid "Hostname"
 msgstr "Nom d'hôte"
 
-#: src/extension/filename.ts:25
+#: src/extension/filename.ts:28
 msgid "Hour"
 msgstr "Heure"
 
-#: src/extension/prefs/indicator.ts:56
+#: src/extension/prefs/indicator.ts:53
 msgid "Image Data"
 msgstr "Image"
 
-#: src/extension/indicator.ts:138
+#: src/extension/indicator.ts:155
 msgid "Imgur"
 msgstr "Imgur"
 
-#: src/extension/notifications.ts:145 src/extension/notifications.ts:150
-#: src/extension/notifications.ts:165
+#: src/extension/notifications.ts:179 src/extension/notifications.ts:184
+#: src/extension/notifications.ts:199 src/extension/prefs/prefs.ts:30
 msgid "Imgur Upload"
 msgstr "Téléversement Imgur"
 
-#: src/extension/prefs/prefs.ts:37
-msgid "Imgur Upload (Beta)"
-msgstr "Téléversement Imgur (Béta)"
-
-#: src/extension/notifications.ts:169
+#: src/extension/notifications.ts:203
 msgid "Imgur Upload Failed"
 msgstr "Erreur lors du téléversement sur Imgur"
 
-#: src/extension/notifications.ts:173
+#: src/extension/notifications.ts:207
 msgid "Imgur Upload Successful"
 msgstr "Téléversement sur Imgur reussi"
 
-#: src/extension/prefs/prefs.ts:25
+#: src/extension/prefs/prefs.ts:26
 msgid "Indicator"
 msgstr "Indicateur"
 
-#: src/extension/prefs/prefs.ts:41
+#: src/extension/prefs/prefs.ts:31
 msgid "Keybindings"
 msgstr "Raccourcis clavier"
 
-#: src/extension/prefs/keybindings.ts:44
+#: src/extension/prefs/keybindings.ts:45
 msgid "Keyboard Shortcut"
 msgstr "Raccourci clavier"
 
-#: src/extension/prefs/indicator.ts:57
+#: src/extension/prefs/indicator.ts:54
 msgid "Local Path"
 msgstr ""
 
-#: src/extension/filename.ts:26
+#: src/extension/filename.ts:29
 msgid "Minute"
 msgstr "Minute"
 
-#: src/extension/prefs/keybindings.ts:84
+#: src/extension/prefs/keybindings.ts:85
 msgid "Modify"
 msgstr "Modifier"
 
-#: src/extension/filename.ts:23
+#: src/extension/filename.ts:26
 msgid "Month"
 msgstr "Mois"
 
-#: src/extension/notifications.ts:50
+#: src/extension/notifications.ts:58
 msgid "New Screenshot"
 msgstr "Nouvelle capture d'écran"
 
-#: src/extension/indicator.ts:87
+#: src/extension/indicator.ts:92
 msgid "No Capture Delay"
 msgstr "Pas de délai de capture"
 
-#: src/extension/prefs/indicator.ts:55
+#: src/extension/prefs/indicator.ts:52
 msgid "Nothing"
 msgstr "Rien"
 
-#: src/extension/indicator.ts:140
+#: src/extension/indicator.ts:157
 msgid "Open Link"
 msgstr "Ouvrir le lien"
 
-#: src/extension/filename.ts:35
+#: src/extension/templateParams.ts:5
 msgid "Parameters:"
 msgstr "Paramètres :"
 
-#: src/extension/prefs/storage.ts:82
+#: src/extension/prefs/storage.ts:74
 msgid "Preview"
 msgstr "Aperçu"
 
@@ -188,11 +196,15 @@ msgstr "Boutton principal"
 msgid "Rescale"
 msgstr ""
 
-#: src/extension/notifications.ts:94
+#: src/extension/prefs/commands.ts:16
+msgid "Run Command After Capture"
+msgstr ""
+
+#: src/extension/notifications.ts:102
 msgid "Save"
 msgstr "Enregistrer"
 
-#: src/extension/indicator.ts:122
+#: src/extension/indicator.ts:127
 msgid "Save As..."
 msgstr "Enregistrer sous..."
 
@@ -200,99 +212,102 @@ msgstr "Enregistrer sous..."
 msgid "Save Location"
 msgstr "Emplacement de sauvegarde"
 
-#: src/extension/filename.ts:21
+#: src/extension/filename.ts:24
 msgid "Screenshot"
 msgstr "Capture"
 
-#: src/extension/filename.ts:21
+#: src/extension/filename.ts:24
 msgid "Screenshot (literal)"
 msgstr "\"Capture\""
 
-#: src/extension/filename.ts:27
+#: src/extension/filename.ts:30
 msgid "Second"
 msgstr "Seconde"
 
-#: src/extension/prefs/storage.ts:30
+#: src/extension/prefs/storage.ts:27
 msgid "Select"
 msgstr "Sélectionner"
 
-#: src/extension/prefs/keybindings.ts:15
+#: src/extension/prefs/keybindings.ts:16
 msgid "Select area"
 msgstr "Sélectionner une zone"
 
-#: src/extension/indicator.ts:295 src/extension/prefs/indicator.ts:38
+#: src/extension/indicator.ts:328 src/extension/prefs/indicator.ts:35
 msgid "Select Area"
 msgstr "Sélectionner une zone"
 
-#: src/extension/indicator.ts:297 src/extension/prefs/indicator.ts:40
+#: src/extension/indicator.ts:330 src/extension/prefs/indicator.ts:37
 msgid "Select Desktop"
 msgstr "Sélectionner le bureau"
 
-#: src/extension/prefs/keybindings.ts:17
+#: src/extension/prefs/keybindings.ts:18
 msgid "Select whole desktop"
 msgstr "Sélectionner tout le bureau"
 
-#: src/extension/prefs/keybindings.ts:16
+#: src/extension/prefs/keybindings.ts:17
 msgid "Select window"
 msgstr "Sélectionner une fenêtre"
 
-#: src/extension/indicator.ts:296 src/extension/prefs/indicator.ts:39
+#: src/extension/indicator.ts:329 src/extension/prefs/indicator.ts:36
 msgid "Select Window"
 msgstr "Sélectionner une fenêtre"
 
-#: src/extension/selection.ts:229
+#: src/extension/selection.ts:211
 msgid "selected region was too small - please select a larger area"
 msgstr ""
 "La zone sélectionnée était trop petite - merci de sélectionner une plus "
 "grande zone"
 
-#: src/extension/indicator.ts:322
+#: src/extension/indicator.ts:355 src/extension/notifications.ts:162
 msgid "Settings"
 msgstr "Paramètres"
 
-#: src/extension/prefs/indicator.ts:15
+#: src/extension/prefs/indicator.ts:16
 msgid "Show Indicator"
 msgstr "Afficher l'indicateur"
 
-#: src/extension/prefs/indicator.ts:41
+#: src/extension/prefs/indicator.ts:38
 msgid "Show Menu"
 msgstr "Afficher le menu"
 
-#: src/extension/prefs/indicator.ts:23
+#: src/extension/prefs/indicator.ts:24
 msgid "Show Notification After Capture"
 msgstr "Afficher une notification après la capture"
 
-#: src/extension/prefs/imgur.ts:19
+#: src/extension/prefs/imgur.ts:22
 msgid "Show Upload Notification"
 msgstr "Afficher une notification de téléversement"
 
-#: src/extension/notifications.ts:56
+#: src/extension/notifications.ts:64
 msgid "Size:"
 msgstr "Taille:"
 
-#: src/extension/prefs/prefs.ts:33
+#: src/extension/prefs/prefs.ts:29
 msgid "Storage"
 msgstr "Sauvegarde"
 
-#: src/extension/indicator.ts:139
+#: src/extension/indicator.ts:156
 msgid "Upload"
 msgstr "Téléverser"
 
-#: src/extension/notifications.ts:102
+#: src/extension/notifications.ts:110
 msgid "Upload To Imgur"
 msgstr "Téléverser sur Imgur"
 
-#: src/extension/notifications.ts:98
+#: src/extension/notifications.ts:106
 msgid "Uploading To Imgur..."
 msgstr "Téléversement sur Imgur..."
 
-#: src/extension/filename.ts:28
+#: src/extension/filename.ts:31
 msgid "Width"
 msgstr "Largeur"
 
-#: src/extension/filename.ts:22
+#: src/extension/filename.ts:25
 msgid "Year"
 msgstr "Année"
+
+#~ msgid "Imgur Upload (Beta)"
+#~ msgstr "Téléversement Imgur (Béta)"
 
 #~ msgid "Default Clipboard Content"
 #~ msgstr "Contenu par défaut du presse-papier"
