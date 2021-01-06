@@ -18,15 +18,19 @@ export function getPage(settings: Gio.Settings): Gtk.Box {
   );
   prefs.add(configRowEnableRunCommand.hbox);
 
-  const configRowRunCommand = buildConfigRow(
-    _('Command'),
-    new Gtk.Entry({
-      expand: true,
-      tooltip_text: Commands.tooltipText(),
-      text: settings.get_string(Config.KeyRunCommand),
-    }),
-  );
+  const entry = new Gtk.Entry({
+    expand: true,
+    tooltip_text: Commands.tooltipText(),
+    text: settings.get_string(Config.KeyRunCommand),
+  });
 
+  ['inserted-text', 'deleted-text'].forEach((name) => {
+    entry.get_buffer().connect(name, ({ text }) => {
+      settings.set_string(Config.KeyRunCommand, text);
+    });
+  });
+
+  const configRowRunCommand = buildConfigRow(_('Command'), entry);
   bindSensitivity(configRowEnableRunCommand.gtkSwitch, configRowRunCommand);
   prefs.add(configRowRunCommand);
 

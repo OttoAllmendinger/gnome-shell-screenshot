@@ -339,11 +339,17 @@ var prefs = (function (Gtk, GObject, Gio, GLib) {
         const prefs = buildPage();
         const configRowEnableRunCommand = buildConfigSwitch(settings, _('Run Command After Capture'), KeyEnableRunCommand);
         prefs.add(configRowEnableRunCommand.hbox);
-        const configRowRunCommand = buildConfigRow(_('Command'), new Gtk.Entry({
+        const entry = new Gtk.Entry({
             expand: true,
             tooltip_text: tooltipText(),
             text: settings.get_string(KeyRunCommand),
-        }));
+        });
+        ['inserted-text', 'deleted-text'].forEach((name) => {
+            entry.get_buffer().connect(name, ({ text }) => {
+                settings.set_string(KeyRunCommand, text);
+            });
+        });
+        const configRowRunCommand = buildConfigRow(_('Command'), entry);
         bindSensitivity(configRowEnableRunCommand.gtkSwitch, configRowRunCommand);
         prefs.add(configRowRunCommand);
         return prefs;
