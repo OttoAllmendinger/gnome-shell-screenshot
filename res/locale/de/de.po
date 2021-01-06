@@ -58,11 +58,11 @@ msgstr "Leeren"
 
 #: src/extension/notifications.ts:268 src/extension/prefs/commands.ts:33
 msgid "Command"
-msgstr ""
+msgstr "Befehl"
 
 #: src/extension/prefs/prefs.ts:28
 msgid "Commands"
-msgstr ""
+msgstr "Befehle"
 
 #: src/extension/indicator.ts:126 src/extension/notifications.ts:101
 msgid "Copy"
@@ -103,7 +103,7 @@ msgstr "Fehler"
 
 #: src/extension/commands.ts:21
 msgid "Filename"
-msgstr ""
+msgstr "Dateiname"
 
 #: src/extension/filename.ts:32
 msgid "Height"
@@ -200,7 +200,7 @@ msgstr "Skalierung"
 
 #: src/extension/prefs/commands.ts:16
 msgid "Run Command After Capture"
-msgstr ""
+msgstr "Führe Befehl nach Aufnahme aus"
 
 #: src/extension/notifications.ts:102
 msgid "Save"
