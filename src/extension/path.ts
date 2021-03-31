@@ -2,19 +2,19 @@ import * as GLib from '@imports/GLib-2.0';
 
 const PATH_SEPARATOR = '/';
 
-export const join = (...segments) => {
+export function join(...segments: string[]): string {
   return [''].concat(segments.filter((e) => e !== '')).join(PATH_SEPARATOR);
-};
+}
 
-const expandUserDir = (segment) => {
+export function expandUserDir(segment: string): string {
   switch (segment.toUpperCase()) {
     case '$PICTURES':
       return GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_PICTURES);
     default:
       return segment;
   }
-};
+}
 
-export const expand = (path) => {
+export function expand(path: string): string {
   return join(...path.split(PATH_SEPARATOR).map(expandUserDir));
-};
+}
