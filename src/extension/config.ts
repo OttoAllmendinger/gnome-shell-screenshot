@@ -6,16 +6,20 @@ export const KeyEnableIndicator = 'enable-indicator';
 
 export const KeyEnableNotification = 'enable-notification';
 
-export const KeyShortcuts = ['shortcut-select-area', 'shortcut-select-window', 'shortcut-select-desktop'];
+export const ValueShortcutSelectArea = 'shortcut-select-area';
+export const ValueShortcutSelectWindow = 'shortcut-select-window';
+export const ValueShortcutSelectDesktop = 'shortcut-select-desktop';
+
+export const KeyShortcuts = [ValueShortcutSelectArea, ValueShortcutSelectWindow, ValueShortcutSelectDesktop];
 
 // See schemas/org.gnome.shell.extensions.screenshot.gschema.xml
 export const KeyClickAction = 'click-action';
 
 export const ClickActions = {
-  SHOW_MENU: 0,
-  SELECT_AREA: 1,
-  SELECT_WINDOW: 2,
-  SELECT_DESKTOP: 3,
+  SHOW_MENU: 'show-menu',
+  SELECT_AREA: 'select-area',
+  SELECT_WINDOW: 'select-window',
+  SELECT_DESKTOP: 'select-desktop',
 };
 
 export const KeyCaptureDelay = 'capture-delay';

@@ -1,19 +1,7 @@
-var prefs = (function (Gtk, GObject, Gio, GLib) {
+var prefs = (function (Gtk3, Gtk4, Gio, GLib, GObject) {
     'use strict';
 
     var ExtensionUtils = imports.misc.extensionUtils;
-
-    // eslint-disable-next-line @typescript-eslint/ban-types
-    function registerClass(meta, cls) {
-        return GObject.registerClass(meta, cls);
-    }
-    function extendGObject(cls, parent) {
-        return registerClass({
-            Name: cls.name,
-            GTypeName: cls.name,
-            Extends: parent,
-        }, cls);
-    }
 
     var uuid = "gnome-shell-screenshot@ttll.de";
     var name = "Screenshot Tool";
@@ -21,10 +9,9 @@ var prefs = (function (Gtk, GObject, Gio, GLib) {
     var description = "Conveniently create, copy, store and upload screenshots";
     var metadata = {
     	"shell-version": [
-    	"3.32",
-    	"3.34",
     	"3.36",
-    	"3.38"
+    	"3.38",
+    	"40"
     ],
     	uuid: uuid,
     	name: name,
@@ -38,169 +25,407 @@ var prefs = (function (Gtk, GObject, Gio, GLib) {
     const domain = metadata['gettext-domain'];
     const _ = imports.gettext.domain(domain).gettext;
 
-    const KeyEnableIndicator = 'enable-indicator';
-    const KeyEnableNotification = 'enable-notification';
-    // See schemas/org.gnome.shell.extensions.screenshot.gschema.xml
-    const KeyClickAction = 'click-action';
-    const ClickActions = {
-        SHOW_MENU: 0,
-        SELECT_AREA: 1,
-        SELECT_WINDOW: 2,
-        SELECT_DESKTOP: 3,
-    };
-    const KeySaveScreenshot = 'save-screenshot';
-    const KeySaveLocation = 'save-location';
-    const KeyFilenameTemplate = 'filename-template';
-    // "Auto-Copy to Clipboard" action
-    const KeyClipboardAction = 'clipboard-action';
-    // Copy button action
-    const KeyCopyButtonAction = 'copy-button-action';
-    const ClipboardActions = {
-        NONE: 'none',
-        SET_IMAGE_DATA: 'set-image-data',
-        SET_LOCAL_PATH: 'set-local-path',
-        SET_REMOTE_URL: 'set-remote-url',
-    };
-    const KeyEnableUploadImgur = 'enable-imgur';
-    const KeyImgurEnableNotification = 'imgur-enable-notification';
-    const KeyImgurAutoUpload = 'imgur-auto-upload';
-    const KeyImgurAutoCopyLink = 'imgur-auto-copy-link';
-    const KeyImgurAutoOpenLink = 'imgur-auto-open-link';
-    const KeyEffectRescale = 'effect-rescale';
-    const KeyEnableRunCommand = 'enable-run-command';
-    const KeyRunCommand = 'run-command';
+    const PATH_SEPARATOR = '/';
+    function join(...segments) {
+        return [''].concat(segments.filter((e) => e !== '')).join(PATH_SEPARATOR);
+    }
+    function expandUserDir(segment) {
+        switch (segment.toUpperCase()) {
+            case '$PICTURES':
+                return GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_PICTURES);
+            default:
+                return segment;
+        }
+    }
+    function expand(path) {
+        return join(...path.split(PATH_SEPARATOR).map(expandUserDir));
+    }
 
-    function bindSensitivity(source, target) {
-        const set = () => {
-            target.set_sensitive(source.active);
-        };
-        source.connect('notify::active', set);
-        set();
+    function getGtkVersion() {
+        const v = Gtk3.get_major_version();
+        if (v === 3 || v === 4) {
+            return v;
+        }
+        throw new Error('unsupported version');
     }
-    function buildPage() {
-        return new Gtk.Box({
-            orientation: Gtk.Orientation.VERTICAL,
-            margin: 20,
-            margin_top: 10,
-            expand: false,
-        });
+    function getCompatRoot(w) {
+        switch (getGtkVersion()) {
+            case 3:
+                return w.get_toplevel();
+            case 4:
+                return w.get_root();
+        }
+        throw new Error('unsupported version');
     }
-    function buildHbox() {
-        return new Gtk.Box({
-            orientation: Gtk.Orientation.HORIZONTAL,
-            margin_top: 5,
-            expand: false,
-            hexpand: false,
-            vexpand: false,
-            margin_bottom: 10,
-        });
-    }
-    function getComboBox(options, valueType, defaultValue, callback) {
-        const model = new Gtk.ListStore();
-        const Columns = { LABEL: 0, VALUE: 1 };
-        model.set_column_types([GObject.TYPE_STRING, valueType]);
-        const comboBox = new Gtk.ComboBox({ model });
-        const renderer = new Gtk.CellRendererText();
-        comboBox.pack_start(renderer, true);
-        comboBox.add_attribute(renderer, 'text', 0);
-        for (const [label, value] of options) {
-            let iter;
-            model.set((iter = model.append()), [Columns.LABEL, Columns.VALUE], [label, value]);
-            if (value === defaultValue) {
-                comboBox.set_active_iter(iter);
+    function getGVariantClassName(vc) {
+        for (const k of Object.keys(GLib.VariantClass)) {
+            if (GLib.VariantClass[k] === vc) {
+                return k;
             }
         }
-        comboBox.connect('changed', (_entry) => {
-            const [success, iter] = comboBox.get_active_iter();
-            if (!success) {
-                return;
-            }
-            const value = model.get_value(iter, Columns.VALUE);
-            callback(value);
-        });
-        return comboBox;
+        throw new Error(`unknown class ${vc}`);
     }
-    function buildLabel(label) {
-        return new Gtk.Label({
-            label,
-            xalign: 0,
-            expand: true,
-        });
-    }
-    function buildConfigRow(label, widget) {
-        if (typeof label === 'string') {
-            return buildConfigRow(buildLabel(label), widget);
+    function getGObjectTypeFromGVariantClass(vc) {
+        switch (vc) {
+            case GLib.VariantClass.INT16:
+            case GLib.VariantClass.INT32:
+            case GLib.VariantClass.INT64:
+            case GLib.VariantClass.UINT16:
+            case GLib.VariantClass.UINT32:
+            case GLib.VariantClass.UINT64:
+                return GObject.TYPE_INT;
+            case GLib.VariantClass.STRING:
+                return GObject.TYPE_STRING;
         }
-        const hbox = buildHbox();
-        hbox.add(label);
-        hbox.add(widget);
-        return hbox;
+        throw new Error(`unsupported GVariantClass ${getGVariantClassName(vc)}`);
     }
-    function buildConfigSwitch(settings, label, configKey) {
-        const gtkSwitch = new Gtk.Switch();
-        gtkSwitch.connect('notify::active', (button) => {
-            settings.set_boolean(configKey, button.active);
-        });
-        gtkSwitch.active = settings.get_boolean(configKey);
-        return {
-            hbox: buildConfigRow(label, gtkSwitch),
-            gtkSwitch,
-        };
+    function wrapGVariant(v) {
+        switch (typeof v) {
+            case 'boolean':
+                return GLib.Variant.new_boolean(v);
+            case 'number':
+                return GLib.Variant.new_int32(v);
+            case 'string':
+                return GLib.Variant.new_string(v);
+        }
+        throw new Error(`could not find variant fo ${typeof v}`);
     }
-
-    function getPage(settings) {
-        const prefs = buildPage();
-        /* Show indicator [on|off] */
-        const switchShowIndicator = buildConfigSwitch(settings, _('Show Indicator'), KeyEnableIndicator);
-        prefs.add(switchShowIndicator.hbox);
-        /* Show notification [on|off] */
-        const switchShowNotification = buildConfigSwitch(settings, _('Show Notification After Capture'), KeyEnableNotification);
-        prefs.add(switchShowNotification.hbox);
-        /* Default click action [dropdown] */
-        const labelDefaultClickAction = _('Primary Button');
-        const clickActionOptions = [
-            [_('Select Area'), ClickActions.SELECT_AREA],
-            [_('Select Window'), ClickActions.SELECT_WINDOW],
-            [_('Select Desktop'), ClickActions.SELECT_DESKTOP],
-            [_('Show Menu'), ClickActions.SHOW_MENU],
-        ];
-        const currentClickAction = settings.get_enum(KeyClickAction);
-        const comboBoxDefaultClickAction = getComboBox(clickActionOptions, GObject.TYPE_INT, currentClickAction, (value) => settings.set_enum(KeyClickAction, value));
-        prefs.add(buildConfigRow(labelDefaultClickAction, comboBoxDefaultClickAction));
-        /* Clipboard Action [dropdown] */
-        const [optionNothing, optionImageData, optionLocalPath] = [
-            [_('Nothing'), ClipboardActions.NONE],
-            [_('Image Data'), ClipboardActions.SET_IMAGE_DATA],
-            [_('Local Path'), ClipboardActions.SET_LOCAL_PATH],
-        ];
-        const clipboardActionDropdown = (label, { options, configKey }) => {
-            const currentValue = settings.get_string(configKey);
-            const comboBoxClipboardContent = getComboBox(options, GObject.TYPE_STRING, currentValue, (value) => settings.set_string(configKey, value));
-            prefs.add(buildConfigRow(label, comboBoxClipboardContent));
-        };
-        clipboardActionDropdown(_('Copy Button'), {
-            options: [optionImageData, optionLocalPath],
-            configKey: KeyCopyButtonAction,
-        });
-        clipboardActionDropdown(_('Auto-Copy to Clipboard'), {
-            options: [optionNothing, optionImageData, optionLocalPath],
-            configKey: KeyClipboardAction,
-        });
-        return prefs;
+    function unwrapGVariant(v) {
+        switch (v.classify()) {
+            case GLib.VariantClass.ARRAY:
+                throw new Error('not supported');
+            case GLib.VariantClass.BOOLEAN:
+                return v.get_boolean();
+            case GLib.VariantClass.BYTE:
+                return v.get_byte();
+            case GLib.VariantClass.DICT_ENTRY:
+                throw new Error('not supported');
+            case GLib.VariantClass.DOUBLE:
+                return v.get_double();
+            case GLib.VariantClass.HANDLE:
+                throw new Error('not supported');
+            case GLib.VariantClass.MAYBE:
+                throw new Error('not supported');
+            case GLib.VariantClass.INT16:
+                return v.get_int16();
+            case GLib.VariantClass.INT32:
+                return v.get_int32();
+            case GLib.VariantClass.INT64:
+                return v.get_int64();
+            case GLib.VariantClass.VARIANT:
+                throw new Error('not supported');
+            case GLib.VariantClass.STRING:
+                const [str] = v.get_string();
+                return str;
+            case GLib.VariantClass.UINT16:
+                return v.get_uint16();
+            case GLib.VariantClass.UINT32:
+                return v.get_uint32();
+            case GLib.VariantClass.UINT64:
+                return v.get_uint64();
+        }
     }
-
-    function getPage$1(settings) {
-        const prefs = buildPage();
-        /* Rescale [dropdown] */
-        const labelRescale = _('Rescale');
-        const rescaleOptions = [
-            ['100%', 100],
-            ['50%', 50],
-        ];
-        const currentRescale = settings.get_int(KeyEffectRescale);
-        const comboBoxRescale = getComboBox(rescaleOptions, GObject.TYPE_INT, currentRescale, (value) => settings.set_int(KeyEffectRescale, value));
-        prefs.add(buildConfigRow(labelRescale, comboBoxRescale));
-        return prefs;
+    function addBoxChildren(box, children) {
+        children.forEach((w) => {
+            switch (getGtkVersion()) {
+                case 3:
+                    box.add(w);
+                    return;
+                case 4:
+                    box.append(w);
+                    return;
+            }
+            throw new Error(`invalid gtk version ${getGtkVersion()}`);
+        });
+    }
+    function syncSetting(settings, key, callback) {
+        settings.connect('changed::' + key, () => {
+            callback(unwrapGVariant(settings.get_value(key)));
+        });
+        callback(unwrapGVariant(settings.get_value(key)));
+    }
+    class PrefBuilder {
+        constructor(settings, window) {
+            this.settings = settings;
+            this.window = window;
+        }
+        getValue(key) {
+            return unwrapGVariant(this.settings.get_value(key));
+        }
+        setValue(key, value) {
+            this.settings.set_value(key, wrapGVariant(value));
+        }
+        getDefaultValue(key) {
+            const defaultValue = this.settings.get_default_value(key);
+            if (defaultValue === null) {
+                throw new Error();
+            }
+            return unwrapGVariant(defaultValue);
+        }
+        buildSwitch(p) {
+            const w = new Gtk4.Switch();
+            syncSetting(this.settings, p.settingsKey, (v) => {
+                w.set_active(v);
+            });
+            w.connect('notify::state', () => {
+                this.setValue(p.settingsKey, w.state);
+            });
+            return w;
+        }
+        buildComboBox(p) {
+            const defaultValue = this.settings.get_default_value(p.settingsKey);
+            if (!defaultValue) {
+                throw new Error(`settings ${p.settingsKey} needs default value`);
+            }
+            if (!defaultValue.classify()) {
+                throw new Error(`could not classify default value for ${p.settingsKey}`);
+            }
+            const valueType = getGObjectTypeFromGVariantClass(defaultValue.classify());
+            const model = new Gtk4.ListStore();
+            const Columns = { LABEL: 0, VALUE: 1 };
+            model.set_column_types([GObject.TYPE_STRING, valueType]);
+            const comboBox = new Gtk4.ComboBox({ model });
+            const renderer = new Gtk4.CellRendererText();
+            comboBox.pack_start(renderer, true);
+            comboBox.add_attribute(renderer, 'text', 0);
+            for (const [label, value] of p.options) {
+                const iter = model.append();
+                model.set(iter, [Columns.LABEL, Columns.VALUE], [label, value]);
+            }
+            comboBox.connect('changed', () => {
+                const [success, iter] = comboBox.get_active_iter();
+                if (!success) {
+                    return;
+                }
+                const value = model.get_value(iter, Columns.VALUE);
+                this.setValue(p.settingsKey, value);
+            });
+            const setActiveByValue = (v) => {
+                const [success, iter] = model.get_iter_first();
+                if (!success) {
+                    return;
+                }
+                for (;;) {
+                    if (model.get_value(iter, Columns.VALUE) === v) {
+                        comboBox.set_active_iter(iter);
+                    }
+                    if (!model.iter_next(iter)) {
+                        return;
+                    }
+                }
+            };
+            syncSetting(this.settings, p.settingsKey, (v) => {
+                setActiveByValue(v);
+            });
+            return comboBox;
+        }
+        buildEntry(p) {
+            const w = new Gtk4.Entry({
+                hexpand: true,
+                tooltip_text: p.tooltip,
+                secondary_icon_name: 'document-revert',
+            });
+            syncSetting(this.settings, p.settingsKey, (v) => {
+                if (w.text !== v) {
+                    w.text = v;
+                }
+            });
+            w.get_buffer().connect('notify::text', ({ text }) => {
+                if (p.validate(text)) {
+                    this.setValue(p.settingsKey, text);
+                    w.get_style_context().remove_class('error');
+                }
+                else {
+                    w.get_style_context().add_class('error');
+                }
+            });
+            w.connect('icon-press', () => {
+                w.text = this.getDefaultValue(p.settingsKey);
+            });
+            return w;
+        }
+        buildFileChooser(p) {
+            const w = new Gtk4.Button();
+            syncSetting(this.settings, p.settingsKey, (path) => {
+                const f = Gio.File.new_for_path(expand(path));
+                w.label = f.get_basename() || p.label;
+            });
+            w.connect('clicked', () => {
+                const d = new Gtk4.FileChooserDialog({
+                    title: p.label,
+                    action: Gtk4.FileChooserAction.SELECT_FOLDER,
+                    transient_for: getCompatRoot(w),
+                    modal: true,
+                });
+                d.add_button(p.label, Gtk4.ResponseType.OK);
+                d.add_button(_('Cancel'), Gtk4.ResponseType.CANCEL);
+                d.connect('response', (_dialog, response) => {
+                    if (response === Gtk4.ResponseType.OK) {
+                        this.setValue(p.settingsKey, d.get_file().get_path());
+                    }
+                    d.close();
+                });
+                d.show();
+            });
+            return w;
+        }
+        buildPreview(p) {
+            const w = new Gtk4.Label();
+            syncSetting(this.settings, p.settingsKey, () => {
+                try {
+                    w.label = p.format(this.settings);
+                    w.get_style_context().remove_class('error');
+                }
+                catch (e) {
+                    w.label = 'Error';
+                    w.get_style_context().add_class('error');
+                }
+            });
+            return w;
+        }
+        buildPrefWidget(w) {
+            switch (w.type) {
+                case 'Switch':
+                    return this.buildSwitch(w);
+                case 'ComboBox':
+                    return this.buildComboBox(w);
+                case 'Entry':
+                    return this.buildEntry(w);
+                case 'FileChooser':
+                    return this.buildFileChooser(w);
+                case 'Preview':
+                    return this.buildPreview(w);
+            }
+            throw new Error('unknown type');
+        }
+        buildPageRows(rows) {
+            const box = new Gtk4.Box({
+                orientation: Gtk4.Orientation.VERTICAL,
+            });
+            const gtkRows = rows.map(({ label, widget }) => {
+                const hbox = new Gtk4.Box({
+                    orientation: Gtk4.Orientation.HORIZONTAL,
+                    margin_top: 10,
+                    margin_bottom: 10,
+                    margin_start: 10,
+                    margin_end: 10,
+                });
+                addBoxChildren(hbox, [
+                    new Gtk4.Label({
+                        label,
+                        hexpand: true,
+                        xalign: 0,
+                    }),
+                    this.buildPrefWidget(widget),
+                ]);
+                return hbox;
+            });
+            addBoxChildren(box, gtkRows);
+            function updateSensitive(settings) {
+                gtkRows.forEach((gtkRow, i) => {
+                    gtkRow.set_sensitive(rows[i].enable(settings));
+                });
+            }
+            this.settings.connect('changed', () => {
+                updateSensitive(this.settings);
+            });
+            updateSensitive(this.settings);
+            return box;
+        }
+        buildPrefKeybindings(p) {
+            const model = new Gtk4.ListStore();
+            model.set_column_types([GObject.TYPE_STRING, GObject.TYPE_STRING, GObject.TYPE_INT, GObject.TYPE_INT]);
+            const ColumnConfigKey = 0;
+            const ColumnLabel = 1;
+            const ColumnShortcutModifiers = 2;
+            const ColumnShortcutKey = 3;
+            for (const { label, settingsKey } of p.bindings) {
+                const binding = this.settings.get_strv(settingsKey)[0];
+                let key, mods;
+                if (binding) {
+                    switch (getGtkVersion()) {
+                        case 3:
+                            [key, mods] = Gtk3.accelerator_parse(binding);
+                            break;
+                        case 4:
+                            const [success, ...parsed] = Gtk4.accelerator_parse(binding);
+                            if (!success) {
+                                throw new Error(`could not parse ${binding}`);
+                            }
+                            [key, mods] = parsed;
+                    }
+                }
+                else {
+                    [key, mods] = [0, 0];
+                }
+                const row = model.append();
+                model.set(row, [ColumnConfigKey, ColumnLabel, ColumnShortcutModifiers, ColumnShortcutKey], [settingsKey, label, mods, key]);
+            }
+            const treeview = new Gtk4.TreeView({
+                hexpand: true,
+                vexpand: true,
+                model,
+            });
+            {
+                const cellrend = new Gtk4.CellRendererText();
+                const col = new Gtk4.TreeViewColumn({
+                    title: _('Keyboard Shortcut'),
+                    expand: true,
+                });
+                col.pack_start(cellrend, true);
+                col.add_attribute(cellrend, 'text', ColumnLabel);
+                treeview.append_column(col);
+            }
+            {
+                const cellrend = new Gtk4.CellRendererAccel({
+                    editable: true,
+                    accel_mode: Gtk4.CellRendererAccelMode.GTK,
+                });
+                cellrend.connect('accel-edited', (rend, path, key, mods) => {
+                    const value = Gtk4.accelerator_name(key, mods);
+                    const [succ, iterator] = model.get_iter_from_string(path);
+                    if (!succ) {
+                        throw new Error('Error updating keybinding');
+                    }
+                    const name = model.get_value(iterator, ColumnConfigKey);
+                    model.set(iterator, [ColumnShortcutModifiers, ColumnShortcutKey], [mods, key]);
+                    this.settings.set_strv(name, [value]);
+                });
+                cellrend.connect('accel-cleared', (rend, path) => {
+                    const [succ, iterator] = model.get_iter_from_string(path);
+                    if (!succ) {
+                        throw new Error('Error clearing keybinding');
+                    }
+                    const name = model.get_value(iterator, ColumnConfigKey);
+                    model.set(iterator, [ColumnShortcutModifiers, ColumnShortcutKey], [0, 0]);
+                    this.settings.set_strv(name, []);
+                });
+                const col = new Gtk4.TreeViewColumn({ title: _('Modify'), min_width: 200 });
+                col.pack_end(cellrend, false);
+                col.add_attribute(cellrend, 'accel-mods', ColumnShortcutModifiers);
+                col.add_attribute(cellrend, 'accel-key', ColumnShortcutKey);
+                treeview.append_column(col);
+            }
+            return treeview;
+        }
+    }
+    function buildPrefPages(pages, settings, window) {
+        const builder = new PrefBuilder(settings, window);
+        const notebook = new Gtk4.Notebook();
+        pages.forEach((p) => {
+            const { label } = p;
+            if ('rows' in p) {
+                notebook.append_page(builder.buildPageRows(p.rows), new Gtk4.Label({ label }));
+            }
+            if ('widget' in p) {
+                notebook.append_page(builder.buildPrefKeybindings(p.widget), new Gtk4.Label({ label }));
+            }
+        });
+        switch (getGtkVersion()) {
+            case 3:
+                notebook.show_all();
+        }
+        return notebook;
     }
 
     var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
@@ -327,32 +552,20 @@ var prefs = (function (Gtk, GObject, Gio, GLib) {
         }, {});
     }
 
-    const settings = ExtensionUtils.getSettings();
+    function isValidTemplate(s) {
+        try {
+            stringFormat(s);
+            return true;
+        }
+        catch (e) {
+            return false;
+        }
+    }
     function parameters(v) {
         return [['f', GLib.shell_quote(v.filename), _('Filename')]];
     }
     function tooltipText() {
         return toTooltipText(parameters({ filename: '/path/to/file.png' }));
-    }
-
-    function getPage$2(settings) {
-        const prefs = buildPage();
-        const configRowEnableRunCommand = buildConfigSwitch(settings, _('Run Command After Capture'), KeyEnableRunCommand);
-        prefs.add(configRowEnableRunCommand.hbox);
-        const entry = new Gtk.Entry({
-            expand: true,
-            tooltip_text: tooltipText(),
-            text: settings.get_string(KeyRunCommand),
-        });
-        ['inserted-text', 'deleted-text'].forEach((name) => {
-            entry.get_buffer().connect(name, ({ text }) => {
-                settings.set_string(KeyRunCommand, text);
-            });
-        });
-        const configRowRunCommand = buildConfigRow(_('Command'), entry);
-        bindSensitivity(configRowEnableRunCommand.gtkSwitch, configRowRunCommand);
-        prefs.add(configRowRunCommand);
-        return prefs;
     }
 
     function parameters$1({ width, height }) {
@@ -391,221 +604,203 @@ var prefs = (function (Gtk, GObject, Gio, GLib) {
         }
         return basename + sequence + '.png';
     }
-
-    const PATH_SEPARATOR = '/';
-    const join = (...segments) => {
-        return [''].concat(segments.filter((e) => e !== '')).join(PATH_SEPARATOR);
-    };
-    const expandUserDir = (segment) => {
-        switch (segment.toUpperCase()) {
-            case '$PICTURES':
-                return GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_PICTURES);
-            default:
-                return segment;
-        }
-    };
-    const expand = (path) => {
-        return join(...path.split(PATH_SEPARATOR).map(expandUserDir));
-    };
-
-    function getPage$3(settings) {
-        const prefs = buildPage();
-        /* Save Screenshot [on|off] */
-        const switchSaveScreenshot = buildConfigSwitch(settings, _('Auto-Save Screenshot'), KeySaveScreenshot);
-        prefs.add(switchSaveScreenshot.hbox);
-        /* Save Location [filechooser] */
-        const labelSaveLocation = _('Save Location');
-        const chooserSaveLocation = new Gtk.FileChooserButton({
-            title: _('Select'),
-            local_only: true,
-        });
-        chooserSaveLocation.set_action(Gtk.FileChooserAction.SELECT_FOLDER);
+    function isValidTemplate$1(template) {
         try {
-            const saveLocation = expand(settings.get_string(KeySaveLocation));
-            chooserSaveLocation.set_filename(saveLocation);
+            stringFormat(template);
+            return true;
         }
         catch (e) {
-            logError(e);
+            return false;
         }
-        chooserSaveLocation.connect('file-set', () => {
-            const uri = chooserSaveLocation.get_uri();
-            if (!uri) {
-                throw new Error();
-            }
-            const [filename, err] = GLib.filename_from_uri(uri);
-            if (err) {
-                throw new Error("can't resolve uri");
-            }
-            settings.set_string(KeySaveLocation, filename);
-        });
-        const box = buildConfigRow(labelSaveLocation, chooserSaveLocation);
-        bindSensitivity(switchSaveScreenshot.gtkSwitch, box);
-        prefs.add(box);
-        /* Filename */
-        const [defaultTemplate] = settings.get_default_value(KeyFilenameTemplate).get_string();
-        const mockDimensions = { width: 800, height: 600 };
-        const labelFilenameTemplate = _('Default Filename');
-        const inputFilenameTemplate = new Gtk.Entry({
-            expand: true,
-            tooltip_text: tooltipText$1(mockDimensions),
-            secondary_icon_name: 'document-revert',
-        });
-        inputFilenameTemplate.text = settings.get_string(KeyFilenameTemplate);
-        prefs.add(buildConfigRow(labelFilenameTemplate, inputFilenameTemplate));
-        /* Filename Preview */
-        const labelPreview = _('Preview');
-        const textPreview = new Gtk.Label({
-            xalign: 0,
-        });
-        const setPreview = (tpl) => {
-            try {
-                if (tpl == '') {
-                    return;
-                }
-                inputFilenameTemplate.get_style_context().remove_class('error');
-                const label = get(tpl, mockDimensions);
-                textPreview.label = label;
-                settings.set_string(KeyFilenameTemplate, tpl);
-            }
-            catch (e) {
-                logError(e);
-                textPreview.label = '';
-                inputFilenameTemplate.get_style_context().add_class('error');
-            }
+    }
+
+    const KeyEnableIndicator = 'enable-indicator';
+    const KeyEnableNotification = 'enable-notification';
+    const ValueShortcutSelectArea = 'shortcut-select-area';
+    const ValueShortcutSelectWindow = 'shortcut-select-window';
+    const ValueShortcutSelectDesktop = 'shortcut-select-desktop';
+    // See schemas/org.gnome.shell.extensions.screenshot.gschema.xml
+    const KeyClickAction = 'click-action';
+    const ClickActions = {
+        SHOW_MENU: 'show-menu',
+        SELECT_AREA: 'select-area',
+        SELECT_WINDOW: 'select-window',
+        SELECT_DESKTOP: 'select-desktop',
+    };
+    const KeySaveScreenshot = 'save-screenshot';
+    const KeySaveLocation = 'save-location';
+    const KeyFilenameTemplate = 'filename-template';
+    // "Auto-Copy to Clipboard" action
+    const KeyClipboardAction = 'clipboard-action';
+    // Copy button action
+    const KeyCopyButtonAction = 'copy-button-action';
+    const ClipboardActions = {
+        NONE: 'none',
+        SET_IMAGE_DATA: 'set-image-data',
+        SET_LOCAL_PATH: 'set-local-path',
+        SET_REMOTE_URL: 'set-remote-url',
+    };
+    const KeyEnableUploadImgur = 'enable-imgur';
+    const KeyImgurEnableNotification = 'imgur-enable-notification';
+    const KeyImgurAutoUpload = 'imgur-auto-upload';
+    const KeyImgurAutoCopyLink = 'imgur-auto-copy-link';
+    const KeyImgurAutoOpenLink = 'imgur-auto-open-link';
+    const KeyEffectRescale = 'effect-rescale';
+    const KeyEnableRunCommand = 'enable-run-command';
+    const KeyRunCommand = 'run-command';
+
+    function prefSwitch(settingsKey) {
+        return {
+            type: 'Switch',
+            settingsKey,
         };
-        ['inserted-text', 'deleted-text'].forEach((name) => {
-            inputFilenameTemplate.get_buffer().connect(name, ({ text }) => {
-                setPreview(text);
-            });
-        });
-        inputFilenameTemplate.connect('icon-press', () => {
-            inputFilenameTemplate.text = defaultTemplate;
-        });
-        setPreview(inputFilenameTemplate.text);
-        prefs.add(buildConfigRow(labelPreview, textPreview));
-        return prefs;
+    }
+    function prefComboBox(options, settingsKey) {
+        return {
+            type: 'ComboBox',
+            options,
+            settingsKey,
+        };
+    }
+    function prefFileChooser(label, settingsKey) {
+        return {
+            type: 'FileChooser',
+            label,
+            settingsKey,
+        };
+    }
+    function prefEntry(opts, settingsKey, validate) {
+        return {
+            type: 'Entry',
+            settingsKey,
+            tooltip: opts.tooltip,
+            validate,
+        };
+    }
+    function prefPreview(settingsKey, format) {
+        return {
+            type: 'Preview',
+            settingsKey,
+            format,
+        };
+    }
+    function enableKey(k) {
+        return function (s) {
+            return s.get_boolean(k);
+        };
+    }
+    function prefRow(label, widget, { enable = () => true } = {}) {
+        return {
+            label,
+            widget,
+            enable,
+        };
+    }
+    function prefKeybinding(label, settingsKey) {
+        return { label, settingsKey };
+    }
+    function prefKeybindings(bindings) {
+        return {
+            type: 'Keybindings',
+            bindings,
+        };
+    }
+    function prefPage(label, child) {
+        if (Array.isArray(child)) {
+            return { label, rows: child };
+        }
+        return { label, widget: child };
     }
 
-    function getPage$4(settings) {
-        const prefs = buildPage();
-        /* Enable Imgur Upload [on|off] */
-        const configSwitchEnable = buildConfigSwitch(settings, _('Enable Imgur Upload'), KeyEnableUploadImgur);
-        prefs.add(configSwitchEnable.hbox);
-        /* Enable Upload Notification [on|off] */
-        const configSwitchEnableNotification = buildConfigSwitch(settings, _('Show Upload Notification'), KeyImgurEnableNotification);
-        prefs.add(configSwitchEnableNotification.hbox);
-        bindSensitivity(configSwitchEnable.gtkSwitch, configSwitchEnableNotification.hbox);
-        /* Auto-Upload After Capture [on|off] */
-        const configSwitchUploadOnCapture = buildConfigSwitch(settings, _('Auto-Upload After Capture'), KeyImgurAutoUpload);
-        bindSensitivity(configSwitchEnable.gtkSwitch, configSwitchUploadOnCapture.hbox);
-        prefs.add(configSwitchUploadOnCapture.hbox);
-        /* Auto-Copy Link After Upload [on|off] */
-        const configSwitchCopyLinkOnUpload = buildConfigSwitch(settings, _('Auto-Copy Link After Upload'), KeyImgurAutoCopyLink);
-        bindSensitivity(configSwitchEnable.gtkSwitch, configSwitchCopyLinkOnUpload.hbox);
-        prefs.add(configSwitchCopyLinkOnUpload.hbox);
-        /* Auto-Open Link After Upload [on|off] */
-        const configSwitchOpenLinkOnUpload = buildConfigSwitch(settings, _('Auto-Open Link After Upload'), KeyImgurAutoOpenLink);
-        bindSensitivity(configSwitchEnable.gtkSwitch, configSwitchOpenLinkOnUpload.hbox);
-        prefs.add(configSwitchOpenLinkOnUpload.hbox);
-        return prefs;
-    }
-
-    // accelerator setting based on
-    // https://github.com/ambrice/spatialnavigation-tastycactus.com/blob/master/prefs.js
-    function getPage$5(settings) {
-        const model = new Gtk.ListStore();
-        model.set_column_types([GObject.TYPE_STRING, GObject.TYPE_STRING, GObject.TYPE_INT, GObject.TYPE_INT]);
-        const bindings = [
-            ['shortcut-select-area', _('Select area')],
-            ['shortcut-select-window', _('Select window')],
-            ['shortcut-select-desktop', _('Select whole desktop')],
+    function getIndicatorPrefs() {
+        const [optionNothing, optionImageData, optionLocalPath] = [
+            [_('Nothing'), ClipboardActions.NONE],
+            [_('Image Data'), ClipboardActions.SET_IMAGE_DATA],
+            [_('Local Path'), ClipboardActions.SET_LOCAL_PATH],
         ];
-        for (const [name, description] of bindings) {
-            log('binding: ' + name + ' description: ' + description);
-            const binding = settings.get_strv(name)[0];
-            let key, mods;
-            if (binding) {
-                [key, mods] = Gtk.accelerator_parse(binding);
-            }
-            else {
-                [key, mods] = [0, 0];
-            }
-            const row = model.append();
-            model.set(row, [0, 1, 2, 3], [name, description, mods, key]);
-        }
-        const treeview = new Gtk.TreeView({
-            expand: true,
-            model,
-        });
-        let cellrend = new Gtk.CellRendererText();
-        let col = new Gtk.TreeViewColumn({
-            title: _('Keyboard Shortcut'),
-            expand: true,
-        });
-        col.pack_start(cellrend, true);
-        col.add_attribute(cellrend, 'text', 1);
-        treeview.append_column(col);
-        cellrend = new Gtk.CellRendererAccel({
-            editable: true,
-            accel_mode: Gtk.CellRendererAccelMode.GTK,
-        });
-        cellrend.connect('accel-edited', (rend, iter, key, mods) => {
-            const value = Gtk.accelerator_name(key, mods);
-            const [succ, iterator] = model.get_iter_from_string(iter);
-            if (!succ) {
-                throw new Error('Error updating keybinding');
-            }
-            const name = model.get_value(iterator, 0);
-            model.set(iterator, [2, 3], [mods, key]);
-            settings.set_strv(name, [value]);
-        });
-        cellrend.connect('accel-cleared', (rend, iter, _key, _mods) => {
-            const [succ, iterator] = model.get_iter_from_string(iter);
-            if (!succ) {
-                throw new Error('Error clearing keybinding');
-            }
-            const name = model.get_value(iterator, 0);
-            model.set(iterator, [2, 3], [0, 0]);
-            settings.set_strv(name, []);
-        });
-        col = new Gtk.TreeViewColumn({ title: _('Modify'), min_width: 200 });
-        col.pack_end(cellrend, false);
-        col.add_attribute(cellrend, 'accel-mods', 2);
-        col.add_attribute(cellrend, 'accel-key', 3);
-        treeview.append_column(col);
-        return treeview;
+        return [
+            prefRow(_('Show Indicator'), prefSwitch(KeyEnableIndicator)),
+            prefRow(_('Show Notification After Capture'), prefSwitch(KeyEnableNotification)),
+            prefRow(_('Primary Button'), prefComboBox([
+                [_('Select Area'), ClickActions.SELECT_AREA],
+                [_('Select Window'), ClickActions.SELECT_WINDOW],
+                [_('Select Desktop'), ClickActions.SELECT_DESKTOP],
+                [_('Show Menu'), ClickActions.SHOW_MENU],
+            ], KeyClickAction)),
+            prefRow(_('Copy Button'), prefComboBox([optionImageData, optionLocalPath], KeyCopyButtonAction)),
+            prefRow(_('Auto-Copy to Clipboard'), prefComboBox([optionNothing, optionImageData, optionLocalPath], KeyClipboardAction)),
+        ];
+    }
+    function getEffectPrefs() {
+        return [
+            prefRow(_('Rescale'), prefComboBox([
+                ['100%', 100],
+                ['50%', 50],
+            ], KeyEffectRescale)),
+        ];
+    }
+    function getCommandPrefs() {
+        return [
+            prefRow(_('Run Command After Capture'), prefSwitch(KeyEnableRunCommand)),
+            prefRow(_('Command'), prefEntry({ tooltip: tooltipText() }, KeyRunCommand, isValidTemplate), {
+                enable: enableKey(KeyEnableRunCommand),
+            }),
+        ];
+    }
+    function getStoragePrefs() {
+        const mockDimensions = { width: 800, height: 600 };
+        return [
+            prefRow(_('Auto-Save Screenshot'), prefSwitch(KeySaveScreenshot)),
+            prefRow(_('Save Location'), prefFileChooser(_('Select'), KeySaveLocation), {
+                enable: enableKey(KeySaveScreenshot),
+            }),
+            prefRow(_('Default Filename'), prefEntry({ tooltip: tooltipText$1(mockDimensions) }, KeyFilenameTemplate, isValidTemplate$1)),
+            prefRow(_('Preview'), prefPreview(KeyFilenameTemplate, (settings) => {
+                return get(settings.get_string(KeyFilenameTemplate), mockDimensions);
+            })),
+        ];
+    }
+    function getImgurPrefs() {
+        const enableIfImgurEnabled = {
+            enable: enableKey(KeyEnableUploadImgur),
+        };
+        return [
+            prefRow(_('Enable Imgur Upload'), prefSwitch(KeyEnableUploadImgur)),
+            prefRow(_('Show Upload Notification'), prefSwitch(KeyImgurEnableNotification), enableIfImgurEnabled),
+            prefRow(_('Auto-Upload After Capture'), prefSwitch(KeyImgurAutoUpload), enableIfImgurEnabled),
+            prefRow(_('Auto-Copy Link After Upload'), prefSwitch(KeyImgurAutoCopyLink), enableIfImgurEnabled),
+            prefRow(_('Auto-Open Link After Upload'), prefSwitch(KeyImgurAutoOpenLink), enableIfImgurEnabled),
+        ];
+    }
+    function getKeybindPrefs() {
+        return prefKeybindings([
+            prefKeybinding(_('Select area'), ValueShortcutSelectArea),
+            prefKeybinding(_('Select window'), ValueShortcutSelectWindow),
+            prefKeybinding(_('Select whole desktop'), ValueShortcutSelectDesktop),
+        ]);
+    }
+    function getPages() {
+        return [
+            prefPage(_('Indicator'), getIndicatorPrefs()),
+            prefPage(_('Effects'), getEffectPrefs()),
+            prefPage(_('Commands'), getCommandPrefs()),
+            prefPage(_('Storage'), getStoragePrefs()),
+            prefPage(_('Imgur'), getImgurPrefs()),
+            prefPage(_('Keybindings'), getKeybindPrefs()),
+        ];
     }
 
-    const ScreenshotToolSettingsWidget = extendGObject(class ScreenshotToolSettingsWidget extends Gtk.Box {
-        _init(params) {
-            super._init(params);
-            const settings = ExtensionUtils.getSettings();
-            const notebook = new Gtk.Notebook();
-            function addPage(label, page) {
-                notebook.append_page(page, new Gtk.Label({ label }));
-            }
-            addPage(_('Indicator'), getPage(settings));
-            addPage(_('Effects'), getPage$1(settings));
-            addPage(_('Commands'), getPage$2(settings));
-            addPage(_('Storage'), getPage$3(settings));
-            addPage(_('Imgur Upload'), getPage$4(settings));
-            addPage(_('Keybindings'), getPage$5(settings));
-            this.add(notebook);
-        }
-    }, Gtk.Box);
     function init() {
         ExtensionUtils.initTranslations();
     }
     function buildPrefsWidget() {
-        const widget = new ScreenshotToolSettingsWidget();
-        widget.show_all();
-        return widget;
+        return buildPrefPages(getPages(), ExtensionUtils.getSettings(), null);
     }
     var prefs = { init, buildPrefsWidget };
 
     return prefs;
 
-}(imports.gi.Gtk, imports.gi.GObject, imports.gi.Gio, imports.gi.GLib));
+}(imports.gi.Gtk, imports.gi.Gtk, imports.gi.Gio, imports.gi.GLib, imports.gi.GObject));
 
 var init = prefs.init;
 var buildPrefsWidget = prefs.buildPrefsWidget;

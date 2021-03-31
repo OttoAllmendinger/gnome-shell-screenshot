@@ -19,6 +19,15 @@ const targetPrefs = target({
   },
 });
 
+const targetPrefApp = target({
+  input: 'src/extension/prefs/app.ts',
+  output: {
+    file: `${buildPath}/dev/prefApp.js`,
+    name: 'prefApp',
+    banner: 'imports.gi.versions.Gtk = imports.gi.GLib.getenv("GTK");\n',
+  },
+});
+
 const targetAux = target({
   input: 'src/auxhelper/auxhelper.ts',
   output: {
@@ -32,7 +41,8 @@ const targetSaveDlg = target({
   output: {
     file: `${buildPath}/saveDlg.js`,
     name: 'saveDlg',
+    banner: 'imports.gi.versions.Gtk = imports.gi.GLib.getenv("GTK");\n',
   },
 });
 
-export default [targetExt, targetPrefs, targetAux, targetSaveDlg];
+export default [targetExt, targetPrefs, targetPrefApp, targetAux, targetSaveDlg];

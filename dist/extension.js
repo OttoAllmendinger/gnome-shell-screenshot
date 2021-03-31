@@ -6,7 +6,10 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
     const IndicatorName = 'de.ttll.GnomeScreenshot';
     const KeyEnableIndicator = 'enable-indicator';
     const KeyEnableNotification = 'enable-notification';
-    const KeyShortcuts = ['shortcut-select-area', 'shortcut-select-window', 'shortcut-select-desktop'];
+    const ValueShortcutSelectArea = 'shortcut-select-area';
+    const ValueShortcutSelectWindow = 'shortcut-select-window';
+    const ValueShortcutSelectDesktop = 'shortcut-select-desktop';
+    const KeyShortcuts = [ValueShortcutSelectArea, ValueShortcutSelectWindow, ValueShortcutSelectDesktop];
     // See schemas/org.gnome.shell.extensions.screenshot.gschema.xml
     const KeyClickAction = 'click-action';
     const KeyCaptureDelay = 'capture-delay';
@@ -128,10 +131,9 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
     var description = "Conveniently create, copy, store and upload screenshots";
     var metadata = {
     	"shell-version": [
-    	"3.32",
-    	"3.34",
     	"3.36",
-    	"3.38"
+    	"3.38",
+    	"40"
     ],
     	uuid: uuid,
     	name: name,
@@ -323,20 +325,20 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
     };
 
     const PATH_SEPARATOR = '/';
-    const join = (...segments) => {
+    function join(...segments) {
         return [''].concat(segments.filter((e) => e !== '')).join(PATH_SEPARATOR);
-    };
-    const expandUserDir = (segment) => {
+    }
+    function expandUserDir(segment) {
         switch (segment.toUpperCase()) {
             case '$PICTURES':
                 return GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_PICTURES);
             default:
                 return segment;
         }
-    };
-    const expand = (path) => {
+    }
+    function expand(path) {
         return join(...path.split(PATH_SEPARATOR).map(expandUserDir));
-    };
+    }
 
     function getClipboard() {
         const display = Gdk.Display.get_default();
@@ -444,6 +446,39 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
     }
     Signals.addSignalMethods(Upload.prototype);
 
+    function getEnvArray(override) {
+        return [
+            ...GLib.listenv()
+                .filter((key) => !override.some((e) => e.startsWith(`${key}=`)))
+                .map((key) => `${key}=${GLib.getenv(key)}`),
+            ...override,
+        ];
+    }
+    function spawnAsync(argv, env = null) {
+        log('getEnvArray([])=' + getEnvArray([]).join('\n'));
+        if (env !== null) {
+            log(getEnvArray(env).join('\n'));
+        }
+        return new Promise((resolve, reject) => {
+            const [success, pid] = GLib.spawn_async(null /* pwd */, argv, env === null ? null : getEnvArray(env), GLib.SpawnFlags.SEARCH_PATH | GLib.SpawnFlags.DO_NOT_REAP_CHILD, null /* child_setup */);
+            if (!success) {
+                throw new Error('success=false');
+            }
+            if (pid === null) {
+                throw new Error('pid === null');
+            }
+            GLib.child_watch_add(GLib.PRIORITY_DEFAULT, pid, (pid, exitCode) => {
+                if (exitCode === 0) {
+                    resolve();
+                }
+                else {
+                    logError(new Error(`cmd: ${argv.join(' ')} exitCode=${exitCode}`));
+                    return reject(new Error(`exitCode=${exitCode}`));
+                }
+            });
+        });
+    }
+
     const Signals$1 = imports.signals;
     const Util = imports.misc.util;
     const Local$1 = ExtensionUtils.getCurrentExtension();
@@ -529,7 +564,16 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
                     throw new Error(`unexpected path component in ${pathComponents}`);
                 }
             });
-            Util.spawn(['gjs', Local$1.path + '/saveDlg.js', ...pathComponents.map(encodeURIComponent)]);
+            let gtkVersionString;
+            switch (Gtk.get_major_version()) {
+                case 3:
+                    gtkVersionString = '3.0';
+                    break;
+                case 4:
+                    gtkVersionString = '4.0';
+                    break;
+            }
+            spawnAsync(['gjs', Local$1.path + '/saveDlg.js', ...pathComponents.map(encodeURIComponent)], ['GTK=' + gtkVersionString]);
         }
         copyClipboard(action) {
             if (action === ClipboardActions.NONE) {
@@ -596,7 +640,6 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
     }
     Signals$1.addSignalMethods(Screenshot.prototype);
 
-    const Signals$2 = imports.signals;
     const Main = imports.ui.main;
     const MessageTray = imports.ui.messageTray;
     const version = currentVersion();
@@ -608,29 +651,15 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
     (function (ErrorActions) {
         ErrorActions[ErrorActions["OPEN_SETTINGS"] = 0] = "OPEN_SETTINGS";
     })(ErrorActions || (ErrorActions = {}));
-    const getSource = () => {
+    function getSource() {
         const source = new MessageTray.Source(NotificationSourceName, NotificationIcon);
         Main.messageTray.add(source);
         return source;
-    };
-    const registerClassCompat = (cls) => {
-        if (version.greaterEqual('3.36')) {
-            return GObject.registerClass(cls);
-        }
-        else {
-            Signals$2.addSignalMethods(cls.prototype);
-            return cls;
-        }
-    };
-    const showNotificationCompat = (source, notification) => {
-        if (version.greaterEqual('3.36')) {
-            return source.showNotification(notification);
-        }
-        else {
-            return source.notify(notification);
-        }
-    };
-    const NotificationNewScreenshot = registerClassCompat(class NotificationNewScreenshot extends MessageTray.Notification {
+    }
+    function registerClass(cls) {
+        return GObject.registerClass(cls);
+    }
+    const NotificationNewScreenshot = registerClass(class NotificationNewScreenshot extends MessageTray.Notification {
         static _title() {
             return _('New Screenshot');
         }
@@ -640,23 +669,10 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
             const banner = _('Size:') + ' ' + width + 'x' + height + '.';
             return banner;
         }
-        static ctrArgs(source, screenshot) {
-            return [
-                source,
-                NotificationNewScreenshot._title(),
-                NotificationNewScreenshot._banner(screenshot),
-                { gicon: getIcon(screenshot.srcFile.get_path()) },
-            ];
-        }
-        constructor(source, screenshot) {
-            super(...NotificationNewScreenshot.ctrArgs(source, screenshot));
-            this.initCompat(source, screenshot);
-        }
         _init(source, screenshot) {
-            super._init(...NotificationNewScreenshot.ctrArgs(source, screenshot));
-            this.initCompat(source, screenshot);
-        }
-        initCompat(source, screenshot) {
+            super._init(source, NotificationNewScreenshot._title(), NotificationNewScreenshot._banner(screenshot), {
+                gicon: getIcon(screenshot.srcFile.get_path()),
+            });
             this.connect('activated', this._onActivated.bind(this));
             // makes banner expand on hover
             this.setForFeedback(true);
@@ -692,19 +708,11 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
             this._screenshot.imgurStartUpload();
         }
     });
-    const ErrorNotification = registerClassCompat(class ErrorNotification extends MessageTray.Notification {
-        constructor(source, message, buttons) {
-            super(...ErrorNotification.ctrArgs(source, message));
-            this.initCompat(message, buttons);
-        }
-        static ctrArgs(source, message) {
-            return [source, _('Error'), String(message), { secondaryGIcon: new Gio.ThemedIcon({ name: 'dialog-error' }) }];
-        }
+    const ErrorNotification = registerClass(class ErrorNotification extends MessageTray.Notification {
         _init(source, message, buttons) {
-            super._init(...ErrorNotification.ctrArgs(source, message));
-            this.initCompat(message, buttons);
-        }
-        initCompat(_message, buttons) {
+            super._init(source, _('Error'), String(message), {
+                secondaryGIcon: new Gio.ThemedIcon({ name: 'dialog-error' }),
+            });
             this.buttons = buttons;
         }
         createBanner() {
@@ -723,16 +731,9 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
             return banner;
         }
     });
-    const ImgurNotification = registerClassCompat(class ImgurNotification extends MessageTray.Notification {
-        constructor(source, screenshot) {
-            super(source, _('Imgur Upload'));
-            this.initCompat(source, screenshot);
-        }
+    const ImgurNotification = registerClass(class ImgurNotification extends MessageTray.Notification {
         _init(source, screenshot) {
             super._init(source, _('Imgur Upload'));
-            this.initCompat(source, screenshot);
-        }
-        initCompat(source, screenshot) {
             this.setForFeedback(true);
             this.setResident(true);
             this.connect('activated', this._onActivated.bind(this));
@@ -778,7 +779,7 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
     function notifyScreenshot(screenshot) {
         const source = getSource();
         const notification = new NotificationNewScreenshot(source, screenshot);
-        showNotificationCompat(source, notification);
+        source.showNotification(notification);
     }
     function notifyError(error) {
         const buttons = [];
@@ -788,13 +789,13 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
             }
         }
         const source = getSource();
-        const notification = new ErrorNotification(source, error, buttons);
-        showNotificationCompat(source, notification);
+        const notification = new ErrorNotification(source, error.toString(), buttons);
+        source.showNotification(notification);
     }
     function notifyImgurUpload(screenshot) {
         const source = getSource();
         const notification = new ImgurNotification(source, screenshot);
-        showNotificationCompat(source, notification);
+        source.showNotification(notification);
     }
     function wrapNotifyError(f) {
         return function (...args) {
@@ -815,10 +816,6 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
     const version$1 = currentVersion();
     const DefaultIcon = 'camera-photo-symbolic';
     const settings$2 = ExtensionUtils.getSettings();
-    // remove this when dropping support for < 3.33
-    const getActorCompat = (obj) => (version$1.greaterEqual('3.33') ? obj : obj.actor);
-    const getSliderSignalCompat = () => (version$1.greaterEqual('3.33') ? 'notify::value' : 'value-changed');
-    const addActorCompat = (actor, child) => version$1.greaterEqual('3.36') ? actor.add_child(child) : actor.add(child, { expand: true });
     class CaptureDelayMenu extends PopupMenu.PopupMenuSection {
         createScale() {
             const scale = [0];
@@ -834,9 +831,9 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
             this.scaleMS = this.createScale();
             this.delayValueMS = settings$2.get_int(KeyCaptureDelay);
             this.slider = new Slider.Slider(this.scaleToSlider(this.delayValueMS));
-            this.slider.connect(getSliderSignalCompat(), this.onDragEnd.bind(this));
+            this.slider.connect('notify::value', this.onDragEnd.bind(this));
             this.sliderItem = new PopupMenu.PopupBaseMenuItem({ activate: false });
-            addActorCompat(getActorCompat(this.sliderItem), getActorCompat(this.slider));
+            this.sliderItem.add_child(this.slider);
             this.addMenuItem(this.sliderItem);
             this.delayInfoItem = new PopupMenu.PopupMenuItem('', {
                 activate: false,
@@ -878,7 +875,7 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
     class ScreenshotSection {
         constructor(menu) {
             this.image = new PopupMenu.PopupBaseMenuItem();
-            getActorCompat(this.image).content_gravity = Clutter.ContentGravity.RESIZE_ASPECT;
+            this.image.content_gravity = Clutter.ContentGravity.RESIZE_ASPECT;
             this.clear = new PopupMenu.PopupMenuItem(_('Clear'));
             this.copy = new PopupMenu.PopupMenuItem(_('Copy'));
             this.save = new PopupMenu.PopupMenuItem(_('Save As...'));
@@ -913,17 +910,17 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
         }
         updateVisibility() {
             const visible = !!this._screenshot;
-            getActorCompat(this.image).visible = visible;
-            getActorCompat(this.clear).visible = visible;
-            getActorCompat(this.copy).visible = visible;
-            getActorCompat(this.save).visible = visible;
+            this.image.visible = visible;
+            this.clear.visible = visible;
+            this.copy.visible = visible;
+            this.save.visible = visible;
             const imgurEnabled = settings$2.get_boolean(KeyEnableUploadImgur);
             const imgurComplete = this._screenshot && this._screenshot.imgurUpload && this._screenshot.imgurUpload.responseData;
-            getActorCompat(this.imgurMenu).visible = visible && imgurEnabled;
-            getActorCompat(this.imgurUpload).visible = visible && imgurEnabled && !imgurComplete;
-            getActorCompat(this.imgurOpen).visible = visible && imgurEnabled && imgurComplete;
-            getActorCompat(this.imgurCopyLink).visible = visible && imgurEnabled && imgurComplete;
-            getActorCompat(this.imgurDelete).visible = visible && imgurEnabled && imgurComplete;
+            this.imgurMenu.visible = visible && imgurEnabled;
+            this.imgurUpload.visible = visible && imgurEnabled && !imgurComplete;
+            this.imgurOpen.visible = visible && imgurEnabled && imgurComplete;
+            this.imgurCopyLink.visible = visible && imgurEnabled && imgurComplete;
+            this.imgurDelete.visible = visible && imgurEnabled && imgurComplete;
         }
         setImage(pixbuf) {
             const { width, height } = pixbuf;
@@ -935,8 +932,8 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
             if (!success) {
                 throw Error('error creating Clutter.Image()');
             }
-            getActorCompat(this.image).content = image;
-            getActorCompat(this.image).height = 200;
+            this.image.content = image;
+            this.image.height = 200;
         }
         setScreenshot(screenshot) {
             this._screenshot = screenshot;
@@ -989,8 +986,8 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
                 icon_name: DefaultIcon,
                 style_class: 'system-status-icon',
             });
-            getActorCompat(this.panelButton).add_actor(icon);
-            getActorCompat(this.panelButton).connect('button-press-event', wrapNotifyError((obj, evt) => this.onClick(obj, evt)));
+            this.panelButton.add_actor(icon);
+            this.panelButton.connect('button-press-event', wrapNotifyError((obj, evt) => this.onClick(obj, evt)));
             this.buildMenu();
         }
         onClick(_obj, evt) {
@@ -1045,28 +1042,7 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
         }
     }
 
-    function spawnAsync(argv) {
-        return new Promise((resolve, reject) => {
-            const [success, pid] = GLib.spawn_async(null /* pwd */, argv, null /* envp */, GLib.SpawnFlags.SEARCH_PATH | GLib.SpawnFlags.DO_NOT_REAP_CHILD, null /* child_setup */);
-            if (!success) {
-                throw new Error('success=false');
-            }
-            if (pid === null) {
-                throw new Error('pid === null');
-            }
-            GLib.child_watch_add(GLib.PRIORITY_DEFAULT, pid, (pid, exitCode) => {
-                if (exitCode === 0) {
-                    resolve();
-                }
-                else {
-                    logError(new Error(`cmd: ${argv.join(' ')} exitCode=${exitCode}`));
-                    return reject(new Error(`exitCode=${exitCode}`));
-                }
-            });
-        });
-    }
-
-    const Signals$3 = imports.signals;
+    const Signals$2 = imports.signals;
     const Mainloop = imports.mainloop;
     const Main$1 = imports.ui.main;
     const Local$3 = ExtensionUtils.getCurrentExtension();
@@ -1178,7 +1154,7 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
             this.disconnectAll();
         }
     }
-    Signals$3.addSignalMethods(Capture.prototype);
+    Signals$2.addSignalMethods(Capture.prototype);
     const emitScreenshotOnSuccess = (instance) => (error, fileName) => {
         if (error) {
             return instance.emit('error', error);
@@ -1228,7 +1204,7 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
             });
         }
     }
-    Signals$3.addSignalMethods(SelectionArea.prototype);
+    Signals$2.addSignalMethods(SelectionArea.prototype);
     class SelectionWindow {
         constructor(options) {
             this._options = options;
@@ -1267,7 +1243,7 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
             });
         }
     }
-    Signals$3.addSignalMethods(SelectionWindow.prototype);
+    Signals$2.addSignalMethods(SelectionWindow.prototype);
     class SelectionDesktop {
         constructor(options) {
             this._options = options;
@@ -1277,21 +1253,20 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
             });
         }
     }
-    Signals$3.addSignalMethods(SelectionDesktop.prototype);
+    Signals$2.addSignalMethods(SelectionDesktop.prototype);
 
-    const settings$3 = ExtensionUtils.getSettings();
     function parameters$1(v) {
         return [['f', GLib.shell_quote(v.filename), _('Filename')]];
     }
-    function getCommand(file) {
+    function getCommand(runCommand, file) {
         const filename = file.get_path();
         if (!filename) {
             throw new Error('path: null');
         }
-        return stringFormat(settings$3.get_string(KeyRunCommand), toObject(parameters$1({ filename })));
+        return stringFormat(runCommand, toObject(parameters$1({ filename })));
     }
-    async function exec(file) {
-        const command = getCommand(file);
+    async function exec(runCommand, file) {
+        const command = getCommand(runCommand, file);
         const [ok, argv] = GLib.shell_parse_argv(command);
         if (!ok || !argv) {
             throw new Error('argv parse error command=' + command);
@@ -1301,11 +1276,11 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
     }
 
     // props to
-    const Signals$4 = imports.signals;
+    const Signals$3 = imports.signals;
     const Main$2 = imports.ui.main;
-    const settings$4 = ExtensionUtils.getSettings();
+    const settings$3 = ExtensionUtils.getSettings();
     const getSelectionOptions = () => {
-        const captureDelay = settings$4.get_int(KeyCaptureDelay);
+        const captureDelay = settings$3.get_int(KeyCaptureDelay);
         return { captureDelay };
     };
     class Extension {
@@ -1316,7 +1291,7 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
         setKeybindings() {
             const bindingMode = Shell.ActionMode.NORMAL;
             for (const shortcut of KeyShortcuts) {
-                Main$2.wm.addKeybinding(shortcut, settings$4, Meta.KeyBindingFlags.NONE, bindingMode, this.onAction.bind(this, shortcut.replace('shortcut-', '')));
+                Main$2.wm.addKeybinding(shortcut, settings$3, Meta.KeyBindingFlags.NONE, bindingMode, this.onAction.bind(this, shortcut.replace('shortcut-', '')));
             }
         }
         unsetKeybindings() {
@@ -1337,7 +1312,7 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
             }
         }
         updateIndicator() {
-            if (settings$4.get_boolean(KeyEnableIndicator)) {
+            if (settings$3.get_boolean(KeyEnableIndicator)) {
                 this.createIndicator();
             }
             else {
@@ -1391,28 +1366,28 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
             this.startSelection(new SelectionDesktop(getSelectionOptions()));
         }
         onScreenshot(selection, filePath) {
-            const effects = [new Rescale(settings$4.get_int(KeyEffectRescale) / 100.0)];
+            const effects = [new Rescale(settings$3.get_int(KeyEffectRescale) / 100.0)];
             const screenshot = new Screenshot(filePath, effects);
-            if (settings$4.get_boolean(KeySaveScreenshot)) {
+            if (settings$3.get_boolean(KeySaveScreenshot)) {
                 screenshot.autosave();
             }
-            screenshot.copyClipboard(settings$4.get_string(KeyClipboardAction));
-            if (settings$4.get_boolean(KeyEnableNotification)) {
+            screenshot.copyClipboard(settings$3.get_string(KeyClipboardAction));
+            if (settings$3.get_boolean(KeyEnableNotification)) {
                 notifyScreenshot(screenshot);
             }
             if (this.indicator) {
                 this.indicator.setScreenshot(screenshot);
             }
-            const commandEnabled = settings$4.get_boolean(KeyEnableRunCommand);
+            const commandEnabled = settings$3.get_boolean(KeyEnableRunCommand);
             if (commandEnabled) {
                 const file = screenshot.getFinalFile();
                 // Notifications.notifyCommand(Commands.getCommand(file));
-                exec(file)
+                exec(settings$3.get_string(KeyRunCommand), file)
                     .then((command) => log(`command ${command} complete`))
                     .catch((e) => notifyError(e));
             }
-            const imgurEnabled = settings$4.get_boolean(KeyEnableUploadImgur);
-            const imgurAutoUpload = settings$4.get_boolean(KeyImgurAutoUpload);
+            const imgurEnabled = settings$3.get_boolean(KeyEnableUploadImgur);
+            const imgurAutoUpload = settings$3.get_boolean(KeyImgurAutoUpload);
             if (imgurEnabled && imgurAutoUpload) {
                 screenshot.imgurStartUpload();
             }
@@ -1421,12 +1396,12 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
             this.destroyIndicator();
             this.unsetKeybindings();
             this.signalSettings.forEach((signal) => {
-                settings$4.disconnect(signal);
+                settings$3.disconnect(signal);
             });
             this.disconnectAll();
         }
         enable() {
-            this.signalSettings.push(settings$4.connect('changed::' + KeyEnableIndicator, this.updateIndicator.bind(this)));
+            this.signalSettings.push(settings$3.connect('changed::' + KeyEnableIndicator, this.updateIndicator.bind(this)));
             this.updateIndicator();
             this.setKeybindings();
         }
@@ -1434,7 +1409,7 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
             this.destroy();
         }
     }
-    Signals$4.addSignalMethods(Extension.prototype);
+    Signals$3.addSignalMethods(Extension.prototype);
 
     function index () {
         return new Extension();
