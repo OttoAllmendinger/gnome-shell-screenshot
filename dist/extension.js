@@ -455,10 +455,6 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
         ];
     }
     function spawnAsync(argv, env = null) {
-        log('getEnvArray([])=' + getEnvArray([]).join('\n'));
-        if (env !== null) {
-            log(getEnvArray(env).join('\n'));
-        }
         return new Promise((resolve, reject) => {
             const [success, pid] = GLib.spawn_async(null /* pwd */, argv, env === null ? null : getEnvArray(env), GLib.SpawnFlags.SEARCH_PATH | GLib.SpawnFlags.DO_NOT_REAP_CHILD, null /* child_setup */);
             if (!success) {
