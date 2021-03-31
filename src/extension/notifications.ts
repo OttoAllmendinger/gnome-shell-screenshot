@@ -12,7 +12,6 @@ import * as Config from './config';
 import * as Thumbnail from './thumbnail';
 import { ErrorInvalidSettings, Screenshot } from './screenshot';
 
-const Signals = imports.signals;
 const Main = imports.ui.main;
 const MessageTray = imports.ui.messageTray;
 
@@ -29,30 +28,17 @@ enum ErrorActions {
   OPEN_SETTINGS,
 }
 
-const getSource = () => {
+function getSource() {
   const source = new MessageTray.Source(NotificationSourceName, NotificationIcon);
   Main.messageTray.add(source);
   return source;
-};
+}
 
-const registerClassCompat = (cls) => {
-  if (version.greaterEqual('3.36')) {
-    return GObject.registerClass(cls);
-  } else {
-    Signals.addSignalMethods(cls.prototype);
-    return cls;
-  }
-};
+function registerClass<T = InstanceType<any>>(cls: T): T {
+  return (GObject.registerClass(cls as any) as unknown) as T;
+}
 
-const showNotificationCompat = (source, notification) => {
-  if (version.greaterEqual('3.36')) {
-    return source.showNotification(notification);
-  } else {
-    return source.notify(notification);
-  }
-};
-
-const NotificationNewScreenshot = registerClassCompat(
+const NotificationNewScreenshot = registerClass(
   class NotificationNewScreenshot extends MessageTray.Notification {
     static _title() {
       return _('New Screenshot');
@@ -131,7 +117,7 @@ const NotificationNewScreenshot = registerClassCompat(
   },
 );
 
-const ErrorNotification = registerClassCompat(
+const ErrorNotification = registerClass(
   class ErrorNotification extends MessageTray.Notification {
     buttons?: ErrorActions[];
 
@@ -173,7 +159,7 @@ const ErrorNotification = registerClassCompat(
   },
 );
 
-const ImgurNotification = registerClassCompat(
+const ImgurNotification = registerClass(
   class ImgurNotification extends MessageTray.Notification {
     constructor(source, screenshot) {
       super(source, _('Imgur Upload'));
@@ -242,7 +228,7 @@ const ImgurNotification = registerClassCompat(
 export function notifyScreenshot(screenshot: Screenshot): void {
   const source = getSource();
   const notification = new NotificationNewScreenshot(source, screenshot);
-  showNotificationCompat(source, notification);
+  source.showNotification(notification);
 }
 
 export function notifyError(error: string | Error): void {
@@ -253,20 +239,20 @@ export function notifyError(error: string | Error): void {
     }
   }
   const source = getSource();
-  const notification = new ErrorNotification(source, error, buttons);
-  showNotificationCompat(source, notification);
+  const notification = new ErrorNotification(source, error.toString(), buttons);
+  source.showNotification(notification);
 }
 
 export function notifyImgurUpload(screenshot: Screenshot): void {
   const source = getSource();
   const notification = new ImgurNotification(source, screenshot);
-  showNotificationCompat(source, notification);
+  source.showNotification(notification);
 }
 
 export function notifyCommand(command: string): void {
   const source = getSource();
   const notification = new MessageTray.Notification(source, _('Command'), command);
-  showNotificationCompat(source, notification);
+  source.showNotification(notification);
 }
 
 export function wrapNotifyError<T extends (...args: any[]) => any>(f: T): T {

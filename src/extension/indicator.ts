@@ -24,14 +24,6 @@ const DefaultIcon = 'camera-photo-symbolic';
 
 const settings = ExtensionUtils.getSettings();
 
-// remove this when dropping support for < 3.33
-const getActorCompat = (obj) => (version.greaterEqual('3.33') ? obj : obj.actor);
-
-const getSliderSignalCompat = () => (version.greaterEqual('3.33') ? 'notify::value' : 'value-changed');
-
-const addActorCompat = (actor, child) =>
-  version.greaterEqual('3.36') ? actor.add_child(child) : actor.add(child, { expand: true });
-
 declare interface CaptureDelayMenu extends St.Widget {}
 
 class CaptureDelayMenu extends PopupMenu.PopupMenuSection {
@@ -52,10 +44,10 @@ class CaptureDelayMenu extends PopupMenu.PopupMenuSection {
 
     this.delayValueMS = settings.get_int(Config.KeyCaptureDelay);
     this.slider = new Slider.Slider(this.scaleToSlider(this.delayValueMS));
-    this.slider.connect(getSliderSignalCompat(), this.onDragEnd.bind(this));
+    this.slider.connect('notify::value', this.onDragEnd.bind(this));
     this.sliderItem = new PopupMenu.PopupBaseMenuItem({ activate: false });
 
-    addActorCompat(getActorCompat(this.sliderItem), getActorCompat(this.slider));
+    this.sliderItem.add_child(this.slider);
     this.addMenuItem(this.sliderItem);
 
     this.delayInfoItem = new PopupMenu.PopupMenuItem('', {
@@ -120,7 +112,7 @@ class ScreenshotSection {
 
   constructor(menu) {
     this.image = new PopupMenu.PopupBaseMenuItem();
-    getActorCompat(this.image).content_gravity = Clutter.ContentGravity.RESIZE_ASPECT;
+    this.image.content_gravity = Clutter.ContentGravity.RESIZE_ASPECT;
 
     this.clear = new PopupMenu.PopupMenuItem(_('Clear'));
     this.copy = new PopupMenu.PopupMenuItem(_('Copy'));
@@ -192,19 +184,19 @@ class ScreenshotSection {
   updateVisibility() {
     const visible = !!this._screenshot;
 
-    getActorCompat(this.image).visible = visible;
-    getActorCompat(this.clear).visible = visible;
-    getActorCompat(this.copy).visible = visible;
-    getActorCompat(this.save).visible = visible;
+    this.image.visible = visible;
+    this.clear.visible = visible;
+    this.copy.visible = visible;
+    this.save.visible = visible;
 
     const imgurEnabled = settings.get_boolean(Config.KeyEnableUploadImgur);
     const imgurComplete = this._screenshot && this._screenshot.imgurUpload && this._screenshot.imgurUpload.responseData;
 
-    getActorCompat(this.imgurMenu).visible = visible && imgurEnabled;
-    getActorCompat(this.imgurUpload).visible = visible && imgurEnabled && !imgurComplete;
-    getActorCompat(this.imgurOpen).visible = visible && imgurEnabled && imgurComplete;
-    getActorCompat(this.imgurCopyLink).visible = visible && imgurEnabled && imgurComplete;
-    getActorCompat(this.imgurDelete).visible = visible && imgurEnabled && imgurComplete;
+    this.imgurMenu.visible = visible && imgurEnabled;
+    this.imgurUpload.visible = visible && imgurEnabled && !imgurComplete;
+    this.imgurOpen.visible = visible && imgurEnabled && imgurComplete;
+    this.imgurCopyLink.visible = visible && imgurEnabled && imgurComplete;
+    this.imgurDelete.visible = visible && imgurEnabled && imgurComplete;
   }
 
   setImage(pixbuf) {
@@ -224,8 +216,8 @@ class ScreenshotSection {
       throw Error('error creating Clutter.Image()');
     }
 
-    getActorCompat(this.image).content = image;
-    getActorCompat(this.image).height = 200;
+    this.image.content = image;
+    this.image.height = 200;
   }
 
   setScreenshot(screenshot: Screenshot | undefined) {
@@ -297,10 +289,10 @@ export class Indicator {
       icon_name: DefaultIcon,
       style_class: 'system-status-icon',
     });
-    getActorCompat(this.panelButton).add_actor(icon);
-    getActorCompat(this.panelButton).connect(
+    this.panelButton.add_actor(icon);
+    this.panelButton.connect(
       'button-press-event',
-      wrapNotifyError((obj, evt) => this.onClick(obj, evt)),
+      wrapNotifyError((obj, evt) => this.onClick(obj, (evt as unknown) as Clutter.Event)),
     );
 
     this.buildMenu();
