@@ -47,6 +47,15 @@ export function get(template: string, vars: FilenameVars, n?: number): string {
   return basename + sequence + '.png';
 }
 
+export function isValidTemplate(template: string): boolean {
+  try {
+    StringFormat(template);
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
 const tempfilePattern = 'gnome-shell-screenshot-XXXXXX.png';
 
 export function getTemp(): string {

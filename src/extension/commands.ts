@@ -12,6 +12,14 @@ type CommandVars = {
   filename: string;
 };
 
+export function isValidTemplate(s: string): boolean {
+  try {
+    StringFormat(s);
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
 
 function parameters(v: CommandVars): [string, string, string][] {
   return [['f', GLib.shell_quote(v.filename), _('Filename')]];
