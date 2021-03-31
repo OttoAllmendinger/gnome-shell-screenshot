@@ -159,7 +159,7 @@ export class Extension {
     if (commandEnabled) {
       const file = screenshot.getFinalFile();
       // Notifications.notifyCommand(Commands.getCommand(file));
-      Commands.exec(file)
+      Commands.exec(settings.get_string(Config.KeyRunCommand), file)
         .then((command) => log(`command ${command} complete`))
         .catch((e) => Notifications.notifyError(e));
     }
