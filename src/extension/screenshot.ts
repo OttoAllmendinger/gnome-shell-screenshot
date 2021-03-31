@@ -14,6 +14,7 @@ import * as Filename from './filename';
 import * as UploadImgur from './uploadImgur';
 import * as Notifications from './notifications';
 import ExtensionUtils from '../gselib/extensionUtils';
+import { spawnAsync } from './spawnUtil';
 
 const Signals = imports.signals;
 
@@ -131,7 +132,21 @@ export class Screenshot {
         throw new Error(`unexpected path component in ${pathComponents}`);
       }
     });
-    Util.spawn(['gjs', Local.path + '/saveDlg.js', ...pathComponents.map(encodeURIComponent)]);
+
+    let gtkVersionString;
+    switch (Gtk.get_major_version()) {
+      case 3:
+        gtkVersionString = '3.0';
+        break;
+      case 4:
+        gtkVersionString = '4.0';
+        break;
+    }
+
+    spawnAsync(
+      ['gjs', Local.path + '/saveDlg.js', ...pathComponents.map(encodeURIComponent)],
+      ['GTK=' + gtkVersionString],
+    );
   }
 
   copyClipboard(action: string): void {
