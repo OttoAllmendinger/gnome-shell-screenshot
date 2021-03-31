@@ -34,8 +34,12 @@ function getSource() {
   return source;
 }
 
-function registerClass<T = InstanceType<any>>(cls: T): T {
-  return (GObject.registerClass(cls as any) as unknown) as T;
+type GObj<X> = {
+  new (...args: any[]): X;
+};
+
+function registerClass<X>(cls: GObj<X>): GObj<X> {
+  return (GObject.registerClass(cls as any) as unknown) as GObj<X>;
 }
 
 const NotificationNewScreenshot = registerClass(
@@ -51,26 +55,11 @@ const NotificationNewScreenshot = registerClass(
       return banner;
     }
 
-    static ctrArgs(source, screenshot) {
-      return [
-        source,
-        NotificationNewScreenshot._title(),
-        NotificationNewScreenshot._banner(screenshot),
-        { gicon: Thumbnail.getIcon(screenshot.srcFile.get_path()) },
-      ];
-    }
+    _init(source: string, screenshot: Screenshot) {
+      super._init(source, NotificationNewScreenshot._title(), NotificationNewScreenshot._banner(screenshot), {
+        gicon: Thumbnail.getIcon(screenshot.srcFile.get_path()),
+      });
 
-    constructor(source, screenshot) {
-      super(...NotificationNewScreenshot.ctrArgs(source, screenshot));
-      this.initCompat(source, screenshot);
-    }
-
-    _init(source, screenshot) {
-      super._init(...NotificationNewScreenshot.ctrArgs(source, screenshot));
-      this.initCompat(source, screenshot);
-    }
-
-    initCompat(source, screenshot) {
       this.connect('activated', this._onActivated.bind(this));
 
       // makes banner expand on hover
@@ -121,21 +110,11 @@ const ErrorNotification = registerClass(
   class ErrorNotification extends MessageTray.Notification {
     buttons?: ErrorActions[];
 
-    static ctrArgs(source, message: string) {
-      return [source, _('Error'), String(message), { secondaryGIcon: new Gio.ThemedIcon({ name: 'dialog-error' }) }];
-    }
-
-    constructor(source, message: string, buttons: ErrorActions[]) {
-      super(...ErrorNotification.ctrArgs(source, message));
-      this.initCompat(message, buttons);
-    }
-
     _init(source, message, buttons) {
-      super._init(...ErrorNotification.ctrArgs(source, message));
-      this.initCompat(message, buttons);
-    }
+      super._init(source, _('Error'), String(message), {
+        secondaryGIcon: new Gio.ThemedIcon({ name: 'dialog-error' }),
+      });
 
-    initCompat(_message, buttons) {
       this.buttons = buttons;
     }
 
@@ -161,17 +140,9 @@ const ErrorNotification = registerClass(
 
 const ImgurNotification = registerClass(
   class ImgurNotification extends MessageTray.Notification {
-    constructor(source, screenshot) {
-      super(source, _('Imgur Upload'));
-      this.initCompat(source, screenshot);
-    }
-
     _init(source, screenshot) {
       super._init(source, _('Imgur Upload'));
-      this.initCompat(source, screenshot);
-    }
 
-    initCompat(source, screenshot) {
       this.setForFeedback(true);
       this.setResident(true);
 
