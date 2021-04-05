@@ -131,8 +131,6 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
     var description = "Conveniently create, copy, store and upload screenshots";
     var metadata = {
     	"shell-version": [
-    	"3.36",
-    	"3.38",
     	"40"
     ],
     	uuid: uuid,
