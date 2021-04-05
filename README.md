@@ -20,11 +20,22 @@ The latest development version can be installed manually with these commands:
 ```sh
 git clone https://github.com/OttoAllmendinger/gnome-shell-screenshot.git
 cd gnome-shell-screenshot
+make update_dependencies
 make install
 ```
 
 Then go to https://extensions.gnome.org/local/ to turn on the extension or use
 gnome-tweak-tool.
+
+## Reporting a Bug
+
+When reporting a bug, please include debugging output from `gnome-shell`.
+
+You can capture the logs with this command:
+
+```
+journalctl --user /usr/bin/gnome-shell --follow
+```
 
 ## Known Issues
 
