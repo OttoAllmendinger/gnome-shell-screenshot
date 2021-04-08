@@ -456,10 +456,10 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
         return new Promise((resolve, reject) => {
             const [success, pid] = GLib.spawn_async(null /* pwd */, argv, env === null ? null : getEnvArray(env), GLib.SpawnFlags.SEARCH_PATH | GLib.SpawnFlags.DO_NOT_REAP_CHILD, null /* child_setup */);
             if (!success) {
-                throw new Error('success=false');
+                return reject(new Error('success=false'));
             }
             if (pid === null) {
-                throw new Error('pid === null');
+                return reject(Error('pid === null'));
             }
             GLib.child_watch_add(GLib.PRIORITY_DEFAULT, pid, (pid, exitCode) => {
                 if (exitCode === 0) {

@@ -19,10 +19,10 @@ export function spawnAsync(argv: string[], env: string[] | null = null): Promise
       null /* child_setup */,
     );
     if (!success) {
-      throw new Error('success=false');
+      return reject(new Error('success=false'));
     }
     if (pid === null) {
-      throw new Error('pid === null');
+      return reject(Error('pid === null'));
     }
     GLib.child_watch_add(GLib.PRIORITY_DEFAULT, pid, (pid, exitCode) => {
       if (exitCode === 0) {
