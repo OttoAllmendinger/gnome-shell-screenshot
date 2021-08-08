@@ -1,4 +1,5 @@
 import * as Gio from '@imports/Gio-2.0';
+import * as GdkPixbuf from '@imports/GdkPixbuf-2.0';
 import * as Gtk from '@imports/Gtk-3.0';
 import * as Shell from '@imports/Shell-0.1';
 import { InterpType } from '@imports/GdkPixbuf-2.0';
@@ -18,7 +19,6 @@ import { spawnAsync } from './spawnUtil';
 
 const Signals = imports.signals;
 
-const Util = imports.misc.util;
 const Local = ExtensionUtils.getCurrentExtension();
 
 const settings = ExtensionUtils.getSettings();
@@ -38,7 +38,7 @@ class ErrorAutosaveDirNotExists extends ErrorInvalidSettings {
 export declare interface Screenshot extends SignalEmitter {}
 
 export interface Effect {
-  apply(image: Gtk.Image): void;
+  apply(image: GdkPixbuf.Pixbuf): GdkPixbuf.Pixbuf;
 }
 
 export class Rescale implements Effect {
@@ -48,23 +48,26 @@ export class Rescale implements Effect {
     }
   }
 
-  apply(image: Gtk.Image): void {
+  apply(pixbuf: GdkPixbuf.Pixbuf): GdkPixbuf.Pixbuf {
     if (this.scale === 1) {
-      return;
+      return pixbuf;
     }
 
-    const newPixbuf = image.pixbuf.scale_simple(
-      image.pixbuf.get_width() * this.scale,
-      image.pixbuf.get_height() * this.scale,
+    const result = pixbuf.scale_simple(
+      pixbuf.get_width() * this.scale,
+      pixbuf.get_height() * this.scale,
       InterpType.BILINEAR,
     );
+    if (!result) {
+      throw new Error('null result');
+    }
 
-    image.set_from_pixbuf(newPixbuf);
+    return pixbuf;
   }
 }
 
 export class Screenshot {
-  public gtkImage: Gtk.Image;
+  public pixbuf: GdkPixbuf.Pixbuf;
   public srcFile: Gio.File;
   public dstFile: Gio.File | null;
   public imgurUpload?: UploadImgur.Upload;
@@ -74,9 +77,9 @@ export class Screenshot {
       throw new Error(`need argument ${filePath}`);
     }
 
-    this.gtkImage = new Gtk.Image({ file: filePath });
-    effects.forEach((e) => e.apply(this.gtkImage));
-    this.gtkImage.pixbuf.savev(filePath, 'png', [], []);
+    this.pixbuf = GdkPixbuf.Pixbuf.new_from_file(filePath);
+    this.pixbuf = effects.reduce((pixbuf, e) => e.apply(pixbuf), this.pixbuf);
+    this.pixbuf.savev(filePath, 'png', [], []);
 
     this.srcFile = Gio.File.new_for_path(filePath);
     this.dstFile = null;
@@ -84,7 +87,7 @@ export class Screenshot {
 
   getFilename(n = 0): string {
     const filenameTemplate = settings.get_string(Config.KeyFilenameTemplate);
-    const { width, height } = (this.gtkImage.get_pixbuf() as unknown) as { width: number; height: number };
+    const { width, height } = (this.pixbuf as unknown) as { width: number; height: number };
     return Filename.get(filenameTemplate, { width, height }, n);
   }
 
@@ -153,9 +156,13 @@ export class Screenshot {
     if (action === Config.ClipboardActions.NONE) {
       return;
     } else if (action === Config.ClipboardActions.SET_IMAGE_DATA) {
-      return Clipboard.setImage(this.gtkImage);
+      return Clipboard.setImage(this.pixbuf);
     } else if (action === Config.ClipboardActions.SET_LOCAL_PATH) {
-      return Clipboard.setText(this.getFinalFile().get_path());
+      const path = this.getFinalFile().get_path();
+      if (!path) {
+        throw new Error('error getting file path');
+      }
+      return Clipboard.setText(path);
     }
 
     throw new Error(`unknown action ${action}`);

@@ -1,4 +1,4 @@
-var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPixbuf, Gtk, Gdk, Soup) {
+var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPixbuf, Gtk, Soup) {
     'use strict';
 
     var ExtensionUtils = imports.misc.extensionUtils;
@@ -340,18 +340,16 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
         return join(...path.split(PATH_SEPARATOR).map(expandUserDir));
     }
 
-    function getClipboard() {
-        const display = Gdk.Display.get_default();
-        if (!display) {
-            throw new Error('could not get default display');
+    function setImage(pixbuf) {
+        const [ok, buffer] = pixbuf.save_to_bufferv('png', [], []);
+        if (!ok) {
+            throw new Error('error in save_to_bufferv');
         }
-        return Gtk.Clipboard.get_default(display);
-    }
-    function setImage(gtkImage) {
-        getClipboard().set_image(gtkImage.get_pixbuf());
+        const bytes = GLib.Bytes.new(buffer);
+        St.Clipboard.get_default().set_content(St.ClipboardType.CLIPBOARD, 'image/png', bytes);
     }
     function setText(text) {
-        getClipboard().set_text(text, -1);
+        St.Clipboard.get_default().set_text(St.ClipboardType.CLIPBOARD, text);
     }
 
     const Signals = imports.signals;
@@ -476,7 +474,6 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
     }
 
     const Signals$1 = imports.signals;
-    const Util = imports.misc.util;
     const Local$1 = ExtensionUtils.getCurrentExtension();
     const settings = ExtensionUtils.getSettings();
     class ErrorInvalidSettings extends Error {
@@ -496,12 +493,15 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
                 throw new Error(`invalid argument ${scale}`);
             }
         }
-        apply(image) {
+        apply(pixbuf) {
             if (this.scale === 1) {
-                return;
+                return pixbuf;
             }
-            const newPixbuf = image.pixbuf.scale_simple(image.pixbuf.get_width() * this.scale, image.pixbuf.get_height() * this.scale, GdkPixbuf.InterpType.BILINEAR);
-            image.set_from_pixbuf(newPixbuf);
+            const result = pixbuf.scale_simple(pixbuf.get_width() * this.scale, pixbuf.get_height() * this.scale, GdkPixbuf.InterpType.BILINEAR);
+            if (!result) {
+                throw new Error('null result');
+            }
+            return pixbuf;
         }
     }
     class Screenshot {
@@ -509,15 +509,15 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
             if (!filePath) {
                 throw new Error(`need argument ${filePath}`);
             }
-            this.gtkImage = new Gtk.Image({ file: filePath });
-            effects.forEach((e) => e.apply(this.gtkImage));
-            this.gtkImage.pixbuf.savev(filePath, 'png', [], []);
+            this.pixbuf = GdkPixbuf.Pixbuf.new_from_file(filePath);
+            this.pixbuf = effects.reduce((pixbuf, e) => e.apply(pixbuf), this.pixbuf);
+            this.pixbuf.savev(filePath, 'png', [], []);
             this.srcFile = Gio.File.new_for_path(filePath);
             this.dstFile = null;
         }
         getFilename(n = 0) {
             const filenameTemplate = settings.get_string(KeyFilenameTemplate);
-            const { width, height } = this.gtkImage.get_pixbuf();
+            const { width, height } = this.pixbuf;
             return get(filenameTemplate, { width, height }, n);
         }
         getNextFile() {
@@ -576,10 +576,14 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
                 return;
             }
             else if (action === ClipboardActions.SET_IMAGE_DATA) {
-                return setImage(this.gtkImage);
+                return setImage(this.pixbuf);
             }
             else if (action === ClipboardActions.SET_LOCAL_PATH) {
-                return setText(this.getFinalFile().get_path());
+                const path = this.getFinalFile().get_path();
+                if (!path) {
+                    throw new Error('error getting file path');
+                }
+                return setText(path);
             }
             throw new Error(`unknown action ${action}`);
         }
@@ -660,10 +664,9 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
             return _('New Screenshot');
         }
         static _banner(obj) {
-            const { gtkImage } = obj;
-            const { width, height } = gtkImage.get_pixbuf();
-            const banner = _('Size:') + ' ' + width + 'x' + height + '.';
-            return banner;
+            const { pixbuf } = obj;
+            const { width, height } = pixbuf;
+            return _('Size:') + ' ' + width + 'x' + height + '.';
         }
         _init(source, screenshot) {
             super._init(source, NotificationNewScreenshot._title(), NotificationNewScreenshot._banner(screenshot), {
@@ -934,7 +937,7 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
         setScreenshot(screenshot) {
             this._screenshot = screenshot;
             if (this._screenshot) {
-                this.setImage(this._screenshot.gtkImage.get_pixbuf());
+                this.setImage(this._screenshot.pixbuf);
                 this._screenshot.connect('imgur-upload', (obj, upload) => {
                     upload.connect('done', (_obj, _data) => {
                         this.updateVisibility();
@@ -1271,7 +1274,6 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
         return command;
     }
 
-    // props to
     const Signals$3 = imports.signals;
     const Main$2 = imports.ui.main;
     const settings$3 = ExtensionUtils.getSettings();
@@ -1413,4 +1415,4 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
 
     return index;
 
-}(imports.gi.Meta, imports.gi.Shell, imports.gi.St, imports.gi.Cogl, imports.gi.Clutter, imports.gi.GLib, imports.gi.Gio, imports.gi.GObject, imports.gi.GdkPixbuf, imports.gi.Gtk, imports.gi.Gdk, imports.gi.Soup));
+}(imports.gi.Meta, imports.gi.Shell, imports.gi.St, imports.gi.Cogl, imports.gi.Clutter, imports.gi.GLib, imports.gi.Gio, imports.gi.GObject, imports.gi.GdkPixbuf, imports.gi.Gtk, imports.gi.Soup));

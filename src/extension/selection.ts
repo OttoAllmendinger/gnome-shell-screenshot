@@ -1,6 +1,6 @@
 import * as St from '@imports/St-1.0';
-import * as Meta from '@imports/Meta-7';
-import * as Clutter from '@imports/Clutter-7';
+import * as Meta from '@imports/Meta-8';
+import * as Clutter from '@imports/Clutter-8';
 import * as Shell from '@imports/Shell-0.1';
 
 import { SignalEmitter } from '..';

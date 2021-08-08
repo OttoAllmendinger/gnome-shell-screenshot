@@ -1,8 +1,4 @@
-// props to
-// https://github.com/rjanja/desktop-capture
-// https://github.com/DASPRiD/gnome-shell-extension-area-screenshot
-
-import * as Meta from '@imports/Meta-7';
+import * as Meta from '@imports/Meta-8';
 import * as Shell from '@imports/Shell-0.1';
 
 import { SignalEmitter } from '..';

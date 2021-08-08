@@ -1,6 +1,6 @@
 import * as St from '@imports/St-1.0';
-import * as Cogl from '@imports/Cogl-7';
-import * as Clutter from '@imports/Clutter-7';
+import * as Cogl from '@imports/Cogl-8';
+import * as Clutter from '@imports/Clutter-8';
 
 import { currentVersion } from '../gselib/version';
 import { openPrefs } from '../gselib/openPrefs';
@@ -224,7 +224,7 @@ class ScreenshotSection {
     this._screenshot = screenshot;
 
     if (this._screenshot) {
-      this.setImage(this._screenshot.gtkImage.get_pixbuf());
+      this.setImage(this._screenshot.pixbuf);
       this._screenshot.connect('imgur-upload', (obj, upload) => {
         upload.connect('done', (_obj, _data) => {
           this.updateVisibility();

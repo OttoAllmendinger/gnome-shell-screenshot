@@ -1,18 +1,16 @@
-import * as Gtk from '@imports/Gtk-3.0';
-import * as Gdk from '@imports/Gdk-3.0';
+import * as St from '@imports/St-1.0';
+import * as GLib from '@imports/GLib-2.0';
+import * as GdkPixbuf from '@imports/GdkPixbuf-2.0';
 
-export function getClipboard() {
-  const display = Gdk.Display.get_default();
-  if (!display) {
-    throw new Error('could not get default display');
+export function setImage(pixbuf: GdkPixbuf.Pixbuf): void {
+  const [ok, buffer] = pixbuf.save_to_bufferv('png', [], []);
+  if (!ok) {
+    throw new Error('error in save_to_bufferv');
   }
-  return Gtk.Clipboard.get_default(display);
+  const bytes = GLib.Bytes.new(buffer);
+  St.Clipboard.get_default().set_content(St.ClipboardType.CLIPBOARD, 'image/png', bytes);
 }
 
-export function setImage(gtkImage) {
-  getClipboard().set_image(gtkImage.get_pixbuf());
-}
-
-export function setText(text) {
-  getClipboard().set_text(text, -1);
+export function setText(text: string): void {
+  St.Clipboard.get_default().set_text(St.ClipboardType.CLIPBOARD, text);
 }

@@ -48,11 +48,10 @@ const NotificationNewScreenshot = registerClass(
       return _('New Screenshot');
     }
 
-    static _banner(obj) {
-      const { gtkImage } = obj;
-      const { width, height } = gtkImage.get_pixbuf();
-      const banner = _('Size:') + ' ' + width + 'x' + height + '.';
-      return banner;
+    static _banner(obj: Screenshot) {
+      const { pixbuf } = obj;
+      const { width, height } = pixbuf as any;
+      return _('Size:') + ' ' + width + 'x' + height + '.';
     }
 
     _init(source: string, screenshot: Screenshot) {
