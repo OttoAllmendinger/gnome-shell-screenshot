@@ -1,70 +1,75 @@
 msgid ""
 msgstr ""
-"Content-Type: text/plain; charset=UTF-8\n"
 "Project-Id-Version: \n"
 "POT-Creation-Date: \n"
 "PO-Revision-Date: \n"
+"Last-Translator: Heimen Stoffels <vistausss@fastmail.com>\n"
 "Language-Team: \n"
+"Language: nl\n"
 "MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 3.0\n"
-"Last-Translator: Heimen Stoffels <vistausss@fastmail.com>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"Language: nl\n"
 
-#: src/saveDlg/saveDlg.ts:23
+#: src/saveDlg/saveDlg.ts:31
 msgid "_Cancel"
 msgstr "_Annuleren"
 
-#: src/saveDlg/saveDlg.ts:24
+#: src/saveDlg/saveDlg.ts:32
 msgid "_Save"
 msgstr "Op_slaan"
 
-#: src/extension/prefs/imgur.ts:46
+#: src/extension/prefs/prefPages.ts:120
 msgid "Auto-Copy Link After Upload"
 msgstr "Link kopiëren na uploaden"
 
-#: src/extension/prefs/indicator.ts:74
+#: src/extension/prefs/prefPages.ts:53
 msgid "Auto-Copy to Clipboard"
 msgstr "Link kopiëren naar klembord"
 
-#: src/extension/prefs/imgur.ts:58
+#: src/extension/prefs/prefPages.ts:121
 msgid "Auto-Open Link After Upload"
 msgstr "Link openen na uploaden"
 
-#: src/extension/prefs/storage.ts:18
+#: src/extension/prefs/prefPages.ts:91
 msgid "Auto-Save Screenshot"
 msgstr "Schermfoto's automatisch opslaan"
 
-#: src/extension/prefs/imgur.ts:34
+#: src/extension/prefs/prefPages.ts:119
 msgid "Auto-Upload After Capture"
 msgstr "Schermfoto's automatisch uploaden"
 
-#: src/extension/indicator.ts:94 src/extension/indicator.ts:96
+#: src/extension/prefs/prefView.ts:268
+#, fuzzy
+msgid "Cancel"
+msgstr "_Annuleren"
+
+#: src/extension/indicator.ts:86 src/extension/indicator.ts:88
 msgid "Capture Delay"
 msgstr "Wachttijd"
 
-#: src/extension/indicator.ts:125
+#: src/extension/indicator.ts:117
 msgid "Clear"
 msgstr "Wissen"
 
-#: src/extension/notifications.ts:268 src/extension/prefs/commands.ts:33
+#: src/extension/notifications.ts:224 src/extension/prefs/prefPages.ts:78
 msgid "Command"
 msgstr "Opdracht"
 
-#: src/extension/prefs/prefs.ts:28
+#: src/extension/prefs/prefPages.ts:137
 msgid "Commands"
 msgstr "Opdrachten"
 
-#: src/extension/indicator.ts:126 src/extension/notifications.ts:101
+#: src/extension/indicator.ts:118 src/extension/notifications.ts:75
 msgid "Copy"
 msgstr "Kopiëren"
 
-#: src/extension/prefs/indicator.ts:69
+#: src/extension/prefs/prefPages.ts:51
 msgid "Copy Button"
 msgstr "Kopieerknop"
 
-#: src/extension/indicator.ts:158 src/extension/notifications.ts:221
+#: src/extension/indicator.ts:150 src/extension/notifications.ts:177
 msgid "Copy Link"
 msgstr "Link kopiëren"
 
@@ -72,27 +77,27 @@ msgstr "Link kopiëren"
 msgid "Day"
 msgstr "Dag"
 
-#: src/extension/prefs/storage.ts:60
+#: src/extension/prefs/prefPages.ts:96
 msgid "Default Filename"
 msgstr "Standaard bestandsnaam"
 
-#: src/extension/indicator.ts:159
+#: src/extension/indicator.ts:151
 msgid "Delete"
 msgstr "Verwijderen"
 
-#: src/extension/prefs/prefs.ts:27
+#: src/extension/prefs/prefPages.ts:136
 msgid "Effects"
 msgstr "Effecten"
 
-#: src/extension/prefs/imgur.ts:15
+#: src/extension/prefs/prefPages.ts:117
 msgid "Enable Imgur Upload"
 msgstr "Uploaden naar Imgur"
 
-#: src/extension/notifications.ts:139
+#: src/extension/notifications.ts:113
 msgid "Error"
 msgstr "Foutmelding"
 
-#: src/extension/commands.ts:21
+#: src/extension/commands.ts:25
 msgid "Filename"
 msgstr "Bestandsnaam"
 
@@ -108,40 +113,39 @@ msgstr "Hostnaam"
 msgid "Hour"
 msgstr "Uur"
 
-#: src/extension/prefs/indicator.ts:53
+#: src/extension/prefs/prefPages.ts:30
 msgid "Image Data"
 msgstr "Afbeeldingsinformatie"
 
-#: src/extension/indicator.ts:155
+#: src/extension/indicator.ts:147 src/extension/prefs/prefPages.ts:139
 msgid "Imgur"
 msgstr "Imgur"
 
-#: src/extension/notifications.ts:179 src/extension/notifications.ts:184
-#: src/extension/notifications.ts:199 src/extension/prefs/prefs.ts:30
+#: src/extension/notifications.ts:143 src/extension/notifications.ts:155
 msgid "Imgur Upload"
 msgstr "Uploaden naar Imgur"
 
-#: src/extension/notifications.ts:203
+#: src/extension/notifications.ts:159
 msgid "Imgur Upload Failed"
 msgstr "Het uploaden is mislukt"
 
-#: src/extension/notifications.ts:207
+#: src/extension/notifications.ts:163
 msgid "Imgur Upload Successful"
 msgstr "Het uploaden is voltooid"
 
-#: src/extension/prefs/prefs.ts:26
+#: src/extension/prefs/prefPages.ts:135
 msgid "Indicator"
 msgstr "Indicator"
 
-#: src/extension/prefs/prefs.ts:31
+#: src/extension/prefs/prefPages.ts:140
 msgid "Keybindings"
 msgstr "Sneltoetsen"
 
-#: src/extension/prefs/keybindings.ts:45
+#: src/extension/prefs/prefView.ts:401
 msgid "Keyboard Shortcut"
 msgstr "Sneltoets"
 
-#: src/extension/prefs/indicator.ts:54
+#: src/extension/prefs/prefPages.ts:31
 msgid "Local Path"
 msgstr "Computerlocatie"
 
@@ -149,7 +153,7 @@ msgstr "Computerlocatie"
 msgid "Minute"
 msgstr "Minuut"
 
-#: src/extension/prefs/keybindings.ts:85
+#: src/extension/prefs/prefView.ts:439
 msgid "Modify"
 msgstr "Aanpassen"
 
@@ -157,19 +161,19 @@ msgstr "Aanpassen"
 msgid "Month"
 msgstr "Maand"
 
-#: src/extension/notifications.ts:58
+#: src/extension/notifications.ts:48
 msgid "New Screenshot"
 msgstr "Nieuwe schermfoto"
 
-#: src/extension/indicator.ts:92
+#: src/extension/indicator.ts:84
 msgid "No Capture Delay"
 msgstr "Geen wachttijd"
 
-#: src/extension/prefs/indicator.ts:52
+#: src/extension/prefs/prefPages.ts:29
 msgid "Nothing"
 msgstr "Niets"
 
-#: src/extension/indicator.ts:157
+#: src/extension/indicator.ts:149
 msgid "Open Link"
 msgstr "Link openen"
 
@@ -177,31 +181,31 @@ msgstr "Link openen"
 msgid "Parameters:"
 msgstr "Opdrachtregelopties:"
 
-#: src/extension/prefs/storage.ts:74
+#: src/extension/prefs/prefPages.ts:104
 msgid "Preview"
 msgstr "Voorvertoning"
 
-#: src/extension/prefs/indicator.ts:32
+#: src/extension/prefs/prefPages.ts:40
 msgid "Primary Button"
 msgstr "Primaire knop"
 
-#: src/extension/prefs/effects.ts:16
+#: src/extension/prefs/prefPages.ts:62
 msgid "Rescale"
 msgstr "Grootte aanpassen"
 
-#: src/extension/prefs/commands.ts:16
+#: src/extension/prefs/prefPages.ts:76
 msgid "Run Command After Capture"
 msgstr "Opdracht uitvoeren na maken van schermfoto"
 
-#: src/extension/notifications.ts:102
+#: src/extension/notifications.ts:76
 msgid "Save"
 msgstr "Opslaan"
 
-#: src/extension/indicator.ts:127
+#: src/extension/indicator.ts:119
 msgid "Save As..."
 msgstr "Opslaan als…"
 
-#: src/extension/prefs/storage.ts:24
+#: src/extension/prefs/prefPages.ts:92
 msgid "Save Location"
 msgstr "Opslaglocatie"
 
@@ -217,31 +221,31 @@ msgstr "Schermfoto (letterlijk)"
 msgid "Second"
 msgstr "Seconde"
 
-#: src/extension/prefs/storage.ts:27
+#: src/extension/prefs/prefPages.ts:92
 msgid "Select"
 msgstr "Selecteren"
 
-#: src/extension/prefs/keybindings.ts:16
+#: src/extension/prefs/prefPages.ts:127
 msgid "Select area"
 msgstr "Gebied selecteren"
 
-#: src/extension/indicator.ts:328 src/extension/prefs/indicator.ts:35
+#: src/extension/indicator.ts:320 src/extension/prefs/prefPages.ts:43
 msgid "Select Area"
 msgstr "Gebied selecteren"
 
-#: src/extension/indicator.ts:330 src/extension/prefs/indicator.ts:37
+#: src/extension/indicator.ts:322 src/extension/prefs/prefPages.ts:45
 msgid "Select Desktop"
 msgstr "Werkblad selecteren"
 
-#: src/extension/prefs/keybindings.ts:18
+#: src/extension/prefs/prefPages.ts:129
 msgid "Select whole desktop"
 msgstr "Gehele bureaublad selecteren"
 
-#: src/extension/prefs/keybindings.ts:17
+#: src/extension/prefs/prefPages.ts:128
 msgid "Select window"
 msgstr "Venster selecteren"
 
-#: src/extension/indicator.ts:329 src/extension/prefs/indicator.ts:36
+#: src/extension/indicator.ts:321 src/extension/prefs/prefPages.ts:44
 msgid "Select Window"
 msgstr "Venster selecteren"
 
@@ -249,43 +253,43 @@ msgstr "Venster selecteren"
 msgid "selected region was too small - please select a larger area"
 msgstr "Het selectiegebied is te klein - probeer het opnieuw"
 
-#: src/extension/indicator.ts:355 src/extension/notifications.ts:162
+#: src/extension/indicator.ts:347 src/extension/notifications.ts:126
 msgid "Settings"
 msgstr "Voorkeuren"
 
-#: src/extension/prefs/indicator.ts:16
+#: src/extension/prefs/prefPages.ts:37
 msgid "Show Indicator"
 msgstr "Indicator tonen"
 
-#: src/extension/prefs/indicator.ts:38
+#: src/extension/prefs/prefPages.ts:46
 msgid "Show Menu"
 msgstr "Menu tonen"
 
-#: src/extension/prefs/indicator.ts:24
+#: src/extension/prefs/prefPages.ts:38
 msgid "Show Notification After Capture"
 msgstr "Melding tonen na maken van schermfoto"
 
-#: src/extension/prefs/imgur.ts:22
+#: src/extension/prefs/prefPages.ts:118
 msgid "Show Upload Notification"
 msgstr "Uploadmelding tonen"
 
-#: src/extension/notifications.ts:64
+#: src/extension/notifications.ts:54
 msgid "Size:"
 msgstr "Grootte:"
 
-#: src/extension/prefs/prefs.ts:29
+#: src/extension/prefs/prefPages.ts:138
 msgid "Storage"
 msgstr "Opslag"
 
-#: src/extension/indicator.ts:156
+#: src/extension/indicator.ts:148
 msgid "Upload"
 msgstr "Uploaden"
 
-#: src/extension/notifications.ts:110
+#: src/extension/notifications.ts:84
 msgid "Upload To Imgur"
 msgstr "Uploaden naar Imgur"
 
-#: src/extension/notifications.ts:106
+#: src/extension/notifications.ts:80
 msgid "Uploading To Imgur..."
 msgstr "Bezig met uploaden naar Imgur…"
 

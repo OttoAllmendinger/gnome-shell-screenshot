@@ -17,60 +17,65 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/saveDlg/saveDlg.ts:23
+#: src/saveDlg/saveDlg.ts:31
 msgid "_Cancel"
 msgstr "(_C)取消"
 
-#: src/saveDlg/saveDlg.ts:24
+#: src/saveDlg/saveDlg.ts:32
 msgid "_Save"
 msgstr "(_S)保存"
 
-#: src/extension/prefs/imgur.ts:46
+#: src/extension/prefs/prefPages.ts:120
 msgid "Auto-Copy Link After Upload"
 msgstr "上传后自动复制连接"
 
-#: src/extension/prefs/indicator.ts:74
+#: src/extension/prefs/prefPages.ts:53
 msgid "Auto-Copy to Clipboard"
 msgstr "自动复制到粘贴板"
 
-#: src/extension/prefs/imgur.ts:58
+#: src/extension/prefs/prefPages.ts:121
 msgid "Auto-Open Link After Upload"
 msgstr "上传后自动打开连接"
 
-#: src/extension/prefs/storage.ts:18
+#: src/extension/prefs/prefPages.ts:91
 msgid "Auto-Save Screenshot"
 msgstr "自动保存截图"
 
-#: src/extension/prefs/imgur.ts:34
+#: src/extension/prefs/prefPages.ts:119
 msgid "Auto-Upload After Capture"
 msgstr "截屏后自动上传"
 
-#: src/extension/indicator.ts:94 src/extension/indicator.ts:96
+#: src/extension/prefs/prefView.ts:268
+#, fuzzy
+msgid "Cancel"
+msgstr "(_C)取消"
+
+#: src/extension/indicator.ts:86 src/extension/indicator.ts:88
 msgid "Capture Delay"
 msgstr "截屏延时"
 
-#: src/extension/indicator.ts:125
+#: src/extension/indicator.ts:117
 msgid "Clear"
 msgstr "清除"
 
-#: src/extension/notifications.ts:268 src/extension/prefs/commands.ts:33
+#: src/extension/notifications.ts:224 src/extension/prefs/prefPages.ts:78
 msgid "Command"
 msgstr ""
 
-#: src/extension/prefs/prefs.ts:28
+#: src/extension/prefs/prefPages.ts:137
 msgid "Commands"
 msgstr ""
 
-#: src/extension/indicator.ts:126 src/extension/notifications.ts:101
+#: src/extension/indicator.ts:118 src/extension/notifications.ts:75
 msgid "Copy"
 msgstr "复制"
 
-#: src/extension/prefs/indicator.ts:69
+#: src/extension/prefs/prefPages.ts:51
 #, fuzzy
 msgid "Copy Button"
 msgstr "主按钮"
 
-#: src/extension/indicator.ts:158 src/extension/notifications.ts:221
+#: src/extension/indicator.ts:150 src/extension/notifications.ts:177
 msgid "Copy Link"
 msgstr "复制连接"
 
@@ -78,27 +83,27 @@ msgstr "复制连接"
 msgid "Day"
 msgstr "日"
 
-#: src/extension/prefs/storage.ts:60
+#: src/extension/prefs/prefPages.ts:96
 msgid "Default Filename"
 msgstr "默认文件名"
 
-#: src/extension/indicator.ts:159
+#: src/extension/indicator.ts:151
 msgid "Delete"
 msgstr "删除"
 
-#: src/extension/prefs/prefs.ts:27
+#: src/extension/prefs/prefPages.ts:136
 msgid "Effects"
 msgstr ""
 
-#: src/extension/prefs/imgur.ts:15
+#: src/extension/prefs/prefPages.ts:117
 msgid "Enable Imgur Upload"
 msgstr "允许上传到Imgur"
 
-#: src/extension/notifications.ts:139
+#: src/extension/notifications.ts:113
 msgid "Error"
 msgstr "错误"
 
-#: src/extension/commands.ts:21
+#: src/extension/commands.ts:25
 msgid "Filename"
 msgstr ""
 
@@ -114,40 +119,39 @@ msgstr "主机名"
 msgid "Hour"
 msgstr "时"
 
-#: src/extension/prefs/indicator.ts:53
+#: src/extension/prefs/prefPages.ts:30
 msgid "Image Data"
 msgstr "图片数据"
 
-#: src/extension/indicator.ts:155
+#: src/extension/indicator.ts:147 src/extension/prefs/prefPages.ts:139
 msgid "Imgur"
 msgstr "Imgur"
 
-#: src/extension/notifications.ts:179 src/extension/notifications.ts:184
-#: src/extension/notifications.ts:199 src/extension/prefs/prefs.ts:30
+#: src/extension/notifications.ts:143 src/extension/notifications.ts:155
 msgid "Imgur Upload"
 msgstr "上传到 Imgur"
 
-#: src/extension/notifications.ts:203
+#: src/extension/notifications.ts:159
 msgid "Imgur Upload Failed"
 msgstr "上传到 Imgur 失败"
 
-#: src/extension/notifications.ts:207
+#: src/extension/notifications.ts:163
 msgid "Imgur Upload Successful"
 msgstr "上传到 Imgur 成功"
 
-#: src/extension/prefs/prefs.ts:26
+#: src/extension/prefs/prefPages.ts:135
 msgid "Indicator"
 msgstr "指示器"
 
-#: src/extension/prefs/prefs.ts:31
+#: src/extension/prefs/prefPages.ts:140
 msgid "Keybindings"
 msgstr "快捷键"
 
-#: src/extension/prefs/keybindings.ts:45
+#: src/extension/prefs/prefView.ts:401
 msgid "Keyboard Shortcut"
 msgstr "快捷键"
 
-#: src/extension/prefs/indicator.ts:54
+#: src/extension/prefs/prefPages.ts:31
 msgid "Local Path"
 msgstr ""
 
@@ -155,7 +159,7 @@ msgstr ""
 msgid "Minute"
 msgstr "分"
 
-#: src/extension/prefs/keybindings.ts:85
+#: src/extension/prefs/prefView.ts:439
 msgid "Modify"
 msgstr "修改"
 
@@ -163,19 +167,19 @@ msgstr "修改"
 msgid "Month"
 msgstr "月"
 
-#: src/extension/notifications.ts:58
+#: src/extension/notifications.ts:48
 msgid "New Screenshot"
 msgstr "新截屏"
 
-#: src/extension/indicator.ts:92
+#: src/extension/indicator.ts:84
 msgid "No Capture Delay"
 msgstr "无延时截屏"
 
-#: src/extension/prefs/indicator.ts:52
+#: src/extension/prefs/prefPages.ts:29
 msgid "Nothing"
 msgstr "空数据"
 
-#: src/extension/indicator.ts:157
+#: src/extension/indicator.ts:149
 msgid "Open Link"
 msgstr "打开连接"
 
@@ -183,31 +187,31 @@ msgstr "打开连接"
 msgid "Parameters:"
 msgstr "参数"
 
-#: src/extension/prefs/storage.ts:74
+#: src/extension/prefs/prefPages.ts:104
 msgid "Preview"
 msgstr "预览"
 
-#: src/extension/prefs/indicator.ts:32
+#: src/extension/prefs/prefPages.ts:40
 msgid "Primary Button"
 msgstr "主按钮"
 
-#: src/extension/prefs/effects.ts:16
+#: src/extension/prefs/prefPages.ts:62
 msgid "Rescale"
 msgstr ""
 
-#: src/extension/prefs/commands.ts:16
+#: src/extension/prefs/prefPages.ts:76
 msgid "Run Command After Capture"
 msgstr ""
 
-#: src/extension/notifications.ts:102
+#: src/extension/notifications.ts:76
 msgid "Save"
 msgstr "保存"
 
-#: src/extension/indicator.ts:127
+#: src/extension/indicator.ts:119
 msgid "Save As..."
 msgstr "另存为..."
 
-#: src/extension/prefs/storage.ts:24
+#: src/extension/prefs/prefPages.ts:92
 msgid "Save Location"
 msgstr "保存位置"
 
@@ -223,31 +227,31 @@ msgstr "截屏（文字）"
 msgid "Second"
 msgstr "秒"
 
-#: src/extension/prefs/storage.ts:27
+#: src/extension/prefs/prefPages.ts:92
 msgid "Select"
 msgstr "选择"
 
-#: src/extension/prefs/keybindings.ts:16
+#: src/extension/prefs/prefPages.ts:127
 msgid "Select area"
 msgstr "选择区域"
 
-#: src/extension/indicator.ts:328 src/extension/prefs/indicator.ts:35
+#: src/extension/indicator.ts:320 src/extension/prefs/prefPages.ts:43
 msgid "Select Area"
 msgstr "选择区域"
 
-#: src/extension/indicator.ts:330 src/extension/prefs/indicator.ts:37
+#: src/extension/indicator.ts:322 src/extension/prefs/prefPages.ts:45
 msgid "Select Desktop"
 msgstr "选择桌面"
 
-#: src/extension/prefs/keybindings.ts:18
+#: src/extension/prefs/prefPages.ts:129
 msgid "Select whole desktop"
 msgstr "选择整个桌面"
 
-#: src/extension/prefs/keybindings.ts:17
+#: src/extension/prefs/prefPages.ts:128
 msgid "Select window"
 msgstr "选择窗口"
 
-#: src/extension/indicator.ts:329 src/extension/prefs/indicator.ts:36
+#: src/extension/indicator.ts:321 src/extension/prefs/prefPages.ts:44
 msgid "Select Window"
 msgstr "选择窗口"
 
@@ -255,43 +259,43 @@ msgstr "选择窗口"
 msgid "selected region was too small - please select a larger area"
 msgstr "选择的区域太小了，请重新选择一个大点的区域"
 
-#: src/extension/indicator.ts:355 src/extension/notifications.ts:162
+#: src/extension/indicator.ts:347 src/extension/notifications.ts:126
 msgid "Settings"
 msgstr "设置"
 
-#: src/extension/prefs/indicator.ts:16
+#: src/extension/prefs/prefPages.ts:37
 msgid "Show Indicator"
 msgstr "显示指示符"
 
-#: src/extension/prefs/indicator.ts:38
+#: src/extension/prefs/prefPages.ts:46
 msgid "Show Menu"
 msgstr "显示菜单"
 
-#: src/extension/prefs/indicator.ts:24
+#: src/extension/prefs/prefPages.ts:38
 msgid "Show Notification After Capture"
 msgstr "截屏后显示通知"
 
-#: src/extension/prefs/imgur.ts:22
+#: src/extension/prefs/prefPages.ts:118
 msgid "Show Upload Notification"
 msgstr "显示上传通知"
 
-#: src/extension/notifications.ts:64
+#: src/extension/notifications.ts:54
 msgid "Size:"
 msgstr "尺寸："
 
-#: src/extension/prefs/prefs.ts:29
+#: src/extension/prefs/prefPages.ts:138
 msgid "Storage"
 msgstr "储存"
 
-#: src/extension/indicator.ts:156
+#: src/extension/indicator.ts:148
 msgid "Upload"
 msgstr "上传"
 
-#: src/extension/notifications.ts:110
+#: src/extension/notifications.ts:84
 msgid "Upload To Imgur"
 msgstr "上传到 Imgur"
 
-#: src/extension/notifications.ts:106
+#: src/extension/notifications.ts:80
 msgid "Uploading To Imgur..."
 msgstr "正在上传到 Imgur..."
 
