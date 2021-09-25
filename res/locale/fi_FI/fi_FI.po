@@ -1,0 +1,301 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.4.2\n"
+"Last-Translator: \n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: fi_FI\n"
+
+#: src/saveDlg/saveDlg.ts:31
+msgid "_Cancel"
+msgstr "Peruuta"
+
+#: src/saveDlg/saveDlg.ts:32
+msgid "_Save"
+msgstr "Tallenna"
+
+#: src/extension/prefs/prefPages.ts:120
+msgid "Auto-Copy Link After Upload"
+msgstr "Kopio linkki automaattisesti julkaisun jälkeen"
+
+#: src/extension/prefs/prefPages.ts:53
+msgid "Auto-Copy to Clipboard"
+msgstr "Kopio kuva automaattisesti oton jälkeen"
+
+#: src/extension/prefs/prefPages.ts:121
+msgid "Auto-Open Link After Upload"
+msgstr "Avaa linkki automaattisesti julkaisun jälkeen"
+
+#: src/extension/prefs/prefPages.ts:91
+msgid "Auto-Save Screenshot"
+msgstr "Tallenna kuva automaattisesti"
+
+#: src/extension/prefs/prefPages.ts:119
+msgid "Auto-Upload After Capture"
+msgstr "Julkaise kuva automaattisesti"
+
+#: src/extension/prefs/prefView.ts:268
+msgid "Cancel"
+msgstr "Peruuta"
+
+#: src/extension/indicator.ts:86 src/extension/indicator.ts:88
+msgid "Capture Delay"
+msgstr "Viive"
+
+#: src/extension/indicator.ts:117
+msgid "Clear"
+msgstr "Tyhjennä"
+
+#: src/extension/notifications.ts:224 src/extension/prefs/prefPages.ts:78
+msgid "Command"
+msgstr "Komento"
+
+#: src/extension/prefs/prefPages.ts:137
+msgid "Commands"
+msgstr "Komennot"
+
+#: src/extension/indicator.ts:118 src/extension/notifications.ts:75
+msgid "Copy"
+msgstr "Kopioi"
+
+#: src/extension/prefs/prefPages.ts:51
+msgid "Copy Button"
+msgstr "Kopioi"
+
+#: src/extension/indicator.ts:150 src/extension/notifications.ts:177
+msgid "Copy Link"
+msgstr "Kopioi-nappi"
+
+#: src/extension/filename.ts:27
+msgid "Day"
+msgstr "Päivä"
+
+#: src/extension/prefs/prefPages.ts:96
+msgid "Default Filename"
+msgstr "Oletustiedostonimi"
+
+#: src/extension/indicator.ts:151
+msgid "Delete"
+msgstr "Poista"
+
+#: src/extension/prefs/prefPages.ts:136
+msgid "Effects"
+msgstr "Efektit"
+
+#: src/extension/prefs/prefPages.ts:117
+msgid "Enable Imgur Upload"
+msgstr "Mahdollista Imgur-julkaisu"
+
+#: src/extension/notifications.ts:113
+msgid "Error"
+msgstr "Virhe"
+
+#: src/extension/commands.ts:25
+msgid "Filename"
+msgstr "Tiedostonimi"
+
+#: src/extension/filename.ts:32
+msgid "Height"
+msgstr "Korkeus"
+
+#: src/extension/filename.ts:33
+msgid "Hostname"
+msgstr "Isäntänimi"
+
+#: src/extension/filename.ts:28
+msgid "Hour"
+msgstr "Tunti"
+
+#: src/extension/prefs/prefPages.ts:30
+msgid "Image Data"
+msgstr "Kuvadata"
+
+#: src/extension/indicator.ts:147 src/extension/prefs/prefPages.ts:139
+msgid "Imgur"
+msgstr "Imgur"
+
+#: src/extension/notifications.ts:143 src/extension/notifications.ts:155
+msgid "Imgur Upload"
+msgstr "Imgur-julkaisu"
+
+#: src/extension/notifications.ts:159
+msgid "Imgur Upload Failed"
+msgstr "Imgur-julkaisu epäonnistui"
+
+#: src/extension/notifications.ts:163
+msgid "Imgur Upload Successful"
+msgstr "Imgur-julkaisu onnistui"
+
+#: src/extension/prefs/prefPages.ts:135
+msgid "Indicator"
+msgstr "Ilmaisin"
+
+#: src/extension/prefs/prefPages.ts:140
+msgid "Keybindings"
+msgstr "Pikanäppäimet"
+
+#: src/extension/prefs/prefView.ts:401
+msgid "Keyboard Shortcut"
+msgstr "Näppäinkomento"
+
+#: src/extension/prefs/prefPages.ts:31
+msgid "Local Path"
+msgstr "Paikallinen Tiedostopolku"
+
+#: src/extension/filename.ts:29
+msgid "Minute"
+msgstr "Minuutti"
+
+#: src/extension/prefs/prefView.ts:439
+msgid "Modify"
+msgstr "Muuta"
+
+#: src/extension/filename.ts:26
+msgid "Month"
+msgstr "Kuukausi"
+
+#: src/extension/notifications.ts:48
+msgid "New Screenshot"
+msgstr "Uusi Kuvakaappaus"
+
+#: src/extension/indicator.ts:84
+msgid "No Capture Delay"
+msgstr "Ei  viivettä"
+
+#: src/extension/prefs/prefPages.ts:29
+msgid "Nothing"
+msgstr "Ei mitään"
+
+#: src/extension/indicator.ts:149
+msgid "Open Link"
+msgstr "Avaa linkki"
+
+#: src/extension/templateParams.ts:5
+msgid "Parameters:"
+msgstr "Parametrit:"
+
+#: src/extension/prefs/prefPages.ts:104
+msgid "Preview"
+msgstr "Esikatselu"
+
+#: src/extension/prefs/prefPages.ts:40
+msgid "Primary Button"
+msgstr "Ensisijainen painike"
+
+#: src/extension/prefs/prefPages.ts:62
+msgid "Rescale"
+msgstr "Uudelleenskaalaus"
+
+#: src/extension/prefs/prefPages.ts:76
+msgid "Run Command After Capture"
+msgstr "Suorita komento kaappauksen jälkeen"
+
+#: src/extension/notifications.ts:76
+msgid "Save"
+msgstr "Tallenna"
+
+#: src/extension/indicator.ts:119
+msgid "Save As..."
+msgstr "Tallenna nimellä..."
+
+#: src/extension/prefs/prefPages.ts:92
+msgid "Save Location"
+msgstr "Tallennussijainti"
+
+#: src/extension/filename.ts:24
+msgid "Screenshot"
+msgstr "Kuvakaappaus"
+
+#: src/extension/filename.ts:24
+msgid "Screenshot (literal)"
+msgstr "Kuvakaappaus (kirjaimellisesti)"
+
+#: src/extension/filename.ts:30
+msgid "Second"
+msgstr "Sekunti"
+
+#: src/extension/prefs/prefPages.ts:92
+msgid "Select"
+msgstr "Valitse"
+
+#: src/extension/prefs/prefPages.ts:127
+msgid "Select area"
+msgstr "Valitse alue"
+
+#: src/extension/indicator.ts:320 src/extension/prefs/prefPages.ts:43
+msgid "Select Area"
+msgstr "Valitse Alue"
+
+#: src/extension/indicator.ts:322 src/extension/prefs/prefPages.ts:45
+msgid "Select Desktop"
+msgstr "Valitse työpöytä"
+
+#: src/extension/prefs/prefPages.ts:129
+msgid "Select whole desktop"
+msgstr "Valitse koko työpöytä"
+
+#: src/extension/prefs/prefPages.ts:128
+msgid "Select window"
+msgstr "Valitse ikkuna"
+
+#: src/extension/indicator.ts:321 src/extension/prefs/prefPages.ts:44
+msgid "Select Window"
+msgstr "Valitse Ikkuna"
+
+#: src/extension/selection.ts:211
+msgid "selected region was too small - please select a larger area"
+msgstr "valittu alue oli liian pieni - ole hyvä ja valitse isompi alue"
+
+#: src/extension/indicator.ts:347 src/extension/notifications.ts:126
+msgid "Settings"
+msgstr "Asetukset"
+
+#: src/extension/prefs/prefPages.ts:37
+msgid "Show Indicator"
+msgstr "Näytä ilmaisin"
+
+#: src/extension/prefs/prefPages.ts:46
+msgid "Show Menu"
+msgstr "Näytä valikko"
+
+#: src/extension/prefs/prefPages.ts:38
+msgid "Show Notification After Capture"
+msgstr "Näytä ilmoitus kaappauksen jälkeen"
+
+#: src/extension/prefs/prefPages.ts:118
+msgid "Show Upload Notification"
+msgstr "Näytä ilmoitus julkaisun jälkeen"
+
+#: src/extension/notifications.ts:54
+msgid "Size:"
+msgstr "Koko:"
+
+#: src/extension/prefs/prefPages.ts:138
+msgid "Storage"
+msgstr "Tallennus"
+
+#: src/extension/indicator.ts:148
+msgid "Upload"
+msgstr "Julkaise"
+
+#: src/extension/notifications.ts:84
+msgid "Upload To Imgur"
+msgstr "Julkaise Imguriin"
+
+#: src/extension/notifications.ts:80
+msgid "Uploading To Imgur..."
+msgstr "Julkaistaan Imguriin..."
+
+#: src/extension/filename.ts:31
+msgid "Width"
+msgstr "Leveys"
+
+#: src/extension/filename.ts:25
+msgid "Year"
+msgstr "Vuosi"
