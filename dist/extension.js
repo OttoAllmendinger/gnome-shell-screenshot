@@ -131,9 +131,7 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
     var description = "Conveniently create, copy, store and upload screenshots";
     var metadata = {
     	"shell-version": [
-    	"3.36",
-    	"3.38",
-    	"40"
+    	"41"
     ],
     	uuid: uuid,
     	name: name,
@@ -1285,6 +1283,7 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
         constructor() {
             this.signalSettings = [];
             ExtensionUtils.initTranslations();
+            global.context.unsafe_mode = true;
         }
         setKeybindings() {
             const bindingMode = Shell.ActionMode.NORMAL;

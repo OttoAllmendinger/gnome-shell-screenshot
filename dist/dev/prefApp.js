@@ -9,9 +9,7 @@ imports.gi.versions.Gtk = imports.gi.GLib.getenv("GTK");
     var description = "Conveniently create, copy, store and upload screenshots";
     var metadata = {
     	"shell-version": [
-    	"3.36",
-    	"3.38",
-    	"40"
+    	"41"
     ],
     	uuid: uuid,
     	name: name,
