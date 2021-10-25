@@ -2,10 +2,7 @@ import * as St from '@imports/St-1.0';
 import * as Cogl from '@imports/Cogl-8';
 import * as Clutter from '@imports/Clutter-8';
 
-import { currentVersion } from '../gselib/version';
-import { openPrefs } from '../gselib/openPrefs';
-import { _ } from '../gselib/gettext';
-import ExtensionUtils from '../gselib/extensionUtils';
+import ExtensionUtils, { _ } from '../gselib/extensionUtils';
 
 import * as Config from './config';
 import * as Extension from './extension';
@@ -16,14 +13,11 @@ const PanelMenu = imports.ui.panelMenu;
 const PopupMenu = imports.ui.popupMenu;
 const Slider = imports.ui.slider;
 
-const Local = ExtensionUtils.getCurrentExtension();
-
-const version = currentVersion();
-
 const DefaultIcon = 'camera-photo-symbolic';
 
 const settings = ExtensionUtils.getSettings();
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 declare interface CaptureDelayMenu extends St.Widget {}
 
 class CaptureDelayMenu extends PopupMenu.PopupMenuSection {
@@ -317,6 +311,7 @@ export class Indicator {
     // These actions can be triggered via shortcut or popup menu
     const menu = this.panelButton.menu;
     const items = [
+      ['open-portal', _('Open Portal')],
       ['select-area', _('Select Area')],
       ['select-window', _('Select Window')],
       ['select-desktop', _('Select Desktop')],
@@ -331,12 +326,6 @@ export class Indicator {
       menu.addMenuItem(item);
     });
 
-    // Delay
-
-    menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
-
-    menu.addMenuItem(new CaptureDelayMenu());
-
     menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
 
     this.screenshotSection = new ScreenshotSection(menu);
@@ -346,7 +335,7 @@ export class Indicator {
     // Settings can only be triggered via menu
     const settingsItem = new PopupMenu.PopupMenuItem(_('Settings'));
     settingsItem.connect('activate', () => {
-      openPrefs(version, Local.metadata.uuid, { shell: imports.gi.Shell });
+      ExtensionUtils.openPrefs();
     });
     menu.addMenuItem(settingsItem);
   }

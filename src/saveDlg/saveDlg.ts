@@ -5,10 +5,9 @@
 //
 
 import * as Gio from '@imports/Gio-2.0';
-import * as Gtk3 from '@imports/Gtk-3.0';
 import * as Gtk4 from '@imports/Gtk-4.0';
 
-import { _, init as initTranslations } from '../gselib/gettext';
+import { _, init as initTranslations } from '../gettext';
 
 function wrapCompatGFileArgument(str: string): Gio.File | string {
   switch (Gtk4.get_major_version()) {

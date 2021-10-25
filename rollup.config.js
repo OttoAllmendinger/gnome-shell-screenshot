@@ -28,11 +28,12 @@ const targetPrefApp = target({
   },
 });
 
-const targetAux = target({
-  input: 'src/auxhelper/auxhelper.ts',
+const targetScreenshotPortalApp = target({
+  input: 'src/screenshotPortalApp.ts',
   output: {
-    file: `${buildPath}/auxhelper.js`,
-    name: 'auxhelper',
+    file: `${buildPath}/dev/screenshotPortalApp.js`,
+    name: 'screenshotPortalApp',
+    banner: 'imports.gi.versions.Gtk = imports.gi.GLib.getenv("GTK");\n',
   },
 });
 
@@ -45,4 +46,10 @@ const targetSaveDlg = target({
   },
 });
 
-export default [targetExt, targetPrefs, targetPrefApp, targetAux, targetSaveDlg];
+export default [targetExt, targetPrefs, targetPrefApp, targetScreenshotPortalApp, targetSaveDlg].filter((t) => {
+  if (process.env.ROLLUP_BUILD_TARGETS) {
+    return process.env.ROLLUP_BUILD_TARGETS.split(',').includes(t.output.name);
+  } else {
+    return true;
+  }
+});

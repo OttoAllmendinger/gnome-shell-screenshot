@@ -1,4 +1,4 @@
-import { _ } from '../../gselib/gettext';
+import { _ } from '../../gselib/extensionUtils';
 
 import { Settings } from '@imports/Gio-2.0';
 

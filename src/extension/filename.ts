@@ -1,7 +1,7 @@
 import * as GLib from '@imports/GLib-2.0';
 import StringFormat from 'string-format';
 
-import { _ } from '../gselib/gettext';
+import { _ } from '../gselib/extensionUtils';
 import { TemplateParam, toObject, toTooltipText } from './templateParams';
 
 type FilenameVars = { width: number; height: number };

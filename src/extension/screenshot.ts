@@ -5,8 +5,7 @@ import * as Shell from '@imports/Shell-0.1';
 import { InterpType } from '@imports/GdkPixbuf-2.0';
 
 import { SignalEmitter } from '..';
-
-import { _ } from '../gselib/gettext';
+import ExtensionUtils, { _ } from '../gselib/extensionUtils';
 
 import * as Path from './path';
 import * as Config from './config';
@@ -14,13 +13,11 @@ import * as Clipboard from './clipboard';
 import * as Filename from './filename';
 import * as UploadImgur from './uploadImgur';
 import * as Notifications from './notifications';
-import ExtensionUtils from '../gselib/extensionUtils';
 import { spawnAsync } from './spawnUtil';
 
 const Signals = imports.signals;
 
 const Local = ExtensionUtils.getCurrentExtension();
-
 const settings = ExtensionUtils.getSettings();
 
 export class ErrorInvalidSettings extends Error {

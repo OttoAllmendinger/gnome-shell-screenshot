@@ -3,27 +3,21 @@ imports.gi.versions.Gtk = imports.gi.GLib.getenv("GTK");
 (function (Gio, GLib, Gtk3, Gtk4, GObject) {
     'use strict';
 
-    var uuid = "gnome-shell-screenshot@ttll.de";
-    var name = "Screenshot Tool";
-    var url = "https://github.com/OttoAllmendinger/gnome-shell-screenshot/";
-    var description = "Conveniently create, copy, store and upload screenshots";
-    var metadata = {
-    	"shell-version": [
-    	"3.36",
-    	"3.38",
-    	"40"
-    ],
-    	uuid: uuid,
-    	name: name,
-    	url: url,
-    	description: description,
-    	"settings-schema": "org.gnome.shell.extensions.screenshot",
-    	"gettext-domain": "gnome-shell-screenshot",
-    	"git-version": "_gitversion_"
-    };
-
-    const domain = metadata['gettext-domain'];
-    const _ = imports.gettext.domain(domain).gettext;
+    const extensionUtils = imports.misc.extensionUtils;
+    if (!extensionUtils.gettext) {
+        // backport from v41
+        // https://gitlab.gnome.org/GNOME/gnome-shell/-/blob/1deb13e1aaabfd04b2641976a224b6fc2be3b9ec/js/misc/extensionUtils.js#L117
+        const domain = extensionUtils.getCurrentExtension().metadata['gettext-domain'];
+        extensionUtils.initTranslations(domain);
+        const gettextForDomain = imports.gettext.domain(domain);
+        if (gettextForDomain.gettext) {
+            Object.assign(extensionUtils, gettextForDomain);
+        }
+        else {
+            logError(new Error(`could create gettextForDomain domain=${domain}`));
+        }
+    }
+    const _ = extensionUtils.gettext;
 
     var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 

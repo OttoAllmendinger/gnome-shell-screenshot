@@ -6,31 +6,33 @@ import ExtensionUtils from '../gselib/extensionUtils';
 
 import * as Config from './config';
 import * as Indicator from './indicator';
-import * as Selection from './selection';
 import * as Commands from './commands';
 import * as Notifications from './notifications';
-import { wrapNotifyError } from './notifications';
 import { Rescale, Screenshot } from './screenshot';
+import { ScreenshotPortalProxy, portalScreenshot, getServiceProxy } from './screenshotPortal';
 
 const Signals = imports.signals;
 const Main = imports.ui.main;
 
 const settings = ExtensionUtils.getSettings();
 
-const getSelectionOptions = () => {
-  const captureDelay = settings.get_int(Config.KeyCaptureDelay);
-  return { captureDelay };
-};
+function stripPrefix(prefix: string, s: string): string {
+  if (s.startsWith(prefix)) {
+    return s.slice(prefix.length);
+  }
+  return s;
+}
 
 export declare interface Extension extends SignalEmitter {}
 
 export class Extension {
+  private readonly servicePromise: Promise<ScreenshotPortalProxy>;
   private signalSettings: number[] = [];
   private indicator?: Indicator.Indicator;
-  private selection?: Selection.Selection;
 
   constructor() {
     ExtensionUtils.initTranslations();
+    this.servicePromise = getServiceProxy(ExtensionUtils.getCurrentExtension().path);
   }
 
   setKeybindings(): void {
@@ -76,64 +78,23 @@ export class Extension {
   }
 
   onAction(action: string): void {
-    const dispatch = {
-      'select-area': this.selectArea.bind(this),
-      'select-window': this.selectWindow.bind(this),
-      'select-desktop': this.selectDesktop.bind(this),
-    };
-
-    const f =
-      dispatch[action] ||
-      function () {
-        throw new Error('unknown action: ' + action);
-      };
-
-    wrapNotifyError(f)();
-  }
-
-  startSelection(selection: Selection.Selection): void {
-    if (this.selection) {
-      // prevent reentry
-      log('_startSelection() error: selection already in progress');
-      return;
-    }
-
-    this.selection = selection;
-
-    if (!this.selection) {
-      throw new Error('selection undefined');
-    }
-
-    this.selection.connect('screenshot', (screenshot, file) => {
-      try {
-        this.onScreenshot(screenshot, file);
-      } catch (e) {
-        Notifications.notifyError(e);
+    Notifications.wrapNotifyError(async () => {
+      switch (action) {
+        case 'select-area':
+        case 'select-desktop':
+        case 'select-window':
+          throw new Error('Not available for Gnome-Shell 41');
+        case 'open-portal':
+          const path = await portalScreenshot(await this.servicePromise);
+          this.onScreenshot(stripPrefix('file://', path));
+          break;
+        default:
+          throw new Error('unknown action ' + action);
       }
-    });
-
-    this.selection.connect('error', (selection, message) => {
-      Notifications.notifyError(message);
-    });
-
-    this.selection.connect('stop', () => {
-      this.selection = undefined;
-    });
+    })();
   }
 
-  selectArea(): void {
-    this.startSelection(new Selection.SelectionArea(getSelectionOptions()));
-  }
-
-  selectWindow(): void {
-    this.startSelection(new Selection.SelectionWindow(getSelectionOptions()));
-  }
-
-  selectDesktop(): void {
-    this.startSelection(new Selection.SelectionDesktop(getSelectionOptions()));
-  }
-
-  onScreenshot(selection: Selection.Selection, filePath: string): void {
+  onScreenshot(filePath: string): void {
     const effects = [new Rescale(settings.get_int(Config.KeyEffectRescale) / 100.0)];
     const screenshot = new Screenshot(filePath, effects);
 

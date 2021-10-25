@@ -6,18 +6,17 @@ import * as Shell from '@imports/Shell-0.1';
 import { SignalEmitter } from '..';
 
 import { currentVersion } from '../gselib/version';
-import ExtensionUtils from '../gselib/extensionUtils';
-import { _ } from '../gselib/gettext';
+import ExtensionUtils, { _ } from '../gselib/extensionUtils';
 
 import * as Filename from './filename';
-import { spawnAsync } from './spawnUtil';
+import { portalScreenshot } from './screenshotPortal';
 
 const Signals = imports.signals;
 const Mainloop = imports.mainloop;
 
 const Main = imports.ui.main;
 
-const Local = ExtensionUtils.getCurrentExtension();
+// const Local = ExtensionUtils.getCurrentExtension();
 
 const version = currentVersion();
 
@@ -57,12 +56,11 @@ const selectWindow = (windows, px, py) => {
   return filtered[0];
 };
 
-const callHelper = (argv, fileName, callback: ScreenshotCallback) => {
-  argv = ['gjs', Local.path + '/auxhelper.js', '--filename', fileName, ...argv];
-  spawnAsync(argv)
-    .catch((err) => callback(err, null))
-    .then(() => callback(null, fileName));
-};
+function callHelper(argv, fileName, callback: ScreenshotCallback): void {
+  portalScreenshot(ExtensionUtils.getCurrentExtension().path)
+    .then((path) => callback(null, path))
+    .catch((err) => callback(err, null));
+}
 
 const makeAreaScreenshot = ({ x, y, w, h }, callback) => {
   const fileName = Filename.getTemp();
