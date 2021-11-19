@@ -37,6 +37,11 @@ You can capture the logs with this command:
 journalctl --user /usr/bin/gnome-shell --follow
 ```
 
+## Dev reload
+```
+dbus-run-session -- gnome-shell --nested --wayland
+```
+
 ## Known Issues
 
 ### Error after updating extension (Gnome-Shell 3.37 and above)
