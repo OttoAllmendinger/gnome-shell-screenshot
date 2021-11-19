@@ -44,6 +44,12 @@ dbus-run-session -- gnome-shell --nested --wayland
 
 ## Known Issues
 
+### Gnome 41 unsafe mode
+
+Root pf the problem: [Merge 1970](https://gitlab.gnome.org/GNOME/gnome-shell/-/merge_requests/1970)
+
+More information about that: [ksnip issue 727](https://github.com/ksnip/ksnip/issues/727)
+
 ### Error after updating extension (Gnome-Shell 3.37 and above)
 
 Since Gnome-Shell version `3.37.2`, extensions that are updated are unavailable
