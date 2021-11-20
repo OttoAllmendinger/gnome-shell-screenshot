@@ -42,6 +42,9 @@ journalctl --user /usr/bin/gnome-shell --follow
 dbus-run-session -- gnome-shell --nested --wayland
 ```
 
+## Useful commands
+A set of useful commands can be found [here](https://gist.github.com/mc-cat-tty/0ac3990d5dd47c25fb6acf95e80c1b5d)
+
 ## Known Issues
 
 ### Gnome 41 unsafe mode
