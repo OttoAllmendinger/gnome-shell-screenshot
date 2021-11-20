@@ -31,7 +31,7 @@ export class Extension {
 
   constructor() {
     ExtensionUtils.initTranslations();
-    (global as any).context.unsafe_mode = true;
+    (global as any).context.unsafe_mode = false;
   }
 
   setKeybindings(): void {

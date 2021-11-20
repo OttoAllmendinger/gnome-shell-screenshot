@@ -1283,7 +1283,7 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
         constructor() {
             this.signalSettings = [];
             ExtensionUtils.initTranslations();
-            global.context.unsafe_mode = true;
+            global.context.unsafe_mode = false;
         }
         setKeybindings() {
             const bindingMode = Shell.ActionMode.NORMAL;
