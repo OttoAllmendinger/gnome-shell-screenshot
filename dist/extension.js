@@ -46,7 +46,7 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
     let dbus_connection = Gio.bus_get_sync(Gio.BusType.SESSION, null);
     logDebug('connection name: ' + dbus_connection.get_unique_name());
 
-  const ScreenshotServiceIFace = `
+    const ScreenshotServiceIFace = `
 <node>
   <interface name="org.freedesktop.portal.Screenshot">
     <method name="Screenshot">
@@ -62,32 +62,31 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
   </interface>
 </node>
 `;
-  const ScreenshotServiceProxy = Gio.DBusProxy.makeProxyWrapper(ScreenshotServiceIFace);
-  const getScreenshotService = () => {
+    const ScreenshotServiceProxy = Gio.DBusProxy.makeProxyWrapper(ScreenshotServiceIFace);
+    const getScreenshotService = () => {
       return new ScreenshotServiceProxy(Gio.DBus.session, 'org.freedesktop.portal.Desktop', '/org/freedesktop/portal/desktop');
-  };
+    };
+  
+    const waitResource = (handle, callback) => {
+      function onScreenshotResponse(connection, sender, path, iface, signal, params) {
+        // logDebug('EVENT EVENT EVENT'); 
+        let file_path = params.get_child_value(1).deepUnpack()['uri'].get_string()[0];
+        file_path = file_path.substring(7);  // remove "file:///"
+        logDebug('EVENT - file_path: ' + file_path);
+        callback(null, file_path);
+      }
 
-
-  const waitResource = (handle, callback) => {
-    function onScreenshotResponse(connection, sender, path, iface, signal, params) {
-      // logDebug('EVENT EVENT EVENT'); 
-      let file_path = params.get_child_value(1).deepUnpack()['uri'].get_string()[0];
-      file_path = file_path.substring(7);  // remove "file:///"
-      logDebug('EVENT - file_path: ' + file_path);
-      callback(null, file_path);
+      let handlerId = dbus_connection.signal_subscribe(
+        'org.freedesktop.portal.Desktop',
+        'org.freedesktop.portal.Request',
+        'Response',
+        handle,
+        null,
+        Gio.DBusSignalFlags.NO_MATCH_RULE,
+        onScreenshotResponse
+      );
+      logDebug('Listener set');
     }
-
-    let handlerId = dbus_connection.signal_subscribe(
-      'org.freedesktop.portal.Desktop',
-      'org.freedesktop.portal.Request',
-      'Response',
-      handle,
-      null,
-      Gio.DBusSignalFlags.NO_MATCH_RULE,
-      onScreenshotResponse
-    );
-    logDebug('Listener set');
-  }
   
     // stop edit	
 
@@ -1134,8 +1133,10 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
             .then(() => callback(null, fileName));
     };
     const makeAreaScreenshot = ({ x, y, w, h }, callback) => {
-        /* const fileName = getTemp();
-        callHelper(['--area', [x, y, w, h].join(',')], fileName, callback); */
+        /*
+        const fileName = getTemp();
+        callHelper(['--area', [x, y, w, h].join(',')], fileName, callback);
+        */
         let handle = getScreenshotService().ScreenshotSync("wayland: 1", {});
         waitResource(handle[0], callback);
     };
@@ -1144,8 +1145,12 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
         callHelper(['--window'], fileName, callback);
     };
     const makeDesktopScreenshot = (callback) => {
+        /*
         const fileName = getTemp();
         callHelper(['--desktop'], fileName, callback);
+        */
+        let handle = getScreenshotService().ScreenshotSync("wayland: 1", {});
+        waitResource(handle[0], callback);
     };
     class Capture {
         constructor() {
