@@ -74,8 +74,9 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
 
   const waitResource = (handle) => {
     function onScreenshotResponse(connection, sender, path, iface, signal, params) {
-      // logDebug('EVENT EVENT EVENT');
-      logDebug('EVENT - sender, path: ' + sender + " " + path);
+      // logDebug('EVENT EVENT EVENT'); 
+      let file_path = params.get_child_value(1).deepUnpack()['uri'].get_string()[0]
+      logDebug('EVENT - file_path: ' + file_path);
     }
 
     let handlerId = dbus_connection.signal_subscribe(
