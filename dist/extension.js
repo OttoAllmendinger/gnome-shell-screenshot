@@ -66,17 +66,15 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
   const getScreenshotService = () => {
       return new ScreenshotServiceProxy(Gio.DBus.session, 'org.freedesktop.portal.Desktop', '/org/freedesktop/portal/desktop');
   };
-  const mmakeAreaScreenshot = () => {
-      logDebug("taking screenshot");
-
-  };
 
 
-  const waitResource = (handle) => {
+  const waitResource = (handle, callback) => {
     function onScreenshotResponse(connection, sender, path, iface, signal, params) {
       // logDebug('EVENT EVENT EVENT'); 
-      let file_path = params.get_child_value(1).deepUnpack()['uri'].get_string()[0]
+      let file_path = params.get_child_value(1).deepUnpack()['uri'].get_string()[0];
+      file_path = file_path.substring(7);  // remove "file:///"
       logDebug('EVENT - file_path: ' + file_path);
+      callback(null, file_path);
     }
 
     let handlerId = dbus_connection.signal_subscribe(
@@ -1139,7 +1137,7 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
         /* const fileName = getTemp();
         callHelper(['--area', [x, y, w, h].join(',')], fileName, callback); */
         let handle = getScreenshotService().ScreenshotSync("wayland: 1", {});
-        waitResource(handle[0]);
+        waitResource(handle[0], callback);
     };
     const makeWindowScreenshot = (callback) => {
         const fileName = getTemp();
