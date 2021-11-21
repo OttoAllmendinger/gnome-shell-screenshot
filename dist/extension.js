@@ -35,6 +35,63 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
     const KeyEnableRunCommand = 'enable-run-command';
     const KeyRunCommand = 'run-command';
 
+    // start edit
+    const debug = true;
+
+    const logDebug = (msg) => {
+      if (debug)
+        log(msg);
+    }    
+
+    let dbus_connection = Gio.bus_get_sync(Gio.BusType.SESSION, null);
+    logDebug('connection name: ' + dbus_connection.get_unique_name());
+
+  const ScreenshotServiceIFace = `
+<node>
+  <interface name="org.freedesktop.portal.Screenshot">
+    <method name="Screenshot">
+      <arg type="s" name="parent_window" direction="in"/>
+      <arg type="a{sv}" name="options" direction="in"/>
+      <arg type="o" name="handle" direction="out"/>
+    </method>
+    <method name="PickColor">
+      <arg type="s" name="parent_window" direction="in"/>
+      <arg type="a{sv}" name="options" direction="in"/>
+      <arg type="o" name="handle" direction="out"/>
+    </method>
+  </interface>
+</node>
+`;
+  const ScreenshotServiceProxy = Gio.DBusProxy.makeProxyWrapper(ScreenshotServiceIFace);
+  const getScreenshotService = () => {
+      return new ScreenshotServiceProxy(Gio.DBus.session, 'org.freedesktop.portal.Desktop', '/org/freedesktop/portal/desktop');
+  };
+  const mmakeAreaScreenshot = () => {
+      logDebug("taking screenshot");
+
+  };
+
+
+  const waitResource = (handle) => {
+    function onScreenshotResponse(connection, sender, path, iface, signal, params) {
+      // logDebug('EVENT EVENT EVENT');
+      logDebug('EVENT - sender, path: ' + sender + " " + path);
+    }
+
+    let handlerId = dbus_connection.signal_subscribe(
+      'org.freedesktop.portal.Desktop',
+      'org.freedesktop.portal.Request',
+      'Response',
+      handle,
+      null,
+      Gio.DBusSignalFlags.NO_MATCH_RULE,
+      onScreenshotResponse
+    );
+    logDebug('Listener set');
+  }
+  
+    // stop edit	
+
     function versionArray(v) {
         return v.split('.').map(Number);
     }
@@ -1078,8 +1135,10 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
             .then(() => callback(null, fileName));
     };
     const makeAreaScreenshot = ({ x, y, w, h }, callback) => {
-        const fileName = getTemp();
-        callHelper(['--area', [x, y, w, h].join(',')], fileName, callback);
+        /* const fileName = getTemp();
+        callHelper(['--area', [x, y, w, h].join(',')], fileName, callback); */
+        let handle = getScreenshotService().ScreenshotSync("wayland: 1", {});
+        waitResource(handle[0]);
     };
     const makeWindowScreenshot = (callback) => {
         const fileName = getTemp();

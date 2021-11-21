@@ -3,49 +3,37 @@
 
   //  Create screenshot using dbus interface
   const System = imports.system;
-  let debug = false;
+  let debug = true;
   const logDebug = (msg) => {
       if (debug) {
           log(msg);
       }
   };
+
+  const logDebugObject = (name, obj) => {
+    logDebug(name + ": " + obj + " type: " + typeof(obj));
+  }
+
   // https://gitlab.gnome.org/GNOME/gnome-shell/blob/master/data/org.gnome.Shell.Screenshot.xml
   const ScreenshotServiceIFace = `
 <node>
-  <interface name="org.gnome.Shell.Screenshot">
+  <interface name="org.freedesktop.portal.Screenshot">
     <method name="Screenshot">
-      <arg type="b" direction="in" name="include_cursor"/>
-      <arg type="b" direction="in" name="flash"/>
-      <arg type="s" direction="in" name="filename"/>
-      <arg type="b" direction="out" name="success"/>
-      <arg type="s" direction="out" name="filename_used"/>
+      <arg type="s" name="parent_window" direction="in"/>
+      <arg type="a{sv}" name="options" direction="in"/>
+      <arg type="o" name="handle" direction="out"/>
     </method>
-
-    <method name="ScreenshotWindow">
-      <arg type="b" direction="in" name="include_frame"/>
-      <arg type="b" direction="in" name="include_cursor"/>
-      <arg type="b" direction="in" name="flash"/>
-      <arg type="s" direction="in" name="filename"/>
-      <arg type="b" direction="out" name="success"/>
-      <arg type="s" direction="out" name="filename_used"/>
-    </method>
-
-    <method name="ScreenshotArea">
-      <arg type="i" direction="in" name="x"/>
-      <arg type="i" direction="in" name="y"/>
-      <arg type="i" direction="in" name="width"/>
-      <arg type="i" direction="in" name="height"/>
-      <arg type="b" direction="in" name="flash"/>
-      <arg type="s" direction="in" name="filename"/>
-      <arg type="b" direction="out" name="success"/>
-      <arg type="s" direction="out" name="filename_used"/>
+    <method name="PickColor">
+      <arg type="s" name="parent_window" direction="in"/>
+      <arg type="a{sv}" name="options" direction="in"/>
+      <arg type="o" name="handle" direction="out"/>
     </method>
   </interface>
 </node>
 `;
   const ScreenshotServiceProxy = Gio.DBusProxy.makeProxyWrapper(ScreenshotServiceIFace);
   const getScreenshotService = () => {
-      return new ScreenshotServiceProxy(Gio.DBus.session, 'org.gnome.Shell.Screenshot', '/org/gnome/Shell/Screenshot');
+      return new ScreenshotServiceProxy(Gio.DBus.session, 'org.freedesktop.portal.Desktop', '/org/freedesktop/portal/desktop');
   };
   const makeDesktopScreenshot = (fileName, { includeCursor, flash }) => {
       logDebug('creating desktop screenshot...');
@@ -57,7 +45,10 @@
   };
   const makeAreaScreenshot = (fileName, { x, y, w, h }, { flash }) => {
       logDebug('creating area screenshot...');
-      return getScreenshotService().ScreenshotAreaSync(x, y, w, h, flash, fileName);
+      let handle = getScreenshotService().ScreenshotSync("wayland: 1", {});
+      logDebugObject("handle", handle);
+      logDebugObject("handle[0]", handle[0]);
+      return handle[0];
   };
   const parseOptions = (params, argv) => [...argv].reduce((acc, arg, i, argv) => {
       const fullArg = Object.keys(params).find((p) => p === arg || p.startsWith(arg + ' '));
@@ -155,14 +146,18 @@
           throw new Error('must use --desktop, --area or --window');
       }
       logDebug('calling func...');
-      const [ok, fileNameUsed] = func();
-      if (!ok) {
-          throw new Error('ok=false');
+      const handle = func();
+      if (!handle) {
+          throw new Error('Null return value');
       }
+      /*
       if (fileName !== fileNameUsed) {
           throw new Error(`path mismatch fileName=${fileName} fileNameUsed=${fileNameUsed}`);
       }
       logDebug(`written ${fileNameUsed}`);
+      */
+      logDebug("Exiting from main funciton...");
+      return handle;
   };
   try {
       main();
