@@ -87,6 +87,13 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
       );
       logDebug('Listener set');
     }
+    
+    const rand_handle_token = () => {
+      let r = '';
+      let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+      let len = characters.length;
+      return characters.charAt(Math.floor(Math.random() * len));
+    }
   
     // stop edit	
 
@@ -1137,21 +1144,56 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
         const fileName = getTemp();
         callHelper(['--area', [x, y, w, h].join(',')], fileName, callback);
         */
-        let handle = getScreenshotService().ScreenshotSync("wayland: 1", {});
-        waitResource(handle[0], callback);
+        const options = {
+          'handle_token': GLib.Variant.new_string(rand_handle_token()),
+          'interactive': GLib.Variant.new_boolean(true)
+        };
+        logDebug(options);
+        let handle = getScreenshotService().ScreenshotSync('wayland:1', options);
+        const crop_callback = (err, filename) => {
+          // TODO: crop in js seems not feasible
+          callback(err, filename);
+        }
+        waitResource(handle[0], crop_callback);
+        // Needs user interaction
     };
     const makeWindowScreenshot = (callback) => {
+        /*
         const fileName = getTemp();
         callHelper(['--window'], fileName, callback);
+        */
+        
+        // throw new Error('No idea about how to implement this method');
+        // TODO: find a workaround
     };
     const makeDesktopScreenshot = (callback) => {
         /*
         const fileName = getTemp();
         callHelper(['--desktop'], fileName, callback);
         */
-        let handle = getScreenshotService().ScreenshotSync("wayland: 1", {});
+        const options = {
+          'handle_token': GLib.Variant.new_string(rand_handle_token())
+        };
+        logDebug(options);
+        let handle = getScreenshotService().ScreenshotSync('wayland:1', options);
         waitResource(handle[0], callback);
     };
+    
+    // Opens xdg-desktop-portal dialog
+    const makeScreenshot = (callback) => {
+        const options = {
+          'handle_token': GLib.Variant.new_string(rand_handle_token()),
+          'interactive': GLib.Variant.new_boolean(true)
+        };
+        logDebug(options);
+        let handle = getScreenshotService().ScreenshotSync('wayland:1', options);
+        const crop_callback = (err, filename) => {
+          // TODO: crop in js seems not feasible
+          callback(err, filename);
+        }
+        waitResource(handle[0], crop_callback);
+    };
+
     class Capture {
         constructor() {
             this._mouseDown = false;
