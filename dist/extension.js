@@ -36,7 +36,7 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
     const KeyRunCommand = 'run-command';
 
     // start edit
-    const debug = true;
+    const debug = false;
 
     const logDebug = (msg) => {
       if (debug)
@@ -1171,8 +1171,17 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
         const fileName = getTemp();
         callHelper(['--desktop'], fileName, callback);
         */
+        /*
         const options = {
           'handle_token': GLib.Variant.new_string(rand_handle_token())
+        };
+        logDebug(options);
+        let handle = getScreenshotService().ScreenshotSync('wayland:1', options);
+        waitResource(handle[0], callback);
+        */
+        const options = {
+          'handle_token': GLib.Variant.new_string(rand_handle_token()),
+          'interactive': GLib.Variant.new_boolean(true)
         };
         logDebug(options);
         let handle = getScreenshotService().ScreenshotSync('wayland:1', options);
