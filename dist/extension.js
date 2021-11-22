@@ -1178,7 +1178,7 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
         let handle = getScreenshotService().ScreenshotSync('wayland:1', options);
         waitResource(handle[0], callback);
     };
-    
+    /*
     // Opens xdg-desktop-portal dialog
     const makeScreenshot = (callback) => {
         const options = {
@@ -1193,7 +1193,7 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
         }
         waitResource(handle[0], crop_callback);
     };
-
+    */
     class Capture {
         constructor() {
             this._mouseDown = false;
