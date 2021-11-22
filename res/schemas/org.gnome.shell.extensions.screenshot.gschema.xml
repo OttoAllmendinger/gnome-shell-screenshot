@@ -45,7 +45,7 @@
         <key
                 name="click-action"
                 enum="org.gnome.shell.extensions.screenshot.click-action">
-            <default>'show-menu'</default>
+            <default>'select-desktop'</default>
         </key>
 
         <key name="save-screenshot" type="b">
