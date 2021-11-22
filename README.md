@@ -27,6 +27,19 @@ make install
 Then go to https://extensions.gnome.org/local/ to turn on the extension or use
 gnome-tweak-tool.
 
+### Dependencies
+- xdg-desktop-portal
+
+On Arch:
+```
+sudo pacman -S xdg-desktop-portal
+```
+
+On Ubuntu:
+```
+sudo apt install -y xdg-desktop-portal
+```
+
 ## Reporting a Bug
 
 When reporting a bug, please include debugging output from `gnome-shell`.
