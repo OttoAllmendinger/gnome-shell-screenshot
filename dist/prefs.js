@@ -611,6 +611,7 @@ var prefs = (function (Gtk3, Gtk4, Gio, GLib, GObject) {
     const ValueShortcutSelectArea = 'shortcut-select-area';
     const ValueShortcutSelectWindow = 'shortcut-select-window';
     const ValueShortcutSelectDesktop = 'shortcut-select-desktop';
+    const ValueShortcutOpenPortal = 'shortcut-open-portal';
     // See schemas/org.gnome.shell.extensions.screenshot.gschema.xml
     const KeyClickAction = 'click-action';
     const ClickActions = {
@@ -618,6 +619,7 @@ var prefs = (function (Gtk3, Gtk4, Gio, GLib, GObject) {
         SELECT_AREA: 'select-area',
         SELECT_WINDOW: 'select-window',
         SELECT_DESKTOP: 'select-desktop',
+        OPEN_PORTAL: 'open-portal',
     };
     const KeySaveScreenshot = 'save-screenshot';
     const KeySaveLocation = 'save-location';
@@ -717,6 +719,7 @@ var prefs = (function (Gtk3, Gtk4, Gio, GLib, GObject) {
                 [_('Select Area'), ClickActions.SELECT_AREA],
                 [_('Select Window'), ClickActions.SELECT_WINDOW],
                 [_('Select Desktop'), ClickActions.SELECT_DESKTOP],
+                [_('Open Portal'), ClickActions.OPEN_PORTAL],
                 [_('Show Menu'), ClickActions.SHOW_MENU],
             ], KeyClickAction)),
             prefRow(_('Copy Button'), prefComboBox([optionImageData, optionLocalPath], KeyCopyButtonAction)),
@@ -769,6 +772,7 @@ var prefs = (function (Gtk3, Gtk4, Gio, GLib, GObject) {
             prefKeybinding(_('Select area'), ValueShortcutSelectArea),
             prefKeybinding(_('Select window'), ValueShortcutSelectWindow),
             prefKeybinding(_('Select whole desktop'), ValueShortcutSelectDesktop),
+            prefKeybinding(_('Open portal'), ValueShortcutOpenPortal),
         ]);
     }
     function getPages() {

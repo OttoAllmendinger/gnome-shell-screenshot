@@ -38,7 +38,6 @@ export async function getServiceProxy(extensionPath: string): Promise<Screenshot
   const Proxy: DBusProxyCtr = (Gio.DBusProxy as any).makeProxyWrapper(ifaceXml);
   return new Promise((resolve, reject) => {
     new Proxy(connection, serviceName, objectPath, (init, err) => {
-      log(dump({ init, err }));
       if (err) {
         reject(err);
       } else {

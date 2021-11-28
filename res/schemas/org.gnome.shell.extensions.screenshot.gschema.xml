@@ -5,6 +5,7 @@
         <value nick="select-area" value="1"/>
         <value nick="select-window" value="2"/>
         <value nick="select-desktop" value="3"/>
+        <value nick="open-portal" value="4"/>
     </enum>
 
     <enum id="org.gnome.shell.extensions.screenshot.clipboard-action">
@@ -27,6 +28,10 @@
         </key>
 
         <key name="shortcut-select-desktop" type="as">
+            <default>[]</default>
+        </key>
+
+        <key name="shortcut-open-portal" type="as">
             <default>[]</default>
         </key>
 

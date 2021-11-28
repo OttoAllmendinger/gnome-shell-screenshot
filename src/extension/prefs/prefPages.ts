@@ -43,6 +43,7 @@ function getIndicatorPrefs(): PrefRow[] {
           [_('Select Area'), Config.ClickActions.SELECT_AREA],
           [_('Select Window'), Config.ClickActions.SELECT_WINDOW],
           [_('Select Desktop'), Config.ClickActions.SELECT_DESKTOP],
+          [_('Open Portal'), Config.ClickActions.OPEN_PORTAL],
           [_('Show Menu'), Config.ClickActions.SHOW_MENU],
         ],
         Config.KeyClickAction,
@@ -127,6 +128,7 @@ function getKeybindPrefs(): PrefKeybindings {
     prefKeybinding(_('Select area'), Config.ValueShortcutSelectArea),
     prefKeybinding(_('Select window'), Config.ValueShortcutSelectWindow),
     prefKeybinding(_('Select whole desktop'), Config.ValueShortcutSelectDesktop),
+    prefKeybinding(_('Open portal'), Config.ValueShortcutOpenPortal),
   ]);
 }
 

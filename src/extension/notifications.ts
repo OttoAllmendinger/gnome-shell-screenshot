@@ -117,7 +117,7 @@ const ErrorNotification = registerClass(
         switch (b) {
           case ErrorActions.OPEN_SETTINGS:
             banner.addAction(_('Settings'), () => {
-              throw new Error('todo');
+              ExtensionUtils.openPrefs();
             });
             break;
           default:
