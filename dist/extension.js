@@ -1062,7 +1062,7 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, Gio, GObject, GdkPixbuf, G
                     case 'select-area':
                     case 'select-desktop':
                     case 'select-window':
-                        throw new Error('Not available for Gnome-Shell 41');
+                        throw new Error('Not available for Gnome 41');
                     case 'open-portal':
                         const path = await portalScreenshot(await this.servicePromise);
                         this.onScreenshot(stripPrefix('file://', path));
