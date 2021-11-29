@@ -1,6 +1,5 @@
 import * as GLib from '@imports/GLib-2.0';
 import * as Gio from '@imports/Gio-2.0';
-import { dump } from '../gselib/dump';
 
 type VariantGJSUtil = GLib.Variant & {
   unpack(): unknown;

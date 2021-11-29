@@ -1,17 +1,13 @@
 import * as Gio from '@imports/Gio-2.0';
 import * as GdkPixbuf from '@imports/GdkPixbuf-2.0';
-
-import ExtensionUtils from '../gselib/extensionUtils';
-
-const Local = ExtensionUtils.getCurrentExtension();
-
 import * as Filename from './filename';
+import { getExtension } from './extension';
 
 // width and height of thumbnail
 const size = 64;
-const emptyImagePath = Local.path + '/empty64.png';
 
 export const getIcon = (path) => {
+  const emptyImagePath = getExtension().info.path + '/empty64.png';
   // creates an scaled with aspect ratio where the larger side is 64px
   const source = GdkPixbuf.Pixbuf.new_from_file_at_size(path, size, size);
 

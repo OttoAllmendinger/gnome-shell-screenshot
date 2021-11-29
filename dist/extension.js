@@ -210,11 +210,10 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, Gio, GObject, GdkPixbuf, G
         return fileName;
     }
 
-    const Local = extensionUtils.getCurrentExtension();
     // width and height of thumbnail
     const size = 64;
-    const emptyImagePath = Local.path + '/empty64.png';
     const getIcon = (path) => {
+        const emptyImagePath = getExtension().info.path + '/empty64.png';
         // creates an scaled with aspect ratio where the larger side is 64px
         const source = GdkPixbuf.Pixbuf.new_from_file_at_size(path, size, size);
         // load transparent 64x64 image
@@ -263,7 +262,6 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, Gio, GObject, GdkPixbuf, G
     const Signals = imports.signals;
     const clientId = 'c5c1369fb46f29e';
     const baseUrl = 'https://api.imgur.com/3/';
-    const httpSession = new Soup.SessionAsync();
     const getMimetype = (_file) => {
         return 'image/png'; // FIXME
     };
@@ -297,6 +295,7 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, Gio, GObject, GdkPixbuf, G
     };
     class Upload {
         constructor(file) {
+            this.httpSession = new Soup.SessionAsync();
             this._file = file;
         }
         start() {
@@ -311,7 +310,7 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, Gio, GObject, GdkPixbuf, G
                     uploaded += buffer.length;
                     this.emit('progress', uploaded, total);
                 });
-                httpSession.queue_message(message, (session, { reason_phrase, status_code, response_body }) => {
+                this.httpSession.queue_message(message, (session, { reason_phrase, status_code, response_body }) => {
                     if (status_code == 200) {
                         const data = JSON.parse(response_body.data).data;
                         this.responseData = data;
@@ -340,7 +339,7 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, Gio, GObject, GdkPixbuf, G
             const uri = new Soup.URI(baseUrl + 'image/' + deletehash);
             const message = new Soup.Message({ method: 'DELETE', uri });
             authMessage(message);
-            httpSession.queue_message(message, (session, { reason_phrase, status_code, response_body }) => {
+            this.httpSession.queue_message(message, (session, { reason_phrase, status_code, response_body }) => {
                 if (status_code == 200) {
                     this.emit('deleted');
                 }
@@ -382,8 +381,6 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, Gio, GObject, GdkPixbuf, G
     }
 
     const Signals$1 = imports.signals;
-    const Local$1 = extensionUtils.getCurrentExtension();
-    const settings = extensionUtils.getSettings();
     class ErrorInvalidSettings extends Error {
         constructor(message) {
             super(message);
@@ -424,12 +421,12 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, Gio, GObject, GdkPixbuf, G
             this.dstFile = null;
         }
         getFilename(n = 0) {
-            const filenameTemplate = settings.get_string(KeyFilenameTemplate);
+            const filenameTemplate = getExtension().settings.get_string(KeyFilenameTemplate);
             const { width, height } = this.pixbuf;
             return get(filenameTemplate, { width, height }, n);
         }
         getNextFile() {
-            const dir = expand(settings.get_string(KeySaveLocation));
+            const dir = expand(getExtension().settings.get_string(KeySaveLocation));
             const dirExists = Gio.File.new_for_path(dir).query_exists(/* cancellable */ null);
             if (!dirExists) {
                 throw new ErrorAutosaveDirNotExists(dir);
@@ -461,7 +458,7 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, Gio, GObject, GdkPixbuf, G
                 this.srcFile.get_path(),
                 expand('$PICTURES'),
                 this.getFilename(),
-                Local$1.dir.get_path(),
+                getExtension().info.dir.get_path(),
             ];
             pathComponents.forEach((v) => {
                 if (!v) {
@@ -477,7 +474,7 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, Gio, GObject, GdkPixbuf, G
                     gtkVersionString = '4.0';
                     break;
             }
-            spawnAsync(['gjs', Local$1.path + '/saveDlg.js', ...pathComponents.map(encodeURIComponent)], ['GTK=' + gtkVersionString]);
+            spawnAsync(['gjs', getExtension().info.path + '/saveDlg.js', ...pathComponents.map(encodeURIComponent)], ['GTK=' + gtkVersionString]);
         }
         copyClipboard(action) {
             if (action === ClipboardActions.NONE) {
@@ -501,15 +498,15 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, Gio, GObject, GdkPixbuf, G
                 logError(err);
                 notifyError(String(err));
             });
-            if (settings.get_boolean(KeyImgurEnableNotification)) {
+            if (getExtension().settings.get_boolean(KeyImgurEnableNotification)) {
                 notifyImgurUpload(this);
             }
             this.emit('imgur-upload', this.imgurUpload);
             this.imgurUpload.connect('done', () => {
-                if (settings.get_boolean(KeyImgurAutoCopyLink)) {
+                if (getExtension().settings.get_boolean(KeyImgurAutoCopyLink)) {
                     this.imgurCopyURL();
                 }
-                if (settings.get_boolean(KeyImgurAutoOpenLink)) {
+                if (getExtension().settings.get_boolean(KeyImgurAutoOpenLink)) {
                     this.imgurOpenURL();
                 }
             });
@@ -553,7 +550,6 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, Gio, GObject, GdkPixbuf, G
     const NotificationIcon = 'camera-photo-symbolic';
     const NotificationSourceName = 'Screenshot Tool';
     const ICON_SIZE = 64;
-    const settings$1 = extensionUtils.getSettings();
     var ErrorActions;
     (function (ErrorActions) {
         ErrorActions[ErrorActions["OPEN_SETTINGS"] = 0] = "OPEN_SETTINGS";
@@ -589,8 +585,9 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, Gio, GObject, GdkPixbuf, G
             b._iconBin.child.icon_size = ICON_SIZE;
             b.addAction(_('Copy'), this._onCopy.bind(this));
             b.addAction(_('Save'), this._onSave.bind(this));
-            if (settings$1.get_boolean(KeyEnableUploadImgur)) {
-                if (settings$1.get_boolean(KeyImgurAutoUpload)) {
+            const extension = getExtension();
+            if (extension.settings.get_boolean(KeyEnableUploadImgur)) {
+                if (extension.settings.get_boolean(KeyImgurAutoUpload)) {
                     b.addAction(_('Uploading To Imgur...'), () => {
                         /* noop */
                     });
@@ -605,7 +602,7 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, Gio, GObject, GdkPixbuf, G
             this._screenshot.launchOpen();
         }
         _onCopy() {
-            this._screenshot.copyClipboard(settings$1.get_string(KeyCopyButtonAction));
+            this._screenshot.copyClipboard(getExtension().settings.get_string(KeyCopyButtonAction));
         }
         _onSave() {
             this._screenshot.launchSave();
@@ -715,11 +712,127 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, Gio, GObject, GdkPixbuf, G
         };
     }
 
+    const connection = Gio.DBus.session;
+    const serviceName = 'org.freedesktop.portal.Desktop';
+    const interfaceName = 'org.freedesktop.portal.Request';
+    const objectPath = '/org/freedesktop/portal/desktop';
+    async function getServiceProxy(extensionPath) {
+        const path = extensionPath + '/org.freedesktop.portal.Screenshot.xml';
+        const [ok, data] = GLib.file_get_contents(path);
+        if (!ok) {
+            throw new Error('could not read interface file');
+        }
+        const ifaceXml = imports.byteArray.toString(data);
+        const Proxy = Gio.DBusProxy.makeProxyWrapper(ifaceXml);
+        return new Promise((resolve, reject) => {
+            new Proxy(connection, serviceName, objectPath, (init, err) => {
+                if (err) {
+                    reject(err);
+                }
+                else {
+                    resolve(init);
+                }
+            });
+        });
+    }
+    async function getResponseParams(requestPath) {
+        return new Promise((resolve) => {
+            connection.signal_subscribe(serviceName, interfaceName, 'Response', requestPath, null, Gio.DBusSignalFlags.NONE, (connection, sender, path, iface, signal, params) => {
+                resolve(params);
+            });
+        });
+    }
+    async function portalScreenshot(service) {
+        const [requestPath] = service.ScreenshotSync('', {
+            interactive: GLib.Variant.new_boolean(true),
+        });
+        const params = await getResponseParams(requestPath);
+        const [responseCode, dict] = params.deepUnpack();
+        switch (responseCode) {
+            case 0:
+                return dict.uri.deepUnpack();
+            case 1:
+                throw new Error('cancelled by user');
+            default:
+                throw new Error(`unexpected responseCode ${responseCode}`);
+        }
+    }
+
+    function parameters$1(v) {
+        return [['f', GLib.shell_quote(v.filename), _('Filename')]];
+    }
+    function getCommand(runCommand, file) {
+        const filename = file.get_path();
+        if (!filename) {
+            throw new Error('path: null');
+        }
+        return stringFormat(runCommand, toObject(parameters$1({ filename })));
+    }
+    async function exec(runCommand, file) {
+        const command = getCommand(runCommand, file);
+        const [ok, argv] = GLib.shell_parse_argv(command);
+        if (!ok || !argv) {
+            throw new Error('argv parse error command=' + command);
+        }
+        await spawnAsync(argv);
+        return command;
+    }
+
+    function stripPrefix(prefix, s) {
+        if (s.startsWith(prefix)) {
+            return s.slice(prefix.length);
+        }
+        return s;
+    }
+    function onScreenshot(filePath) {
+        const { settings, indicator } = getExtension();
+        const effects = [new Rescale(settings.get_int(KeyEffectRescale) / 100.0)];
+        const screenshot = new Screenshot(filePath, effects);
+        if (settings.get_boolean(KeySaveScreenshot)) {
+            screenshot.autosave();
+        }
+        screenshot.copyClipboard(settings.get_string(KeyClipboardAction));
+        if (settings.get_boolean(KeyEnableNotification)) {
+            notifyScreenshot(screenshot);
+        }
+        if (indicator) {
+            indicator.setScreenshot(screenshot);
+        }
+        const commandEnabled = settings.get_boolean(KeyEnableRunCommand);
+        if (commandEnabled) {
+            const file = screenshot.getFinalFile();
+            // Notifications.notifyCommand(Commands.getCommand(file));
+            exec(settings.get_string(KeyRunCommand), file)
+                .then((command) => log(`command ${command} complete`))
+                .catch((e) => notifyError(e));
+        }
+        const imgurEnabled = settings.get_boolean(KeyEnableUploadImgur);
+        const imgurAutoUpload = settings.get_boolean(KeyImgurAutoUpload);
+        if (imgurEnabled && imgurAutoUpload) {
+            screenshot.imgurStartUpload();
+        }
+    }
+    function onAction(action) {
+        wrapNotifyError(async () => {
+            switch (action) {
+                case 'select-area':
+                case 'select-desktop':
+                case 'select-window':
+                    throw new Error('Not available for Gnome 41');
+                case 'open-portal':
+                    const path = await portalScreenshot(await getExtension().servicePromise);
+                    onScreenshot(stripPrefix('file://', path));
+                    break;
+                default:
+                    throw new Error('unknown action ' + action);
+            }
+        })();
+    }
+
     const PanelMenu = imports.ui.panelMenu;
     const PopupMenu = imports.ui.popupMenu;
     const Slider = imports.ui.slider;
     const DefaultIcon = 'camera-photo-symbolic';
-    const settings$2 = extensionUtils.getSettings();
     class CaptureDelayMenu extends PopupMenu.PopupMenuSection {
         createScale() {
             const scale = [0];
@@ -733,7 +846,7 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, Gio, GObject, GdkPixbuf, G
         constructor(_control) {
             super();
             this.scaleMS = this.createScale();
-            this.delayValueMS = settings$2.get_int(KeyCaptureDelay);
+            this.delayValueMS = getExtension().settings.get_int(KeyCaptureDelay);
             this.slider = new Slider.Slider(this.scaleToSlider(this.delayValueMS));
             this.slider.connect('notify::value', this.onDragEnd.bind(this));
             this.sliderItem = new PopupMenu.PopupBaseMenuItem({ activate: false });
@@ -757,7 +870,7 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, Gio, GObject, GdkPixbuf, G
             const newValue = this.sliderToScale(slider.value);
             if (newValue !== this.delayValueMS) {
                 this.delayValueMS = newValue;
-                settings$2.set_int(KeyCaptureDelay, newValue);
+                getExtension().settings.set_int(KeyCaptureDelay, newValue);
                 this.updateDelayInfo();
             }
         }
@@ -818,7 +931,7 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, Gio, GObject, GdkPixbuf, G
             this.clear.visible = visible;
             this.copy.visible = visible;
             this.save.visible = visible;
-            const imgurEnabled = settings$2.get_boolean(KeyEnableUploadImgur);
+            const imgurEnabled = getExtension().settings.get_boolean(KeyEnableUploadImgur);
             const imgurComplete = this._screenshot && this._screenshot.imgurUpload && this._screenshot.imgurUpload.responseData;
             this.imgurMenu.visible = visible && imgurEnabled;
             this.imgurUpload.visible = visible && imgurEnabled && !imgurComplete;
@@ -864,7 +977,7 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, Gio, GObject, GdkPixbuf, G
             this.setScreenshot(undefined);
         }
         onCopy() {
-            this.screenshot.copyClipboard(settings$2.get_string(KeyCopyButtonAction));
+            this.screenshot.copyClipboard(getExtension().settings.get_string(KeyCopyButtonAction));
         }
         onSave() {
             this.screenshot.launchSave();
@@ -899,12 +1012,12 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, Gio, GObject, GdkPixbuf, G
             if (evt.get_button() !== Clutter.BUTTON_PRIMARY) {
                 return;
             }
-            const action = settings$2.get_string(KeyClickAction);
+            const action = getExtension().settings.get_string(KeyClickAction);
             if (action === 'show-menu') {
                 return;
             }
             this.panelButton.menu.close();
-            this.extension.onAction(action);
+            onAction(action);
         }
         buildMenu() {
             // These actions can be triggered via shortcut or popup menu
@@ -919,7 +1032,7 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, Gio, GObject, GdkPixbuf, G
                 const item = new PopupMenu.PopupMenuItem(title);
                 item.connect('activate', () => {
                     menu.close();
-                    this.extension.onAction(action);
+                    onAction(action);
                 });
                 menu.addMenuItem(item);
             });
@@ -944,91 +1057,20 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, Gio, GObject, GdkPixbuf, G
         }
     }
 
-    function parameters$1(v) {
-        return [['f', GLib.shell_quote(v.filename), _('Filename')]];
-    }
-    function getCommand(runCommand, file) {
-        const filename = file.get_path();
-        if (!filename) {
-            throw new Error('path: null');
-        }
-        return stringFormat(runCommand, toObject(parameters$1({ filename })));
-    }
-    async function exec(runCommand, file) {
-        const command = getCommand(runCommand, file);
-        const [ok, argv] = GLib.shell_parse_argv(command);
-        if (!ok || !argv) {
-            throw new Error('argv parse error command=' + command);
-        }
-        await spawnAsync(argv);
-        return command;
-    }
-
-    const connection = Gio.DBus.session;
-    const serviceName = 'org.freedesktop.portal.Desktop';
-    const interfaceName = 'org.freedesktop.portal.Request';
-    const objectPath = '/org/freedesktop/portal/desktop';
-    async function getServiceProxy(extensionPath) {
-        const path = extensionPath + '/org.freedesktop.portal.Screenshot.xml';
-        const [ok, data] = GLib.file_get_contents(path);
-        if (!ok) {
-            throw new Error('could not read interface file');
-        }
-        const ifaceXml = imports.byteArray.toString(data);
-        const Proxy = Gio.DBusProxy.makeProxyWrapper(ifaceXml);
-        return new Promise((resolve, reject) => {
-            new Proxy(connection, serviceName, objectPath, (init, err) => {
-                if (err) {
-                    reject(err);
-                }
-                else {
-                    resolve(init);
-                }
-            });
-        });
-    }
-    async function getResponseParams(requestPath) {
-        return new Promise((resolve) => {
-            connection.signal_subscribe(serviceName, interfaceName, 'Response', requestPath, null, Gio.DBusSignalFlags.NONE, (connection, sender, path, iface, signal, params) => {
-                resolve(params);
-            });
-        });
-    }
-    async function portalScreenshot(service) {
-        const [requestPath] = service.ScreenshotSync('', {
-            interactive: GLib.Variant.new_boolean(true),
-        });
-        const params = await getResponseParams(requestPath);
-        const [responseCode, dict] = params.deepUnpack();
-        switch (responseCode) {
-            case 0:
-                return dict.uri.deepUnpack();
-            case 1:
-                throw new Error('cancelled by user');
-            default:
-                throw new Error(`unexpected responseCode ${responseCode}`);
-        }
-    }
-
     const Signals$2 = imports.signals;
     const Main$1 = imports.ui.main;
-    const settings$3 = extensionUtils.getSettings();
-    function stripPrefix(prefix, s) {
-        if (s.startsWith(prefix)) {
-            return s.slice(prefix.length);
-        }
-        return s;
-    }
     class Extension {
         constructor() {
             this.signalSettings = [];
-            extensionUtils.initTranslations();
-            this.servicePromise = getServiceProxy(extensionUtils.getCurrentExtension().path);
+            this.settings = extensionUtils.getSettings();
+            this.info = extensionUtils.getCurrentExtension();
+            this.servicePromise = getServiceProxy(this.info.path);
+            this.signalSettings.push(this.settings.connect('changed::' + KeyEnableIndicator, this.updateIndicator.bind(this)));
         }
         setKeybindings() {
             const bindingMode = Shell.ActionMode.NORMAL;
             for (const shortcut of KeyShortcuts) {
-                Main$1.wm.addKeybinding(shortcut, settings$3, Meta.KeyBindingFlags.NONE, bindingMode, this.onAction.bind(this, shortcut.replace('shortcut-', '')));
+                Main$1.wm.addKeybinding(shortcut, this.settings, Meta.KeyBindingFlags.NONE, bindingMode, () => onAction(shortcut.replace('shortcut-', '')));
             }
         }
         unsetKeybindings() {
@@ -1049,79 +1091,47 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, Gio, GObject, GdkPixbuf, G
             }
         }
         updateIndicator() {
-            if (settings$3.get_boolean(KeyEnableIndicator)) {
+            if (this.settings.get_boolean(KeyEnableIndicator)) {
                 this.createIndicator();
             }
             else {
                 this.destroyIndicator();
             }
         }
-        onAction(action) {
-            wrapNotifyError(async () => {
-                switch (action) {
-                    case 'select-area':
-                    case 'select-desktop':
-                    case 'select-window':
-                        throw new Error('Not available for Gnome 41');
-                    case 'open-portal':
-                        const path = await portalScreenshot(await this.servicePromise);
-                        this.onScreenshot(stripPrefix('file://', path));
-                        break;
-                    default:
-                        throw new Error('unknown action ' + action);
-                }
-            })();
-        }
-        onScreenshot(filePath) {
-            const effects = [new Rescale(settings$3.get_int(KeyEffectRescale) / 100.0)];
-            const screenshot = new Screenshot(filePath, effects);
-            if (settings$3.get_boolean(KeySaveScreenshot)) {
-                screenshot.autosave();
-            }
-            screenshot.copyClipboard(settings$3.get_string(KeyClipboardAction));
-            if (settings$3.get_boolean(KeyEnableNotification)) {
-                notifyScreenshot(screenshot);
-            }
-            if (this.indicator) {
-                this.indicator.setScreenshot(screenshot);
-            }
-            const commandEnabled = settings$3.get_boolean(KeyEnableRunCommand);
-            if (commandEnabled) {
-                const file = screenshot.getFinalFile();
-                // Notifications.notifyCommand(Commands.getCommand(file));
-                exec(settings$3.get_string(KeyRunCommand), file)
-                    .then((command) => log(`command ${command} complete`))
-                    .catch((e) => notifyError(e));
-            }
-            const imgurEnabled = settings$3.get_boolean(KeyEnableUploadImgur);
-            const imgurAutoUpload = settings$3.get_boolean(KeyImgurAutoUpload);
-            if (imgurEnabled && imgurAutoUpload) {
-                screenshot.imgurStartUpload();
-            }
-        }
-        destroy() {
-            this.destroyIndicator();
-            this.unsetKeybindings();
+        disable() {
             this.signalSettings.forEach((signal) => {
-                settings$3.disconnect(signal);
+                this.settings.disconnect(signal);
             });
             this.disconnectAll();
         }
-        enable() {
-            this.signalSettings.push(settings$3.connect('changed::' + KeyEnableIndicator, this.updateIndicator.bind(this)));
-            this.updateIndicator();
-            this.setKeybindings();
-        }
-        disable() {
-            this.destroy();
-        }
     }
     Signals$2.addSignalMethods(Extension.prototype);
-
-    function index () {
-        return new Extension();
+    let extension;
+    function getExtension() {
+        if (!extension) {
+            throw new Error('extension is not enabled');
+        }
+        return extension;
+    }
+    function enable() {
+        extension = new Extension();
+        extension.updateIndicator();
+        extension.setKeybindings();
+    }
+    function disable() {
+        if (extension) {
+            extension.disable();
+            extension.destroyIndicator();
+            extension.unsetKeybindings();
+            extension = null;
+        }
     }
 
-    return index;
+    function init() {
+        extensionUtils.initTranslations();
+        return { enable, disable };
+    }
+
+    return init;
 
 }(imports.gi.Meta, imports.gi.Shell, imports.gi.St, imports.gi.Cogl, imports.gi.Clutter, imports.gi.Gio, imports.gi.GObject, imports.gi.GdkPixbuf, imports.gi.GLib, imports.gi.Gtk, imports.gi.Soup));

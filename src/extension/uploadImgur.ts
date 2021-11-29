@@ -7,8 +7,6 @@ const Signals = imports.signals;
 const clientId = 'c5c1369fb46f29e';
 const baseUrl = 'https://api.imgur.com/3/';
 
-const httpSession = new Soup.SessionAsync();
-
 const getMimetype = (_file) => {
   return 'image/png'; // FIXME
 };
@@ -62,6 +60,8 @@ export class Upload {
   // TODO
   public responseData: ResponseData;
 
+  private httpSession = new Soup.SessionAsync();
+
   constructor(file) {
     this._file = file;
   }
@@ -81,7 +81,7 @@ export class Upload {
         this.emit('progress', uploaded, total);
       });
 
-      httpSession.queue_message(message, (session, { reason_phrase, status_code, response_body }) => {
+      this.httpSession.queue_message(message, (session, { reason_phrase, status_code, response_body }) => {
         if (status_code == 200) {
           const data = JSON.parse(response_body.data).data;
           this.responseData = data;
@@ -112,7 +112,7 @@ export class Upload {
     const uri = new Soup.URI(baseUrl + 'image/' + deletehash);
     const message = new Soup.Message({ method: 'DELETE', uri });
     authMessage(message);
-    httpSession.queue_message(message, (session, { reason_phrase, status_code, response_body }) => {
+    this.httpSession.queue_message(message, (session, { reason_phrase, status_code, response_body }) => {
       if (status_code == 200) {
         this.emit('deleted');
       } else {

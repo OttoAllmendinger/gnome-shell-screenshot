@@ -6,6 +6,7 @@ import ExtensionUtils, { _ } from '../gselib/extensionUtils';
 import * as Config from './config';
 import * as Thumbnail from './thumbnail';
 import { ErrorInvalidSettings, Screenshot } from './screenshot';
+import { getExtension } from './extension';
 
 const Main = imports.ui.main;
 const MessageTray = imports.ui.messageTray;
@@ -14,8 +15,6 @@ const NotificationIcon = 'camera-photo-symbolic';
 const NotificationSourceName = 'Screenshot Tool';
 
 const ICON_SIZE = 64;
-
-const settings = ExtensionUtils.getSettings();
 
 enum ErrorActions {
   OPEN_SETTINGS,
@@ -68,8 +67,10 @@ const NotificationNewScreenshot = registerClass(
       b.addAction(_('Copy'), this._onCopy.bind(this));
       b.addAction(_('Save'), this._onSave.bind(this));
 
-      if (settings.get_boolean(Config.KeyEnableUploadImgur)) {
-        if (settings.get_boolean(Config.KeyImgurAutoUpload)) {
+      const extension = getExtension();
+
+      if (extension.settings.get_boolean(Config.KeyEnableUploadImgur)) {
+        if (extension.settings.get_boolean(Config.KeyImgurAutoUpload)) {
           b.addAction(_('Uploading To Imgur...'), () => {
             /* noop */
           });
@@ -85,7 +86,7 @@ const NotificationNewScreenshot = registerClass(
     }
 
     _onCopy() {
-      this._screenshot.copyClipboard(settings.get_string(Config.KeyCopyButtonAction));
+      this._screenshot.copyClipboard(getExtension().settings.get_string(Config.KeyCopyButtonAction));
     }
 
     _onSave() {
