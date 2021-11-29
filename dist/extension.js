@@ -1,7 +1,21 @@
-var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPixbuf, Gtk, Soup) {
+var init = (function (Meta, Shell, St, Cogl, Clutter, Gio, GObject, GdkPixbuf, GLib, Gtk, Soup) {
     'use strict';
 
-    var ExtensionUtils = imports.misc.extensionUtils;
+    const extensionUtils = imports.misc.extensionUtils;
+    if (!extensionUtils.gettext) {
+        // backport from v41
+        // https://gitlab.gnome.org/GNOME/gnome-shell/-/blob/1deb13e1aaabfd04b2641976a224b6fc2be3b9ec/js/misc/extensionUtils.js#L117
+        const domain = extensionUtils.getCurrentExtension().metadata['gettext-domain'];
+        extensionUtils.initTranslations(domain);
+        const gettextForDomain = imports.gettext.domain(domain);
+        if (gettextForDomain.gettext) {
+            Object.assign(extensionUtils, gettextForDomain);
+        }
+        else {
+            logError(new Error(`could create gettextForDomain domain=${domain}`));
+        }
+    }
+    const _ = extensionUtils.gettext;
 
     const IndicatorName = 'de.ttll.GnomeScreenshot';
     const KeyEnableIndicator = 'enable-indicator';
@@ -9,7 +23,13 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
     const ValueShortcutSelectArea = 'shortcut-select-area';
     const ValueShortcutSelectWindow = 'shortcut-select-window';
     const ValueShortcutSelectDesktop = 'shortcut-select-desktop';
-    const KeyShortcuts = [ValueShortcutSelectArea, ValueShortcutSelectWindow, ValueShortcutSelectDesktop];
+    const ValueShortcutOpenPortal = 'shortcut-open-portal';
+    const KeyShortcuts = [
+        ValueShortcutSelectArea,
+        ValueShortcutSelectWindow,
+        ValueShortcutSelectDesktop,
+        ValueShortcutOpenPortal,
+    ];
     // See schemas/org.gnome.shell.extensions.screenshot.gschema.xml
     const KeyClickAction = 'click-action';
     const KeyCaptureDelay = 'capture-delay';
@@ -34,118 +54,6 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
     const KeyEffectRescale = 'effect-rescale';
     const KeyEnableRunCommand = 'enable-run-command';
     const KeyRunCommand = 'run-command';
-
-    function versionArray(v) {
-        return v.split('.').map(Number);
-    }
-    function zip(a, b, defaultValue) {
-        if (a.length === 0 && b.length === 0) {
-            return [];
-        }
-        const headA = a.length > 0 ? a.shift() : defaultValue;
-        const headB = b.length > 0 ? b.shift() : defaultValue;
-        return [[headA, headB]].concat(zip(a, b, defaultValue));
-    }
-    function versionEqual(a, b) {
-        return zip(versionArray(a), versionArray(b), 0).reduce((prev, [a, b]) => prev && a === b, true);
-    }
-    function versionGreater(a, b) {
-        const diff = zip(versionArray(a), versionArray(b), 0).find(([a, b]) => a !== b);
-        if (!diff) {
-            return false;
-        }
-        const [x, y] = diff;
-        return x > y;
-    }
-    function versionSmaller(a, b) {
-        return !versionEqual(a, b) && !versionGreater(a, b);
-    }
-    function currentVersion() {
-        return new Version(imports.misc.config.PACKAGE_VERSION);
-    }
-    class Version {
-        constructor(packageVersion) {
-            this.packageVersion = packageVersion;
-        }
-        equal(v) {
-            return versionEqual(this.packageVersion, v);
-        }
-        greater(v) {
-            return versionGreater(this.packageVersion, v);
-        }
-        smaller(v) {
-            return versionSmaller(this.packageVersion, v);
-        }
-        greaterEqual(v) {
-            return this.equal(v) || this.greater(v);
-        }
-        smallerEqual(v) {
-            return this.equal(v) || this.smaller(v);
-        }
-    }
-
-    /**
-     * This works for < 3.36
-     */
-    function openPrefsAppSystem(uuid, params = {}) {
-        const shell = params.shell;
-        if (!shell) {
-            throw new Error('must provide shell');
-        }
-        const appSys = shell.AppSystem.get_default();
-        const appId = 'gnome-shell-extension-prefs.desktop';
-        const prefs = appSys.lookup_app(appId);
-        if (!prefs) {
-            logError(new Error('could not find prefs app'));
-            return;
-        }
-        if (prefs.get_state() == Shell.AppState.RUNNING) {
-            prefs.activate();
-        }
-        else {
-            prefs.get_app_info().launch_uris(['extension:///' + uuid], null);
-        }
-    }
-    /**
-     * Works for >= 3.36, maybe earlier
-     */
-    function openPrefsUtilSpawn(uuid) {
-        const Util = imports.misc.util;
-        Util.spawn(['gnome-extensions', 'prefs', uuid]);
-    }
-    function openPrefs(version, uuid, params = {}) {
-        if (version.greaterEqual('3.36')) {
-            return openPrefsUtilSpawn(uuid);
-        }
-        return openPrefsAppSystem(uuid, params);
-    }
-    if ('ARGV' in window) {
-        if ('0' in window.ARGV) {
-            openPrefsAppSystem(window.ARGV[0]);
-        }
-    }
-
-    var uuid = "gnome-shell-screenshot@ttll.de";
-    var name = "Screenshot Tool";
-    var url = "https://github.com/OttoAllmendinger/gnome-shell-screenshot/";
-    var description = "Conveniently create, copy, store and upload screenshots";
-    var metadata = {
-    	"shell-version": [
-    	"3.36",
-    	"3.38",
-    	"40"
-    ],
-    	uuid: uuid,
-    	name: name,
-    	url: url,
-    	description: description,
-    	"settings-schema": "org.gnome.shell.extensions.screenshot",
-    	"gettext-domain": "gnome-shell-screenshot",
-    	"git-version": "_gitversion_"
-    };
-
-    const domain = metadata['gettext-domain'];
-    const _ = imports.gettext.domain(domain).gettext;
 
     var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
@@ -302,11 +210,10 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
         return fileName;
     }
 
-    const Local = ExtensionUtils.getCurrentExtension();
     // width and height of thumbnail
     const size = 64;
-    const emptyImagePath = Local.path + '/empty64.png';
     const getIcon = (path) => {
+        const emptyImagePath = getExtension().info.path + '/empty64.png';
         // creates an scaled with aspect ratio where the larger side is 64px
         const source = GdkPixbuf.Pixbuf.new_from_file_at_size(path, size, size);
         // load transparent 64x64 image
@@ -355,7 +262,6 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
     const Signals = imports.signals;
     const clientId = 'c5c1369fb46f29e';
     const baseUrl = 'https://api.imgur.com/3/';
-    const httpSession = new Soup.SessionAsync();
     const getMimetype = (_file) => {
         return 'image/png'; // FIXME
     };
@@ -389,6 +295,7 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
     };
     class Upload {
         constructor(file) {
+            this.httpSession = new Soup.SessionAsync();
             this._file = file;
         }
         start() {
@@ -403,7 +310,7 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
                     uploaded += buffer.length;
                     this.emit('progress', uploaded, total);
                 });
-                httpSession.queue_message(message, (session, { reason_phrase, status_code, response_body }) => {
+                this.httpSession.queue_message(message, (session, { reason_phrase, status_code, response_body }) => {
                     if (status_code == 200) {
                         const data = JSON.parse(response_body.data).data;
                         this.responseData = data;
@@ -432,7 +339,7 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
             const uri = new Soup.URI(baseUrl + 'image/' + deletehash);
             const message = new Soup.Message({ method: 'DELETE', uri });
             authMessage(message);
-            httpSession.queue_message(message, (session, { reason_phrase, status_code, response_body }) => {
+            this.httpSession.queue_message(message, (session, { reason_phrase, status_code, response_body }) => {
                 if (status_code == 200) {
                     this.emit('deleted');
                 }
@@ -474,8 +381,6 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
     }
 
     const Signals$1 = imports.signals;
-    const Local$1 = ExtensionUtils.getCurrentExtension();
-    const settings = ExtensionUtils.getSettings();
     class ErrorInvalidSettings extends Error {
         constructor(message) {
             super(message);
@@ -516,12 +421,12 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
             this.dstFile = null;
         }
         getFilename(n = 0) {
-            const filenameTemplate = settings.get_string(KeyFilenameTemplate);
+            const filenameTemplate = getExtension().settings.get_string(KeyFilenameTemplate);
             const { width, height } = this.pixbuf;
             return get(filenameTemplate, { width, height }, n);
         }
         getNextFile() {
-            const dir = expand(settings.get_string(KeySaveLocation));
+            const dir = expand(getExtension().settings.get_string(KeySaveLocation));
             const dirExists = Gio.File.new_for_path(dir).query_exists(/* cancellable */ null);
             if (!dirExists) {
                 throw new ErrorAutosaveDirNotExists(dir);
@@ -553,7 +458,7 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
                 this.srcFile.get_path(),
                 expand('$PICTURES'),
                 this.getFilename(),
-                Local$1.dir.get_path(),
+                getExtension().info.dir.get_path(),
             ];
             pathComponents.forEach((v) => {
                 if (!v) {
@@ -569,7 +474,7 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
                     gtkVersionString = '4.0';
                     break;
             }
-            spawnAsync(['gjs', Local$1.path + '/saveDlg.js', ...pathComponents.map(encodeURIComponent)], ['GTK=' + gtkVersionString]);
+            spawnAsync(['gjs', getExtension().info.path + '/saveDlg.js', ...pathComponents.map(encodeURIComponent)], ['GTK=' + gtkVersionString]);
         }
         copyClipboard(action) {
             if (action === ClipboardActions.NONE) {
@@ -593,15 +498,15 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
                 logError(err);
                 notifyError(String(err));
             });
-            if (settings.get_boolean(KeyImgurEnableNotification)) {
+            if (getExtension().settings.get_boolean(KeyImgurEnableNotification)) {
                 notifyImgurUpload(this);
             }
             this.emit('imgur-upload', this.imgurUpload);
             this.imgurUpload.connect('done', () => {
-                if (settings.get_boolean(KeyImgurAutoCopyLink)) {
+                if (getExtension().settings.get_boolean(KeyImgurAutoCopyLink)) {
                     this.imgurCopyURL();
                 }
-                if (settings.get_boolean(KeyImgurAutoOpenLink)) {
+                if (getExtension().settings.get_boolean(KeyImgurAutoOpenLink)) {
                     this.imgurOpenURL();
                 }
             });
@@ -642,11 +547,9 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
 
     const Main = imports.ui.main;
     const MessageTray = imports.ui.messageTray;
-    const version = currentVersion();
     const NotificationIcon = 'camera-photo-symbolic';
     const NotificationSourceName = 'Screenshot Tool';
     const ICON_SIZE = 64;
-    const settings$1 = ExtensionUtils.getSettings();
     var ErrorActions;
     (function (ErrorActions) {
         ErrorActions[ErrorActions["OPEN_SETTINGS"] = 0] = "OPEN_SETTINGS";
@@ -682,8 +585,9 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
             b._iconBin.child.icon_size = ICON_SIZE;
             b.addAction(_('Copy'), this._onCopy.bind(this));
             b.addAction(_('Save'), this._onSave.bind(this));
-            if (settings$1.get_boolean(KeyEnableUploadImgur)) {
-                if (settings$1.get_boolean(KeyImgurAutoUpload)) {
+            const extension = getExtension();
+            if (extension.settings.get_boolean(KeyEnableUploadImgur)) {
+                if (extension.settings.get_boolean(KeyImgurAutoUpload)) {
                     b.addAction(_('Uploading To Imgur...'), () => {
                         /* noop */
                     });
@@ -698,7 +602,7 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
             this._screenshot.launchOpen();
         }
         _onCopy() {
-            this._screenshot.copyClipboard(settings$1.get_string(KeyCopyButtonAction));
+            this._screenshot.copyClipboard(getExtension().settings.get_string(KeyCopyButtonAction));
         }
         _onSave() {
             this._screenshot.launchSave();
@@ -720,7 +624,7 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
                 switch (b) {
                     case ErrorActions.OPEN_SETTINGS:
                         banner.addAction(_('Settings'), () => {
-                            openPrefs(version, uuid, { shell: imports.gi.Shell });
+                            extensionUtils.openPrefs();
                         });
                         break;
                     default:
@@ -797,9 +701,9 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
         source.showNotification(notification);
     }
     function wrapNotifyError(f) {
-        return function (...args) {
+        return async function (...args) {
             try {
-                return f(...args);
+                return await f(...args);
             }
             catch (e) {
                 notifyError(e);
@@ -808,13 +712,127 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
         };
     }
 
+    const connection = Gio.DBus.session;
+    const serviceName = 'org.freedesktop.portal.Desktop';
+    const interfaceName = 'org.freedesktop.portal.Request';
+    const objectPath = '/org/freedesktop/portal/desktop';
+    async function getServiceProxy(extensionPath) {
+        const path = extensionPath + '/org.freedesktop.portal.Screenshot.xml';
+        const [ok, data] = GLib.file_get_contents(path);
+        if (!ok) {
+            throw new Error('could not read interface file');
+        }
+        const ifaceXml = imports.byteArray.toString(data);
+        const Proxy = Gio.DBusProxy.makeProxyWrapper(ifaceXml);
+        return new Promise((resolve, reject) => {
+            new Proxy(connection, serviceName, objectPath, (init, err) => {
+                if (err) {
+                    reject(err);
+                }
+                else {
+                    resolve(init);
+                }
+            });
+        });
+    }
+    async function getResponseParams(requestPath) {
+        return new Promise((resolve) => {
+            connection.signal_subscribe(serviceName, interfaceName, 'Response', requestPath, null, Gio.DBusSignalFlags.NONE, (connection, sender, path, iface, signal, params) => {
+                resolve(params);
+            });
+        });
+    }
+    async function portalScreenshot(service) {
+        const [requestPath] = service.ScreenshotSync('', {
+            interactive: GLib.Variant.new_boolean(true),
+        });
+        const params = await getResponseParams(requestPath);
+        const [responseCode, dict] = params.deepUnpack();
+        switch (responseCode) {
+            case 0:
+                return dict.uri.deepUnpack();
+            case 1:
+                throw new Error('cancelled by user');
+            default:
+                throw new Error(`unexpected responseCode ${responseCode}`);
+        }
+    }
+
+    function parameters$1(v) {
+        return [['f', GLib.shell_quote(v.filename), _('Filename')]];
+    }
+    function getCommand(runCommand, file) {
+        const filename = file.get_path();
+        if (!filename) {
+            throw new Error('path: null');
+        }
+        return stringFormat(runCommand, toObject(parameters$1({ filename })));
+    }
+    async function exec(runCommand, file) {
+        const command = getCommand(runCommand, file);
+        const [ok, argv] = GLib.shell_parse_argv(command);
+        if (!ok || !argv) {
+            throw new Error('argv parse error command=' + command);
+        }
+        await spawnAsync(argv);
+        return command;
+    }
+
+    function stripPrefix(prefix, s) {
+        if (s.startsWith(prefix)) {
+            return s.slice(prefix.length);
+        }
+        return s;
+    }
+    function onScreenshot(filePath) {
+        const { settings, indicator } = getExtension();
+        const effects = [new Rescale(settings.get_int(KeyEffectRescale) / 100.0)];
+        const screenshot = new Screenshot(filePath, effects);
+        if (settings.get_boolean(KeySaveScreenshot)) {
+            screenshot.autosave();
+        }
+        screenshot.copyClipboard(settings.get_string(KeyClipboardAction));
+        if (settings.get_boolean(KeyEnableNotification)) {
+            notifyScreenshot(screenshot);
+        }
+        if (indicator) {
+            indicator.setScreenshot(screenshot);
+        }
+        const commandEnabled = settings.get_boolean(KeyEnableRunCommand);
+        if (commandEnabled) {
+            const file = screenshot.getFinalFile();
+            // Notifications.notifyCommand(Commands.getCommand(file));
+            exec(settings.get_string(KeyRunCommand), file)
+                .then((command) => log(`command ${command} complete`))
+                .catch((e) => notifyError(e));
+        }
+        const imgurEnabled = settings.get_boolean(KeyEnableUploadImgur);
+        const imgurAutoUpload = settings.get_boolean(KeyImgurAutoUpload);
+        if (imgurEnabled && imgurAutoUpload) {
+            screenshot.imgurStartUpload();
+        }
+    }
+    function onAction(action) {
+        wrapNotifyError(async () => {
+            switch (action) {
+                case 'select-area':
+                case 'select-desktop':
+                case 'select-window':
+                    throw new Error('Not available for Gnome 41');
+                case 'open-portal':
+                    const path = await portalScreenshot(await getExtension().servicePromise);
+                    onScreenshot(stripPrefix('file://', path));
+                    break;
+                default:
+                    throw new Error('unknown action ' + action);
+            }
+        })();
+    }
+
     const PanelMenu = imports.ui.panelMenu;
     const PopupMenu = imports.ui.popupMenu;
     const Slider = imports.ui.slider;
-    const Local$2 = ExtensionUtils.getCurrentExtension();
-    const version$1 = currentVersion();
     const DefaultIcon = 'camera-photo-symbolic';
-    const settings$2 = ExtensionUtils.getSettings();
     class CaptureDelayMenu extends PopupMenu.PopupMenuSection {
         createScale() {
             const scale = [0];
@@ -828,7 +846,7 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
         constructor(_control) {
             super();
             this.scaleMS = this.createScale();
-            this.delayValueMS = settings$2.get_int(KeyCaptureDelay);
+            this.delayValueMS = getExtension().settings.get_int(KeyCaptureDelay);
             this.slider = new Slider.Slider(this.scaleToSlider(this.delayValueMS));
             this.slider.connect('notify::value', this.onDragEnd.bind(this));
             this.sliderItem = new PopupMenu.PopupBaseMenuItem({ activate: false });
@@ -852,7 +870,7 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
             const newValue = this.sliderToScale(slider.value);
             if (newValue !== this.delayValueMS) {
                 this.delayValueMS = newValue;
-                settings$2.set_int(KeyCaptureDelay, newValue);
+                getExtension().settings.set_int(KeyCaptureDelay, newValue);
                 this.updateDelayInfo();
             }
         }
@@ -913,7 +931,7 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
             this.clear.visible = visible;
             this.copy.visible = visible;
             this.save.visible = visible;
-            const imgurEnabled = settings$2.get_boolean(KeyEnableUploadImgur);
+            const imgurEnabled = getExtension().settings.get_boolean(KeyEnableUploadImgur);
             const imgurComplete = this._screenshot && this._screenshot.imgurUpload && this._screenshot.imgurUpload.responseData;
             this.imgurMenu.visible = visible && imgurEnabled;
             this.imgurUpload.visible = visible && imgurEnabled && !imgurComplete;
@@ -959,7 +977,7 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
             this.setScreenshot(undefined);
         }
         onCopy() {
-            this.screenshot.copyClipboard(settings$2.get_string(KeyCopyButtonAction));
+            this.screenshot.copyClipboard(getExtension().settings.get_string(KeyCopyButtonAction));
         }
         onSave() {
             this.screenshot.launchSave();
@@ -994,17 +1012,18 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
             if (evt.get_button() !== Clutter.BUTTON_PRIMARY) {
                 return;
             }
-            const action = settings$2.get_string(KeyClickAction);
+            const action = getExtension().settings.get_string(KeyClickAction);
             if (action === 'show-menu') {
                 return;
             }
             this.panelButton.menu.close();
-            this.extension.onAction(action);
+            onAction(action);
         }
         buildMenu() {
             // These actions can be triggered via shortcut or popup menu
             const menu = this.panelButton.menu;
             const items = [
+                ['open-portal', _('Open Portal')],
                 ['select-area', _('Select Area')],
                 ['select-window', _('Select Window')],
                 ['select-desktop', _('Select Desktop')],
@@ -1013,20 +1032,17 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
                 const item = new PopupMenu.PopupMenuItem(title);
                 item.connect('activate', () => {
                     menu.close();
-                    this.extension.onAction(action);
+                    onAction(action);
                 });
                 menu.addMenuItem(item);
             });
-            // Delay
-            menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
-            menu.addMenuItem(new CaptureDelayMenu());
             menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
             this.screenshotSection = new ScreenshotSection(menu);
             menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
             // Settings can only be triggered via menu
             const settingsItem = new PopupMenu.PopupMenuItem(_('Settings'));
             settingsItem.connect('activate', () => {
-                openPrefs(version$1, Local$2.metadata.uuid, { shell: imports.gi.Shell });
+                extensionUtils.openPrefs();
             });
             menu.addMenuItem(settingsItem);
         }
@@ -1042,265 +1058,30 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
     }
 
     const Signals$2 = imports.signals;
-    const Mainloop = imports.mainloop;
     const Main$1 = imports.ui.main;
-    const Local$3 = ExtensionUtils.getCurrentExtension();
-    const version$2 = currentVersion();
-    const shellGlobal = Shell.Global.get();
-    const getRectangle = (x1, y1, x2, y2) => {
-        return {
-            x: Math.min(x1, x2),
-            y: Math.min(y1, y2),
-            w: Math.abs(x1 - x2),
-            h: Math.abs(y1 - y2),
-        };
-    };
-    const getWindowRectangle = (win) => {
-        const { x, y, width: w, height: h } = win.get_meta_window().get_frame_rect();
-        return { x, y, w, h };
-    };
-    const selectWindow = (windows, px, py) => {
-        const filtered = windows.filter((win) => {
-            if (win === undefined || !win.visible || typeof win.get_meta_window !== 'function') {
-                return false;
-            }
-            const { x, y, w, h } = getWindowRectangle(win);
-            return x <= px && y <= py && x + w >= px && y + h >= py;
-        });
-        if (filtered.length === 0) {
-            return;
-        }
-        filtered.sort((a, b) => a.get_meta_window().get_layer() <= b.get_meta_window().get_layer());
-        return filtered[0];
-    };
-    const callHelper = (argv, fileName, callback) => {
-        argv = ['gjs', Local$3.path + '/auxhelper.js', '--filename', fileName, ...argv];
-        spawnAsync(argv)
-            .catch((err) => callback(err, null))
-            .then(() => callback(null, fileName));
-    };
-    const makeAreaScreenshot = ({ x, y, w, h }, callback) => {
-        const fileName = getTemp();
-        callHelper(['--area', [x, y, w, h].join(',')], fileName, callback);
-    };
-    const makeWindowScreenshot = (callback) => {
-        const fileName = getTemp();
-        callHelper(['--window'], fileName, callback);
-    };
-    const makeDesktopScreenshot = (callback) => {
-        const fileName = getTemp();
-        callHelper(['--desktop'], fileName, callback);
-    };
-    class Capture {
-        constructor() {
-            this._mouseDown = false;
-            this._container = new St.Widget({
-                name: 'area-selection',
-                style_class: 'area-selection',
-                visible: true,
-                reactive: true,
-                x: -10,
-                y: -10,
-            });
-            Main$1.uiGroup.add_actor(this._container);
-            if (Main$1.pushModal(this._container)) {
-                this._signalCapturedEvent = shellGlobal.stage.connect('captured-event', this._onCaptureEvent.bind(this));
-                this._setCaptureCursor();
-            }
-            else {
-                log('Main.pushModal() === false');
-            }
-        }
-        _setCursorCompat(v) {
-            if (version$2.greaterEqual('3.29')) {
-                shellGlobal.display.set_cursor(v);
-            }
-            else {
-                shellGlobal.screen.set_cursor(v);
-            }
-        }
-        _setDefaultCursor() {
-            this._setCursorCompat(Meta.Cursor.DEFAULT);
-        }
-        _setCaptureCursor() {
-            this._setCursorCompat(Meta.Cursor.CROSSHAIR);
-        }
-        _onCaptureEvent(actor, event) {
-            if (event.type() === Clutter.EventType.KEY_PRESS) {
-                if (event.get_key_symbol() === Clutter.KEY_Escape) {
-                    this.stop();
-                }
-            }
-            this.emit('captured-event', event);
-        }
-        drawContainer({ x, y, w, h }) {
-            this._container.set_position(x, y);
-            this._container.set_size(w, h);
-        }
-        clearContainer() {
-            this.drawContainer({ x: -10, y: -10, w: 0, h: 0 });
-        }
-        stop() {
-            this.clearContainer();
-            if (this._signalCapturedEvent !== undefined) {
-                shellGlobal.stage.disconnect(this._signalCapturedEvent);
-            }
-            this._setDefaultCursor();
-            Main$1.uiGroup.remove_actor(this._container);
-            Main$1.popModal(this._container);
-            this._container.destroy();
-            this.emit('stop');
-            this.disconnectAll();
-        }
-    }
-    Signals$2.addSignalMethods(Capture.prototype);
-    const emitScreenshotOnSuccess = (instance) => (error, fileName) => {
-        if (error) {
-            return instance.emit('error', error);
-        }
-        instance.emit('screenshot', fileName);
-    };
-    class SelectionArea {
-        constructor(options) {
-            this._options = options;
-            this._mouseDown = false;
-            this._capture = new Capture();
-            this._capture.connect('captured-event', this._onEvent.bind(this));
-            this._capture.connect('stop', this.emit.bind(this, 'stop'));
-        }
-        _onEvent(capture, event) {
-            const type = event.type();
-            const [x, y] = shellGlobal.get_pointer();
-            if (type === Clutter.EventType.BUTTON_PRESS) {
-                [this._startX, this._startY] = [x, y];
-                this._mouseDown = true;
-            }
-            else if (this._mouseDown) {
-                const rect = getRectangle(this._startX, this._startY, x, y);
-                if (type === Clutter.EventType.MOTION) {
-                    this._capture.drawContainer(rect);
-                }
-                else if (type === Clutter.EventType.BUTTON_RELEASE) {
-                    this._capture.stop();
-                    this._screenshot(rect);
-                }
-            }
-        }
-        _screenshot(region) {
-            if (region.w < 8 || region.h < 8) {
-                this.emit('error', _('selected region was too small - please select a larger area'));
-                this.emit('stop');
-                return;
-            }
-            const scaleFactor = St.ThemeContext.get_for_stage(Shell.Global.get().stage.get_stage()).scale_factor;
-            if (scaleFactor !== 1) {
-                ['x', 'y', 'w', 'h'].forEach((key) => {
-                    region[key] = Math.floor(region[key] / scaleFactor);
-                });
-            }
-            Mainloop.timeout_add(this._options.captureDelay, () => {
-                makeAreaScreenshot(region, emitScreenshotOnSuccess(this));
-            });
-        }
-    }
-    Signals$2.addSignalMethods(SelectionArea.prototype);
-    class SelectionWindow {
-        constructor(options) {
-            this._options = options;
-            this._windows = shellGlobal.get_window_actors();
-            this._capture = new Capture();
-            this._capture.connect('captured-event', this._onEvent.bind(this));
-            this._capture.connect('stop', this.emit.bind(this, 'stop'));
-        }
-        _onEvent(capture, event) {
-            const type = event.type();
-            const [x, y] = shellGlobal.get_pointer();
-            this._selectedWindow = selectWindow(this._windows, x, y);
-            if (this._selectedWindow) {
-                this._highlightWindow(this._selectedWindow);
-            }
-            else {
-                this._clearHighlight();
-            }
-            if (type === Clutter.EventType.BUTTON_PRESS) {
-                if (this._selectedWindow) {
-                    this._screenshot(this._selectedWindow);
-                }
-            }
-        }
-        _highlightWindow(win) {
-            this._capture.drawContainer(getWindowRectangle(win));
-        }
-        _clearHighlight() {
-            this._capture.clearContainer();
-        }
-        _screenshot(win) {
-            this._capture.stop();
-            Mainloop.timeout_add(this._options.captureDelay, () => {
-                Main$1.activateWindow(win.get_meta_window());
-                Mainloop.idle_add(() => makeWindowScreenshot(emitScreenshotOnSuccess(this)));
-            });
-        }
-    }
-    Signals$2.addSignalMethods(SelectionWindow.prototype);
-    class SelectionDesktop {
-        constructor(options) {
-            this._options = options;
-            Mainloop.timeout_add(this._options.captureDelay, () => {
-                makeDesktopScreenshot(emitScreenshotOnSuccess(this));
-                this.emit('stop');
-            });
-        }
-    }
-    Signals$2.addSignalMethods(SelectionDesktop.prototype);
-
-    function parameters$1(v) {
-        return [['f', GLib.shell_quote(v.filename), _('Filename')]];
-    }
-    function getCommand(runCommand, file) {
-        const filename = file.get_path();
-        if (!filename) {
-            throw new Error('path: null');
-        }
-        return stringFormat(runCommand, toObject(parameters$1({ filename })));
-    }
-    async function exec(runCommand, file) {
-        const command = getCommand(runCommand, file);
-        const [ok, argv] = GLib.shell_parse_argv(command);
-        if (!ok || !argv) {
-            throw new Error('argv parse error command=' + command);
-        }
-        await spawnAsync(argv);
-        return command;
-    }
-
-    const Signals$3 = imports.signals;
-    const Main$2 = imports.ui.main;
-    const settings$3 = ExtensionUtils.getSettings();
-    const getSelectionOptions = () => {
-        const captureDelay = settings$3.get_int(KeyCaptureDelay);
-        return { captureDelay };
-    };
     class Extension {
         constructor() {
             this.signalSettings = [];
-            ExtensionUtils.initTranslations();
+            this.settings = extensionUtils.getSettings();
+            this.info = extensionUtils.getCurrentExtension();
+            this.servicePromise = getServiceProxy(this.info.path);
+            this.signalSettings.push(this.settings.connect('changed::' + KeyEnableIndicator, this.updateIndicator.bind(this)));
         }
         setKeybindings() {
             const bindingMode = Shell.ActionMode.NORMAL;
             for (const shortcut of KeyShortcuts) {
-                Main$2.wm.addKeybinding(shortcut, settings$3, Meta.KeyBindingFlags.NONE, bindingMode, this.onAction.bind(this, shortcut.replace('shortcut-', '')));
+                Main$1.wm.addKeybinding(shortcut, this.settings, Meta.KeyBindingFlags.NONE, bindingMode, () => onAction(shortcut.replace('shortcut-', '')));
             }
         }
         unsetKeybindings() {
             for (const shortcut of KeyShortcuts) {
-                Main$2.wm.removeKeybinding(shortcut);
+                Main$1.wm.removeKeybinding(shortcut);
             }
         }
         createIndicator() {
             if (!this.indicator) {
                 this.indicator = new Indicator(this);
-                Main$2.panel.addToStatusArea(IndicatorName, this.indicator.panelButton);
+                Main$1.panel.addToStatusArea(IndicatorName, this.indicator.panelButton);
             }
         }
         destroyIndicator() {
@@ -1310,109 +1091,47 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, GLib, Gio, GObject, GdkPix
             }
         }
         updateIndicator() {
-            if (settings$3.get_boolean(KeyEnableIndicator)) {
+            if (this.settings.get_boolean(KeyEnableIndicator)) {
                 this.createIndicator();
             }
             else {
                 this.destroyIndicator();
             }
         }
-        onAction(action) {
-            const dispatch = {
-                'select-area': this.selectArea.bind(this),
-                'select-window': this.selectWindow.bind(this),
-                'select-desktop': this.selectDesktop.bind(this),
-            };
-            const f = dispatch[action] ||
-                function () {
-                    throw new Error('unknown action: ' + action);
-                };
-            wrapNotifyError(f)();
-        }
-        startSelection(selection) {
-            if (this.selection) {
-                // prevent reentry
-                log('_startSelection() error: selection already in progress');
-                return;
-            }
-            this.selection = selection;
-            if (!this.selection) {
-                throw new Error('selection undefined');
-            }
-            this.selection.connect('screenshot', (screenshot, file) => {
-                try {
-                    this.onScreenshot(screenshot, file);
-                }
-                catch (e) {
-                    notifyError(e);
-                }
-            });
-            this.selection.connect('error', (selection, message) => {
-                notifyError(message);
-            });
-            this.selection.connect('stop', () => {
-                this.selection = undefined;
-            });
-        }
-        selectArea() {
-            this.startSelection(new SelectionArea(getSelectionOptions()));
-        }
-        selectWindow() {
-            this.startSelection(new SelectionWindow(getSelectionOptions()));
-        }
-        selectDesktop() {
-            this.startSelection(new SelectionDesktop(getSelectionOptions()));
-        }
-        onScreenshot(selection, filePath) {
-            const effects = [new Rescale(settings$3.get_int(KeyEffectRescale) / 100.0)];
-            const screenshot = new Screenshot(filePath, effects);
-            if (settings$3.get_boolean(KeySaveScreenshot)) {
-                screenshot.autosave();
-            }
-            screenshot.copyClipboard(settings$3.get_string(KeyClipboardAction));
-            if (settings$3.get_boolean(KeyEnableNotification)) {
-                notifyScreenshot(screenshot);
-            }
-            if (this.indicator) {
-                this.indicator.setScreenshot(screenshot);
-            }
-            const commandEnabled = settings$3.get_boolean(KeyEnableRunCommand);
-            if (commandEnabled) {
-                const file = screenshot.getFinalFile();
-                // Notifications.notifyCommand(Commands.getCommand(file));
-                exec(settings$3.get_string(KeyRunCommand), file)
-                    .then((command) => log(`command ${command} complete`))
-                    .catch((e) => notifyError(e));
-            }
-            const imgurEnabled = settings$3.get_boolean(KeyEnableUploadImgur);
-            const imgurAutoUpload = settings$3.get_boolean(KeyImgurAutoUpload);
-            if (imgurEnabled && imgurAutoUpload) {
-                screenshot.imgurStartUpload();
-            }
-        }
-        destroy() {
-            this.destroyIndicator();
-            this.unsetKeybindings();
+        disable() {
             this.signalSettings.forEach((signal) => {
-                settings$3.disconnect(signal);
+                this.settings.disconnect(signal);
             });
             this.disconnectAll();
         }
-        enable() {
-            this.signalSettings.push(settings$3.connect('changed::' + KeyEnableIndicator, this.updateIndicator.bind(this)));
-            this.updateIndicator();
-            this.setKeybindings();
+    }
+    Signals$2.addSignalMethods(Extension.prototype);
+    let extension;
+    function getExtension() {
+        if (!extension) {
+            throw new Error('extension is not enabled');
         }
-        disable() {
-            this.destroy();
+        return extension;
+    }
+    function enable() {
+        extension = new Extension();
+        extension.updateIndicator();
+        extension.setKeybindings();
+    }
+    function disable() {
+        if (extension) {
+            extension.disable();
+            extension.destroyIndicator();
+            extension.unsetKeybindings();
+            extension = null;
         }
     }
-    Signals$3.addSignalMethods(Extension.prototype);
 
-    function index () {
-        return new Extension();
+    function init() {
+        extensionUtils.initTranslations();
+        return { enable, disable };
     }
 
-    return index;
+    return init;
 
-}(imports.gi.Meta, imports.gi.Shell, imports.gi.St, imports.gi.Cogl, imports.gi.Clutter, imports.gi.GLib, imports.gi.Gio, imports.gi.GObject, imports.gi.GdkPixbuf, imports.gi.Gtk, imports.gi.Soup));
+}(imports.gi.Meta, imports.gi.Shell, imports.gi.St, imports.gi.Cogl, imports.gi.Clutter, imports.gi.Gio, imports.gi.GObject, imports.gi.GdkPixbuf, imports.gi.GLib, imports.gi.Gtk, imports.gi.Soup));

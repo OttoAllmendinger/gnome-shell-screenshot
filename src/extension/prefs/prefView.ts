@@ -5,7 +5,7 @@ import * as GLib from '@imports/GLib-2.0';
 import { VariantClass } from '@imports/GLib-2.0';
 import * as GObject from '@imports/GObject-2.0';
 
-import { _ } from '../../gselib/gettext';
+import { _ } from '../../gselib/extensionUtils';
 
 import * as Path from '../path';
 

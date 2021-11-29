@@ -9,8 +9,14 @@ export const KeyEnableNotification = 'enable-notification';
 export const ValueShortcutSelectArea = 'shortcut-select-area';
 export const ValueShortcutSelectWindow = 'shortcut-select-window';
 export const ValueShortcutSelectDesktop = 'shortcut-select-desktop';
+export const ValueShortcutOpenPortal = 'shortcut-open-portal';
 
-export const KeyShortcuts = [ValueShortcutSelectArea, ValueShortcutSelectWindow, ValueShortcutSelectDesktop];
+export const KeyShortcuts = [
+  ValueShortcutSelectArea,
+  ValueShortcutSelectWindow,
+  ValueShortcutSelectDesktop,
+  ValueShortcutOpenPortal,
+];
 
 // See schemas/org.gnome.shell.extensions.screenshot.gschema.xml
 export const KeyClickAction = 'click-action';
@@ -20,6 +26,7 @@ export const ClickActions = {
   SELECT_AREA: 'select-area',
   SELECT_WINDOW: 'select-window',
   SELECT_DESKTOP: 'select-desktop',
+  OPEN_PORTAL: 'open-portal',
 };
 
 export const KeyCaptureDelay = 'capture-delay';

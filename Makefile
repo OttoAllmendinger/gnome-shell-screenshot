@@ -6,10 +6,10 @@ LANGUAGES = bg ca cs de el es eu fr id_ID it pl pt_BR ru tr uk zh_CN nl
 
 all: update_dependencies
 	make archive
-	
+
 update_dependencies:
 	git submodule update --init
 
 -include gselib/make/gnome-shell-extension.mk
 
-SOURCE += src/empty64.png
+SOURCE += src/empty64.png res/org.freedesktop.portal.Screenshot.xml

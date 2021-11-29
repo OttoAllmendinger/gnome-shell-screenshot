@@ -3,7 +3,7 @@ import StringFormat from 'string-format';
 import * as Gio from '@imports/Gio-2.0';
 import * as GLib from '@imports/GLib-2.0';
 
-import { _ } from '../gselib/gettext';
+import { _ } from '../gselib/extensionUtils';
 
 import { toObject, toTooltipText } from './templateParams';
 import { spawnAsync } from './spawnUtil';

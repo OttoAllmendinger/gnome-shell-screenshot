@@ -2,28 +2,22 @@ import * as St from '@imports/St-1.0';
 import * as Cogl from '@imports/Cogl-8';
 import * as Clutter from '@imports/Clutter-8';
 
-import { currentVersion } from '../gselib/version';
-import { openPrefs } from '../gselib/openPrefs';
-import { _ } from '../gselib/gettext';
-import ExtensionUtils from '../gselib/extensionUtils';
+import ExtensionUtils, { _ } from '../gselib/extensionUtils';
 
 import * as Config from './config';
 import * as Extension from './extension';
 import { Screenshot } from './screenshot';
 import { wrapNotifyError } from './notifications';
+import { onAction } from './actions';
+import { getExtension } from './extension';
 
 const PanelMenu = imports.ui.panelMenu;
 const PopupMenu = imports.ui.popupMenu;
 const Slider = imports.ui.slider;
 
-const Local = ExtensionUtils.getCurrentExtension();
-
-const version = currentVersion();
-
 const DefaultIcon = 'camera-photo-symbolic';
 
-const settings = ExtensionUtils.getSettings();
-
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 declare interface CaptureDelayMenu extends St.Widget {}
 
 class CaptureDelayMenu extends PopupMenu.PopupMenuSection {
@@ -42,7 +36,7 @@ class CaptureDelayMenu extends PopupMenu.PopupMenuSection {
 
     this.scaleMS = this.createScale();
 
-    this.delayValueMS = settings.get_int(Config.KeyCaptureDelay);
+    this.delayValueMS = getExtension().settings.get_int(Config.KeyCaptureDelay);
     this.slider = new Slider.Slider(this.scaleToSlider(this.delayValueMS));
     this.slider.connect('notify::value', this.onDragEnd.bind(this));
     this.sliderItem = new PopupMenu.PopupBaseMenuItem({ activate: false });
@@ -72,7 +66,7 @@ class CaptureDelayMenu extends PopupMenu.PopupMenuSection {
     const newValue = this.sliderToScale(slider.value);
     if (newValue !== this.delayValueMS) {
       this.delayValueMS = newValue;
-      settings.set_int(Config.KeyCaptureDelay, newValue);
+      getExtension().settings.set_int(Config.KeyCaptureDelay, newValue);
       this.updateDelayInfo();
     }
   }
@@ -189,7 +183,7 @@ class ScreenshotSection {
     this.copy.visible = visible;
     this.save.visible = visible;
 
-    const imgurEnabled = settings.get_boolean(Config.KeyEnableUploadImgur);
+    const imgurEnabled = getExtension().settings.get_boolean(Config.KeyEnableUploadImgur);
     const imgurComplete = this._screenshot && this._screenshot.imgurUpload && this._screenshot.imgurUpload.responseData;
 
     this.imgurMenu.visible = visible && imgurEnabled;
@@ -251,7 +245,7 @@ class ScreenshotSection {
   }
 
   onCopy() {
-    this.screenshot.copyClipboard(settings.get_string(Config.KeyCopyButtonAction));
+    this.screenshot.copyClipboard(getExtension().settings.get_string(Config.KeyCopyButtonAction));
   }
 
   onSave() {
@@ -304,19 +298,20 @@ export class Indicator {
       return;
     }
 
-    const action = settings.get_string(Config.KeyClickAction);
+    const action = getExtension().settings.get_string(Config.KeyClickAction);
     if (action === 'show-menu') {
       return;
     }
 
     this.panelButton.menu.close();
-    this.extension.onAction(action);
+    onAction(action);
   }
 
   buildMenu(): void {
     // These actions can be triggered via shortcut or popup menu
     const menu = this.panelButton.menu;
     const items = [
+      ['open-portal', _('Open Portal')],
       ['select-area', _('Select Area')],
       ['select-window', _('Select Window')],
       ['select-desktop', _('Select Desktop')],
@@ -326,16 +321,10 @@ export class Indicator {
       const item = new PopupMenu.PopupMenuItem(title);
       item.connect('activate', () => {
         menu.close();
-        this.extension.onAction(action);
+        onAction(action);
       });
       menu.addMenuItem(item);
     });
-
-    // Delay
-
-    menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
-
-    menu.addMenuItem(new CaptureDelayMenu());
 
     menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
 
@@ -346,7 +335,7 @@ export class Indicator {
     // Settings can only be triggered via menu
     const settingsItem = new PopupMenu.PopupMenuItem(_('Settings'));
     settingsItem.connect('activate', () => {
-      openPrefs(version, Local.metadata.uuid, { shell: imports.gi.Shell });
+      ExtensionUtils.openPrefs();
     });
     menu.addMenuItem(settingsItem);
   }

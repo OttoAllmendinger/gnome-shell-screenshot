@@ -5,8 +5,7 @@ import * as Shell from '@imports/Shell-0.1';
 import { InterpType } from '@imports/GdkPixbuf-2.0';
 
 import { SignalEmitter } from '..';
-
-import { _ } from '../gselib/gettext';
+import { _ } from '../gselib/extensionUtils';
 
 import * as Path from './path';
 import * as Config from './config';
@@ -14,14 +13,10 @@ import * as Clipboard from './clipboard';
 import * as Filename from './filename';
 import * as UploadImgur from './uploadImgur';
 import * as Notifications from './notifications';
-import ExtensionUtils from '../gselib/extensionUtils';
 import { spawnAsync } from './spawnUtil';
+import { getExtension } from './extension';
 
 const Signals = imports.signals;
-
-const Local = ExtensionUtils.getCurrentExtension();
-
-const settings = ExtensionUtils.getSettings();
 
 export class ErrorInvalidSettings extends Error {
   constructor(message: string) {
@@ -86,13 +81,13 @@ export class Screenshot {
   }
 
   getFilename(n = 0): string {
-    const filenameTemplate = settings.get_string(Config.KeyFilenameTemplate);
+    const filenameTemplate = getExtension().settings.get_string(Config.KeyFilenameTemplate);
     const { width, height } = (this.pixbuf as unknown) as { width: number; height: number };
     return Filename.get(filenameTemplate, { width, height }, n);
   }
 
   getNextFile(): Gio.File {
-    const dir = Path.expand(settings.get_string(Config.KeySaveLocation));
+    const dir = Path.expand(getExtension().settings.get_string(Config.KeySaveLocation));
     const dirExists = Gio.File.new_for_path(dir).query_exists(/* cancellable */ null);
     if (!dirExists) {
       throw new ErrorAutosaveDirNotExists(dir);
@@ -128,7 +123,7 @@ export class Screenshot {
       this.srcFile.get_path(),
       Path.expand('$PICTURES'),
       this.getFilename(),
-      Local.dir.get_path(),
+      getExtension().info.dir.get_path(),
     ] as string[];
     pathComponents.forEach((v) => {
       if (!v) {
@@ -147,7 +142,7 @@ export class Screenshot {
     }
 
     spawnAsync(
-      ['gjs', Local.path + '/saveDlg.js', ...pathComponents.map(encodeURIComponent)],
+      ['gjs', getExtension().info.path + '/saveDlg.js', ...pathComponents.map(encodeURIComponent)],
       ['GTK=' + gtkVersionString],
     );
   }
@@ -176,17 +171,17 @@ export class Screenshot {
       Notifications.notifyError(String(err));
     });
 
-    if (settings.get_boolean(Config.KeyImgurEnableNotification)) {
+    if (getExtension().settings.get_boolean(Config.KeyImgurEnableNotification)) {
       Notifications.notifyImgurUpload(this);
     }
     this.emit('imgur-upload', this.imgurUpload);
 
     this.imgurUpload.connect('done', () => {
-      if (settings.get_boolean(Config.KeyImgurAutoCopyLink)) {
+      if (getExtension().settings.get_boolean(Config.KeyImgurAutoCopyLink)) {
         this.imgurCopyURL();
       }
 
-      if (settings.get_boolean(Config.KeyImgurAutoOpenLink)) {
+      if (getExtension().settings.get_boolean(Config.KeyImgurAutoOpenLink)) {
         this.imgurOpenURL();
       }
     });
