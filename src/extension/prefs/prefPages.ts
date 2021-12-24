@@ -24,6 +24,15 @@ import {
   prefSwitch,
 } from './prefModel';
 
+function getBackendPrefs(): PrefRow[] {
+  const comboBoxOptions: PrefComboBoxOption[] = [
+    [_('gnome-screenshot'), Config.Backends.GNOME_SCREENSHOT_CLI],
+    [_('Desktop Portal'), Config.Backends.DESKTOP_PORTAL],
+  ];
+
+  return [prefRow(_('Backend'), prefComboBox(comboBoxOptions, Config.KeyBackend))];
+}
+
 function getIndicatorPrefs(): PrefRow[] {
   const [optionNothing, optionImageData, optionLocalPath] = [
     [_('Nothing'), Config.ClipboardActions.NONE],
@@ -140,5 +149,6 @@ export function getPages(): PrefPage[] {
     prefPage(_('Storage'), getStoragePrefs()),
     prefPage(_('Imgur'), getImgurPrefs()),
     prefPage(_('Keybindings'), getKeybindPrefs()),
+    prefPage(_('Backend'), getBackendPrefs()),
   ];
 }

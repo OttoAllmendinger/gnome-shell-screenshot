@@ -1,4 +1,4 @@
-var init = (function (Meta, Shell, St, Cogl, Clutter, Gio, GObject, GdkPixbuf, GLib, Gtk, Soup) {
+var init = (function (Meta, Shell, Gio, GObject, GdkPixbuf, GLib, Gtk, St, Soup, Cogl, Clutter) {
     'use strict';
 
     const extensionUtils = imports.misc.extensionUtils;
@@ -17,6 +17,11 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, Gio, GObject, GdkPixbuf, G
     }
     const _ = extensionUtils.gettext;
 
+    const KeyBackend = 'backend';
+    const Backends = {
+        DESKTOP_PORTAL: 'desktop-portal',
+        GNOME_SCREENSHOT_CLI: 'gnome-screenshot',
+    };
     const IndicatorName = 'de.ttll.GnomeScreenshot';
     const KeyEnableIndicator = 'enable-indicator';
     const KeyEnableNotification = 'enable-notification';
@@ -712,6 +717,90 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, Gio, GObject, GdkPixbuf, G
         };
     }
 
+    function parameters$1(v) {
+        return [['f', GLib.shell_quote(v.filename), _('Filename')]];
+    }
+    function getCommand(runCommand, file) {
+        const filename = file.get_path();
+        if (!filename) {
+            throw new Error('path: null');
+        }
+        return stringFormat(runCommand, toObject(parameters$1({ filename })));
+    }
+    async function exec(runCommand, file) {
+        const command = getCommand(runCommand, file);
+        const [ok, argv] = GLib.shell_parse_argv(command);
+        if (!ok || !argv) {
+            throw new Error('argv parse error command=' + command);
+        }
+        await spawnAsync(argv);
+        return command;
+    }
+
+    /*
+
+    Usage:
+      gnome-screenshot [OPTION…]
+
+    Help Options:
+      -h, --help                     Show help options
+      --help-all                     Show all help options
+      --help-gapplication            Show GApplication options
+      --help-gtk                     Show GTK+ Options
+
+    Application Options:
+      -c, --clipboard                Send the grab directly to the clipboard
+      -w, --window                   Grab a window instead of the entire screen
+      -a, --area                     Grab an area of the screen instead of the entire screen
+      -b, --include-border           Include the window border with the screenshot. This option is deprecated and window border is always included
+      -B, --remove-border            Remove the window border from the screenshot. This option is deprecated and window border is always included
+      -p, --include-pointer          Include the pointer with the screenshot
+      -d, --delay=seconds            Take screenshot after specified delay [in seconds]
+      -e, --border-effect=effect     Effect to add to the border (‘shadow’, ‘border’, ‘vintage’ or ‘none’). Note: This option is deprecated and is assumed to be ‘none’
+      -i, --interactive              Interactively set options
+      -f, --file=filename            Save screenshot directly to this file
+      --version                      Print version information and exit
+      --display=DISPLAY              X display to use
+
+     */
+    class BackendGnomeScreenshot {
+        supportsParam(paramName) {
+            return paramName === 'delay-seconds';
+        }
+        supportsAction(action) {
+            switch (action) {
+                case 'select-area':
+                case 'select-window':
+                case 'select-desktop':
+                    return true;
+                default:
+                    return false;
+            }
+        }
+        async exec(action, params) {
+            if (!Number.isInteger(params.delaySeconds)) {
+                throw new Error(`delaySeconds must be integer, got ${params.delaySeconds}`);
+            }
+            const tempfile = getTemp();
+            const args = ['gnome-screenshot', `--delay=${params.delaySeconds}`, `--file=${tempfile}`];
+            switch (action) {
+                case 'select-area':
+                    args.push('--area');
+                    break;
+                case 'select-window':
+                    args.push('--window');
+                    break;
+                case 'select-desktop':
+                    // default
+                    break;
+                default:
+                    throw new ErrorNotImplemented();
+            }
+            await spawnAsync(args);
+            return tempfile;
+        }
+    }
+
     const connection = Gio.DBus.session;
     const serviceName = 'org.freedesktop.portal.Desktop';
     const interfaceName = 'org.freedesktop.portal.Request';
@@ -758,34 +847,56 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, Gio, GObject, GdkPixbuf, G
         }
     }
 
-    function parameters$1(v) {
-        return [['f', GLib.shell_quote(v.filename), _('Filename')]];
-    }
-    function getCommand(runCommand, file) {
-        const filename = file.get_path();
-        if (!filename) {
-            throw new Error('path: null');
-        }
-        return stringFormat(runCommand, toObject(parameters$1({ filename })));
-    }
-    async function exec(runCommand, file) {
-        const command = getCommand(runCommand, file);
-        const [ok, argv] = GLib.shell_parse_argv(command);
-        if (!ok || !argv) {
-            throw new Error('argv parse error command=' + command);
-        }
-        await spawnAsync(argv);
-        return command;
-    }
-
     function stripPrefix(prefix, s) {
         if (s.startsWith(prefix)) {
             return s.slice(prefix.length);
         }
         return s;
     }
-    function onScreenshot(filePath) {
+    class BackendDeskopPortal {
+        supportsAction(action) {
+            return action === 'open-portal';
+        }
+        supportsParam(_) {
+            return false;
+        }
+        async exec(action, _) {
+            if (action !== 'open-portal') {
+                throw new ErrorNotImplemented();
+            }
+            return stripPrefix('file://', await portalScreenshot(await getExtension().servicePromise));
+        }
+    }
+
+    class ErrorNotImplemented extends Error {
+        constructor() {
+            super('not implemented');
+        }
+    }
+    const actionNames = ['open-portal', 'select-area', 'select-window', 'select-desktop'];
+    function isActionName(v) {
+        return actionNames.includes(v);
+    }
+    function getBackend(settings) {
+        const backendStr = settings.get_string(KeyBackend);
+        switch (backendStr) {
+            case Backends.GNOME_SCREENSHOT_CLI:
+                return new BackendGnomeScreenshot();
+            case Backends.DESKTOP_PORTAL:
+                return new BackendDeskopPortal();
+            default:
+                throw new Error(`unexpected backend ${backendStr}`);
+        }
+    }
+
+    async function onAction(action) {
+        if (!isActionName(action)) {
+            throw new Error(`invalid action ${action}`);
+        }
         const { settings, indicator } = getExtension();
+        const filePath = await getBackend(settings).exec(action, {
+            delaySeconds: settings.get_int(KeyCaptureDelay) / 1000,
+        });
         const effects = [new Rescale(settings.get_int(KeyEffectRescale) / 100.0)];
         const screenshot = new Screenshot(filePath, effects);
         if (settings.get_boolean(KeySaveScreenshot)) {
@@ -812,22 +923,6 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, Gio, GObject, GdkPixbuf, G
             screenshot.imgurStartUpload();
         }
     }
-    function onAction(action) {
-        wrapNotifyError(async () => {
-            switch (action) {
-                case 'select-area':
-                case 'select-desktop':
-                case 'select-window':
-                    throw new Error('Not available for Gnome 41');
-                case 'open-portal':
-                    const path = await portalScreenshot(await getExtension().servicePromise);
-                    onScreenshot(stripPrefix('file://', path));
-                    break;
-                default:
-                    throw new Error('unknown action ' + action);
-            }
-        })();
-    }
 
     const PanelMenu = imports.ui.panelMenu;
     const PopupMenu = imports.ui.popupMenu;
@@ -836,10 +931,8 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, Gio, GObject, GdkPixbuf, G
     class CaptureDelayMenu extends PopupMenu.PopupMenuSection {
         createScale() {
             const scale = [0];
-            for (let p = 1; p < 4; p++) {
-                for (let x = 1; x <= 10; x += 1) {
-                    scale.push(x * Math.pow(10, p));
-                }
+            for (let x = 1; x <= 10; x += 1) {
+                scale.push(x * 1000);
             }
             return scale;
         }
@@ -920,9 +1013,6 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, Gio, GObject, GdkPixbuf, G
             this.imgurMenu.menu.addMenuItem(this.imgurCopyLink);
             this.imgurMenu.menu.addMenuItem(this.imgurDelete);
             menu.addMenuItem(this.imgurMenu);
-            menu.connect('open-state-changed', () => {
-                this.updateVisibility();
-            });
             this.updateVisibility();
         }
         updateVisibility() {
@@ -1005,7 +1095,37 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, Gio, GObject, GdkPixbuf, G
             });
             this.panelButton.add_actor(icon);
             this.panelButton.connect('button-press-event', wrapNotifyError((obj, evt) => this.onClick(obj, evt)));
-            this.buildMenu();
+            // These actions can be triggered via shortcut or popup menu
+            const menu = this.panelButton.menu;
+            const items = [
+                ['open-portal', _('Open Portal')],
+                ['select-area', _('Select Area')],
+                ['select-window', _('Select Window')],
+                ['select-desktop', _('Select Desktop')],
+            ];
+            this.actionItems = items.reduce((record, [action, title]) => {
+                const item = new PopupMenu.PopupMenuItem(title);
+                item.connect('activate', wrapNotifyError(async () => {
+                    menu.close();
+                    await onAction(action);
+                }));
+                menu.addMenuItem(item);
+                return Object.assign(Object.assign({}, record), { [action]: item });
+            }, {});
+            menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
+            menu.addMenuItem((this.captureDelayMenu = new CaptureDelayMenu()));
+            menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
+            this.screenshotSection = new ScreenshotSection(menu);
+            menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
+            // Settings can only be triggered via menu
+            const settingsItem = new PopupMenu.PopupMenuItem(_('Settings'));
+            settingsItem.connect('activate', () => {
+                extensionUtils.openPrefs();
+            });
+            menu.addMenuItem(settingsItem);
+            menu.connect('open-state-changed', () => {
+                this.updateVisibility();
+            });
         }
         onClick(_obj, evt) {
             // only override primary button behavior
@@ -1017,34 +1137,14 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, Gio, GObject, GdkPixbuf, G
                 return;
             }
             this.panelButton.menu.close();
-            onAction(action);
         }
-        buildMenu() {
-            // These actions can be triggered via shortcut or popup menu
-            const menu = this.panelButton.menu;
-            const items = [
-                ['open-portal', _('Open Portal')],
-                ['select-area', _('Select Area')],
-                ['select-window', _('Select Window')],
-                ['select-desktop', _('Select Desktop')],
-            ];
-            items.forEach(([action, title]) => {
-                const item = new PopupMenu.PopupMenuItem(title);
-                item.connect('activate', () => {
-                    menu.close();
-                    onAction(action);
-                });
-                menu.addMenuItem(item);
+        updateVisibility() {
+            const backend = getBackend(this.extension.settings);
+            Object.entries(this.actionItems).forEach(([actionName, item]) => {
+                item.visible = backend.supportsAction(actionName);
             });
-            menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
-            this.screenshotSection = new ScreenshotSection(menu);
-            menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
-            // Settings can only be triggered via menu
-            const settingsItem = new PopupMenu.PopupMenuItem(_('Settings'));
-            settingsItem.connect('activate', () => {
-                extensionUtils.openPrefs();
-            });
-            menu.addMenuItem(settingsItem);
+            this.captureDelayMenu.visible = backend.supportsParam('delay-seconds');
+            this.screenshotSection.updateVisibility();
         }
         setScreenshot(screenshot) {
             if (!this.screenshotSection) {
@@ -1070,7 +1170,7 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, Gio, GObject, GdkPixbuf, G
         setKeybindings() {
             const bindingMode = Shell.ActionMode.NORMAL;
             for (const shortcut of KeyShortcuts) {
-                Main$1.wm.addKeybinding(shortcut, this.settings, Meta.KeyBindingFlags.NONE, bindingMode, () => onAction(shortcut.replace('shortcut-', '')));
+                Main$1.wm.addKeybinding(shortcut, this.settings, Meta.KeyBindingFlags.NONE, bindingMode, wrapNotifyError(() => onAction(shortcut.replace('shortcut-', ''))));
             }
         }
         unsetKeybindings() {
@@ -1134,4 +1234,4 @@ var init = (function (Meta, Shell, St, Cogl, Clutter, Gio, GObject, GdkPixbuf, G
 
     return init;
 
-}(imports.gi.Meta, imports.gi.Shell, imports.gi.St, imports.gi.Cogl, imports.gi.Clutter, imports.gi.Gio, imports.gi.GObject, imports.gi.GdkPixbuf, imports.gi.GLib, imports.gi.Gtk, imports.gi.Soup));
+}(imports.gi.Meta, imports.gi.Shell, imports.gi.Gio, imports.gi.GObject, imports.gi.GdkPixbuf, imports.gi.GLib, imports.gi.Gtk, imports.gi.St, imports.gi.Soup, imports.gi.Cogl, imports.gi.Clutter));

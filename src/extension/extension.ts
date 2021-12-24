@@ -1,14 +1,14 @@
 import * as Meta from '@imports/Meta-8';
 import * as Shell from '@imports/Shell-0.1';
+import { Settings } from '@imports/Gio-2.0';
 
 import { SignalEmitter } from '..';
-
+import { onAction } from './actions';
+import { wrapNotifyError } from './notifications';
 import * as Config from './config';
 import * as Indicator from './indicator';
 import { ScreenshotPortalProxy, getServiceProxy } from './screenshotPortal';
 import ExtensionUtils, { ExtensionInfo } from '../gselib/extensionUtils';
-import { Settings } from '@imports/Gio-2.0';
-import { onAction } from './actions';
 
 const Signals = imports.signals;
 const Main = imports.ui.main;
@@ -36,8 +36,12 @@ export class Extension {
     const bindingMode = Shell.ActionMode.NORMAL;
 
     for (const shortcut of Config.KeyShortcuts) {
-      Main.wm.addKeybinding(shortcut, this.settings, Meta.KeyBindingFlags.NONE, bindingMode, () =>
-        onAction(shortcut.replace('shortcut-', '')),
+      Main.wm.addKeybinding(
+        shortcut,
+        this.settings,
+        Meta.KeyBindingFlags.NONE,
+        bindingMode,
+        wrapNotifyError(() => onAction(shortcut.replace('shortcut-', ''))),
       );
     }
   }

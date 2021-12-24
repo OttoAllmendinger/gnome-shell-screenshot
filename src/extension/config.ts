@@ -1,3 +1,10 @@
+export const KeyBackend = 'backend';
+
+export const Backends = {
+  DESKTOP_PORTAL: 'desktop-portal',
+  GNOME_SCREENSHOT_CLI: 'gnome-screenshot',
+};
+
 export const IndicatorName = 'de.ttll.GnomeScreenshot';
 
 export const SettingsSchema = 'org.gnome.shell.extensions.screenshot';

@@ -10,6 +10,7 @@ import { Screenshot } from './screenshot';
 import { wrapNotifyError } from './notifications';
 import { onAction } from './actions';
 import { getExtension } from './extension';
+import { ActionName, getBackend } from './backends/backend';
 
 const PanelMenu = imports.ui.panelMenu;
 const PopupMenu = imports.ui.popupMenu;
@@ -23,10 +24,8 @@ declare interface CaptureDelayMenu extends St.Widget {}
 class CaptureDelayMenu extends PopupMenu.PopupMenuSection {
   createScale() {
     const scale = [0];
-    for (let p = 1; p < 4; p++) {
-      for (let x = 1; x <= 10; x += 1) {
-        scale.push(x * Math.pow(10, p));
-      }
+    for (let x = 1; x <= 10; x += 1) {
+      scale.push(x * 1000);
     }
     return scale;
   }
@@ -168,10 +167,6 @@ class ScreenshotSection {
 
     menu.addMenuItem(this.imgurMenu);
 
-    menu.connect('open-state-changed', () => {
-      this.updateVisibility();
-    });
-
     this.updateVisibility();
   }
 
@@ -271,7 +266,9 @@ class ScreenshotSection {
 
 export class Indicator {
   private extension: Extension.Extension;
-  private screenshotSection?: ScreenshotSection;
+  private screenshotSection: ScreenshotSection;
+  private captureDelayMenu: CaptureDelayMenu;
+  private actionItems: Record<ActionName, PopupMenuItem>;
 
   public panelButton: St.Button & { menu: any };
 
@@ -289,7 +286,48 @@ export class Indicator {
       wrapNotifyError((obj, evt) => this.onClick(obj, (evt as unknown) as Clutter.Event)),
     );
 
-    this.buildMenu();
+    // These actions can be triggered via shortcut or popup menu
+    const menu = this.panelButton.menu;
+    const items: [ActionName, string][] = [
+      ['open-portal', _('Open Portal')],
+      ['select-area', _('Select Area')],
+      ['select-window', _('Select Window')],
+      ['select-desktop', _('Select Desktop')],
+    ];
+
+    this.actionItems = items.reduce((record: Record<ActionName, PopupMenuItem>, [action, title]) => {
+      const item = new PopupMenu.PopupMenuItem(title);
+      item.connect(
+        'activate',
+        wrapNotifyError(async () => {
+          menu.close();
+          await onAction(action);
+        }),
+      );
+      menu.addMenuItem(item);
+      return { ...record, [action]: item };
+    }, {} as Record<ActionName, PopupMenuItem>);
+
+    menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
+
+    menu.addMenuItem((this.captureDelayMenu = new CaptureDelayMenu()));
+
+    menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
+
+    this.screenshotSection = new ScreenshotSection(menu);
+
+    menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
+
+    // Settings can only be triggered via menu
+    const settingsItem = new PopupMenu.PopupMenuItem(_('Settings'));
+    settingsItem.connect('activate', () => {
+      ExtensionUtils.openPrefs();
+    });
+    menu.addMenuItem(settingsItem);
+
+    menu.connect('open-state-changed', () => {
+      this.updateVisibility();
+    });
   }
 
   onClick(_obj: unknown, evt: Clutter.Event): void {
@@ -304,40 +342,18 @@ export class Indicator {
     }
 
     this.panelButton.menu.close();
-    onAction(action);
+    wrapNotifyError(async () => onAction(action));
   }
 
-  buildMenu(): void {
-    // These actions can be triggered via shortcut or popup menu
-    const menu = this.panelButton.menu;
-    const items = [
-      ['open-portal', _('Open Portal')],
-      ['select-area', _('Select Area')],
-      ['select-window', _('Select Window')],
-      ['select-desktop', _('Select Desktop')],
-    ];
-
-    items.forEach(([action, title]) => {
-      const item = new PopupMenu.PopupMenuItem(title);
-      item.connect('activate', () => {
-        menu.close();
-        onAction(action);
-      });
-      menu.addMenuItem(item);
+  updateVisibility(): void {
+    const backend = getBackend(this.extension.settings);
+    Object.entries(this.actionItems).forEach(([actionName, item]) => {
+      item.visible = backend.supportsAction(actionName as ActionName);
     });
 
-    menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
+    this.captureDelayMenu.visible = backend.supportsParam('delay-seconds');
 
-    this.screenshotSection = new ScreenshotSection(menu);
-
-    menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
-
-    // Settings can only be triggered via menu
-    const settingsItem = new PopupMenu.PopupMenuItem(_('Settings'));
-    settingsItem.connect('activate', () => {
-      ExtensionUtils.openPrefs();
-    });
-    menu.addMenuItem(settingsItem);
+    this.screenshotSection.updateVisibility();
   }
 
   setScreenshot(screenshot: Screenshot): void {

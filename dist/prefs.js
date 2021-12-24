@@ -606,6 +606,11 @@ var prefs = (function (Gtk3, Gtk4, Gio, GLib, GObject) {
         }
     }
 
+    const KeyBackend = 'backend';
+    const Backends = {
+        DESKTOP_PORTAL: 'desktop-portal',
+        GNOME_SCREENSHOT_CLI: 'gnome-screenshot',
+    };
     const KeyEnableIndicator = 'enable-indicator';
     const KeyEnableNotification = 'enable-notification';
     const ValueShortcutSelectArea = 'shortcut-select-area';
@@ -706,6 +711,13 @@ var prefs = (function (Gtk3, Gtk4, Gio, GLib, GObject) {
         return { label, widget: child };
     }
 
+    function getBackendPrefs() {
+        const comboBoxOptions = [
+            [_('gnome-screenshot'), Backends.GNOME_SCREENSHOT_CLI],
+            [_('Desktop Portal'), Backends.DESKTOP_PORTAL],
+        ];
+        return [prefRow(_('Backend'), prefComboBox(comboBoxOptions, KeyBackend))];
+    }
     function getIndicatorPrefs() {
         const [optionNothing, optionImageData, optionLocalPath] = [
             [_('Nothing'), ClipboardActions.NONE],
@@ -783,6 +795,7 @@ var prefs = (function (Gtk3, Gtk4, Gio, GLib, GObject) {
             prefPage(_('Storage'), getStoragePrefs()),
             prefPage(_('Imgur'), getImgurPrefs()),
             prefPage(_('Keybindings'), getKeybindPrefs()),
+            prefPage(_('Backend'), getBackendPrefs()),
         ];
     }
 
