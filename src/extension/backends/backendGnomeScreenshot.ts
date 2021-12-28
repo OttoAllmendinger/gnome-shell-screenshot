@@ -63,7 +63,7 @@ export class BackendGnomeScreenshot implements Backend {
         // default
         break;
       default:
-        throw new ErrorNotImplemented();
+        throw new ErrorNotImplemented(action);
     }
     await spawnAsync(args);
     return tempfile;

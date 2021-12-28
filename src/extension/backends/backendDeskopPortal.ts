@@ -20,7 +20,7 @@ export class BackendDeskopPortal implements Backend {
 
   async exec(action: ActionName, _: ScreenshotParams): Promise<string> {
     if (action !== 'open-portal') {
-      throw new ErrorNotImplemented();
+      throw new ErrorNotImplemented(action);
     }
     return stripPrefix('file://', await portalScreenshot(await getExtension().servicePromise));
   }

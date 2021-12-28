@@ -6,8 +6,8 @@ import { BackendGnomeScreenshot } from './backendGnomeScreenshot';
 import { BackendDeskopPortal } from './backendDeskopPortal';
 
 export class ErrorNotImplemented extends Error {
-  constructor() {
-    super('not implemented');
+  constructor(action: ActionName) {
+    super(`action ${action} not implemented for this backend`);
   }
 }
 

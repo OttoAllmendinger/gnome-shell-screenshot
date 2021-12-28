@@ -3,7 +3,7 @@ import { Rescale, Screenshot } from './screenshot';
 import * as Config from './config';
 import * as Commands from './commands';
 import { getExtension } from './extension';
-import { getBackend, isActionName } from './backends/backend';
+import { ErrorNotImplemented, getBackend, isActionName } from './backends/backend';
 
 export async function onAction(action: string): Promise<void> {
   if (!isActionName(action)) {
@@ -11,7 +11,12 @@ export async function onAction(action: string): Promise<void> {
   }
   const { settings, indicator } = getExtension();
 
-  const filePath = await getBackend(settings).exec(action, {
+  const backend = getBackend(settings);
+  if (!backend.supportsAction(action)) {
+    throw new ErrorNotImplemented(action);
+  }
+
+  const filePath = await backend.exec(action, {
     delaySeconds: settings.get_int(Config.KeyCaptureDelay) / 1000,
   });
 
