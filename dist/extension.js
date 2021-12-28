@@ -794,7 +794,7 @@ var init = (function (Meta, Shell, Gio, GObject, GdkPixbuf, GLib, Gtk, St, Soup,
                     // default
                     break;
                 default:
-                    throw new ErrorNotImplemented();
+                    throw new ErrorNotImplemented(action);
             }
             await spawnAsync(args);
             return tempfile;
@@ -862,15 +862,15 @@ var init = (function (Meta, Shell, Gio, GObject, GdkPixbuf, GLib, Gtk, St, Soup,
         }
         async exec(action, _) {
             if (action !== 'open-portal') {
-                throw new ErrorNotImplemented();
+                throw new ErrorNotImplemented(action);
             }
             return stripPrefix('file://', await portalScreenshot(await getExtension().servicePromise));
         }
     }
 
     class ErrorNotImplemented extends Error {
-        constructor() {
-            super('not implemented');
+        constructor(action) {
+            super(`action ${action} not implemented for this backend`);
         }
     }
     const actionNames = ['open-portal', 'select-area', 'select-window', 'select-desktop'];
@@ -894,7 +894,11 @@ var init = (function (Meta, Shell, Gio, GObject, GdkPixbuf, GLib, Gtk, St, Soup,
             throw new Error(`invalid action ${action}`);
         }
         const { settings, indicator } = getExtension();
-        const filePath = await getBackend(settings).exec(action, {
+        const backend = getBackend(settings);
+        if (!backend.supportsAction(action)) {
+            throw new ErrorNotImplemented(action);
+        }
+        const filePath = await backend.exec(action, {
             delaySeconds: settings.get_int(KeyCaptureDelay) / 1000,
         });
         const effects = [new Rescale(settings.get_int(KeyEffectRescale) / 100.0)];
@@ -1137,6 +1141,7 @@ var init = (function (Meta, Shell, Gio, GObject, GdkPixbuf, GLib, Gtk, St, Soup,
                 return;
             }
             this.panelButton.menu.close();
+            wrapNotifyError(async () => onAction(action))();
         }
         updateVisibility() {
             const backend = getBackend(this.extension.settings);
