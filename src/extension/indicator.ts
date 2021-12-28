@@ -342,7 +342,7 @@ export class Indicator {
     }
 
     this.panelButton.menu.close();
-    wrapNotifyError(async () => onAction(action));
+    wrapNotifyError(async () => onAction(action))();
   }
 
   updateVisibility(): void {
