@@ -9,8 +9,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-03-23 23:47+0100\n"
 "PO-Revision-Date: 2019-05-01 18:56-0400\n"
-"Last-Translator: Benjamin Dupont <benjamin.dupont.984@gmail.com>\n"
-"Language-Team: \n"
+"Last-Translator: Jean-Alexandre Anglès d'Auriac <jeanalexandre@anglesdauriac.fr>\n"
+"Language-Team: Benjamin Dupont <benjamin.dupont.984@gmail.com>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -61,11 +61,11 @@ msgstr "Effacer"
 
 #: src/extension/notifications.ts:224 src/extension/prefs/prefPages.ts:78
 msgid "Command"
-msgstr ""
+msgstr "Commande"
 
 #: src/extension/prefs/prefPages.ts:137
 msgid "Commands"
-msgstr ""
+msgstr "Commandes"
 
 #: src/extension/indicator.ts:118 src/extension/notifications.ts:75
 msgid "Copy"
@@ -94,7 +94,7 @@ msgstr "Supprimer"
 
 #: src/extension/prefs/prefPages.ts:136
 msgid "Effects"
-msgstr ""
+msgstr "Effets"
 
 #: src/extension/prefs/prefPages.ts:117
 msgid "Enable Imgur Upload"
@@ -106,7 +106,7 @@ msgstr "Erreur"
 
 #: src/extension/commands.ts:25
 msgid "Filename"
-msgstr ""
+msgstr "Nom du fichier"
 
 #: src/extension/filename.ts:32
 msgid "Height"
@@ -154,7 +154,7 @@ msgstr "Raccourci clavier"
 
 #: src/extension/prefs/prefPages.ts:31
 msgid "Local Path"
-msgstr ""
+msgstr "Chemin du fichier"
 
 #: src/extension/filename.ts:29
 msgid "Minute"
@@ -198,11 +198,11 @@ msgstr "Boutton principal"
 
 #: src/extension/prefs/prefPages.ts:62
 msgid "Rescale"
-msgstr ""
+msgstr "Redimensionner"
 
 #: src/extension/prefs/prefPages.ts:76
 msgid "Run Command After Capture"
-msgstr ""
+msgstr "Exécuter une commande après la capture"
 
 #: src/extension/notifications.ts:76
 msgid "Save"
