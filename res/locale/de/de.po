@@ -50,7 +50,7 @@ msgstr "Auto-Upload nach Aufname"
 
 #: src/extension/prefs/prefPages.ts:152 src/extension/prefs/prefPages.ts:33
 msgid "Backend"
-msgstr ""
+msgstr "Backend"
 
 #: src/extension/prefs/prefView.ts:268
 #, fuzzy
@@ -100,7 +100,7 @@ msgstr "Löschen"
 
 #: src/extension/prefs/prefPages.ts:30
 msgid "Desktop Portal"
-msgstr ""
+msgstr "Desktop Portal"
 
 #: src/extension/prefs/prefPages.ts:147
 msgid "Effects"
@@ -129,7 +129,7 @@ msgstr "Höhe"
 
 #: src/extension/notifications.ts:147
 msgid "Help"
-msgstr ""
+msgstr "Hilfe"
 
 #: src/extension/filename.ts:33
 msgid "Hostname"
@@ -205,11 +205,11 @@ msgstr "Link Öffnen"
 
 #: src/extension/prefs/prefPages.ts:140
 msgid "Open portal"
-msgstr ""
+msgstr "Portal öffnen"
 
 #: src/extension/indicator.ts:292 src/extension/prefs/prefPages.ts:55
 msgid "Open Portal"
-msgstr ""
+msgstr "Portal öffnen"
 
 #: src/extension/templateParams.ts:5
 msgid "Parameters:"
