@@ -6,7 +6,7 @@ imports.gi.versions.Gtk = imports.gi.GLib.getenv("GTK");
     var uuid = "gnome-shell-screenshot@ttll.de";
     var name = "Screenshot Tool";
     var url = "https://github.com/OttoAllmendinger/gnome-shell-screenshot/";
-    var description = "Conveniently create, copy, store and upload screenshots";
+    var description = "Conveniently create, copy, store and upload screenshots. Please log out and log in again after updating.";
     var metadata = {
     	"shell-version": [
     	"40",
