@@ -86,7 +86,7 @@ should work again afterwards.
 
 ## Contributors
 
-* https://github.com/RaphaelRochet, https://github.com/peetcamron -- French translation
+* https://github.com/RaphaelRochet, https://github.com/peetcamron, https://github.com/oxayotl -- French translation
 * https://github.com/gsantner -- German translation
 * https://github.com/pkomur, https://github.com/orschiro, https://github.com/MartinPL -- Polish translation
 * https://github.com/amivaleo, https://github.com/Fastbyte01 -- Italian translation
@@ -100,7 +100,9 @@ should work again afterwards.
 * https://github.com/Burday -- Bulgarian translation
 * https://github.com/johanbcn -- Spanish and Catalan translation
 * https://github.com/ibaios -- Basque translation
-* https://github.com/kudaliar032 -- Indonesian Translation
+* https://github.com/kudaliar032 -- Indonesian translation
+* https://github.com/Vistaus -- Dutch translation
+* https://github.com/xypine -- Finnish translation
 
 Also see contributors for
 [gnome-shell-imgur](https://github.com/OttoAllmendinger/gnome-shell-imgur/).
