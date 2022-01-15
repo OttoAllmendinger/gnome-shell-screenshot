@@ -7,6 +7,8 @@ import * as Config from './config';
 import * as Thumbnail from './thumbnail';
 import { ErrorInvalidSettings, Screenshot } from './screenshot';
 import { getExtension } from './extension';
+import { BackendError } from './actions';
+import { openURI } from './openURI';
 
 const Main = imports.ui.main;
 const MessageTray = imports.ui.messageTray;
@@ -18,9 +20,23 @@ const ICON_SIZE = 64;
 
 enum ErrorActions {
   OPEN_SETTINGS,
+  OPEN_HELP,
 }
 
-function getSource() {
+type MessageSource = {
+  showNotification(n: unknown): void;
+};
+
+function getURI(error: string | Error): string | undefined {
+  if (error instanceof BackendError) {
+    return [
+      'https://github.com/OttoAllmendinger/gnome-shell-screenshot/',
+      `blob/master/README.md#error-backend-${error.backendName}`,
+    ].join('');
+  }
+}
+
+function getSource(): MessageSource {
   const source = new MessageTray.Source(NotificationSourceName, NotificationIcon);
   Main.messageTray.add(source);
   return source;
@@ -101,14 +117,16 @@ const NotificationNewScreenshot = registerClass(
 
 const ErrorNotification = registerClass(
   class ErrorNotification extends MessageTray.Notification {
-    buttons?: ErrorActions[];
+    buttons!: ErrorActions[];
+    error!: string | Error;
 
-    _init(source, message, buttons) {
-      super._init(source, _('Error'), String(message), {
+    _init(source: MessageSource, error: string | Error, buttons: ErrorActions[]) {
+      super._init(source, _('Error'), String(error), {
         secondaryGIcon: new Gio.ThemedIcon({ name: 'dialog-error' }),
       });
 
       this.buttons = buttons;
+      this.error = error;
     }
 
     createBanner() {
@@ -120,6 +138,13 @@ const ErrorNotification = registerClass(
             banner.addAction(_('Settings'), () => {
               ExtensionUtils.openPrefs();
             });
+            break;
+          case ErrorActions.OPEN_HELP:
+            const uri = getURI(this.error);
+            if (!uri) {
+              return;
+            }
+            banner.addAction(_('Help'), () => openURI(uri));
             break;
           default:
             logError(new Error('unknown button ' + b));
@@ -133,7 +158,7 @@ const ErrorNotification = registerClass(
 
 const ImgurNotification = registerClass(
   class ImgurNotification extends MessageTray.Notification {
-    _init(source, screenshot) {
+    _init(source: MessageSource, screenshot: Screenshot) {
       super._init(source, _('Imgur Upload'));
 
       this.setForFeedback(true);
@@ -201,9 +226,12 @@ export function notifyError(error: string | Error): void {
     if (error instanceof ErrorInvalidSettings) {
       buttons.push(ErrorActions.OPEN_SETTINGS);
     }
+    if (error instanceof BackendError) {
+      buttons.push(ErrorActions.OPEN_HELP);
+    }
   }
   const source = getSource();
-  const notification = new ErrorNotification(source, error.toString(), buttons);
+  const notification = new ErrorNotification(source, error, buttons);
   source.showNotification(notification);
 }
 

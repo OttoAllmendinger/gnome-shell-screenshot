@@ -3,7 +3,14 @@ import { Rescale, Screenshot } from './screenshot';
 import * as Config from './config';
 import * as Commands from './commands';
 import { getExtension } from './extension';
-import { ErrorNotImplemented, getBackend, isActionName } from './backends/backend';
+import { ErrorNotImplemented, getBackend, getBackendName, isActionName } from './backends/backend';
+import { fileExists } from './filename';
+
+export class BackendError extends Error {
+  constructor(public backendName: string, public cause: Error) {
+    super(`backend ${backendName}: ${cause}`);
+  }
+}
 
 export async function onAction(action: string): Promise<void> {
   if (!isActionName(action)) {
@@ -16,9 +23,18 @@ export async function onAction(action: string): Promise<void> {
     throw new ErrorNotImplemented(action);
   }
 
-  const filePath = await backend.exec(action, {
-    delaySeconds: settings.get_int(Config.KeyCaptureDelay) / 1000,
-  });
+  let filePath;
+  try {
+    filePath = await backend.exec(action, {
+      delaySeconds: settings.get_int(Config.KeyCaptureDelay) / 1000,
+    });
+  } catch (e) {
+    throw new BackendError(getBackendName(settings), e);
+  }
+
+  if (!fileExists(filePath)) {
+    throw new Error(`file ${filePath} does not exist`);
+  }
 
   const effects = [new Rescale(settings.get_int(Config.KeyEffectRescale) / 100.0)];
   const screenshot = new Screenshot(filePath, effects);

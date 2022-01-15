@@ -1,7 +1,6 @@
 import * as Gio from '@imports/Gio-2.0';
 import * as GdkPixbuf from '@imports/GdkPixbuf-2.0';
 import * as Gtk from '@imports/Gtk-3.0';
-import * as Shell from '@imports/Shell-0.1';
 import { InterpType } from '@imports/GdkPixbuf-2.0';
 
 import { SignalEmitter } from '..';
@@ -15,6 +14,7 @@ import * as UploadImgur from './uploadImgur';
 import * as Notifications from './notifications';
 import { spawnAsync } from './spawnUtil';
 import { getExtension } from './extension';
+import { openURI } from './openURI';
 
 const Signals = imports.signals;
 
@@ -114,8 +114,7 @@ export class Screenshot {
   }
 
   launchOpen(): void {
-    const context = Shell.Global.get().create_app_launch_context(0, -1);
-    Gio.AppInfo.launch_default_for_uri(this.getFinalFile().get_uri(), context);
+    openURI(this.getFinalFile().get_uri());
   }
 
   launchSave(): void {
@@ -197,12 +196,11 @@ export class Screenshot {
     if (!this.isImgurUploadComplete()) {
       throw new Error('no completed imgur upload');
     }
-    const context = Shell.Global.get().create_app_launch_context(0, -1);
     const uri = this.imgurUpload!.responseData.link;
     if (!uri) {
       throw new Error('no uri in responseData');
     }
-    Gio.AppInfo.launch_default_for_uri(uri, context);
+    openURI(this.getFinalFile().get_uri());
   }
 
   imgurCopyURL(): void {

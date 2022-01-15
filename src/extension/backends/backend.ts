@@ -33,14 +33,18 @@ export interface Backend {
   exec(action: ActionName, params: ScreenshotParams): Promise<string>;
 }
 
+export function getBackendName(settings: Settings): string {
+  return settings.get_string(Config.KeyBackend);
+}
+
 export function getBackend(settings: Settings): Backend {
-  const backendStr = settings.get_string(Config.KeyBackend);
-  switch (backendStr) {
+  const name = getBackendName(settings);
+  switch (name) {
     case Config.Backends.GNOME_SCREENSHOT_CLI:
       return new BackendGnomeScreenshot();
     case Config.Backends.DESKTOP_PORTAL:
       return new BackendDeskopPortal();
     default:
-      throw new Error(`unexpected backend ${backendStr}`);
+      throw new Error(`unexpected backend ${name}`);
   }
 }

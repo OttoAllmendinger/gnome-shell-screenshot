@@ -1,6 +1,6 @@
 import { ActionName, Backend, ErrorNotImplemented, ParamName, ScreenshotParams } from './backend';
 import { spawnAsync } from '../spawnUtil';
-import { getTemp } from '../filename';
+import { getTemp, fileExists } from '../filename';
 
 /*
 
@@ -66,6 +66,9 @@ export class BackendGnomeScreenshot implements Backend {
         throw new ErrorNotImplemented(action);
     }
     await spawnAsync(args);
+    if (!fileExists(tempfile)) {
+      throw new Error('output file does not exist.');
+    }
     return tempfile;
   }
 }

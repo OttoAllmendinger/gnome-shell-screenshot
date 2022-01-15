@@ -209,10 +209,13 @@ var init = (function (Meta, Shell, Gio, GObject, GdkPixbuf, GLib, Gtk, St, Soup,
         }
         return basename + sequence + '.png';
     }
-    const tempfilePattern = 'gnome-shell-screenshot-XXXXXX.png';
     function getTemp() {
-        const [, fileName] = GLib.file_open_tmp(tempfilePattern);
-        return fileName;
+        const tempDir = GLib.get_tmp_dir();
+        const rnd = (0 | (Math.random() * (1 << 30))).toString(36);
+        return `${tempDir}/gnome-shell-screenshot-${rnd}.png`;
+    }
+    function fileExists(path) {
+        return GLib.file_test(path, GLib.FileTest.EXISTS);
     }
 
     // width and height of thumbnail
@@ -385,6 +388,11 @@ var init = (function (Meta, Shell, Gio, GObject, GdkPixbuf, GLib, Gtk, St, Soup,
         });
     }
 
+    function openURI(uri) {
+        const context = Shell.Global.get().create_app_launch_context(0, -1);
+        Gio.AppInfo.launch_default_for_uri(uri, context);
+    }
+
     const Signals$1 = imports.signals;
     class ErrorInvalidSettings extends Error {
         constructor(message) {
@@ -455,8 +463,7 @@ var init = (function (Meta, Shell, Gio, GObject, GdkPixbuf, GLib, Gtk, St, Soup,
             return this.dstFile || this.srcFile;
         }
         launchOpen() {
-            const context = Shell.Global.get().create_app_launch_context(0, -1);
-            Gio.AppInfo.launch_default_for_uri(this.getFinalFile().get_uri(), context);
+            openURI(this.getFinalFile().get_uri());
         }
         launchSave() {
             const pathComponents = [
@@ -524,12 +531,11 @@ var init = (function (Meta, Shell, Gio, GObject, GdkPixbuf, GLib, Gtk, St, Soup,
             if (!this.isImgurUploadComplete()) {
                 throw new Error('no completed imgur upload');
             }
-            const context = Shell.Global.get().create_app_launch_context(0, -1);
             const uri = this.imgurUpload.responseData.link;
             if (!uri) {
                 throw new Error('no uri in responseData');
             }
-            Gio.AppInfo.launch_default_for_uri(uri, context);
+            openURI(this.getFinalFile().get_uri());
         }
         imgurCopyURL() {
             if (!this.isImgurUploadComplete()) {
@@ -558,7 +564,16 @@ var init = (function (Meta, Shell, Gio, GObject, GdkPixbuf, GLib, Gtk, St, Soup,
     var ErrorActions;
     (function (ErrorActions) {
         ErrorActions[ErrorActions["OPEN_SETTINGS"] = 0] = "OPEN_SETTINGS";
+        ErrorActions[ErrorActions["OPEN_HELP"] = 1] = "OPEN_HELP";
     })(ErrorActions || (ErrorActions = {}));
+    function getURI(error) {
+        if (error instanceof BackendError) {
+            return [
+                'https://github.com/OttoAllmendinger/gnome-shell-screenshot/',
+                `blob/master/README.md#error-backend-${error.backendName}`,
+            ].join('');
+        }
+    }
     function getSource() {
         const source = new MessageTray.Source(NotificationSourceName, NotificationIcon);
         Main.messageTray.add(source);
@@ -617,11 +632,12 @@ var init = (function (Meta, Shell, Gio, GObject, GdkPixbuf, GLib, Gtk, St, Soup,
         }
     });
     const ErrorNotification = registerClass(class ErrorNotification extends MessageTray.Notification {
-        _init(source, message, buttons) {
-            super._init(source, _('Error'), String(message), {
+        _init(source, error, buttons) {
+            super._init(source, _('Error'), String(error), {
                 secondaryGIcon: new Gio.ThemedIcon({ name: 'dialog-error' }),
             });
             this.buttons = buttons;
+            this.error = error;
         }
         createBanner() {
             const banner = super.createBanner();
@@ -631,6 +647,13 @@ var init = (function (Meta, Shell, Gio, GObject, GdkPixbuf, GLib, Gtk, St, Soup,
                         banner.addAction(_('Settings'), () => {
                             extensionUtils.openPrefs();
                         });
+                        break;
+                    case ErrorActions.OPEN_HELP:
+                        const uri = getURI(this.error);
+                        if (!uri) {
+                            return;
+                        }
+                        banner.addAction(_('Help'), () => openURI(uri));
                         break;
                     default:
                         logError(new Error('unknown button ' + b));
@@ -695,9 +718,12 @@ var init = (function (Meta, Shell, Gio, GObject, GdkPixbuf, GLib, Gtk, St, Soup,
             if (error instanceof ErrorInvalidSettings) {
                 buttons.push(ErrorActions.OPEN_SETTINGS);
             }
+            if (error instanceof BackendError) {
+                buttons.push(ErrorActions.OPEN_HELP);
+            }
         }
         const source = getSource();
-        const notification = new ErrorNotification(source, error.toString(), buttons);
+        const notification = new ErrorNotification(source, error, buttons);
         source.showNotification(notification);
     }
     function notifyImgurUpload(screenshot) {
@@ -797,6 +823,9 @@ var init = (function (Meta, Shell, Gio, GObject, GdkPixbuf, GLib, Gtk, St, Soup,
                     throw new ErrorNotImplemented(action);
             }
             await spawnAsync(args);
+            if (!fileExists(tempfile)) {
+                throw new Error('output file does not exist.');
+            }
             return tempfile;
         }
     }
@@ -877,18 +906,28 @@ var init = (function (Meta, Shell, Gio, GObject, GdkPixbuf, GLib, Gtk, St, Soup,
     function isActionName(v) {
         return actionNames.includes(v);
     }
+    function getBackendName(settings) {
+        return settings.get_string(KeyBackend);
+    }
     function getBackend(settings) {
-        const backendStr = settings.get_string(KeyBackend);
-        switch (backendStr) {
+        const name = getBackendName(settings);
+        switch (name) {
             case Backends.GNOME_SCREENSHOT_CLI:
                 return new BackendGnomeScreenshot();
             case Backends.DESKTOP_PORTAL:
                 return new BackendDeskopPortal();
             default:
-                throw new Error(`unexpected backend ${backendStr}`);
+                throw new Error(`unexpected backend ${name}`);
         }
     }
 
+    class BackendError extends Error {
+        constructor(backendName, cause) {
+            super(`backend ${backendName}: ${cause}`);
+            this.backendName = backendName;
+            this.cause = cause;
+        }
+    }
     async function onAction(action) {
         if (!isActionName(action)) {
             throw new Error(`invalid action ${action}`);
@@ -898,9 +937,18 @@ var init = (function (Meta, Shell, Gio, GObject, GdkPixbuf, GLib, Gtk, St, Soup,
         if (!backend.supportsAction(action)) {
             throw new ErrorNotImplemented(action);
         }
-        const filePath = await backend.exec(action, {
-            delaySeconds: settings.get_int(KeyCaptureDelay) / 1000,
-        });
+        let filePath;
+        try {
+            filePath = await backend.exec(action, {
+                delaySeconds: settings.get_int(KeyCaptureDelay) / 1000,
+            });
+        }
+        catch (e) {
+            throw new BackendError(getBackendName(settings), e);
+        }
+        if (!fileExists(filePath)) {
+            throw new Error(`file ${filePath} does not exist`);
+        }
         const effects = [new Rescale(settings.get_int(KeyEffectRescale) / 100.0)];
         const screenshot = new Screenshot(filePath, effects);
         if (settings.get_boolean(KeySaveScreenshot)) {

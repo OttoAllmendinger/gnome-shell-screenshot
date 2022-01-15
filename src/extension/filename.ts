@@ -56,9 +56,12 @@ export function isValidTemplate(template: string): boolean {
   }
 }
 
-const tempfilePattern = 'gnome-shell-screenshot-XXXXXX.png';
-
 export function getTemp(): string {
-  const [, fileName] = GLib.file_open_tmp(tempfilePattern);
-  return fileName;
+  const tempDir = GLib.get_tmp_dir();
+  const rnd = (0 | (Math.random() * (1 << 30))).toString(36);
+  return `${tempDir}/gnome-shell-screenshot-${rnd}.png`;
+}
+
+export function fileExists(path: string): boolean {
+  return GLib.file_test(path, GLib.FileTest.EXISTS);
 }
