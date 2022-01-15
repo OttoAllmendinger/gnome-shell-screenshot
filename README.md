@@ -39,6 +39,19 @@ journalctl --user /usr/bin/gnome-shell --follow
 
 ## Known Issues
 
+### <a name="error-backend-gnome-screenshot"></a>Errors with "gnome-screenshot" backend
+
+Example:
+
+* `Output file does not exist`
+* `GLib.SpawnError: Failed to execute child process`
+
+These errors can occur if the [`gnome-screenshot`](https://apps.gnome.org/de/app/org.gnome.Screenshot/) tool is not installed on your system.
+
+Please use your package manager to install the software.
+
+If the tool is installed and the error persists, please file a new bug.
+
 ### Error after updating extension (Gnome-Shell 3.37 and above)
 
 Since Gnome-Shell version `3.37.2`, extensions that are updated are unavailable
