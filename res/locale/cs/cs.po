@@ -18,32 +18,36 @@ msgstr ""
 "X-Generator: Poedit 2.0.1\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
-#: src/saveDlg/saveDlg.ts:31
+#: src/saveDlg/saveDlg.ts:30
 msgid "_Cancel"
 msgstr "_Zrušit"
 
-#: src/saveDlg/saveDlg.ts:32
+#: src/saveDlg/saveDlg.ts:31
 msgid "_Save"
 msgstr "_Uložit"
 
-#: src/extension/prefs/prefPages.ts:120
+#: src/extension/prefs/prefPages.ts:130
 msgid "Auto-Copy Link After Upload"
 msgstr ""
 
-#: src/extension/prefs/prefPages.ts:53
+#: src/extension/prefs/prefPages.ts:63
 msgid "Auto-Copy to Clipboard"
 msgstr ""
 
-#: src/extension/prefs/prefPages.ts:121
+#: src/extension/prefs/prefPages.ts:131
 msgid "Auto-Open Link After Upload"
 msgstr ""
 
-#: src/extension/prefs/prefPages.ts:91
+#: src/extension/prefs/prefPages.ts:101
 msgid "Auto-Save Screenshot"
 msgstr "Automatické ukládání"
 
-#: src/extension/prefs/prefPages.ts:119
+#: src/extension/prefs/prefPages.ts:129
 msgid "Auto-Upload After Capture"
+msgstr ""
+
+#: src/extension/prefs/prefPages.ts:152 src/extension/prefs/prefPages.ts:33
+msgid "Backend"
 msgstr ""
 
 #: src/extension/prefs/prefView.ts:268
@@ -51,32 +55,32 @@ msgstr ""
 msgid "Cancel"
 msgstr "_Zrušit"
 
-#: src/extension/indicator.ts:86 src/extension/indicator.ts:88
+#: src/extension/indicator.ts:79 src/extension/indicator.ts:81
 msgid "Capture Delay"
 msgstr ""
 
-#: src/extension/indicator.ts:117
+#: src/extension/indicator.ts:110
 msgid "Clear"
 msgstr ""
 
-#: src/extension/notifications.ts:224 src/extension/prefs/prefPages.ts:78
+#: src/extension/notifications.ts:246 src/extension/prefs/prefPages.ts:88
 msgid "Command"
 msgstr ""
 
-#: src/extension/prefs/prefPages.ts:137
+#: src/extension/prefs/prefPages.ts:148
 msgid "Commands"
 msgstr ""
 
-#: src/extension/indicator.ts:118 src/extension/notifications.ts:75
+#: src/extension/indicator.ts:111 src/extension/notifications.ts:83
 msgid "Copy"
 msgstr "Kopírovat"
 
-#: src/extension/prefs/prefPages.ts:51
+#: src/extension/prefs/prefPages.ts:61
 #, fuzzy
 msgid "Copy Button"
 msgstr "Primární tlačítko"
 
-#: src/extension/indicator.ts:150 src/extension/notifications.ts:177
+#: src/extension/indicator.ts:143 src/extension/notifications.ts:196
 #, fuzzy
 msgid "Copy Link"
 msgstr "Kopírovat"
@@ -85,23 +89,27 @@ msgstr "Kopírovat"
 msgid "Day"
 msgstr "Den"
 
-#: src/extension/prefs/prefPages.ts:96
+#: src/extension/prefs/prefPages.ts:106
 msgid "Default Filename"
 msgstr "Výchozí jméno souboru"
 
-#: src/extension/indicator.ts:151
+#: src/extension/indicator.ts:144
 msgid "Delete"
 msgstr ""
 
-#: src/extension/prefs/prefPages.ts:136
+#: src/extension/prefs/prefPages.ts:30
+msgid "Desktop Portal"
+msgstr ""
+
+#: src/extension/prefs/prefPages.ts:147
 msgid "Effects"
 msgstr ""
 
-#: src/extension/prefs/prefPages.ts:117
+#: src/extension/prefs/prefPages.ts:127
 msgid "Enable Imgur Upload"
 msgstr ""
 
-#: src/extension/notifications.ts:113
+#: src/extension/notifications.ts:124
 msgid "Error"
 msgstr "Chyba"
 
@@ -109,9 +117,18 @@ msgstr "Chyba"
 msgid "Filename"
 msgstr ""
 
+#: src/extension/prefs/prefPages.ts:29
+#, fuzzy
+msgid "gnome-screenshot"
+msgstr "Focení z obrazovky"
+
 #: src/extension/filename.ts:32
 msgid "Height"
 msgstr "Výška"
+
+#: src/extension/notifications.ts:147
+msgid "Help"
+msgstr ""
 
 #: src/extension/filename.ts:33
 msgid "Hostname"
@@ -121,31 +138,31 @@ msgstr "Jméno hostitele"
 msgid "Hour"
 msgstr "Hodina"
 
-#: src/extension/prefs/prefPages.ts:30
+#: src/extension/prefs/prefPages.ts:39
 msgid "Image Data"
 msgstr "Data rastrového obrazu"
 
-#: src/extension/indicator.ts:147 src/extension/prefs/prefPages.ts:139
+#: src/extension/indicator.ts:140 src/extension/prefs/prefPages.ts:150
 msgid "Imgur"
 msgstr ""
 
-#: src/extension/notifications.ts:143 src/extension/notifications.ts:155
+#: src/extension/notifications.ts:162 src/extension/notifications.ts:174
 msgid "Imgur Upload"
 msgstr ""
 
-#: src/extension/notifications.ts:159
+#: src/extension/notifications.ts:178
 msgid "Imgur Upload Failed"
 msgstr ""
 
-#: src/extension/notifications.ts:163
+#: src/extension/notifications.ts:182
 msgid "Imgur Upload Successful"
 msgstr ""
 
-#: src/extension/prefs/prefPages.ts:135
+#: src/extension/prefs/prefPages.ts:146
 msgid "Indicator"
 msgstr "Indikátor"
 
-#: src/extension/prefs/prefPages.ts:140
+#: src/extension/prefs/prefPages.ts:151
 msgid "Keybindings"
 msgstr "Klávesové zkratky"
 
@@ -153,7 +170,7 @@ msgstr "Klávesové zkratky"
 msgid "Keyboard Shortcut"
 msgstr "Klávesová zkratka"
 
-#: src/extension/prefs/prefPages.ts:31
+#: src/extension/prefs/prefPages.ts:40
 msgid "Local Path"
 msgstr ""
 
@@ -169,51 +186,59 @@ msgstr "Upravit"
 msgid "Month"
 msgstr "Měsíc"
 
-#: src/extension/notifications.ts:48
+#: src/extension/notifications.ts:56
 msgid "New Screenshot"
 msgstr "Nová fotka z obrazovky"
 
-#: src/extension/indicator.ts:84
+#: src/extension/indicator.ts:77
 msgid "No Capture Delay"
 msgstr ""
 
-#: src/extension/prefs/prefPages.ts:29
+#: src/extension/prefs/prefPages.ts:38
 msgid "Nothing"
 msgstr ""
 
-#: src/extension/indicator.ts:149
+#: src/extension/indicator.ts:142
 msgid "Open Link"
+msgstr ""
+
+#: src/extension/prefs/prefPages.ts:140
+msgid "Open portal"
+msgstr ""
+
+#: src/extension/indicator.ts:292 src/extension/prefs/prefPages.ts:55
+msgid "Open Portal"
 msgstr ""
 
 #: src/extension/templateParams.ts:5
 msgid "Parameters:"
 msgstr "Parametry:"
 
-#: src/extension/prefs/prefPages.ts:104
+#: src/extension/prefs/prefPages.ts:114
 msgid "Preview"
 msgstr "Náhled"
 
-#: src/extension/prefs/prefPages.ts:40
+#: src/extension/prefs/prefPages.ts:49
 msgid "Primary Button"
 msgstr "Primární tlačítko"
 
-#: src/extension/prefs/prefPages.ts:62
+#: src/extension/prefs/prefPages.ts:72
 msgid "Rescale"
 msgstr ""
 
-#: src/extension/prefs/prefPages.ts:76
+#: src/extension/prefs/prefPages.ts:86
 msgid "Run Command After Capture"
 msgstr ""
 
-#: src/extension/notifications.ts:76
+#: src/extension/notifications.ts:84
 msgid "Save"
 msgstr "Uložit"
 
-#: src/extension/indicator.ts:119
+#: src/extension/indicator.ts:112
 msgid "Save As..."
 msgstr ""
 
-#: src/extension/prefs/prefPages.ts:92
+#: src/extension/prefs/prefPages.ts:102
 msgid "Save Location"
 msgstr "Složka pro ukládání"
 
@@ -229,75 +254,71 @@ msgstr "Fotka z obrazovky (doslovně)"
 msgid "Second"
 msgstr "Sekunda"
 
-#: src/extension/prefs/prefPages.ts:92
+#: src/extension/prefs/prefPages.ts:102
 msgid "Select"
 msgstr "Vyber"
 
-#: src/extension/prefs/prefPages.ts:127
+#: src/extension/prefs/prefPages.ts:137
 msgid "Select area"
 msgstr "Vyber oblast"
 
-#: src/extension/indicator.ts:320 src/extension/prefs/prefPages.ts:43
+#: src/extension/indicator.ts:293 src/extension/prefs/prefPages.ts:52
 msgid "Select Area"
 msgstr "Vyber oblast"
 
-#: src/extension/indicator.ts:322 src/extension/prefs/prefPages.ts:45
+#: src/extension/indicator.ts:295 src/extension/prefs/prefPages.ts:54
 msgid "Select Desktop"
 msgstr "Vyber pracovní plochu"
 
-#: src/extension/prefs/prefPages.ts:129
+#: src/extension/prefs/prefPages.ts:139
 msgid "Select whole desktop"
 msgstr "Vyber celou obrazovku"
 
-#: src/extension/prefs/prefPages.ts:128
+#: src/extension/prefs/prefPages.ts:138
 msgid "Select window"
 msgstr "Vyber okno"
 
-#: src/extension/indicator.ts:321 src/extension/prefs/prefPages.ts:44
+#: src/extension/indicator.ts:294 src/extension/prefs/prefPages.ts:53
 msgid "Select Window"
 msgstr "Vyber okno"
 
-#: src/extension/selection.ts:211
-msgid "selected region was too small - please select a larger area"
-msgstr "vybraná oblast je příliš malá - vyber větší"
-
-#: src/extension/indicator.ts:347 src/extension/notifications.ts:126
+#: src/extension/indicator.ts:322 src/extension/notifications.ts:138
 msgid "Settings"
 msgstr "Nastavení"
 
-#: src/extension/prefs/prefPages.ts:37
+#: src/extension/prefs/prefPages.ts:46
 msgid "Show Indicator"
 msgstr "Zobrazit indikátor"
 
-#: src/extension/prefs/prefPages.ts:46
+#: src/extension/prefs/prefPages.ts:56
 msgid "Show Menu"
 msgstr "Zobrazit nabídku"
 
-#: src/extension/prefs/prefPages.ts:38
+#: src/extension/prefs/prefPages.ts:47
 msgid "Show Notification After Capture"
 msgstr ""
 
-#: src/extension/prefs/prefPages.ts:118
+#: src/extension/prefs/prefPages.ts:128
 msgid "Show Upload Notification"
 msgstr ""
 
-#: src/extension/notifications.ts:54
+#: src/extension/notifications.ts:62
 msgid "Size:"
 msgstr "Velikost:"
 
-#: src/extension/prefs/prefPages.ts:138
+#: src/extension/prefs/prefPages.ts:149
 msgid "Storage"
 msgstr "Úložiště"
 
-#: src/extension/indicator.ts:148
+#: src/extension/indicator.ts:141
 msgid "Upload"
 msgstr ""
 
-#: src/extension/notifications.ts:84
+#: src/extension/notifications.ts:94
 msgid "Upload To Imgur"
 msgstr ""
 
-#: src/extension/notifications.ts:80
+#: src/extension/notifications.ts:90
 msgid "Uploading To Imgur..."
 msgstr ""
 
@@ -308,6 +329,9 @@ msgstr "Šířka"
 #: src/extension/filename.ts:25
 msgid "Year"
 msgstr "Rok"
+
+#~ msgid "selected region was too small - please select a larger area"
+#~ msgstr "vybraná oblast je příliš malá - vyber větší"
 
 #~ msgid "Default Clipboard Content"
 #~ msgstr "Výchozí obsah do schránky"

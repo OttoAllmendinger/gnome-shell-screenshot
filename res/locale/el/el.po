@@ -18,32 +18,36 @@ msgstr ""
 "X-Generator: Poedit 2.0.1\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: src/saveDlg/saveDlg.ts:31
+#: src/saveDlg/saveDlg.ts:30
 msgid "_Cancel"
 msgstr "_Αναίρεση"
 
-#: src/saveDlg/saveDlg.ts:32
+#: src/saveDlg/saveDlg.ts:31
 msgid "_Save"
 msgstr "_Αποθήκευση"
 
-#: src/extension/prefs/prefPages.ts:120
+#: src/extension/prefs/prefPages.ts:130
 msgid "Auto-Copy Link After Upload"
 msgstr ""
 
-#: src/extension/prefs/prefPages.ts:53
+#: src/extension/prefs/prefPages.ts:63
 msgid "Auto-Copy to Clipboard"
 msgstr ""
 
-#: src/extension/prefs/prefPages.ts:121
+#: src/extension/prefs/prefPages.ts:131
 msgid "Auto-Open Link After Upload"
 msgstr ""
 
-#: src/extension/prefs/prefPages.ts:91
+#: src/extension/prefs/prefPages.ts:101
 msgid "Auto-Save Screenshot"
 msgstr "Αυτόματη αποθήκευση στιγμιοτύπου"
 
-#: src/extension/prefs/prefPages.ts:119
+#: src/extension/prefs/prefPages.ts:129
 msgid "Auto-Upload After Capture"
+msgstr ""
+
+#: src/extension/prefs/prefPages.ts:152 src/extension/prefs/prefPages.ts:33
+msgid "Backend"
 msgstr ""
 
 #: src/extension/prefs/prefView.ts:268
@@ -51,32 +55,32 @@ msgstr ""
 msgid "Cancel"
 msgstr "_Αναίρεση"
 
-#: src/extension/indicator.ts:86 src/extension/indicator.ts:88
+#: src/extension/indicator.ts:79 src/extension/indicator.ts:81
 msgid "Capture Delay"
 msgstr ""
 
-#: src/extension/indicator.ts:117
+#: src/extension/indicator.ts:110
 msgid "Clear"
 msgstr ""
 
-#: src/extension/notifications.ts:224 src/extension/prefs/prefPages.ts:78
+#: src/extension/notifications.ts:246 src/extension/prefs/prefPages.ts:88
 msgid "Command"
 msgstr ""
 
-#: src/extension/prefs/prefPages.ts:137
+#: src/extension/prefs/prefPages.ts:148
 msgid "Commands"
 msgstr ""
 
-#: src/extension/indicator.ts:118 src/extension/notifications.ts:75
+#: src/extension/indicator.ts:111 src/extension/notifications.ts:83
 msgid "Copy"
 msgstr "Αντιγραφή"
 
-#: src/extension/prefs/prefPages.ts:51
+#: src/extension/prefs/prefPages.ts:61
 #, fuzzy
 msgid "Copy Button"
 msgstr "Κυρίως κουμπί"
 
-#: src/extension/indicator.ts:150 src/extension/notifications.ts:177
+#: src/extension/indicator.ts:143 src/extension/notifications.ts:196
 msgid "Copy Link"
 msgstr "Αντιγραφή συνδέσμου"
 
@@ -84,23 +88,27 @@ msgstr "Αντιγραφή συνδέσμου"
 msgid "Day"
 msgstr "Ημέρα"
 
-#: src/extension/prefs/prefPages.ts:96
+#: src/extension/prefs/prefPages.ts:106
 msgid "Default Filename"
 msgstr "Προεπιλεγμένο όνομα αρχείου"
 
-#: src/extension/indicator.ts:151
+#: src/extension/indicator.ts:144
 msgid "Delete"
 msgstr ""
 
-#: src/extension/prefs/prefPages.ts:136
+#: src/extension/prefs/prefPages.ts:30
+msgid "Desktop Portal"
+msgstr ""
+
+#: src/extension/prefs/prefPages.ts:147
 msgid "Effects"
 msgstr ""
 
-#: src/extension/prefs/prefPages.ts:117
+#: src/extension/prefs/prefPages.ts:127
 msgid "Enable Imgur Upload"
 msgstr "Ενεργοποίηση αποστολής στο Imgur"
 
-#: src/extension/notifications.ts:113
+#: src/extension/notifications.ts:124
 msgid "Error"
 msgstr "Σφάλμα"
 
@@ -108,9 +116,18 @@ msgstr "Σφάλμα"
 msgid "Filename"
 msgstr ""
 
+#: src/extension/prefs/prefPages.ts:29
+#, fuzzy
+msgid "gnome-screenshot"
+msgstr "Στιγμιότυπο"
+
 #: src/extension/filename.ts:32
 msgid "Height"
 msgstr "Ύψος"
+
+#: src/extension/notifications.ts:147
+msgid "Help"
+msgstr ""
 
 #: src/extension/filename.ts:33
 msgid "Hostname"
@@ -120,31 +137,31 @@ msgstr "Όνομα οικοδεσπότη"
 msgid "Hour"
 msgstr "Ώρα"
 
-#: src/extension/prefs/prefPages.ts:30
+#: src/extension/prefs/prefPages.ts:39
 msgid "Image Data"
 msgstr "Δεδομένα εικόνας"
 
-#: src/extension/indicator.ts:147 src/extension/prefs/prefPages.ts:139
+#: src/extension/indicator.ts:140 src/extension/prefs/prefPages.ts:150
 msgid "Imgur"
 msgstr "Imgur"
 
-#: src/extension/notifications.ts:143 src/extension/notifications.ts:155
+#: src/extension/notifications.ts:162 src/extension/notifications.ts:174
 msgid "Imgur Upload"
 msgstr "Αποστολή στο Imgur"
 
-#: src/extension/notifications.ts:159
+#: src/extension/notifications.ts:178
 msgid "Imgur Upload Failed"
 msgstr "Ανεπιτυχής αποστολή στο Imgur"
 
-#: src/extension/notifications.ts:163
+#: src/extension/notifications.ts:182
 msgid "Imgur Upload Successful"
 msgstr "Επιτυχής αποστολή στο Imgur"
 
-#: src/extension/prefs/prefPages.ts:135
+#: src/extension/prefs/prefPages.ts:146
 msgid "Indicator"
 msgstr "Δείκτης"
 
-#: src/extension/prefs/prefPages.ts:140
+#: src/extension/prefs/prefPages.ts:151
 msgid "Keybindings"
 msgstr "Συντομεύσεις πληκτρογίου"
 
@@ -152,7 +169,7 @@ msgstr "Συντομεύσεις πληκτρογίου"
 msgid "Keyboard Shortcut"
 msgstr "Συντομεύσεις πληκτρολογίου"
 
-#: src/extension/prefs/prefPages.ts:31
+#: src/extension/prefs/prefPages.ts:40
 msgid "Local Path"
 msgstr ""
 
@@ -168,51 +185,59 @@ msgstr "Τροποποίηση"
 msgid "Month"
 msgstr "Μήνας"
 
-#: src/extension/notifications.ts:48
+#: src/extension/notifications.ts:56
 msgid "New Screenshot"
 msgstr "Νέο στιγμιότυπο"
 
-#: src/extension/indicator.ts:84
+#: src/extension/indicator.ts:77
 msgid "No Capture Delay"
 msgstr ""
 
-#: src/extension/prefs/prefPages.ts:29
+#: src/extension/prefs/prefPages.ts:38
 msgid "Nothing"
 msgstr ""
 
-#: src/extension/indicator.ts:149
+#: src/extension/indicator.ts:142
 msgid "Open Link"
 msgstr "Άνοιγμα συνδέσμου"
+
+#: src/extension/prefs/prefPages.ts:140
+msgid "Open portal"
+msgstr ""
+
+#: src/extension/indicator.ts:292 src/extension/prefs/prefPages.ts:55
+msgid "Open Portal"
+msgstr ""
 
 #: src/extension/templateParams.ts:5
 msgid "Parameters:"
 msgstr "Παράμετροι:"
 
-#: src/extension/prefs/prefPages.ts:104
+#: src/extension/prefs/prefPages.ts:114
 msgid "Preview"
 msgstr "Προεπισκόπηση"
 
-#: src/extension/prefs/prefPages.ts:40
+#: src/extension/prefs/prefPages.ts:49
 msgid "Primary Button"
 msgstr "Κυρίως κουμπί"
 
-#: src/extension/prefs/prefPages.ts:62
+#: src/extension/prefs/prefPages.ts:72
 msgid "Rescale"
 msgstr ""
 
-#: src/extension/prefs/prefPages.ts:76
+#: src/extension/prefs/prefPages.ts:86
 msgid "Run Command After Capture"
 msgstr ""
 
-#: src/extension/notifications.ts:76
+#: src/extension/notifications.ts:84
 msgid "Save"
 msgstr "Αποθήκευση"
 
-#: src/extension/indicator.ts:119
+#: src/extension/indicator.ts:112
 msgid "Save As..."
 msgstr "Αποθήκευση ως..."
 
-#: src/extension/prefs/prefPages.ts:92
+#: src/extension/prefs/prefPages.ts:102
 msgid "Save Location"
 msgstr "Τοποθεσία αποθήκευσης"
 
@@ -228,76 +253,71 @@ msgstr "Στιγμιότυπο οθόνης"
 msgid "Second"
 msgstr "Δευτερόλεπτο"
 
-#: src/extension/prefs/prefPages.ts:92
+#: src/extension/prefs/prefPages.ts:102
 msgid "Select"
 msgstr "Επιλογή"
 
-#: src/extension/prefs/prefPages.ts:127
+#: src/extension/prefs/prefPages.ts:137
 msgid "Select area"
 msgstr "Επιλογή περιοχής"
 
-#: src/extension/indicator.ts:320 src/extension/prefs/prefPages.ts:43
+#: src/extension/indicator.ts:293 src/extension/prefs/prefPages.ts:52
 msgid "Select Area"
 msgstr "Επιλογή περιοχής"
 
-#: src/extension/indicator.ts:322 src/extension/prefs/prefPages.ts:45
+#: src/extension/indicator.ts:295 src/extension/prefs/prefPages.ts:54
 msgid "Select Desktop"
 msgstr "Επιλογή επιφάνειας εργασίας"
 
-#: src/extension/prefs/prefPages.ts:129
+#: src/extension/prefs/prefPages.ts:139
 msgid "Select whole desktop"
 msgstr "Επιλογή όλης της επιφάνειας εργασίας"
 
-#: src/extension/prefs/prefPages.ts:128
+#: src/extension/prefs/prefPages.ts:138
 msgid "Select window"
 msgstr "Επιλογή παραθύρου"
 
-#: src/extension/indicator.ts:321 src/extension/prefs/prefPages.ts:44
+#: src/extension/indicator.ts:294 src/extension/prefs/prefPages.ts:53
 msgid "Select Window"
 msgstr "Επιλογή παραθύρου"
 
-#: src/extension/selection.ts:211
-msgid "selected region was too small - please select a larger area"
-msgstr ""
-"η επιλεγμένη περιοχή ήταν πολύ μικρή - παρακαλώ επιλέξτε μεγαλύτερη περιοχή"
-
-#: src/extension/indicator.ts:347 src/extension/notifications.ts:126
+#: src/extension/indicator.ts:322 src/extension/notifications.ts:138
 msgid "Settings"
 msgstr "Ρυθμίσεις"
 
-#: src/extension/prefs/prefPages.ts:37
+#: src/extension/prefs/prefPages.ts:46
 msgid "Show Indicator"
 msgstr "Εμφάνιση δείκτη"
 
-#: src/extension/prefs/prefPages.ts:46
+#: src/extension/prefs/prefPages.ts:56
 msgid "Show Menu"
 msgstr "Εμφάνιση μενού"
 
-#: src/extension/prefs/prefPages.ts:38
+#: src/extension/prefs/prefPages.ts:47
 msgid "Show Notification After Capture"
 msgstr ""
 
-#: src/extension/prefs/prefPages.ts:118
+#: src/extension/prefs/prefPages.ts:128
 msgid "Show Upload Notification"
 msgstr ""
 
-#: src/extension/notifications.ts:54
+#: src/extension/notifications.ts:62
 msgid "Size:"
 msgstr "Μέγεθος:"
 
-#: src/extension/prefs/prefPages.ts:138
+#: src/extension/prefs/prefPages.ts:149
 msgid "Storage"
 msgstr "Αποθήκευση"
 
-#: src/extension/indicator.ts:148
+#: src/extension/indicator.ts:141
 msgid "Upload"
 msgstr "Αποσολή"
 
-#: src/extension/notifications.ts:84
+#: src/extension/notifications.ts:94
 msgid "Upload To Imgur"
 msgstr "Αποστολή στο Imgur"
 
-#: src/extension/notifications.ts:80
+#: src/extension/notifications.ts:90
 #, fuzzy
 msgid "Uploading To Imgur..."
 msgstr "Αποστολή στο Imgur"
@@ -309,6 +329,11 @@ msgstr "Πλάτος"
 #: src/extension/filename.ts:25
 msgid "Year"
 msgstr "Έτος"
+
+#~ msgid "selected region was too small - please select a larger area"
+#~ msgstr ""
+#~ "η επιλεγμένη περιοχή ήταν πολύ μικρή - παρακαλώ επιλέξτε μεγαλύτερη "
+#~ "περιοχή"
 
 #~ msgid "Imgur Upload (Beta)"
 #~ msgstr "Αποστολή στο Imgur (Beta)"

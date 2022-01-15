@@ -9,7 +9,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-03-23 23:47+0100\n"
 "PO-Revision-Date: 2019-05-01 18:56-0400\n"
-"Last-Translator: Jean-Alexandre Anglès d'Auriac <jeanalexandre@anglesdauriac.fr>\n"
+"Last-Translator: Jean-Alexandre Anglès d'Auriac <jeanalexandre@anglesdauriac."
+"fr>\n"
 "Language-Team: Benjamin Dupont <benjamin.dupont.984@gmail.com>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -18,65 +19,69 @@ msgstr ""
 "X-Generator: Poedit 2.0.3\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: src/saveDlg/saveDlg.ts:31
+#: src/saveDlg/saveDlg.ts:30
 msgid "_Cancel"
 msgstr "_Annuler"
 
-#: src/saveDlg/saveDlg.ts:32
+#: src/saveDlg/saveDlg.ts:31
 msgid "_Save"
 msgstr "_Enregistrer"
 
-#: src/extension/prefs/prefPages.ts:120
+#: src/extension/prefs/prefPages.ts:130
 msgid "Auto-Copy Link After Upload"
 msgstr "Copier automatiquement le lien après le téléversement"
 
-#: src/extension/prefs/prefPages.ts:53
+#: src/extension/prefs/prefPages.ts:63
 msgid "Auto-Copy to Clipboard"
 msgstr "Copier automatiquement dans le presse-papiers"
 
-#: src/extension/prefs/prefPages.ts:121
+#: src/extension/prefs/prefPages.ts:131
 msgid "Auto-Open Link After Upload"
 msgstr "Ouvrir automatiquement le lien après le téléversement"
 
-#: src/extension/prefs/prefPages.ts:91
+#: src/extension/prefs/prefPages.ts:101
 msgid "Auto-Save Screenshot"
 msgstr "Sauvegarde automatique"
 
-#: src/extension/prefs/prefPages.ts:119
+#: src/extension/prefs/prefPages.ts:129
 msgid "Auto-Upload After Capture"
 msgstr "Téléverser automatiquement après les captures"
+
+#: src/extension/prefs/prefPages.ts:152 src/extension/prefs/prefPages.ts:33
+msgid "Backend"
+msgstr ""
 
 #: src/extension/prefs/prefView.ts:268
 #, fuzzy
 msgid "Cancel"
 msgstr "_Annuler"
 
-#: src/extension/indicator.ts:86 src/extension/indicator.ts:88
+#: src/extension/indicator.ts:79 src/extension/indicator.ts:81
 msgid "Capture Delay"
 msgstr "Délai de capture"
 
-#: src/extension/indicator.ts:117
+#: src/extension/indicator.ts:110
 msgid "Clear"
 msgstr "Effacer"
 
-#: src/extension/notifications.ts:224 src/extension/prefs/prefPages.ts:78
+#: src/extension/notifications.ts:246 src/extension/prefs/prefPages.ts:88
 msgid "Command"
 msgstr "Commande"
 
-#: src/extension/prefs/prefPages.ts:137
+#: src/extension/prefs/prefPages.ts:148
 msgid "Commands"
 msgstr "Commandes"
 
-#: src/extension/indicator.ts:118 src/extension/notifications.ts:75
+#: src/extension/indicator.ts:111 src/extension/notifications.ts:83
 msgid "Copy"
 msgstr "Copier"
 
-#: src/extension/prefs/prefPages.ts:51
+#: src/extension/prefs/prefPages.ts:61
 #, fuzzy
 msgid "Copy Button"
 msgstr "Boutton principal"
 
-#: src/extension/indicator.ts:150 src/extension/notifications.ts:177
+#: src/extension/indicator.ts:143 src/extension/notifications.ts:196
 msgid "Copy Link"
 msgstr "Copier le lien"
 
@@ -84,23 +89,27 @@ msgstr "Copier le lien"
 msgid "Day"
 msgstr "Jour"
 
-#: src/extension/prefs/prefPages.ts:96
+#: src/extension/prefs/prefPages.ts:106
 msgid "Default Filename"
 msgstr "Nom de fichier par défaut"
 
-#: src/extension/indicator.ts:151
+#: src/extension/indicator.ts:144
 msgid "Delete"
 msgstr "Supprimer"
 
-#: src/extension/prefs/prefPages.ts:136
+#: src/extension/prefs/prefPages.ts:30
+msgid "Desktop Portal"
+msgstr ""
+
+#: src/extension/prefs/prefPages.ts:147
 msgid "Effects"
 msgstr "Effets"
 
-#: src/extension/prefs/prefPages.ts:117
+#: src/extension/prefs/prefPages.ts:127
 msgid "Enable Imgur Upload"
 msgstr "Activer le téléversement Imgur"
 
-#: src/extension/notifications.ts:113
+#: src/extension/notifications.ts:124
 msgid "Error"
 msgstr "Erreur"
 
@@ -108,9 +117,18 @@ msgstr "Erreur"
 msgid "Filename"
 msgstr "Nom du fichier"
 
+#: src/extension/prefs/prefPages.ts:29
+#, fuzzy
+msgid "gnome-screenshot"
+msgstr "Capture"
+
 #: src/extension/filename.ts:32
 msgid "Height"
 msgstr "Hauteur"
+
+#: src/extension/notifications.ts:147
+msgid "Help"
+msgstr ""
 
 #: src/extension/filename.ts:33
 msgid "Hostname"
@@ -120,31 +138,31 @@ msgstr "Nom d'hôte"
 msgid "Hour"
 msgstr "Heure"
 
-#: src/extension/prefs/prefPages.ts:30
+#: src/extension/prefs/prefPages.ts:39
 msgid "Image Data"
 msgstr "Image"
 
-#: src/extension/indicator.ts:147 src/extension/prefs/prefPages.ts:139
+#: src/extension/indicator.ts:140 src/extension/prefs/prefPages.ts:150
 msgid "Imgur"
 msgstr "Imgur"
 
-#: src/extension/notifications.ts:143 src/extension/notifications.ts:155
+#: src/extension/notifications.ts:162 src/extension/notifications.ts:174
 msgid "Imgur Upload"
 msgstr "Téléversement Imgur"
 
-#: src/extension/notifications.ts:159
+#: src/extension/notifications.ts:178
 msgid "Imgur Upload Failed"
 msgstr "Erreur lors du téléversement sur Imgur"
 
-#: src/extension/notifications.ts:163
+#: src/extension/notifications.ts:182
 msgid "Imgur Upload Successful"
 msgstr "Téléversement sur Imgur reussi"
 
-#: src/extension/prefs/prefPages.ts:135
+#: src/extension/prefs/prefPages.ts:146
 msgid "Indicator"
 msgstr "Indicateur"
 
-#: src/extension/prefs/prefPages.ts:140
+#: src/extension/prefs/prefPages.ts:151
 msgid "Keybindings"
 msgstr "Raccourcis clavier"
 
@@ -152,7 +170,7 @@ msgstr "Raccourcis clavier"
 msgid "Keyboard Shortcut"
 msgstr "Raccourci clavier"
 
-#: src/extension/prefs/prefPages.ts:31
+#: src/extension/prefs/prefPages.ts:40
 msgid "Local Path"
 msgstr "Chemin du fichier"
 
@@ -168,51 +186,59 @@ msgstr "Modifier"
 msgid "Month"
 msgstr "Mois"
 
-#: src/extension/notifications.ts:48
+#: src/extension/notifications.ts:56
 msgid "New Screenshot"
 msgstr "Nouvelle capture d'écran"
 
-#: src/extension/indicator.ts:84
+#: src/extension/indicator.ts:77
 msgid "No Capture Delay"
 msgstr "Pas de délai de capture"
 
-#: src/extension/prefs/prefPages.ts:29
+#: src/extension/prefs/prefPages.ts:38
 msgid "Nothing"
 msgstr "Rien"
 
-#: src/extension/indicator.ts:149
+#: src/extension/indicator.ts:142
 msgid "Open Link"
 msgstr "Ouvrir le lien"
+
+#: src/extension/prefs/prefPages.ts:140
+msgid "Open portal"
+msgstr ""
+
+#: src/extension/indicator.ts:292 src/extension/prefs/prefPages.ts:55
+msgid "Open Portal"
+msgstr ""
 
 #: src/extension/templateParams.ts:5
 msgid "Parameters:"
 msgstr "Paramètres :"
 
-#: src/extension/prefs/prefPages.ts:104
+#: src/extension/prefs/prefPages.ts:114
 msgid "Preview"
 msgstr "Aperçu"
 
-#: src/extension/prefs/prefPages.ts:40
+#: src/extension/prefs/prefPages.ts:49
 msgid "Primary Button"
 msgstr "Boutton principal"
 
-#: src/extension/prefs/prefPages.ts:62
+#: src/extension/prefs/prefPages.ts:72
 msgid "Rescale"
 msgstr "Redimensionner"
 
-#: src/extension/prefs/prefPages.ts:76
+#: src/extension/prefs/prefPages.ts:86
 msgid "Run Command After Capture"
 msgstr "Exécuter une commande après la capture"
 
-#: src/extension/notifications.ts:76
+#: src/extension/notifications.ts:84
 msgid "Save"
 msgstr "Enregistrer"
 
-#: src/extension/indicator.ts:119
+#: src/extension/indicator.ts:112
 msgid "Save As..."
 msgstr "Enregistrer sous..."
 
-#: src/extension/prefs/prefPages.ts:92
+#: src/extension/prefs/prefPages.ts:102
 msgid "Save Location"
 msgstr "Emplacement de sauvegarde"
 
@@ -228,77 +254,71 @@ msgstr "\"Capture\""
 msgid "Second"
 msgstr "Seconde"
 
-#: src/extension/prefs/prefPages.ts:92
+#: src/extension/prefs/prefPages.ts:102
 msgid "Select"
 msgstr "Sélectionner"
 
-#: src/extension/prefs/prefPages.ts:127
+#: src/extension/prefs/prefPages.ts:137
 msgid "Select area"
 msgstr "Sélectionner une zone"
 
-#: src/extension/indicator.ts:320 src/extension/prefs/prefPages.ts:43
+#: src/extension/indicator.ts:293 src/extension/prefs/prefPages.ts:52
 msgid "Select Area"
 msgstr "Sélectionner une zone"
 
-#: src/extension/indicator.ts:322 src/extension/prefs/prefPages.ts:45
+#: src/extension/indicator.ts:295 src/extension/prefs/prefPages.ts:54
 msgid "Select Desktop"
 msgstr "Sélectionner le bureau"
 
-#: src/extension/prefs/prefPages.ts:129
+#: src/extension/prefs/prefPages.ts:139
 msgid "Select whole desktop"
 msgstr "Sélectionner tout le bureau"
 
-#: src/extension/prefs/prefPages.ts:128
+#: src/extension/prefs/prefPages.ts:138
 msgid "Select window"
 msgstr "Sélectionner une fenêtre"
 
-#: src/extension/indicator.ts:321 src/extension/prefs/prefPages.ts:44
+#: src/extension/indicator.ts:294 src/extension/prefs/prefPages.ts:53
 msgid "Select Window"
 msgstr "Sélectionner une fenêtre"
 
-#: src/extension/selection.ts:211
-msgid "selected region was too small - please select a larger area"
-msgstr ""
-"La zone sélectionnée était trop petite - merci de sélectionner une plus "
-"grande zone"
-
-#: src/extension/indicator.ts:347 src/extension/notifications.ts:126
+#: src/extension/indicator.ts:322 src/extension/notifications.ts:138
 msgid "Settings"
 msgstr "Paramètres"
 
-#: src/extension/prefs/prefPages.ts:37
+#: src/extension/prefs/prefPages.ts:46
 msgid "Show Indicator"
 msgstr "Afficher l'indicateur"
 
-#: src/extension/prefs/prefPages.ts:46
+#: src/extension/prefs/prefPages.ts:56
 msgid "Show Menu"
 msgstr "Afficher le menu"
 
-#: src/extension/prefs/prefPages.ts:38
+#: src/extension/prefs/prefPages.ts:47
 msgid "Show Notification After Capture"
 msgstr "Afficher une notification après la capture"
 
-#: src/extension/prefs/prefPages.ts:118
+#: src/extension/prefs/prefPages.ts:128
 msgid "Show Upload Notification"
 msgstr "Afficher une notification de téléversement"
 
-#: src/extension/notifications.ts:54
+#: src/extension/notifications.ts:62
 msgid "Size:"
 msgstr "Taille:"
 
-#: src/extension/prefs/prefPages.ts:138
+#: src/extension/prefs/prefPages.ts:149
 msgid "Storage"
 msgstr "Sauvegarde"
 
-#: src/extension/indicator.ts:148
+#: src/extension/indicator.ts:141
 msgid "Upload"
 msgstr "Téléverser"
 
-#: src/extension/notifications.ts:84
+#: src/extension/notifications.ts:94
 msgid "Upload To Imgur"
 msgstr "Téléverser sur Imgur"
 
-#: src/extension/notifications.ts:80
+#: src/extension/notifications.ts:90
 msgid "Uploading To Imgur..."
 msgstr "Téléversement sur Imgur..."
 
@@ -309,6 +329,11 @@ msgstr "Largeur"
 #: src/extension/filename.ts:25
 msgid "Year"
 msgstr "Année"
+
+#~ msgid "selected region was too small - please select a larger area"
+#~ msgstr ""
+#~ "La zone sélectionnée était trop petite - merci de sélectionner une plus "
+#~ "grande zone"
 
 #~ msgid "Imgur Upload (Beta)"
 #~ msgstr "Téléversement Imgur (Béta)"
