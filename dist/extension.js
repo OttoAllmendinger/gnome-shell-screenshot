@@ -1,4 +1,4 @@
-var init = (function (Meta, Shell, Gio, GObject, GdkPixbuf, GLib, Gtk, St, Soup, Cogl, Clutter) {
+var init = (function (Meta, Shell, Gio, GObject, GdkPixbuf, GLib, Gtk, St, Soup, Clutter, Cogl) {
     'use strict';
 
     const extensionUtils = imports.misc.extensionUtils;
@@ -789,6 +789,23 @@ var init = (function (Meta, Shell, Gio, GObject, GdkPixbuf, GLib, Gtk, St, Soup,
       --display=DISPLAY              X display to use
 
      */
+    class CaptureKeys {
+        constructor() {
+            this.pressEsc = false;
+            this.signal = CaptureKeys.stage.connect('captured-event', (obj, event) => {
+                if (event.type() === Clutter.EventType.KEY_PRESS && event.get_key_symbol() === Clutter.KEY_Escape) {
+                    this.pressEsc = true;
+                }
+                return false;
+            });
+        }
+        stop() {
+            if (this.signal) {
+                CaptureKeys.stage.disconnect(this.signal);
+            }
+        }
+    }
+    CaptureKeys.stage = Shell.Global.get().stage;
     class BackendGnomeScreenshot {
         supportsParam(paramName) {
             return paramName === 'delay-seconds';
@@ -822,9 +839,18 @@ var init = (function (Meta, Shell, Gio, GObject, GdkPixbuf, GLib, Gtk, St, Soup,
                 default:
                     throw new ErrorNotImplemented(action);
             }
-            await spawnAsync(args);
+            const captureKeys = new CaptureKeys();
+            try {
+                await spawnAsync(args);
+            }
+            finally {
+                captureKeys.stop();
+            }
             if (!fileExists(tempfile)) {
-                throw new Error('output file does not exist.');
+                if (captureKeys.pressEsc) {
+                    throw new Error(_('Selection aborted.'));
+                }
+                throw new Error(_('Output file does not exist.'));
             }
             return tempfile;
         }
@@ -1287,4 +1313,4 @@ var init = (function (Meta, Shell, Gio, GObject, GdkPixbuf, GLib, Gtk, St, Soup,
 
     return init;
 
-}(imports.gi.Meta, imports.gi.Shell, imports.gi.Gio, imports.gi.GObject, imports.gi.GdkPixbuf, imports.gi.GLib, imports.gi.Gtk, imports.gi.St, imports.gi.Soup, imports.gi.Cogl, imports.gi.Clutter));
+}(imports.gi.Meta, imports.gi.Shell, imports.gi.Gio, imports.gi.GObject, imports.gi.GdkPixbuf, imports.gi.GLib, imports.gi.Gtk, imports.gi.St, imports.gi.Soup, imports.gi.Clutter, imports.gi.Cogl));
