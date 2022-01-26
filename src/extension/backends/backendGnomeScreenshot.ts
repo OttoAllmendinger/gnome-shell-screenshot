@@ -1,6 +1,10 @@
+import * as Shell from '@imports/Shell-0.1';
+import * as Clutter from '@imports/Clutter-8';
+
 import { ActionName, Backend, ErrorNotImplemented, ParamName, ScreenshotParams } from './backend';
 import { spawnAsync } from '../spawnUtil';
 import { getTemp, fileExists } from '../filename';
+import { _ } from '../../gselib/extensionUtils';
 
 /*
 
@@ -28,6 +32,29 @@ Application Options:
   --display=DISPLAY              X display to use
 
  */
+
+class CaptureKeys {
+  static stage = Shell.Global.get().stage;
+
+  signal: number;
+  pressEsc = false;
+
+  constructor() {
+    this.signal = CaptureKeys.stage.connect('captured-event', (obj, event) => {
+      if (event.type() === Clutter.EventType.KEY_PRESS && event.get_key_symbol() === Clutter.KEY_Escape) {
+        this.pressEsc = true;
+      }
+
+      return false;
+    });
+  }
+
+  stop() {
+    if (this.signal) {
+      CaptureKeys.stage.disconnect(this.signal);
+    }
+  }
+}
 
 export class BackendGnomeScreenshot implements Backend {
   supportsParam(paramName: ParamName): boolean {
@@ -65,10 +92,23 @@ export class BackendGnomeScreenshot implements Backend {
       default:
         throw new ErrorNotImplemented(action);
     }
-    await spawnAsync(args);
-    if (!fileExists(tempfile)) {
-      throw new Error('output file does not exist.');
+
+    const captureKeys = new CaptureKeys();
+
+    try {
+      await spawnAsync(args);
+    } finally {
+      captureKeys.stop();
     }
+
+    if (!fileExists(tempfile)) {
+      if (captureKeys.pressEsc) {
+        throw new Error(_('Selection aborted.'));
+      }
+
+      throw new Error(_('Output file does not exist.'));
+    }
+
     return tempfile;
   }
 }
