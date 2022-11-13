@@ -1,8 +1,7 @@
-import * as Gio from '@imports/Gio-2.0';
-import * as GLib from '@imports/GLib-2.0';
+import * as Gio from '@gi-types/gio2';
+import * as GLib from '@gi-types/glib2';
 
-import * as Gtk3 from '@imports/Gtk-3.0';
-import * as Gtk4 from '@imports/Gtk-4.0';
+import * as Gtk4 from '@gi-types/gtk4';
 
 import { getPages } from './prefPages';
 import * as prefView from './prefView';
@@ -42,9 +41,9 @@ function getSettings(): Gio.Settings {
 }
 
 class PrefsAppWindow {
-  constructor(private app: Gtk3.Application) {}
+  constructor(private app: Gtk4.Application) {}
 
-  getWindow(): Gtk3.Window {
+  getWindow(): Gtk4.Window {
     const windowConfig = {
       application: this.app,
       default_height: 600,
@@ -52,22 +51,19 @@ class PrefsAppWindow {
     };
     let window;
     switch ((imports.gi as any).versions.Gtk) {
-      case '3.0':
-        window = new Gtk3.ApplicationWindow(windowConfig);
-        window.add(prefView.buildPrefPages(getPages(), getSettings(), window));
-        window.show_all();
-        break;
       case '4.0':
         window = new Gtk4.ApplicationWindow(windowConfig as any);
         window.set_child(prefView.buildPrefPages(getPages(), getSettings(), window));
         break;
+      default:
+        throw new Error('not supported');
     }
 
     return window;
   }
 }
 
-const application = new Gtk3.Application({
+const application = new Gtk4.Application({
   application_id: 'org.gnome.GnomeShellScreenshot.PrefsTestApp',
   flags: Gio.ApplicationFlags.FLAGS_NONE,
 });

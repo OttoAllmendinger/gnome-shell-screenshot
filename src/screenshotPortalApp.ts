@@ -1,4 +1,4 @@
-import * as GLib from '@imports/GLib-2.0';
+import * as GLib from '@gi-types/glib2';
 
 import { getServiceProxy, portalScreenshot } from './extension/screenshotPortal';
 

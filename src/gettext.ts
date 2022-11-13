@@ -1,4 +1,4 @@
-import * as Gio from '@imports/Gio-2.0';
+import * as Gio from '@gi-types/gio2';
 
 import metadata from './metadata.json';
 

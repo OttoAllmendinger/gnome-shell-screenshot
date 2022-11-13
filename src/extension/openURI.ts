@@ -1,5 +1,5 @@
-import * as Gio from '@imports/Gio-2.0';
-import * as Shell from '@imports/Shell-0.1';
+import * as Gio from '@gi-types/gio2';
+import * as Shell from '@gi-types/shell0';
 
 export function openURI(uri: string): void {
   const context = Shell.Global.get().create_app_launch_context(0, -1);

@@ -1,4 +1,4 @@
-import { Settings, File } from '@imports/Gio-2.0';
+import { Settings, File } from '@gi-types/gio2';
 import '@imports/Gjs';
 
 type Callback = (...v: any[]) => void;

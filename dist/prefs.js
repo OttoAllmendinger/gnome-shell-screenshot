@@ -1,4 +1,4 @@
-var prefs = (function (Gtk3, Gtk4, Gio, GLib, GObject) {
+var prefs = (function (Gtk4, Gio, GLib, GObject) {
     'use strict';
 
     const extensionUtils = imports.misc.extensionUtils;
@@ -24,7 +24,11 @@ var prefs = (function (Gtk3, Gtk4, Gio, GLib, GObject) {
     function expandUserDir(segment) {
         switch (segment.toUpperCase()) {
             case '$PICTURES':
-                return GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_PICTURES);
+                const v = GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_PICTURES);
+                if (v === null) {
+                    throw new Error('could not expand special dir');
+                }
+                return v;
             default:
                 return segment;
         }
@@ -34,16 +38,14 @@ var prefs = (function (Gtk3, Gtk4, Gio, GLib, GObject) {
     }
 
     function getGtkVersion() {
-        const v = Gtk3.get_major_version();
-        if (v === 3 || v === 4) {
+        const v = Gtk4.get_major_version();
+        if (v === 4) {
             return v;
         }
         throw new Error('unsupported version');
     }
     function getCompatRoot(w) {
         switch (getGtkVersion()) {
-            case 3:
-                return w.get_toplevel();
             case 4:
                 return w.get_root();
         }
@@ -120,9 +122,6 @@ var prefs = (function (Gtk3, Gtk4, Gio, GLib, GObject) {
     function addBoxChildren(box, children) {
         children.forEach((w) => {
             switch (getGtkVersion()) {
-                case 3:
-                    box.add(w);
-                    return;
                 case 4:
                     box.append(w);
                     return;
@@ -253,7 +252,11 @@ var prefs = (function (Gtk3, Gtk4, Gio, GLib, GObject) {
                 d.add_button(_('Cancel'), Gtk4.ResponseType.CANCEL);
                 d.connect('response', (_dialog, response) => {
                     if (response === Gtk4.ResponseType.OK) {
-                        this.setValue(p.settingsKey, d.get_file().get_path());
+                        const f = d.get_file();
+                        if (!f) {
+                            throw new Error('could not get file');
+                        }
+                        this.setValue(p.settingsKey, f.get_path());
                     }
                     d.close();
                 });
@@ -336,9 +339,6 @@ var prefs = (function (Gtk3, Gtk4, Gio, GLib, GObject) {
                 let key, mods;
                 if (binding) {
                     switch (getGtkVersion()) {
-                        case 3:
-                            [key, mods] = Gtk3.accelerator_parse(binding);
-                            break;
                         case 4:
                             const [success, ...parsed] = Gtk4.accelerator_parse(binding);
                             if (!success) {
@@ -381,6 +381,9 @@ var prefs = (function (Gtk3, Gtk4, Gio, GLib, GObject) {
                     }
                     const name = model.get_value(iterator, ColumnConfigKey);
                     model.set(iterator, [ColumnShortcutModifiers, ColumnShortcutKey], [mods, key]);
+                    if (typeof name !== 'string') {
+                        throw new Error();
+                    }
                     this.settings.set_strv(name, [value]);
                 });
                 cellrend.connect('accel-cleared', (rend, path) => {
@@ -390,6 +393,9 @@ var prefs = (function (Gtk3, Gtk4, Gio, GLib, GObject) {
                     }
                     const name = model.get_value(iterator, ColumnConfigKey);
                     model.set(iterator, [ColumnShortcutModifiers, ColumnShortcutKey], [0, 0]);
+                    if (typeof name !== 'string') {
+                        throw new Error();
+                    }
                     this.settings.set_strv(name, []);
                 });
                 const col = new Gtk4.TreeViewColumn({ title: _('Modify'), min_width: 200 });
@@ -413,10 +419,6 @@ var prefs = (function (Gtk3, Gtk4, Gio, GLib, GObject) {
                 notebook.append_page(builder.buildPrefKeybindings(p.widget), new Gtk4.Label({ label }));
             }
         });
-        switch (getGtkVersion()) {
-            case 3:
-                notebook.show_all();
-        }
         return notebook;
     }
 
@@ -723,6 +725,8 @@ var prefs = (function (Gtk3, Gtk4, Gio, GLib, GObject) {
             [_('Nothing'), ClipboardActions.NONE],
             [_('Image Data'), ClipboardActions.SET_IMAGE_DATA],
             [_('Local Path'), ClipboardActions.SET_LOCAL_PATH],
+            // TODO
+            // [_("Remote URL")    , Config.ClipboardActions.SET_REMOTE_URL]
         ];
         return [
             prefRow(_('Show Indicator'), prefSwitch(KeyEnableIndicator)),
@@ -809,7 +813,7 @@ var prefs = (function (Gtk3, Gtk4, Gio, GLib, GObject) {
 
     return prefs;
 
-}(imports.gi.Gtk, imports.gi.Gtk, imports.gi.Gio, imports.gi.GLib, imports.gi.GObject));
+}(imports.gi.Gtk, imports.gi.Gio, imports.gi.GLib, imports.gi.GObject));
 
 var init = prefs.init;
 var buildPrefsWidget = prefs.buildPrefsWidget;

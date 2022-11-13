@@ -16,6 +16,18 @@
   },
   "homepage": "https://github.com/OttoAllmendinger/gnome-shell-screenshot#readme",
   "devDependencies": {
+    "@gi-types/clutter10": "^10.0.1",
+    "@gi-types/cogl8": "^8.0.0",
+    "@gi-types/gdk4": "^4.0.1",
+    "@gi-types/gdkpixbuf2": "^2.0.2",
+    "@gi-types/gio2": "^2.72.1",
+    "@gi-types/glib2": "^2.72.1",
+    "@gi-types/gobject2": "^2.72.1",
+    "@gi-types/gtk4": "^4.6.1",
+    "@gi-types/meta8": "^8.0.0",
+    "@gi-types/shell0": "^0.1.1",
+    "@gi-types/soup3": "^3.0.1",
+    "@gi-types/st1": "^1.0.1",
     "@rollup/plugin-commonjs": "^15.1.0",
     "@rollup/plugin-node-resolve": "^9.0.0",
     "@rollup/plugin-typescript": "^6.0.0",
@@ -31,7 +43,7 @@
     "rollup-plugin-scss": "^2.6.1",
     "ts-node": "^9.0.0",
     "tslib": "^2.0.3",
-    "typescript": "^4.0.3"
+    "typescript": "^4.8.4"
   },
   "dependencies": {
     "@rollup/plugin-json": "^4.1.0",

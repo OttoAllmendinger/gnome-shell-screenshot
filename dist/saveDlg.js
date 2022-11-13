@@ -10,7 +10,8 @@ imports.gi.versions.Gtk = imports.gi.GLib.getenv("GTK");
     var metadata = {
     	"shell-version": [
     	"40",
-    	"41"
+    	"41",
+    	"42"
     ],
     	uuid: uuid,
     	name: name,
@@ -57,13 +58,18 @@ imports.gi.versions.Gtk = imports.gi.GLib.getenv("GTK");
         }
         dlg.connect('response', (_dialog, response) => {
             if (response === Gtk4.ResponseType.OK) {
-                srcFile.copy(dlg.get_file(), Gio.FileCopyFlags.OVERWRITE, null, null);
+                const f = dlg.get_file();
+                if (!f) {
+                    throw new Error();
+                }
+                srcFile.copy(f, Gio.FileCopyFlags.OVERWRITE, null, null);
             }
             dlg.close();
         });
         return dlg;
     }
     if (window['ARGV']) {
+        const ARGV = window.ARGV;
         init(ARGV[3]);
         const [srcPath, dstDir, dstName] = [ARGV[0], ARGV[1], ARGV[2]].map(decodeURIComponent);
         if (!srcPath) {

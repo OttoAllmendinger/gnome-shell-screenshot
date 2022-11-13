@@ -1,4 +1,4 @@
-import * as GLib from '@imports/GLib-2.0';
+import * as GLib from '@gi-types/glib2';
 
 const PATH_SEPARATOR = '/';
 
@@ -9,7 +9,11 @@ export function join(...segments: string[]): string {
 export function expandUserDir(segment: string): string {
   switch (segment.toUpperCase()) {
     case '$PICTURES':
-      return GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_PICTURES);
+      const v = GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_PICTURES);
+      if (v === null) {
+        throw new Error('could not expand special dir');
+      }
+      return v;
     default:
       return segment;
   }

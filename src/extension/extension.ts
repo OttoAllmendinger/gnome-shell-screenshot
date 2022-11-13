@@ -1,6 +1,6 @@
-import * as Meta from '@imports/Meta-8';
-import * as Shell from '@imports/Shell-0.1';
-import { Settings } from '@imports/Gio-2.0';
+import * as Meta from '@gi-types/meta8';
+import * as Shell from '@gi-types/shell0';
+import { Settings } from '@gi-types/gio2';
 
 import { SignalEmitter } from '..';
 import { onAction } from './actions';

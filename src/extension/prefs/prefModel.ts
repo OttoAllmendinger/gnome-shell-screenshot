@@ -1,4 +1,4 @@
-import { Settings } from '@imports/Gio-2.0';
+import { Settings } from '@gi-types/gio2';
 
 export type PrefSwitch = {
   type: 'Switch';

@@ -1,9 +1,8 @@
-import * as Gtk3 from '@imports/Gtk-3.0';
-import * as Gtk4 from '@imports/Gtk-4.0';
-import * as Gio from '@imports/Gio-2.0';
-import * as GLib from '@imports/GLib-2.0';
-import { VariantClass } from '@imports/GLib-2.0';
-import * as GObject from '@imports/GObject-2.0';
+import * as Gtk4 from '@gi-types/gtk4';
+import * as Gio from '@gi-types/gio2';
+import * as GLib from '@gi-types/glib2';
+import { VariantClass } from '@gi-types/glib2';
+import * as GObject from '@gi-types/gobject2';
 
 import { _ } from '../../gselib/extensionUtils';
 
@@ -21,11 +20,11 @@ import {
   PrefSwitch,
 } from './prefModel';
 
-type GtkVersion = 3 | 4;
+type GtkVersion = 4;
 
 function getGtkVersion(): GtkVersion {
-  const v = Gtk3.get_major_version();
-  if (v === 3 || v === 4) {
+  const v = Gtk4.get_major_version();
+  if (v === 4) {
     return v;
   }
   throw new Error('unsupported version');
@@ -33,8 +32,6 @@ function getGtkVersion(): GtkVersion {
 
 function getCompatRoot(w: Gtk4.Widget): Gtk4.Window {
   switch (getGtkVersion()) {
-    case 3:
-      return (((w as unknown) as Gtk3.Widget).get_toplevel() as unknown) as Gtk4.Window;
     case 4:
       return w.get_root() as Gtk4.Window;
   }
@@ -51,7 +48,7 @@ function getGVariantClassName(vc: GLib.VariantClass): string {
   throw new Error(`unknown class ${vc}`);
 }
 
-function getGObjectTypeFromGVariantClass(vc: GLib.VariantClass): GObject.Type {
+function getGObjectTypeFromGVariantClass(vc: GLib.VariantClass): GObject.GType<number> | GObject.GType<string> {
   switch (vc) {
     case GLib.VariantClass.INT16:
     case GLib.VariantClass.INT32:
@@ -118,9 +115,6 @@ function unwrapGVariant(v: GLib.Variant): any {
 function addBoxChildren(box: Gtk4.Box, children: Gtk4.Widget[]) {
   children.forEach((w) => {
     switch (getGtkVersion()) {
-      case 3:
-        ((box as unknown) as Gtk3.Box).add((w as unknown) as Gtk3.Widget);
-        return;
       case 4:
         box.append(w);
         return;
@@ -186,7 +180,11 @@ export class PrefBuilder {
 
     for (const [label, value] of p.options) {
       const iter = model.append();
-      model.set(iter, [Columns.LABEL, Columns.VALUE], [label, value]);
+      model.set(
+        iter,
+        [Columns.LABEL, Columns.VALUE],
+        [(label as unknown) as GObject.Value, (value as unknown) as GObject.Value],
+      );
     }
 
     comboBox.connect('changed', () => {
@@ -268,7 +266,11 @@ export class PrefBuilder {
       d.add_button(_('Cancel'), Gtk4.ResponseType.CANCEL);
       d.connect('response', (_dialog, response) => {
         if (response === Gtk4.ResponseType.OK) {
-          this.setValue(p.settingsKey, d.get_file().get_path());
+          const f = d.get_file();
+          if (!f) {
+            throw new Error('could not get file');
+          }
+          this.setValue(p.settingsKey, f.get_path());
         }
         d.close();
       });
@@ -366,9 +368,6 @@ export class PrefBuilder {
 
       if (binding) {
         switch (getGtkVersion()) {
-          case 3:
-            [key, mods] = Gtk3.accelerator_parse(binding);
-            break;
           case 4:
             const [success, ...parsed] = Gtk4.accelerator_parse(binding);
             if (!success) {
@@ -421,7 +420,14 @@ export class PrefBuilder {
         }
 
         const name = model.get_value(iterator, ColumnConfigKey);
-        model.set(iterator, [ColumnShortcutModifiers, ColumnShortcutKey], [mods, key]);
+        model.set(
+          iterator,
+          [ColumnShortcutModifiers, ColumnShortcutKey],
+          [(mods as unknown) as GObject.Value, (key as unknown) as GObject.Value],
+        );
+        if (typeof name !== 'string') {
+          throw new Error();
+        }
         this.settings.set_strv(name, [value]);
       });
 
@@ -432,7 +438,14 @@ export class PrefBuilder {
         }
 
         const name = model.get_value(iterator, ColumnConfigKey);
-        model.set(iterator, [ColumnShortcutModifiers, ColumnShortcutKey], [0, 0]);
+        model.set(
+          iterator,
+          [ColumnShortcutModifiers, ColumnShortcutKey],
+          [(0 as unknown) as GObject.Value, (0 as unknown) as GObject.Value],
+        );
+        if (typeof name !== 'string') {
+          throw new Error();
+        }
         this.settings.set_strv(name, []);
       });
 
@@ -461,11 +474,6 @@ export function buildPrefPages(pages: PrefPage[], settings: Gio.Settings, window
       notebook.append_page(builder.buildPrefKeybindings(p.widget), new Gtk4.Label({ label }));
     }
   });
-
-  switch (getGtkVersion()) {
-    case 3:
-      ((notebook as unknown) as Gtk3.Notebook).show_all();
-  }
 
   return notebook;
 }

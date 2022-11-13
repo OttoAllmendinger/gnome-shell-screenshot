@@ -1,5 +1,5 @@
-import * as Gio from '@imports/Gio-2.0';
-import * as GdkPixbuf from '@imports/GdkPixbuf-2.0';
+import * as Gio from '@gi-types/gio2';
+import * as GdkPixbuf from '@gi-types/gdkpixbuf2';
 import * as Filename from './filename';
 import { getExtension } from './extension';
 

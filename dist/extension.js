@@ -246,7 +246,11 @@ var init = (function (Meta, Shell, Gio, GObject, GdkPixbuf, GLib, Gtk, St, Soup,
     function expandUserDir(segment) {
         switch (segment.toUpperCase()) {
             case '$PICTURES':
-                return GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_PICTURES);
+                const v = GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_PICTURES);
+                if (v === null) {
+                    throw new Error('could not expand special dir');
+                }
+                return v;
             default:
                 return segment;
         }
@@ -270,91 +274,75 @@ var init = (function (Meta, Shell, Gio, GObject, GdkPixbuf, GLib, Gtk, St, Soup,
     const Signals = imports.signals;
     const clientId = 'c5c1369fb46f29e';
     const baseUrl = 'https://api.imgur.com/3/';
-    const getMimetype = (_file) => {
-        return 'image/png'; // FIXME
-    };
-    const authMessage = (soupMessage) => {
-        soupMessage.request_headers.append('Authorization', 'Client-ID ' + clientId);
-    };
-    const getPostMessage = (file, callback) => {
-        const url = baseUrl + 'image';
-        file.load_contents_async(null, (f, res) => {
-            let contents;
-            try {
-                [, contents] = f.load_contents_finish(res);
-            }
-            catch (e) {
-                logError(new Error('error loading file: ' + e.message));
-                callback(e, null);
-                return;
-            }
-            const buffer = Soup.Buffer.new(contents);
-            const mimetype = getMimetype();
-            const multipart = new Soup.Multipart(Soup.FORM_MIME_TYPE_MULTIPART);
-            const filename = 'image.png';
-            multipart.append_form_file('image', filename, mimetype, buffer);
-            const message = Soup.form_request_new_from_multipart(url, multipart);
-            authMessage(message);
-            callback(null, message);
-        });
-    };
-    const httpError = (reasonPhrase, statusCode, responeData) => {
-        return new Error('HTTP Error status=' + reasonPhrase + ' statusCode=' + statusCode + ' responseData=' + responeData);
-    };
+    function _promisify(cls, function_name, finish_function_name) {
+        Gio._promisify(cls, function_name, finish_function_name);
+    }
+    const LocalFilePrototype = Gio.File.new_for_path('/').constructor.prototype;
+    _promisify(LocalFilePrototype, 'load_bytes_async', 'load_bytes_finish');
+    _promisify(Soup.Session.prototype, 'send_and_read_async');
+    _promisify(Gio.OutputStream.prototype, 'write_bytes_async');
+    _promisify(Gio.IOStream.prototype, 'close_async');
+    _promisify(Gio.Subprocess.prototype, 'wait_check_async');
+    function authMessage(message) {
+        message.request_headers.append('Authorization', 'Client-ID ' + clientId);
+    }
+    const URL_POST_IMAGE = baseUrl + 'image';
+    async function getJSONResonse(message) {
+        const res = await httpSession.send_and_read_async(message, GLib.PRIORITY_DEFAULT, null);
+        const data = res.get_data();
+        if (!data) {
+            throw new Error('no data');
+        }
+        return JSON.parse(imports.byteArray.toString(data));
+    }
+    function getMultipartFromBytes(bytes) {
+        const multipart = new Soup.Multipart(Soup.FORM_MIME_TYPE_MULTIPART);
+        multipart.append_form_file('image', 'image.png', 'image/png', bytes);
+        return multipart;
+    }
+    const httpSession = new Soup.Session();
     class Upload {
         constructor(file) {
-            this.httpSession = new Soup.SessionAsync();
-            this._file = file;
+            this.file = file;
         }
-        start() {
-            getPostMessage(this._file, (error, message) => {
-                const total = message.request_body.length;
-                let uploaded = 0;
-                if (error) {
-                    this.emit('error', error);
-                    return;
-                }
-                const signalProgress = message.connect('wrote-body-data', (message, buffer) => {
-                    uploaded += buffer.length;
-                    this.emit('progress', uploaded, total);
-                });
-                this.httpSession.queue_message(message, (session, { reason_phrase, status_code, response_body }) => {
-                    if (status_code == 200) {
-                        const data = JSON.parse(response_body.data).data;
-                        this.responseData = data;
-                        this.emit('done', data);
-                    }
-                    else {
-                        const err = httpError(reason_phrase, status_code, response_body.data);
-                        try {
-                            err.errorMessage = JSON.parse(response_body.data).data.error;
-                        }
-                        catch (e) {
-                            logError(new Error('failed to parse error message ' + e + ' data=' + response_body.data));
-                            err.errorMessage = response_body.data;
-                        }
-                        this.emit('error', err);
-                    }
-                    message.disconnect(signalProgress);
-                });
+        async upload(message, totalBytes) {
+            authMessage(message);
+            let uploadedBytes = 0;
+            const signalProgress = message.connect('wrote-body-data', (message, chunkSize) => {
+                uploadedBytes += chunkSize;
+                this.emit('progress', uploadedBytes, totalBytes);
             });
-        }
-        deleteRemote() {
-            if (!this.responseData) {
-                throw new Error('no responseData');
+            try {
+                return await getJSONResonse(message);
             }
-            const { deletehash } = this.responseData;
-            const uri = new Soup.URI(baseUrl + 'image/' + deletehash);
+            finally {
+                message.disconnect(signalProgress);
+            }
+        }
+        async start() {
+            try {
+                const [buffer] = await this.file.load_bytes_async(null);
+                this.response = await this.upload(Soup.Message.new_from_multipart(URL_POST_IMAGE, getMultipartFromBytes(buffer)), buffer.get_size());
+                this.emit('done');
+            }
+            catch (e) {
+                logError(e);
+                this.emit('error', e);
+            }
+        }
+        static async delete(deleteHash) {
+            const uri = GLib.Uri.parse(`${baseUrl}/image/${deleteHash}`, GLib.UriFlags.NONE);
             const message = new Soup.Message({ method: 'DELETE', uri });
             authMessage(message);
-            this.httpSession.queue_message(message, (session, { reason_phrase, status_code, response_body }) => {
-                if (status_code == 200) {
-                    this.emit('deleted');
-                }
-                else {
-                    this.emit('error', httpError(reason_phrase, status_code, response_body.data));
-                }
-            });
+            const { success } = await getJSONResonse(message);
+            if (!success) {
+                throw new Error('delete failed');
+            }
+        }
+        async deleteRemote() {
+            if (this.response) {
+                await Upload.delete(this.response.data.deletehash);
+            }
         }
     }
     Signals.addSignalMethods(Upload.prototype);
@@ -525,13 +513,14 @@ var init = (function (Meta, Shell, Gio, GObject, GdkPixbuf, GLib, Gtk, St, Soup,
             this.imgurUpload.start();
         }
         isImgurUploadComplete() {
-            return !!(this.imgurUpload && this.imgurUpload.responseData);
+            return !!(this.imgurUpload && this.imgurUpload.response);
         }
         imgurOpenURL() {
+            var _a;
             if (!this.isImgurUploadComplete()) {
                 throw new Error('no completed imgur upload');
             }
-            const uri = this.imgurUpload.responseData.link;
+            const uri = (_a = this.imgurUpload.response) === null || _a === void 0 ? void 0 : _a.data.link;
             if (!uri) {
                 throw new Error('no uri in responseData');
             }
@@ -541,7 +530,7 @@ var init = (function (Meta, Shell, Gio, GObject, GdkPixbuf, GLib, Gtk, St, Soup,
             if (!this.isImgurUploadComplete()) {
                 throw new Error('no completed imgur upload');
             }
-            const uri = this.imgurUpload.responseData.link;
+            const uri = this.imgurUpload.response.data.link;
             setText(uri);
         }
         imgurDelete() {
@@ -1100,12 +1089,12 @@ var init = (function (Meta, Shell, Gio, GObject, GdkPixbuf, GLib, Gtk, St, Soup,
             this.copy.visible = visible;
             this.save.visible = visible;
             const imgurEnabled = getExtension().settings.get_boolean(KeyEnableUploadImgur);
-            const imgurComplete = this._screenshot && this._screenshot.imgurUpload && this._screenshot.imgurUpload.responseData;
+            const imgurComplete = this._screenshot && this._screenshot.imgurUpload && this._screenshot.imgurUpload.response;
             this.imgurMenu.visible = visible && imgurEnabled;
             this.imgurUpload.visible = visible && imgurEnabled && !imgurComplete;
-            this.imgurOpen.visible = visible && imgurEnabled && imgurComplete;
-            this.imgurCopyLink.visible = visible && imgurEnabled && imgurComplete;
-            this.imgurDelete.visible = visible && imgurEnabled && imgurComplete;
+            this.imgurOpen.visible = Boolean(visible && imgurEnabled && imgurComplete);
+            this.imgurCopyLink.visible = Boolean(visible && imgurEnabled && imgurComplete);
+            this.imgurDelete.visible = Boolean(visible && imgurEnabled && imgurComplete);
         }
         setImage(pixbuf) {
             const { width, height } = pixbuf;
