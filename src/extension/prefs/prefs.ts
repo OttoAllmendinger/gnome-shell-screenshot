@@ -1,4 +1,4 @@
-import * as Gtk4 from '@imports/Gtk-4.0';
+import * as Gtk4 from '@gi-types/gtk4';
 import ExtensionUtils from '../../gselib/extensionUtils';
 
 import * as prefView from './prefView';

@@ -1,5 +1,5 @@
-import * as Gio from '@imports/Gio-2.0';
-import * as GObject from '@imports/GObject-2.0';
+import * as Gio from '@gi-types/gio2';
+import * as GObject from '@gi-types/gobject2';
 
 import ExtensionUtils, { _ } from '../gselib/extensionUtils';
 
@@ -253,8 +253,8 @@ export function wrapNotifyError<T>(f: F<T>): F<T> {
   return async function (...args: unknown[]) {
     try {
       return await f(...args);
-    } catch (e) {
-      notifyError(e);
+    } catch (e: unknown) {
+      notifyError(e as Error);
       throw e;
     }
   };

@@ -28,8 +28,8 @@ export async function onAction(action: string): Promise<void> {
     filePath = await backend.exec(action, {
       delaySeconds: settings.get_int(Config.KeyCaptureDelay) / 1000,
     });
-  } catch (e) {
-    throw new BackendError(getBackendName(settings), e);
+  } catch (e: unknown) {
+    throw new BackendError(getBackendName(settings), e as Error);
   }
 
   if (!fileExists(filePath)) {

@@ -1,6 +1,6 @@
 imports.gi.versions.Gtk = imports.gi.GLib.getenv("GTK");
 
-(function (Gio, GLib, Gtk3, Gtk4, GObject) {
+(function (Gio, GLib, Gtk4, GObject) {
     'use strict';
 
     const extensionUtils = imports.misc.extensionUtils;
@@ -322,6 +322,8 @@ imports.gi.versions.Gtk = imports.gi.GLib.getenv("GTK");
             [_('Nothing'), ClipboardActions.NONE],
             [_('Image Data'), ClipboardActions.SET_IMAGE_DATA],
             [_('Local Path'), ClipboardActions.SET_LOCAL_PATH],
+            // TODO
+            // [_("Remote URL")    , Config.ClipboardActions.SET_REMOTE_URL]
         ];
         return [
             prefRow(_('Show Indicator'), prefSwitch(KeyEnableIndicator)),
@@ -405,7 +407,11 @@ imports.gi.versions.Gtk = imports.gi.GLib.getenv("GTK");
     function expandUserDir(segment) {
         switch (segment.toUpperCase()) {
             case '$PICTURES':
-                return GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_PICTURES);
+                const v = GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_PICTURES);
+                if (v === null) {
+                    throw new Error('could not expand special dir');
+                }
+                return v;
             default:
                 return segment;
         }
@@ -415,16 +421,14 @@ imports.gi.versions.Gtk = imports.gi.GLib.getenv("GTK");
     }
 
     function getGtkVersion() {
-        const v = Gtk3.get_major_version();
-        if (v === 3 || v === 4) {
+        const v = Gtk4.get_major_version();
+        if (v === 4) {
             return v;
         }
         throw new Error('unsupported version');
     }
     function getCompatRoot(w) {
         switch (getGtkVersion()) {
-            case 3:
-                return w.get_toplevel();
             case 4:
                 return w.get_root();
         }
@@ -501,9 +505,6 @@ imports.gi.versions.Gtk = imports.gi.GLib.getenv("GTK");
     function addBoxChildren(box, children) {
         children.forEach((w) => {
             switch (getGtkVersion()) {
-                case 3:
-                    box.add(w);
-                    return;
                 case 4:
                     box.append(w);
                     return;
@@ -634,7 +635,11 @@ imports.gi.versions.Gtk = imports.gi.GLib.getenv("GTK");
                 d.add_button(_('Cancel'), Gtk4.ResponseType.CANCEL);
                 d.connect('response', (_dialog, response) => {
                     if (response === Gtk4.ResponseType.OK) {
-                        this.setValue(p.settingsKey, d.get_file().get_path());
+                        const f = d.get_file();
+                        if (!f) {
+                            throw new Error('could not get file');
+                        }
+                        this.setValue(p.settingsKey, f.get_path());
                     }
                     d.close();
                 });
@@ -717,9 +722,6 @@ imports.gi.versions.Gtk = imports.gi.GLib.getenv("GTK");
                 let key, mods;
                 if (binding) {
                     switch (getGtkVersion()) {
-                        case 3:
-                            [key, mods] = Gtk3.accelerator_parse(binding);
-                            break;
                         case 4:
                             const [success, ...parsed] = Gtk4.accelerator_parse(binding);
                             if (!success) {
@@ -762,6 +764,9 @@ imports.gi.versions.Gtk = imports.gi.GLib.getenv("GTK");
                     }
                     const name = model.get_value(iterator, ColumnConfigKey);
                     model.set(iterator, [ColumnShortcutModifiers, ColumnShortcutKey], [mods, key]);
+                    if (typeof name !== 'string') {
+                        throw new Error();
+                    }
                     this.settings.set_strv(name, [value]);
                 });
                 cellrend.connect('accel-cleared', (rend, path) => {
@@ -771,6 +776,9 @@ imports.gi.versions.Gtk = imports.gi.GLib.getenv("GTK");
                     }
                     const name = model.get_value(iterator, ColumnConfigKey);
                     model.set(iterator, [ColumnShortcutModifiers, ColumnShortcutKey], [0, 0]);
+                    if (typeof name !== 'string') {
+                        throw new Error();
+                    }
                     this.settings.set_strv(name, []);
                 });
                 const col = new Gtk4.TreeViewColumn({ title: _('Modify'), min_width: 200 });
@@ -794,10 +802,6 @@ imports.gi.versions.Gtk = imports.gi.GLib.getenv("GTK");
                 notebook.append_page(builder.buildPrefKeybindings(p.widget), new Gtk4.Label({ label }));
             }
         });
-        switch (getGtkVersion()) {
-            case 3:
-                notebook.show_all();
-        }
         return notebook;
     }
 
@@ -841,20 +845,17 @@ imports.gi.versions.Gtk = imports.gi.GLib.getenv("GTK");
             };
             let window;
             switch (imports.gi.versions.Gtk) {
-                case '3.0':
-                    window = new Gtk3.ApplicationWindow(windowConfig);
-                    window.add(buildPrefPages(getPages(), getSettings(), window));
-                    window.show_all();
-                    break;
                 case '4.0':
                     window = new Gtk4.ApplicationWindow(windowConfig);
                     window.set_child(buildPrefPages(getPages(), getSettings(), window));
                     break;
+                default:
+                    throw new Error('not supported');
             }
             return window;
         }
     }
-    const application = new Gtk3.Application({
+    const application = new Gtk4.Application({
         application_id: 'org.gnome.GnomeShellScreenshot.PrefsTestApp',
         flags: Gio.ApplicationFlags.FLAGS_NONE,
     });
@@ -868,4 +869,4 @@ imports.gi.versions.Gtk = imports.gi.GLib.getenv("GTK");
     });
     application.run(null);
 
-}(imports.gi.Gio, imports.gi.GLib, imports.gi.Gtk, imports.gi.Gtk, imports.gi.GObject));
+}(imports.gi.Gio, imports.gi.GLib, imports.gi.Gtk, imports.gi.GObject));

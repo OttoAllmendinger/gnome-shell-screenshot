@@ -1,5 +1,5 @@
-import * as Shell from '@imports/Shell-0.1';
-import * as Clutter from '@imports/Clutter-8';
+import * as Shell from '@gi-types/shell0';
+import * as Clutter from '@gi-types/clutter10';
 
 import { ActionName, Backend, ErrorNotImplemented, ParamName, ScreenshotParams } from './backend';
 import { spawnAsync } from '../spawnUtil';

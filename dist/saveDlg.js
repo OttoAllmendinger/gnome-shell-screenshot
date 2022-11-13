@@ -9,8 +9,7 @@ imports.gi.versions.Gtk = imports.gi.GLib.getenv("GTK");
     var description = "Conveniently create, copy, store and upload screenshots. Please log out and log in again after updating.";
     var metadata = {
     	"shell-version": [
-    	"40",
-    	"41"
+    	"43"
     ],
     	uuid: uuid,
     	name: name,
@@ -57,13 +56,18 @@ imports.gi.versions.Gtk = imports.gi.GLib.getenv("GTK");
         }
         dlg.connect('response', (_dialog, response) => {
             if (response === Gtk4.ResponseType.OK) {
-                srcFile.copy(dlg.get_file(), Gio.FileCopyFlags.OVERWRITE, null, null);
+                const f = dlg.get_file();
+                if (!f) {
+                    throw new Error();
+                }
+                srcFile.copy(f, Gio.FileCopyFlags.OVERWRITE, null, null);
             }
             dlg.close();
         });
         return dlg;
     }
     if (window['ARGV']) {
+        const ARGV = window.ARGV;
         init(ARGV[3]);
         const [srcPath, dstDir, dstName] = [ARGV[0], ARGV[1], ARGV[2]].map(decodeURIComponent);
         if (!srcPath) {

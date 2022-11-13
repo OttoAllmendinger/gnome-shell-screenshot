@@ -46,7 +46,23 @@ const targetSaveDlg = target({
   },
 });
 
-export default [targetExt, targetPrefs, targetPrefApp, targetScreenshotPortalApp, targetSaveDlg].filter((t) => {
+const targetUploadImgur = target({
+  input: 'src/extension/imgur/cli.ts',
+  output: {
+    file: `${buildPath}/dev/imgurCli.js`,
+    name: 'imgurCli',
+    banner: 'imports.gi.versions.Soup = "3.0";\n',
+  },
+});
+
+export default [
+  targetExt,
+  targetPrefs,
+  targetPrefApp,
+  targetScreenshotPortalApp,
+  targetSaveDlg,
+  targetUploadImgur,
+].filter((t) => {
   if (process.env.ROLLUP_BUILD_TARGETS) {
     return process.env.ROLLUP_BUILD_TARGETS.split(',').includes(t.output.name);
   } else {

@@ -1,6 +1,6 @@
-import * as GObject from '@imports/GObject-2.0';
+import * as GObject from '@gi-types/gobject2';
 
-declare module '@imports/GObject-2.0' {
+declare module '@gi-types/gobject2' {
   const TYPE_STRING: GObject.Type;
   const TYPE_INT: GObject.Type;
 }

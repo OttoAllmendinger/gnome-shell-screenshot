@@ -1,7 +1,7 @@
-import * as Gio from '@imports/Gio-2.0';
-import * as GdkPixbuf from '@imports/GdkPixbuf-2.0';
-import * as Gtk from '@imports/Gtk-3.0';
-import { InterpType } from '@imports/GdkPixbuf-2.0';
+import * as Gio from '@gi-types/gio2';
+import * as GdkPixbuf from '@gi-types/gdkpixbuf2';
+import * as Gtk from '@gi-types/gtk4';
+import { InterpType } from '@gi-types/gdkpixbuf2';
 
 import { SignalEmitter } from '..';
 import { _ } from '../gselib/extensionUtils';
@@ -10,7 +10,7 @@ import * as Path from './path';
 import * as Config from './config';
 import * as Clipboard from './clipboard';
 import * as Filename from './filename';
-import * as UploadImgur from './uploadImgur';
+import * as UploadImgur from './imgur/Upload';
 import * as Notifications from './notifications';
 import { spawnAsync } from './spawnUtil';
 import { getExtension } from './extension';
@@ -189,14 +189,14 @@ export class Screenshot {
   }
 
   isImgurUploadComplete(): boolean {
-    return !!(this.imgurUpload && this.imgurUpload.responseData);
+    return !!(this.imgurUpload && this.imgurUpload.response);
   }
 
   imgurOpenURL(): void {
     if (!this.isImgurUploadComplete()) {
       throw new Error('no completed imgur upload');
     }
-    const uri = this.imgurUpload!.responseData.link;
+    const uri = this.imgurUpload!.response?.data.link;
     if (!uri) {
       throw new Error('no uri in responseData');
     }
@@ -207,11 +207,11 @@ export class Screenshot {
     if (!this.isImgurUploadComplete()) {
       throw new Error('no completed imgur upload');
     }
-    const uri = this.imgurUpload!.responseData.link;
+    const uri = this.imgurUpload!.response!.data.link;
     Clipboard.setText(uri);
   }
 
-  imgurDelete(): void {
+  imgurDelete() {
     if (!this.isImgurUploadComplete()) {
       throw new Error('no completed imgur upload');
     }

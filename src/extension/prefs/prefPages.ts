@@ -1,6 +1,6 @@
 import { _ } from '../../gselib/extensionUtils';
 
-import { Settings } from '@imports/Gio-2.0';
+import { Settings } from '@gi-types/gio2';
 
 import * as Commands from '../commands';
 import * as Filename from '../filename';

@@ -1,6 +1,6 @@
-import * as St from '@imports/St-1.0';
-import * as Cogl from '@imports/Cogl-8';
-import * as Clutter from '@imports/Clutter-8';
+import * as St from '@gi-types/st1';
+import * as Cogl from '@gi-types/cogl8';
+import * as Clutter from '@gi-types/clutter10';
 
 import ExtensionUtils, { _ } from '../gselib/extensionUtils';
 
@@ -179,13 +179,13 @@ class ScreenshotSection {
     this.save.visible = visible;
 
     const imgurEnabled = getExtension().settings.get_boolean(Config.KeyEnableUploadImgur);
-    const imgurComplete = this._screenshot && this._screenshot.imgurUpload && this._screenshot.imgurUpload.responseData;
+    const imgurComplete = this._screenshot && this._screenshot.imgurUpload && this._screenshot.imgurUpload.response;
 
     this.imgurMenu.visible = visible && imgurEnabled;
     this.imgurUpload.visible = visible && imgurEnabled && !imgurComplete;
-    this.imgurOpen.visible = visible && imgurEnabled && imgurComplete;
-    this.imgurCopyLink.visible = visible && imgurEnabled && imgurComplete;
-    this.imgurDelete.visible = visible && imgurEnabled && imgurComplete;
+    this.imgurOpen.visible = Boolean(visible && imgurEnabled && imgurComplete);
+    this.imgurCopyLink.visible = Boolean(visible && imgurEnabled && imgurComplete);
+    this.imgurDelete.visible = Boolean(visible && imgurEnabled && imgurComplete);
   }
 
   setImage(pixbuf) {

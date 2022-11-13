@@ -4,8 +4,8 @@
 //   saveDlg.js SRCFILE DSTDIR DSTNAME
 //
 
-import * as Gio from '@imports/Gio-2.0';
-import * as Gtk4 from '@imports/Gtk-4.0';
+import * as Gio from '@gi-types/gio2';
+import * as Gtk4 from '@gi-types/gtk4';
 
 import { _, init as initTranslations } from '../gettext';
 
@@ -40,7 +40,11 @@ function getCopyDialog(app: Gtk4.Application, srcPath: string, dstDir?: string, 
 
   dlg.connect('response', (_dialog, response) => {
     if (response === Gtk4.ResponseType.OK) {
-      srcFile.copy(dlg.get_file(), Gio.FileCopyFlags.OVERWRITE, null, null);
+      const f = dlg.get_file();
+      if (!f) {
+        throw new Error();
+      }
+      srcFile.copy(f, Gio.FileCopyFlags.OVERWRITE, null, null);
     }
     dlg.close();
   });
@@ -49,6 +53,7 @@ function getCopyDialog(app: Gtk4.Application, srcPath: string, dstDir?: string, 
 }
 
 if (window['ARGV']) {
+  const ARGV = window.ARGV;
   initTranslations(ARGV[3]);
 
   const [srcPath, dstDir, dstName] = [ARGV[0], ARGV[1], ARGV[2]].map(decodeURIComponent);

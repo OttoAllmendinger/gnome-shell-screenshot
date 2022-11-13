@@ -1,7 +1,7 @@
 import StringFormat from 'string-format';
 
-import * as Gio from '@imports/Gio-2.0';
-import * as GLib from '@imports/GLib-2.0';
+import * as Gio from '@gi-types/gio2';
+import * as GLib from '@gi-types/glib2';
 
 import { _ } from '../gselib/extensionUtils';
 

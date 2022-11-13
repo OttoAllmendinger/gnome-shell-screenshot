@@ -1,4 +1,4 @@
-import { Settings } from '@imports/Gio-2.0';
+import { Settings } from '@gi-types/gio2';
 
 import * as Config from '../config';
 
