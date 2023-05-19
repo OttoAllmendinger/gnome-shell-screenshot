@@ -9,9 +9,8 @@ imports.gi.versions.Gtk = imports.gi.GLib.getenv("GTK");
     var description = "Conveniently create, copy, store and upload screenshots. Please log out and log in again after updating.";
     var metadata = {
     	"shell-version": [
-    	"40",
-    	"41",
-    	"42"
+    	"43",
+    	"44"
     ],
     	uuid: uuid,
     	name: name,
