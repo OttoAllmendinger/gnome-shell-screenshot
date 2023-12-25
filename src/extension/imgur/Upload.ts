@@ -1,12 +1,10 @@
-import * as Soup from '@gi-types/soup3';
-import * as Gio from '@gi-types/gio2';
-import * as GLib from '@gi-types/glib2';
-import { UriFlags } from '@gi-types/glib2';
+import Soup from '@girs/soup-3.0';
+import Gio from '@girs/gio-2.0';
+import GLib from '@girs/glib-2.0';
 
-import { SignalEmitter } from '../../index';
+import EventEmitter from 'eventemitter3';
+
 import { ImgurResponseData } from './ImgurResponseData';
-
-const Signals = imports.signals;
 
 const clientId = 'c5c1369fb46f29e';
 const baseUrl = 'https://api.imgur.com/3/';
@@ -35,7 +33,7 @@ async function getJSONResonse<T>(message: Soup.Message): Promise<T> {
   if (!data) {
     throw new Error('no data');
   }
-  return JSON.parse(imports.byteArray.toString(data));
+  return JSON.parse(new TextDecoder().decode(data));
 }
 
 function getMultipartFromBytes(bytes: GLib.Bytes): Soup.Multipart {
@@ -44,15 +42,14 @@ function getMultipartFromBytes(bytes: GLib.Bytes): Soup.Multipart {
   return multipart;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface Upload extends SignalEmitter {}
-
 const httpSession = new Soup.Session();
 
-export class Upload {
+export class Upload extends EventEmitter {
   public response?: ImgurResponseData;
 
-  constructor(private file: Gio.File) {}
+  constructor(private file: Gio.File) {
+    super();
+  }
 
   async upload(message: Soup.Message, totalBytes: number): Promise<ImgurResponseData> {
     authMessage(message);
@@ -72,20 +69,21 @@ export class Upload {
 
   async start(): Promise<void> {
     try {
-      const [buffer] = await this.file.load_bytes_async(null);
+      const [content] = await this.file.load_contents_async(null);
+      const glibBytes = new GLib.Bytes(content);
       this.response = await this.upload(
-        Soup.Message.new_from_multipart(URL_POST_IMAGE, getMultipartFromBytes(buffer)),
-        buffer.get_size(),
+        Soup.Message.new_from_multipart(URL_POST_IMAGE, getMultipartFromBytes(glibBytes)),
+        glibBytes.get_size(),
       );
       this.emit('done');
     } catch (e: unknown) {
-      logError(e);
+      console.error(e);
       this.emit('error', e as Error);
     }
   }
 
   static async delete(deleteHash: string): Promise<void> {
-    const uri = GLib.Uri.parse(`${baseUrl}/image/${deleteHash}`, UriFlags.NONE);
+    const uri = GLib.Uri.parse(`${baseUrl}/image/${deleteHash}`, GLib.UriFlags.NONE);
     const message = new Soup.Message({ method: 'DELETE', uri });
     authMessage(message);
     const { success } = await getJSONResonse<{ success: boolean }>(message);
@@ -100,5 +98,3 @@ export class Upload {
     }
   }
 }
-
-Signals.addSignalMethods(Upload.prototype);

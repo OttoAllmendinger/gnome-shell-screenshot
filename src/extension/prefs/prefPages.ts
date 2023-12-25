@@ -1,7 +1,3 @@
-import { _ } from '../../gselib/extensionUtils';
-
-import { Settings } from '@gi-types/gio2';
-
 import * as Commands from '../commands';
 import * as Filename from '../filename';
 
@@ -23,6 +19,7 @@ import {
   prefRow,
   prefSwitch,
 } from './prefModel';
+import { _ } from '../gettext';
 
 function getBackendPrefs(): PrefRow[] {
   const comboBoxOptions: PrefComboBoxOption[] = [
@@ -112,8 +109,8 @@ function getStoragePrefs(): PrefRow[] {
     ),
     prefRow(
       _('Preview'),
-      prefPreview(Config.KeyFilenameTemplate, (settings: Settings) => {
-        return Filename.get(settings.get_string(Config.KeyFilenameTemplate), mockDimensions);
+      prefPreview(Config.KeyFilenameTemplate, (config: Config.Config) => {
+        return Filename.get(config.getString(Config.KeyFilenameTemplate), mockDimensions);
       }),
     ),
   ];

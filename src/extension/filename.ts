@@ -1,10 +1,11 @@
-import * as GLib from '@gi-types/glib2';
+import GLib from '@girs/glib-2.0';
 import StringFormat from 'string-format';
 
-import { _ } from '../gselib/extensionUtils';
 import { TemplateParam, toObject, toTooltipText } from './templateParams';
 
 type FilenameVars = { width: number; height: number };
+
+const _ = (s: string) => s;
 
 function parameters({ width, height }: FilenameVars): TemplateParam[] {
   const now = new Date();

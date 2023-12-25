@@ -1,4 +1,5 @@
-import { Settings } from '@gi-types/gio2';
+import Gio from '@girs/gio-2.0';
+import { Config } from '../config';
 
 export type PrefSwitch = {
   type: 'Switch';
@@ -65,10 +66,10 @@ export function prefEntry(
 export type PrefPreview = {
   type: 'Preview';
   settingsKey: string;
-  format(s: Settings): string;
+  format(c: Config): string;
 };
 
-export function prefPreview(settingsKey: string, format: (v: Settings) => string): PrefPreview {
+export function prefPreview(settingsKey: string, format: (v: Config) => string): PrefPreview {
   return {
     type: 'Preview',
     settingsKey,
@@ -76,10 +77,10 @@ export function prefPreview(settingsKey: string, format: (v: Settings) => string
   };
 }
 
-export type EnableFunc = (settings: Settings) => boolean;
+export type EnableFunc = (settings: Gio.Settings) => boolean;
 
 export function enableKey(k: string): EnableFunc {
-  return function (s: Settings) {
+  return function (s: Gio.Settings) {
     return s.get_boolean(k);
   };
 }

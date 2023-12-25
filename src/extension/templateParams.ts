@@ -1,4 +1,4 @@
-import { _ } from '../gselib/extensionUtils';
+import { _ } from './gettext';
 
 export type TemplateParam = [string, string, string];
 

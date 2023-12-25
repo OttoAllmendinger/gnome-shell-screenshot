@@ -1,5 +1,5 @@
-import * as GLib from '@gi-types/glib2';
-import * as Gio from '@gi-types/gio2';
+import GLib from '@girs/glib-2.0';
+import Gio from '@girs/gio-2.0';
 
 type VariantGJSUtil = GLib.Variant & {
   unpack(): unknown;
@@ -33,9 +33,9 @@ export async function getServiceProxy(extensionPath: string): Promise<Screenshot
   if (!ok) {
     throw new Error('could not read interface file');
   }
-  const ifaceXml = imports.byteArray.toString(data);
+  const ifaceXml = new TextDecoder().decode(data);
   const Proxy: DBusProxyCtr = (Gio.DBusProxy as any).makeProxyWrapper(ifaceXml);
-  return new Promise((resolve, reject) => {
+  return new Promise<ScreenshotPortalProxy>((resolve, reject) => {
     new Proxy(connection, serviceName, objectPath, (init, err) => {
       if (err) {
         reject(err);
@@ -47,7 +47,7 @@ export async function getServiceProxy(extensionPath: string): Promise<Screenshot
 }
 
 async function getResponseParams(requestPath: string): Promise<VariantGJSUtil> {
-  return new Promise((resolve) => {
+  return new Promise<VariantGJSUtil>((resolve) => {
     connection.signal_subscribe(
       serviceName,
       interfaceName,

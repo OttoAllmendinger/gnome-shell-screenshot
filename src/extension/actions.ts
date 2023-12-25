@@ -7,7 +7,10 @@ import { ErrorNotImplemented, getBackend, getBackendName, isActionName } from '.
 import { fileExists } from './filename';
 
 export class BackendError extends Error {
-  constructor(public backendName: string, public cause: Error) {
+  constructor(
+    public backendName: string,
+    public cause: Error,
+  ) {
     super(`backend ${backendName}: ${cause}`);
   }
 }
@@ -16,7 +19,8 @@ export async function onAction(action: string): Promise<void> {
   if (!isActionName(action)) {
     throw new Error(`invalid action ${action}`);
   }
-  const { settings, indicator } = getExtension();
+  const { indicator } = getExtension();
+  const settings = getExtension().getSettings();
 
   const backend = getBackend(settings);
   if (!backend.supportsAction(action)) {
@@ -36,16 +40,17 @@ export async function onAction(action: string): Promise<void> {
     throw new Error(`file ${filePath} does not exist`);
   }
 
-  const effects = [new Rescale(settings.get_int(Config.KeyEffectRescale) / 100.0)];
+  const config = getExtension().getConfig();
+  const effects = [new Rescale(config.getInt(Config.KeyEffectRescale) / 100.0)];
   const screenshot = new Screenshot(filePath, effects);
 
-  if (settings.get_boolean(Config.KeySaveScreenshot)) {
+  if (config.getBool(Config.KeySaveScreenshot)) {
     screenshot.autosave();
   }
 
-  screenshot.copyClipboard(settings.get_string(Config.KeyClipboardAction));
+  screenshot.copyClipboard(config.getString(Config.KeyClipboardAction));
 
-  if (settings.get_boolean(Config.KeyEnableNotification)) {
+  if (config.getBool(Config.KeyEnableNotification)) {
     Notifications.notifyScreenshot(screenshot);
   }
 
@@ -53,17 +58,16 @@ export async function onAction(action: string): Promise<void> {
     indicator.setScreenshot(screenshot);
   }
 
-  const commandEnabled = settings.get_boolean(Config.KeyEnableRunCommand);
+  const commandEnabled = config.getBool(Config.KeyEnableRunCommand);
   if (commandEnabled) {
     const file = screenshot.getFinalFile();
-    // Notifications.notifyCommand(Commands.getCommand(file));
-    Commands.exec(settings.get_string(Config.KeyRunCommand), file)
-      .then((command) => log(`command ${command} complete`))
+    Commands.exec(config.getString(Config.KeyRunCommand), file)
+      .then((command) => console.log(`command ${command} complete`))
       .catch((e) => Notifications.notifyError(e));
   }
 
-  const imgurEnabled = settings.get_boolean(Config.KeyEnableUploadImgur);
-  const imgurAutoUpload = settings.get_boolean(Config.KeyImgurAutoUpload);
+  const imgurEnabled = config.getBool(Config.KeyEnableUploadImgur);
+  const imgurAutoUpload = config.getBool(Config.KeyImgurAutoUpload);
 
   if (imgurEnabled && imgurAutoUpload) {
     screenshot.imgurStartUpload();

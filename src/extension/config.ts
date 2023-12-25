@@ -1,3 +1,5 @@
+import Gio from '@girs/gio-2.0';
+
 export const KeyBackend = 'backend';
 
 export const Backends = {
@@ -66,3 +68,25 @@ export const KeyEffectRescale = 'effect-rescale';
 
 export const KeyEnableRunCommand = 'enable-run-command';
 export const KeyRunCommand = 'run-command';
+
+export class Config {
+  constructor(public settings: Gio.Settings) {}
+  private get<T>(key: string, f: (s: Gio.Settings) => T | null): T {
+    const value = f(this.settings);
+    if (value === null) {
+      throw new Error(`invalid config value for ${key}`);
+    }
+    return value;
+  }
+  getString(key: string): string {
+    return this.get(key, (s) => s.get_string(key));
+  }
+
+  getInt(key: string): number {
+    return this.get(key, (s) => s.get_int(key));
+  }
+
+  getBool(key: string): boolean {
+    return this.get(key, (s) => s.get_boolean(key));
+  }
+}

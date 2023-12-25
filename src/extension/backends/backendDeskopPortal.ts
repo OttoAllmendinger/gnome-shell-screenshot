@@ -22,6 +22,10 @@ export class BackendDeskopPortal implements Backend {
     if (action !== 'open-portal') {
       throw new ErrorNotImplemented(action);
     }
-    return stripPrefix('file://', await portalScreenshot(await getExtension().servicePromise));
+    const service = await getExtension().servicePromise;
+    if (!service) {
+      throw new Error('no service');
+    }
+    return stripPrefix('file://', await portalScreenshot(service));
   }
 }

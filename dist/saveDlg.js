@@ -1,87 +1,68 @@
-imports.gi.versions.Gtk = imports.gi.GLib.getenv("GTK");
+import Gio from 'gi://Gio?version=2.0';
+import GLib from 'gi://GLib?version=2.0';
+import Gtk from 'gi://Gtk?version=4.0';
+import { bindtextdomain, dgettext } from 'gettext';
 
-(function (Gio, Gtk4) {
-    'use strict';
-
-    var uuid = "gnome-shell-screenshot@ttll.de";
-    var name = "Screenshot Tool";
-    var url = "https://github.com/OttoAllmendinger/gnome-shell-screenshot/";
-    var description = "Conveniently create, copy, store and upload screenshots. Please log out and log in again after updating.";
-    var metadata = {
-    	"shell-version": [
-    	"43",
-    	"44"
-    ],
-    	uuid: uuid,
-    	name: name,
-    	url: url,
-    	description: description,
-    	"settings-schema": "org.gnome.shell.extensions.screenshot",
-    	"gettext-domain": "gnome-shell-screenshot",
-    	"git-version": "_gitversion_"
-    };
-
-    const domain = metadata['gettext-domain'];
-    const _ = imports.gettext.domain(domain).gettext;
-    function init(extensionDir) {
-        const workDir = Gio.File.new_for_path(extensionDir);
-        const localeDir = workDir.get_child('locale');
-        if (localeDir.query_exists(null)) {
-            imports.gettext.bindtextdomain(domain, localeDir.get_path());
-        }
+let gettextFunc = null;
+function initGettext(f) {
+    gettextFunc = f;
+}
+function gettext(s) {
+    if (gettextFunc) {
+        return gettextFunc(s);
     }
+    return s;
+}
+const _ = gettext;
 
-    // Copies a file to user-defined destination.
-    function wrapCompatGFileArgument(str) {
-        switch (Gtk4.get_major_version()) {
-            case 3:
-                return str;
-            case 4:
-                return Gio.File.new_for_path(str);
-        }
-        throw new Error('unsupported version');
+// Copies a file to user-defined destination.
+function getCopyDialog(app, srcPath, dstDir, dstName) {
+    const srcFile = Gio.File.new_for_path(srcPath);
+    const dlg = new Gtk.FileChooserDialog({
+        application: app,
+        action: Gtk.FileChooserAction.SAVE,
+    });
+    dlg.add_button(_('_Cancel'), Gtk.ResponseType.CANCEL);
+    dlg.add_button(_('_Save'), Gtk.ResponseType.OK);
+    if (dstDir) {
+        const v = Gio.File.new_for_path(dstDir);
+        dlg.set_current_folder(v);
     }
-    function getCopyDialog(app, srcPath, dstDir, dstName) {
-        const srcFile = Gio.File.new_for_path(srcPath);
-        const dlg = new Gtk4.FileChooserDialog({
-            application: app,
-            action: Gtk4.FileChooserAction.SAVE,
-        });
-        dlg.add_button(_('_Cancel'), Gtk4.ResponseType.CANCEL);
-        dlg.add_button(_('_Save'), Gtk4.ResponseType.OK);
-        if (dstDir) {
-            dlg.set_current_folder(wrapCompatGFileArgument(dstDir));
-        }
-        if (dstName) {
-            dlg.set_current_name(dstName);
-        }
-        dlg.connect('response', (_dialog, response) => {
-            if (response === Gtk4.ResponseType.OK) {
-                const f = dlg.get_file();
-                if (!f) {
-                    throw new Error();
-                }
-                srcFile.copy(f, Gio.FileCopyFlags.OVERWRITE, null, null);
+    if (dstName) {
+        dlg.set_current_name(dstName);
+    }
+    dlg.connect('response', (_dialog, response) => {
+        if (response === Gtk.ResponseType.OK) {
+            const f = dlg.get_file();
+            if (!f) {
+                throw new Error();
             }
-            dlg.close();
-        });
-        return dlg;
-    }
-    if (window['ARGV']) {
-        const ARGV = window.ARGV;
-        init(ARGV[3]);
-        const [srcPath, dstDir, dstName] = [ARGV[0], ARGV[1], ARGV[2]].map(decodeURIComponent);
-        if (!srcPath) {
-            throw new Error('no srcPath');
+            srcFile.copy(f, Gio.FileCopyFlags.OVERWRITE, null, null);
         }
-        const app = new Gtk4.Application({
-            application_id: 'org.gnome.GnomeShellScreenshot.SaveDialog',
-            flags: Gio.ApplicationFlags.FLAGS_NONE,
-        });
-        app.connect('activate', () => {
-            getCopyDialog(app, srcPath, dstDir, dstName).show();
-        });
-        app.run([]);
+        dlg.close();
+    });
+    return dlg;
+}
+function main(argv) {
+    const localeDir = GLib.getenv('LOCALE_DIR');
+    if (localeDir) {
+        const domain = 'gnome-shell-screenshot';
+        bindtextdomain(domain, localeDir);
+        initGettext((s) => dgettext(domain, s));
     }
-
-}(imports.gi.Gio, imports.gi.Gtk));
+    const [srcPath, dstDir, dstName] = [argv[0], argv[1], argv[2]].map(decodeURIComponent);
+    if (!srcPath) {
+        throw new Error('no srcPath');
+    }
+    const app = new Gtk.Application({
+        application_id: 'org.gnome.GnomeShellScreenshot.SaveDialog',
+        flags: Gio.ApplicationFlags.FLAGS_NONE,
+    });
+    app.connect('activate', () => {
+        getCopyDialog(app, srcPath, dstDir, dstName).show();
+    });
+    app.run([]);
+}
+if ('ARGV' in window) {
+    main(window['ARGV']);
+}

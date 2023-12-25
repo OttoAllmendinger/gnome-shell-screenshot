@@ -1,6 +1,6 @@
-import * as St from '@gi-types/st1';
-import * as GLib from '@gi-types/glib2';
-import * as GdkPixbuf from '@gi-types/gdkpixbuf2';
+import St from '@girs/st-13';
+import GLib from '@girs/glib-2.0';
+import GdkPixbuf from '@girs/gdkpixbuf-2.0';
 
 export function setImage(pixbuf: GdkPixbuf.Pixbuf): void {
   const [ok, buffer] = pixbuf.save_to_bufferv('png', [], []);

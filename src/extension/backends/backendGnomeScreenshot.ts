@@ -1,10 +1,10 @@
-import * as Shell from '@gi-types/shell0';
-import * as Clutter from '@gi-types/clutter10';
+import Shell from '@girs/shell-12';
+import Clutter from '@girs/clutter-13';
 
 import { ActionName, Backend, ErrorNotImplemented, ParamName, ScreenshotParams } from './backend';
 import { spawnAsync } from '../spawnUtil';
 import { getTemp, fileExists } from '../filename';
-import { _ } from '../../gselib/extensionUtils';
+import { _ } from '../gettext';
 
 /*
 

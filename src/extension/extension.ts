@@ -1,34 +1,33 @@
-import * as Meta from '@gi-types/meta8';
-import * as Shell from '@gi-types/shell0';
-import { Settings } from '@gi-types/gio2';
+import Meta from '@girs/meta-10';
+import Shell from '@girs/shell-12';
+import * as Main from '@gnome-shell/ui/main';
+import { Extension, ExtensionMetadata, gettext } from '@gnome-shell/extensions/extension';
 
-import { SignalEmitter } from '..';
 import { onAction } from './actions';
 import { wrapNotifyError } from './notifications';
 import * as Config from './config';
 import * as Indicator from './indicator';
 import { ScreenshotPortalProxy, getServiceProxy } from './screenshotPortal';
-import ExtensionUtils, { ExtensionInfo } from '../gselib/extensionUtils';
+import { initGettext } from './gettext';
 
-const Signals = imports.signals;
-const Main = imports.ui.main;
-
-export declare interface Extension extends SignalEmitter {}
-
-export class Extension {
-  public readonly settings: Settings;
-  public readonly info: ExtensionInfo;
-  public readonly servicePromise: Promise<ScreenshotPortalProxy>;
+export class GnomeShellScreenshotExtension extends Extension {
+  public static instance: GnomeShellScreenshotExtension | null = null;
+  public readonly servicePromise: Promise<ScreenshotPortalProxy | void>;
   public indicator?: Indicator.Indicator;
 
   private readonly signalSettings: number[] = [];
 
-  constructor() {
-    this.settings = ExtensionUtils.getSettings();
-    this.info = ExtensionUtils.getCurrentExtension();
-    this.servicePromise = getServiceProxy(this.info.path);
+  constructor(props: ExtensionMetadata) {
+    super(props);
+    const path = this.dir.get_path();
+    if (!path) {
+      throw new Error('could not get extension path');
+    }
+    this.servicePromise = getServiceProxy(path).catch((err) => {
+      console.error(err);
+    });
     this.signalSettings.push(
-      this.settings.connect('changed::' + Config.KeyEnableIndicator, this.updateIndicator.bind(this)),
+      this.getSettings().connect('changed::' + Config.KeyEnableIndicator, this.updateIndicator.bind(this)),
     );
   }
 
@@ -38,7 +37,7 @@ export class Extension {
     for (const shortcut of Config.KeyShortcuts) {
       Main.wm.addKeybinding(
         shortcut,
-        this.settings,
+        this.getSettings(),
         Meta.KeyBindingFlags.NONE,
         bindingMode,
         wrapNotifyError(() => onAction(shortcut.replace('shortcut-', ''))),
@@ -54,7 +53,7 @@ export class Extension {
 
   createIndicator(): void {
     if (!this.indicator) {
-      this.indicator = new Indicator.Indicator(this);
+      this.indicator = new Indicator.Indicator();
       Main.panel.addToStatusArea(Config.IndicatorName, this.indicator.panelButton);
     }
   }
@@ -67,44 +66,39 @@ export class Extension {
   }
 
   updateIndicator(): void {
-    if (this.settings.get_boolean(Config.KeyEnableIndicator)) {
+    if (this.getSettings().get_boolean(Config.KeyEnableIndicator)) {
       this.createIndicator();
     } else {
       this.destroyIndicator();
     }
   }
 
+  enable(): void {
+    initGettext(gettext);
+    GnomeShellScreenshotExtension.instance = this;
+    this.updateIndicator();
+    this.setKeybindings();
+  }
+
   disable(): void {
     this.signalSettings.forEach((signal) => {
-      this.settings.disconnect(signal);
+      this.getSettings().disconnect(signal);
     });
 
-    this.disconnectAll();
+    this.destroyIndicator();
+    this.unsetKeybindings();
+
+    GnomeShellScreenshotExtension.instance = null;
+  }
+
+  getConfig(): Config.Config {
+    return new Config.Config(this.getSettings());
   }
 }
 
-Signals.addSignalMethods(Extension.prototype);
-
-let extension: Extension | null;
-
-export function getExtension() {
-  if (!extension) {
+export function getExtension(): GnomeShellScreenshotExtension {
+  if (!GnomeShellScreenshotExtension.instance) {
     throw new Error('extension is not enabled');
   }
-  return extension;
-}
-
-export function enable() {
-  extension = new Extension();
-  extension.updateIndicator();
-  extension.setKeybindings();
-}
-
-export function disable() {
-  if (extension) {
-    extension.disable();
-    extension.destroyIndicator();
-    extension.unsetKeybindings();
-    extension = null;
-  }
+  return GnomeShellScreenshotExtension.instance;
 }

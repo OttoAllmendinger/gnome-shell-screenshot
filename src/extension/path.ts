@@ -1,4 +1,4 @@
-import * as GLib from '@gi-types/glib2';
+import GLib from '@girs/glib-2.0';
 
 const PATH_SEPARATOR = '/';
 

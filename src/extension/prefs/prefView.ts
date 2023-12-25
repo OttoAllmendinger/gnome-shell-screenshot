@@ -1,12 +1,11 @@
-import * as Gtk4 from '@gi-types/gtk4';
-import * as Gio from '@gi-types/gio2';
-import * as GLib from '@gi-types/glib2';
-import { VariantClass } from '@gi-types/glib2';
-import * as GObject from '@gi-types/gobject2';
-
-import { _ } from '../../gselib/extensionUtils';
+import Gtk4 from '@girs/gtk-4.0';
+import Gio from '@girs/gio-2.0';
+import GLib from '@girs/glib-2.0';
+import GObject from '@girs/gobject-2.0';
 
 import * as Path from '../path';
+
+import * as Config from '../config';
 
 import {
   PrefComboBox,
@@ -19,24 +18,7 @@ import {
   PrefRowWidget,
   PrefSwitch,
 } from './prefModel';
-
-type GtkVersion = 4;
-
-function getGtkVersion(): GtkVersion {
-  const v = Gtk4.get_major_version();
-  if (v === 4) {
-    return v;
-  }
-  throw new Error('unsupported version');
-}
-
-function getCompatRoot(w: Gtk4.Widget): Gtk4.Window {
-  switch (getGtkVersion()) {
-    case 4:
-      return w.get_root() as Gtk4.Window;
-  }
-  throw new Error('unsupported version');
-}
+import { _ } from '../gettext';
 
 function getGVariantClassName(vc: GLib.VariantClass): string {
   for (const k of Object.keys(GLib.VariantClass)) {
@@ -78,19 +60,19 @@ function wrapGVariant(v: any): GLib.Variant {
 
 function unwrapGVariant(v: GLib.Variant): any {
   switch (v.classify()) {
-    case VariantClass.ARRAY:
+    case GLib.VariantClass.ARRAY:
       throw new Error('not supported');
-    case VariantClass.BOOLEAN:
+    case GLib.VariantClass.BOOLEAN:
       return v.get_boolean();
-    case VariantClass.BYTE:
+    case GLib.VariantClass.BYTE:
       return v.get_byte();
-    case VariantClass.DICT_ENTRY:
+    case GLib.VariantClass.DICT_ENTRY:
       throw new Error('not supported');
-    case VariantClass.DOUBLE:
+    case GLib.VariantClass.DOUBLE:
       return v.get_double();
-    case VariantClass.HANDLE:
+    case GLib.VariantClass.HANDLE:
       throw new Error('not supported');
-    case VariantClass.MAYBE:
+    case GLib.VariantClass.MAYBE:
       throw new Error('not supported');
     case GLib.VariantClass.INT16:
       return v.get_int16();
@@ -98,9 +80,9 @@ function unwrapGVariant(v: GLib.Variant): any {
       return v.get_int32();
     case GLib.VariantClass.INT64:
       return v.get_int64();
-    case VariantClass.VARIANT:
+    case GLib.VariantClass.VARIANT:
       throw new Error('not supported');
-    case VariantClass.STRING:
+    case GLib.VariantClass.STRING:
       const [str] = v.get_string();
       return str;
     case GLib.VariantClass.UINT16:
@@ -114,13 +96,7 @@ function unwrapGVariant(v: GLib.Variant): any {
 
 function addBoxChildren(box: Gtk4.Box, children: Gtk4.Widget[]) {
   children.forEach((w) => {
-    switch (getGtkVersion()) {
-      case 4:
-        box.append(w);
-        return;
-    }
-
-    throw new Error(`invalid gtk version ${getGtkVersion()}`);
+    box.append(w);
   });
 }
 
@@ -132,7 +108,7 @@ function syncSetting<T>(settings: Gio.Settings, key: string, callback: (v: T) =>
 }
 
 export class PrefBuilder {
-  constructor(private settings: Gio.Settings, private window: Gtk4.Window) {}
+  constructor(private settings: Gio.Settings) {}
 
   getValue(key: string): any {
     return unwrapGVariant(this.settings.get_value(key));
@@ -169,7 +145,7 @@ export class PrefBuilder {
     if (!defaultValue.classify()) {
       throw new Error(`could not classify default value for ${p.settingsKey}`);
     }
-    const valueType = getGObjectTypeFromGVariantClass(defaultValue.classify()!);
+    const valueType = getGObjectTypeFromGVariantClass(defaultValue.classify());
     const model = new Gtk4.ListStore();
     const Columns = { LABEL: 0, VALUE: 1 };
     model.set_column_types([GObject.TYPE_STRING, valueType]);
@@ -183,7 +159,7 @@ export class PrefBuilder {
       model.set(
         iter,
         [Columns.LABEL, Columns.VALUE],
-        [(label as unknown) as GObject.Value, (value as unknown) as GObject.Value],
+        [label as unknown as GObject.Value, value as unknown as GObject.Value],
       );
     }
 
@@ -234,7 +210,7 @@ export class PrefBuilder {
     });
 
     w.get_buffer().connect('notify::text', ({ text }) => {
-      if (p.validate(text)) {
+      if (text && p.validate(text)) {
         this.setValue(p.settingsKey, text);
         w.get_style_context().remove_class('error');
       } else {
@@ -259,7 +235,7 @@ export class PrefBuilder {
       const d = new Gtk4.FileChooserDialog({
         title: p.label,
         action: Gtk4.FileChooserAction.SELECT_FOLDER,
-        transient_for: getCompatRoot(w),
+        transient_for: w.get_root() as Gtk4.Window,
         modal: true,
       });
       d.add_button(p.label, Gtk4.ResponseType.OK);
@@ -283,7 +259,7 @@ export class PrefBuilder {
     const w = new Gtk4.Label();
     syncSetting<string>(this.settings, p.settingsKey, () => {
       try {
-        w.label = p.format(this.settings);
+        w.label = p.format(new Config.Config(this.settings));
         w.get_style_context().remove_class('error');
       } catch (e) {
         w.label = 'Error';
@@ -367,14 +343,11 @@ export class PrefBuilder {
       let key, mods;
 
       if (binding) {
-        switch (getGtkVersion()) {
-          case 4:
-            const [success, ...parsed] = Gtk4.accelerator_parse(binding);
-            if (!success) {
-              throw new Error(`could not parse ${binding}`);
-            }
-            [key, mods] = parsed;
+        const [success, ...parsed] = Gtk4.accelerator_parse(binding);
+        if (!success) {
+          throw new Error(`could not parse ${binding}`);
         }
+        [key, mods] = parsed;
       } else {
         [key, mods] = [0, 0];
       }
@@ -423,9 +396,9 @@ export class PrefBuilder {
         model.set(
           iterator,
           [ColumnShortcutModifiers, ColumnShortcutKey],
-          [(mods as unknown) as GObject.Value, (key as unknown) as GObject.Value],
+          [mods as unknown as GObject.Value, key as unknown as GObject.Value],
         );
-        if (typeof name !== 'string') {
+        if (typeof name !== 'string' || typeof value !== 'string') {
           throw new Error();
         }
         this.settings.set_strv(name, [value]);
@@ -441,7 +414,7 @@ export class PrefBuilder {
         model.set(
           iterator,
           [ColumnShortcutModifiers, ColumnShortcutKey],
-          [(0 as unknown) as GObject.Value, (0 as unknown) as GObject.Value],
+          [0 as unknown as GObject.Value, 0 as unknown as GObject.Value],
         );
         if (typeof name !== 'string') {
           throw new Error();
@@ -456,12 +429,12 @@ export class PrefBuilder {
       treeview.append_column(col);
     }
 
-    return (treeview as unknown) as Gtk4.Widget;
+    return treeview as unknown as Gtk4.Widget;
   }
 }
 
-export function buildPrefPages(pages: PrefPage[], settings: Gio.Settings, window: Gtk4.Window): Gtk4.Widget {
-  const builder = new PrefBuilder(settings, window);
+export function buildPrefPages(pages: PrefPage[], settings: Gio.Settings): Gtk4.Widget {
+  const builder = new PrefBuilder(settings);
   const notebook = new Gtk4.Notebook();
   pages.forEach((p) => {
     const { label } = p;
