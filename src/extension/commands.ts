@@ -1,12 +1,11 @@
 import StringFormat from 'string-format';
 
-import * as Gio from '@gi-types/gio2';
-import * as GLib from '@gi-types/glib2';
-
-import { _ } from '../gselib/extensionUtils';
+import Gio from '@girs/gio-2.0';
+import GLib from '@girs/glib-2.0';
 
 import { toObject, toTooltipText } from './templateParams';
 import { spawnAsync } from './spawnUtil';
+import { _ } from './gettext';
 
 type CommandVars = {
   filename: string;

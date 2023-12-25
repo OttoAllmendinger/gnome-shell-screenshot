@@ -43,8 +43,8 @@ journalctl --user /usr/bin/gnome-shell --follow
 
 Example:
 
-* `Output file does not exist`
-* `GLib.SpawnError: Failed to execute child process`
+- `Output file does not exist`
+- `GLib.SpawnError: Failed to execute child process`
 
 These errors can occur if the [`gnome-screenshot`](https://apps.gnome.org/de/app/org.gnome.Screenshot/) tool is not installed on your system.
 
@@ -60,14 +60,11 @@ Since Gnome-Shell version `3.37.2`, extensions that are updated are unavailable
 
 If the error persists, please open a bug report.
 
-
 ### `Error: exitCode=256`
-
 
 #### Firejail
 
 When using Firejail, please add this configration:
-
 
 File `/etc/firejail/gjs.local`:
 
@@ -86,7 +83,6 @@ Please deactivate `no-flash-for-clipboard-screenshots` when using gnome-shell-sc
 
 ([Reported here](https://github.com/OttoAllmendinger/gnome-shell-screenshot/issues/122))
 
-
 ### Clipboard stops working in Gnome 3.20
 
 On Gnome 3.20, the clipboard stops working after the lock screen appears.
@@ -96,26 +92,25 @@ See https://github.com/OttoAllmendinger/gnome-shell-screenshot/issues/4
 As a workaround, restart the shell: `Ctrl-F2` `r` `Enter`. The clipboard
 should work again afterwards.
 
-
 ## Contributors
 
-* https://github.com/RaphaelRochet, https://github.com/peetcamron, https://github.com/oxayotl -- French translation
-* https://github.com/gsantner -- German translation
-* https://github.com/pkomur, https://github.com/orschiro, https://github.com/MartinPL -- Polish translation
-* https://github.com/amivaleo, https://github.com/Fastbyte01 -- Italian translation
-* https://github.com/ge0rgecz -- Czech translation
-* https://github.com/dirosis -- Greek translation
-* https://github.com/AlexGluck, https://github.com/alex-volga -- Russian translation
-* https://github.com/trinaldi -- Portuguese (Brazil) translation
-* https://github.com/alex-volga -- Ukrainian translation
-* https://github.com/iamhefang -- Simplified Chinese translation
-* https://github.com/Mavrikant -- Turkish translation
-* https://github.com/Burday -- Bulgarian translation
-* https://github.com/johanbcn -- Spanish and Catalan translation
-* https://github.com/ibaios -- Basque translation
-* https://github.com/kudaliar032 -- Indonesian translation
-* https://github.com/Vistaus -- Dutch translation
-* https://github.com/xypine -- Finnish translation
+- https://github.com/RaphaelRochet, https://github.com/peetcamron, https://github.com/oxayotl -- French translation
+- https://github.com/gsantner -- German translation
+- https://github.com/pkomur, https://github.com/orschiro, https://github.com/MartinPL -- Polish translation
+- https://github.com/amivaleo, https://github.com/Fastbyte01 -- Italian translation
+- https://github.com/ge0rgecz -- Czech translation
+- https://github.com/dirosis -- Greek translation
+- https://github.com/AlexGluck, https://github.com/alex-volga -- Russian translation
+- https://github.com/trinaldi -- Portuguese (Brazil) translation
+- https://github.com/alex-volga -- Ukrainian translation
+- https://github.com/iamhefang -- Simplified Chinese translation
+- https://github.com/Mavrikant -- Turkish translation
+- https://github.com/Burday -- Bulgarian translation
+- https://github.com/johanbcn -- Spanish and Catalan translation
+- https://github.com/ibaios -- Basque translation
+- https://github.com/kudaliar032 -- Indonesian translation
+- https://github.com/Vistaus -- Dutch translation
+- https://github.com/xypine -- Finnish translation
 
 Also see contributors for
 [gnome-shell-imgur](https://github.com/OttoAllmendinger/gnome-shell-imgur/).

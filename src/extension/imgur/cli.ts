@@ -1,5 +1,7 @@
-import * as Gio from '@gi-types/gio2';
+import Gio from '@girs/gio-2.0';
 import { Upload } from './Upload';
+import GLib from '@girs/glib-2.0';
+import MainLoop = GLib.MainLoop;
 
 async function main([command, arg]: string[]) {
   switch (command) {
@@ -8,9 +10,9 @@ async function main([command, arg]: string[]) {
       const u = new Upload(f);
       const signals = ['progress', 'error', 'done'];
       signals.forEach((n) => {
-        u.connect(n, (obj, ...args) => {
+        u.on(n, (obj, ...args) => {
           if (n === 'error') {
-            logError(args[0]);
+            console.error(args[0]);
           } else {
             console.log({ event: n, args });
           }
@@ -31,12 +33,13 @@ async function main([command, arg]: string[]) {
 }
 
 if (window['ARGV']) {
-  main(window.ARGV)
+  const mainloop = new MainLoop(/* context */ null, /* running */ false);
+  main(window['ARGV'])
     .catch((err) => {
-      logError(err);
+      console.error(err);
     })
     .finally(() => {
-      imports.mainloop.quit('main');
+      mainloop.quit();
     });
-  imports.mainloop.run('main');
+  mainloop.run();
 }

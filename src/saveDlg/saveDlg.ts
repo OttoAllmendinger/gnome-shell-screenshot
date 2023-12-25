@@ -4,20 +4,11 @@
 //   saveDlg.js SRCFILE DSTDIR DSTNAME
 //
 
-import * as Gio from '@gi-types/gio2';
-import * as Gtk4 from '@gi-types/gtk4';
-
-import { _, init as initTranslations } from '../gettext';
-
-function wrapCompatGFileArgument(str: string): Gio.File | string {
-  switch (Gtk4.get_major_version()) {
-    case 3:
-      return str;
-    case 4:
-      return Gio.File.new_for_path(str);
-  }
-  throw new Error('unsupported version');
-}
+import Gio from '@girs/gio-2.0';
+import GLib from '@girs/glib-2.0';
+import Gtk4 from '@girs/gtk-4.0';
+import { bindtextdomain, dgettext } from '@girs/gjs/gettext';
+import { _, initGettext } from '../extension/gettext';
 
 function getCopyDialog(app: Gtk4.Application, srcPath: string, dstDir?: string, dstName?: string): Gtk4.Dialog {
   const srcFile = Gio.File.new_for_path(srcPath);
@@ -31,7 +22,8 @@ function getCopyDialog(app: Gtk4.Application, srcPath: string, dstDir?: string, 
   dlg.add_button(_('_Save'), Gtk4.ResponseType.OK);
 
   if (dstDir) {
-    dlg.set_current_folder(wrapCompatGFileArgument(dstDir) as any);
+    const v = Gio.File.new_for_path(dstDir);
+    dlg.set_current_folder(v as any);
   }
 
   if (dstName) {
@@ -52,11 +44,15 @@ function getCopyDialog(app: Gtk4.Application, srcPath: string, dstDir?: string, 
   return dlg;
 }
 
-if (window['ARGV']) {
-  const ARGV = window.ARGV;
-  initTranslations(ARGV[3]);
+function main(argv: string[]) {
+  const localeDir = GLib.getenv('LOCALE_DIR');
+  if (localeDir) {
+    const domain = 'gnome-shell-screenshot';
+    bindtextdomain(domain, localeDir);
+    initGettext((s) => dgettext(domain, s));
+  }
 
-  const [srcPath, dstDir, dstName] = [ARGV[0], ARGV[1], ARGV[2]].map(decodeURIComponent);
+  const [srcPath, dstDir, dstName] = [argv[0], argv[1], argv[2]].map(decodeURIComponent);
 
   if (!srcPath) {
     throw new Error('no srcPath');
@@ -72,4 +68,8 @@ if (window['ARGV']) {
   });
 
   app.run([]);
+}
+
+if ('ARGV' in window) {
+  main(window['ARGV'] as string[]);
 }

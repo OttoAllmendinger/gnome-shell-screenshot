@@ -1,10 +1,7 @@
-import * as Gio from '@gi-types/gio2';
-import * as GdkPixbuf from '@gi-types/gdkpixbuf2';
-import * as Gtk from '@gi-types/gtk4';
-import { InterpType } from '@gi-types/gdkpixbuf2';
+import Gio from '@girs/gio-2.0';
+import GdkPixbuf from '@girs/gdkpixbuf-2.0';
 
-import { SignalEmitter } from '..';
-import { _ } from '../gselib/extensionUtils';
+import EventEmitter from 'eventemitter3';
 
 import * as Path from './path';
 import * as Config from './config';
@@ -15,8 +12,7 @@ import * as Notifications from './notifications';
 import { spawnAsync } from './spawnUtil';
 import { getExtension } from './extension';
 import { openURI } from './openURI';
-
-const Signals = imports.signals;
+import { _ } from './gettext';
 
 export class ErrorInvalidSettings extends Error {
   constructor(message: string) {
@@ -30,7 +26,7 @@ class ErrorAutosaveDirNotExists extends ErrorInvalidSettings {
   }
 }
 
-export declare interface Screenshot extends SignalEmitter {}
+// export declare interface Screenshot extends SignalEmitter {}
 
 export interface Effect {
   apply(image: GdkPixbuf.Pixbuf): GdkPixbuf.Pixbuf;
@@ -51,7 +47,7 @@ export class Rescale implements Effect {
     const result = pixbuf.scale_simple(
       pixbuf.get_width() * this.scale,
       pixbuf.get_height() * this.scale,
-      InterpType.BILINEAR,
+      GdkPixbuf.InterpType.BILINEAR,
     );
     if (!result) {
       throw new Error('null result');
@@ -61,13 +57,15 @@ export class Rescale implements Effect {
   }
 }
 
-export class Screenshot {
+export class Screenshot extends EventEmitter {
+  private config = getExtension().getConfig();
   public pixbuf: GdkPixbuf.Pixbuf;
   public srcFile: Gio.File;
   public dstFile: Gio.File | null;
   public imgurUpload?: UploadImgur.Upload;
 
   constructor(filePath: string, effects: Effect[] = []) {
+    super();
     if (!filePath) {
       throw new Error(`need argument ${filePath}`);
     }
@@ -80,14 +78,22 @@ export class Screenshot {
     this.dstFile = null;
   }
 
+  getSourceFilePath(): string {
+    const path = this.srcFile.get_path();
+    if (!path) {
+      throw new Error('could not get path');
+    }
+    return path;
+  }
+
   getFilename(n = 0): string {
-    const filenameTemplate = getExtension().settings.get_string(Config.KeyFilenameTemplate);
-    const { width, height } = (this.pixbuf as unknown) as { width: number; height: number };
+    const filenameTemplate = this.config.getString(Config.KeyFilenameTemplate);
+    const { width, height } = this.pixbuf as unknown as { width: number; height: number };
     return Filename.get(filenameTemplate, { width, height }, n);
   }
 
   getNextFile(): Gio.File {
-    const dir = Path.expand(getExtension().settings.get_string(Config.KeySaveLocation));
+    const dir = Path.expand(this.config.getString(Config.KeySaveLocation));
     const dirExists = Gio.File.new_for_path(dir).query_exists(/* cancellable */ null);
     if (!dirExists) {
       throw new ErrorAutosaveDirNotExists(dir);
@@ -113,36 +119,33 @@ export class Screenshot {
     return this.dstFile || this.srcFile;
   }
 
+  getFinalFileURI(): string {
+    const uri = this.getFinalFile().get_uri();
+    if (!uri) {
+      throw new Error('error getting file uri');
+    }
+    return uri;
+  }
+
   launchOpen(): void {
-    openURI(this.getFinalFile().get_uri());
+    openURI(this.getFinalFileURI());
   }
 
   launchSave(): void {
-    const pathComponents = [
-      this.srcFile.get_path(),
-      Path.expand('$PICTURES'),
-      this.getFilename(),
-      getExtension().info.dir.get_path(),
-    ] as string[];
-    pathComponents.forEach((v) => {
-      if (!v) {
-        throw new Error(`unexpected path component in ${pathComponents}`);
+    const args = [this.srcFile.get_path(), Path.expand('$PICTURES'), this.getFilename()].map((v): string => {
+      if (typeof v === 'string' && v) {
+        return encodeURIComponent(v);
       }
+      throw new Error(`unexpected path component in ${args}`);
     });
 
-    let gtkVersionString;
-    switch (Gtk.get_major_version()) {
-      case 3:
-        gtkVersionString = '3.0';
-        break;
-      case 4:
-        gtkVersionString = '4.0';
-        break;
+    const extensionPath = getExtension().dir.get_path();
+    if (!extensionPath) {
+      throw new Error('could not get extension path');
     }
-
     spawnAsync(
-      ['gjs', getExtension().info.path + '/saveDlg.js', ...pathComponents.map(encodeURIComponent)],
-      ['GTK=' + gtkVersionString],
+      ['gjs', '--module', extensionPath + '/saveDlg.js', ...args],
+      [`LOCALE_DIR=${Path.join(extensionPath, 'locale')}`],
     );
   }
 
@@ -165,61 +168,56 @@ export class Screenshot {
   imgurStartUpload(): void {
     this.imgurUpload = new UploadImgur.Upload(this.srcFile);
 
-    this.imgurUpload.connect('error', (obj, err) => {
-      logError(err);
+    this.imgurUpload.on('error', (obj, err) => {
+      console.error(err);
       Notifications.notifyError(String(err));
     });
 
-    if (getExtension().settings.get_boolean(Config.KeyImgurEnableNotification)) {
+    if (getExtension().getSettings().get_boolean(Config.KeyImgurEnableNotification)) {
       Notifications.notifyImgurUpload(this);
     }
     this.emit('imgur-upload', this.imgurUpload);
 
-    this.imgurUpload.connect('done', () => {
-      if (getExtension().settings.get_boolean(Config.KeyImgurAutoCopyLink)) {
+    this.imgurUpload.on('done', () => {
+      if (getExtension().getSettings().get_boolean(Config.KeyImgurAutoCopyLink)) {
         this.imgurCopyURL();
       }
 
-      if (getExtension().settings.get_boolean(Config.KeyImgurAutoOpenLink)) {
+      if (getExtension().getSettings().get_boolean(Config.KeyImgurAutoOpenLink)) {
         this.imgurOpenURL();
       }
     });
 
-    this.imgurUpload.start();
+    void this.imgurUpload.start();
   }
 
-  isImgurUploadComplete(): boolean {
-    return !!(this.imgurUpload && this.imgurUpload.response);
+  getImgurUpload(): UploadImgur.Upload {
+    if (this.imgurUpload) {
+      return this.imgurUpload;
+    }
+    throw new Error('no imgur upload');
+  }
+
+  getImgurUploadURI(): string {
+    const uri = this.getImgurUpload().response?.data.link;
+    if (uri) {
+      return uri;
+    }
+    throw new Error('no imgur link');
   }
 
   imgurOpenURL(): void {
-    if (!this.isImgurUploadComplete()) {
-      throw new Error('no completed imgur upload');
-    }
-    const uri = this.imgurUpload!.response?.data.link;
-    if (!uri) {
-      throw new Error('no uri in responseData');
-    }
-    openURI(this.getFinalFile().get_uri());
+    openURI(this.getImgurUploadURI());
   }
 
   imgurCopyURL(): void {
-    if (!this.isImgurUploadComplete()) {
-      throw new Error('no completed imgur upload');
-    }
-    const uri = this.imgurUpload!.response!.data.link;
-    Clipboard.setText(uri);
+    Clipboard.setText(this.getImgurUploadURI());
   }
 
   imgurDelete() {
-    if (!this.isImgurUploadComplete()) {
-      throw new Error('no completed imgur upload');
-    }
-    this.imgurUpload!.connect('deleted', () => {
+    this.getImgurUpload().on('deleted', () => {
       this.imgurUpload = undefined;
     });
-    this.imgurUpload!.deleteRemote();
+    this.getImgurUpload().deleteRemote();
   }
 }
-
-Signals.addSignalMethods(Screenshot.prototype);

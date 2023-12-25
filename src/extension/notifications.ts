@@ -1,7 +1,4 @@
-import * as Gio from '@gi-types/gio2';
-import * as GObject from '@gi-types/gobject2';
-
-import ExtensionUtils, { _ } from '../gselib/extensionUtils';
+import Gio from '@girs/gio-2.0';
 
 import * as Config from './config';
 import * as Thumbnail from './thumbnail';
@@ -9,9 +6,12 @@ import { ErrorInvalidSettings, Screenshot } from './screenshot';
 import { getExtension } from './extension';
 import { BackendError } from './actions';
 import { openURI } from './openURI';
+import * as UploadImgur from './imgur/Upload';
 
-const Main = imports.ui.main;
-const MessageTray = imports.ui.messageTray;
+import * as MessageTray from '@gnome-shell/ui/messageTray';
+import * as Main from '@gnome-shell/ui/main';
+import { registerGObjectClass } from 'gjs';
+import { _ } from './gettext';
 
 const NotificationIcon = 'camera-photo-symbolic';
 const NotificationSourceName = 'Screenshot Tool';
@@ -23,10 +23,6 @@ enum ErrorActions {
   OPEN_HELP,
 }
 
-type MessageSource = {
-  showNotification(n: unknown): void;
-};
-
 function getURI(error: string | Error): string | undefined {
   if (error instanceof BackendError) {
     return [
@@ -36,183 +32,187 @@ function getURI(error: string | Error): string | undefined {
   }
 }
 
-function getSource(): MessageSource {
+function getSource(): MessageTray.Source {
   const source = new MessageTray.Source(NotificationSourceName, NotificationIcon);
   Main.messageTray.add(source);
   return source;
 }
 
-type GObj<X> = {
-  new (...args: any[]): X;
-};
+@registerGObjectClass
+class NotificationNewScreenshot extends MessageTray.Notification {
+  static _title() {
+    return _('New Screenshot');
+  }
 
-function registerClass<X>(cls: GObj<X>): GObj<X> {
-  return (GObject.registerClass(cls as any) as unknown) as GObj<X>;
+  static _banner(obj: Screenshot) {
+    const { pixbuf } = obj;
+    const { width, height } = pixbuf as any;
+    return _('Size:') + ' ' + width + 'x' + height + '.';
+  }
+
+  constructor(
+    source: MessageTray.Source,
+    public screenshot: Screenshot,
+  ) {
+    super(source, NotificationNewScreenshot._title(), NotificationNewScreenshot._banner(screenshot), {
+      gicon: Thumbnail.getIcon(screenshot.getSourceFilePath()),
+    });
+
+    this.connect('activated', this._onActivated.bind(this));
+
+    // makes banner expand on hover
+    this.setForFeedback(true);
+  }
+
+  createBanner() {
+    const b = super.createBanner();
+
+    // FIXME cast
+    (b as any)._iconBin.child.icon_size = ICON_SIZE;
+
+    b.addAction(_('Copy'), this._onCopy.bind(this));
+    b.addAction(_('Save'), this._onSave.bind(this));
+
+    const extension = getExtension();
+
+    if (extension.getSettings().get_boolean(Config.KeyEnableUploadImgur)) {
+      if (extension.getSettings().get_boolean(Config.KeyImgurAutoUpload)) {
+        b.addAction(_('Uploading To Imgur...'), () => {
+          /* noop */
+        });
+      } else {
+        b.addAction(_('Upload To Imgur'), this._onUpload.bind(this));
+      }
+    }
+    return b;
+  }
+
+  _onActivated() {
+    this.screenshot.launchOpen();
+  }
+
+  _onCopy() {
+    this.screenshot.copyClipboard(getExtension().getConfig().getString(Config.KeyCopyButtonAction));
+  }
+
+  _onSave() {
+    this.screenshot.launchSave();
+  }
+
+  _onUpload() {
+    this.screenshot.imgurStartUpload();
+  }
 }
 
-const NotificationNewScreenshot = registerClass(
-  class NotificationNewScreenshot extends MessageTray.Notification {
-    static _title() {
-      return _('New Screenshot');
-    }
+@registerGObjectClass
+class ErrorNotification extends MessageTray.Notification {
+  buttons: ErrorActions[];
+  error: string | Error;
 
-    static _banner(obj: Screenshot) {
-      const { pixbuf } = obj;
-      const { width, height } = pixbuf as any;
-      return _('Size:') + ' ' + width + 'x' + height + '.';
-    }
+  constructor(source: MessageTray.Source, error: string | Error, buttons: ErrorActions[]) {
+    super(source, _('Error'), String(error), {
+      secondaryGIcon: new Gio.ThemedIcon({ name: 'dialog-error' }),
+    });
 
-    _init(source: string, screenshot: Screenshot) {
-      super._init(source, NotificationNewScreenshot._title(), NotificationNewScreenshot._banner(screenshot), {
-        gicon: Thumbnail.getIcon(screenshot.srcFile.get_path()),
-      });
+    this.buttons = buttons;
+    this.error = error;
+  }
 
-      this.connect('activated', this._onActivated.bind(this));
+  createBanner(): MessageTray.NotificationBanner {
+    const banner = super.createBanner();
 
-      // makes banner expand on hover
-      this.setForFeedback(true);
-
-      this._screenshot = screenshot;
-    }
-
-    createBanner() {
-      const b = super.createBanner();
-
-      b._iconBin.child.icon_size = ICON_SIZE;
-
-      b.addAction(_('Copy'), this._onCopy.bind(this));
-      b.addAction(_('Save'), this._onSave.bind(this));
-
-      const extension = getExtension();
-
-      if (extension.settings.get_boolean(Config.KeyEnableUploadImgur)) {
-        if (extension.settings.get_boolean(Config.KeyImgurAutoUpload)) {
-          b.addAction(_('Uploading To Imgur...'), () => {
-            /* noop */
+    for (const b of this.buttons) {
+      switch (b) {
+        case ErrorActions.OPEN_SETTINGS:
+          banner.addAction(_('Settings'), () => {
+            getExtension().openPreferences();
           });
-        } else {
-          b.addAction(_('Upload To Imgur'), this._onUpload.bind(this));
-        }
-      }
-      return b;
-    }
-
-    _onActivated() {
-      this._screenshot.launchOpen();
-    }
-
-    _onCopy() {
-      this._screenshot.copyClipboard(getExtension().settings.get_string(Config.KeyCopyButtonAction));
-    }
-
-    _onSave() {
-      this._screenshot.launchSave();
-    }
-
-    _onUpload() {
-      this._screenshot.imgurStartUpload();
-    }
-  },
-);
-
-const ErrorNotification = registerClass(
-  class ErrorNotification extends MessageTray.Notification {
-    buttons!: ErrorActions[];
-    error!: string | Error;
-
-    _init(source: MessageSource, error: string | Error, buttons: ErrorActions[]) {
-      super._init(source, _('Error'), String(error), {
-        secondaryGIcon: new Gio.ThemedIcon({ name: 'dialog-error' }),
-      });
-
-      this.buttons = buttons;
-      this.error = error;
-    }
-
-    createBanner() {
-      const banner = super.createBanner();
-
-      for (const b of this.buttons!) {
-        switch (b) {
-          case ErrorActions.OPEN_SETTINGS:
-            banner.addAction(_('Settings'), () => {
-              ExtensionUtils.openPrefs();
-            });
+          break;
+        case ErrorActions.OPEN_HELP:
+          const uri = getURI(this.error);
+          if (!uri) {
             break;
-          case ErrorActions.OPEN_HELP:
-            const uri = getURI(this.error);
-            if (!uri) {
-              return;
-            }
-            banner.addAction(_('Help'), () => openURI(uri));
-            break;
-          default:
-            logError(new Error('unknown button ' + b));
-        }
+          }
+          banner.addAction(_('Help'), () => openURI(uri));
+          break;
+        default:
+          console.error(new Error('unknown button ' + b));
       }
-
-      return banner;
     }
-  },
-);
 
-const ImgurNotification = registerClass(
-  class ImgurNotification extends MessageTray.Notification {
-    _init(source: MessageSource, screenshot: Screenshot) {
-      super._init(source, _('Imgur Upload'));
+    return banner;
+  }
+}
 
-      this.setForFeedback(true);
-      this.setResident(true);
+type MessageTrayButton = {
+  visible: boolean;
+};
 
-      this.connect('activated', this._onActivated.bind(this));
+@registerGObjectClass
+class ImgurNotification extends MessageTray.Notification {
+  upload: UploadImgur.Upload;
+  copyButton?: MessageTrayButton;
 
-      this._screenshot = screenshot;
+  constructor(
+    source: MessageTray.Source,
+    public screenshot: Screenshot,
+  ) {
+    super(source, _('Imgur Upload'));
 
-      this._upload = screenshot.imgurUpload;
+    this.setForFeedback(true);
+    this.setResident(true);
 
-      this._upload.connect('progress', (obj, bytes, total) => {
-        this.update(_('Imgur Upload'), '' + Math.floor(100 * (bytes / total)) + '%');
-      });
+    this.connect('activated', this._onActivated.bind(this));
 
-      this._upload.connect('error', (obj, msg) => {
-        this.update(_('Imgur Upload Failed'), msg);
-      });
+    if (!screenshot.imgurUpload) {
+      throw new Error('imgur upload not present');
+    }
+    this.upload = screenshot.imgurUpload;
 
-      this._upload.connect('done', () => {
-        this.update(_('Imgur Upload Successful'), this._upload.responseData.link);
+    this.upload.on('progress', (obj, bytes, total) => {
+      this.update(_('Imgur Upload'), '' + Math.floor(100 * (bytes / total)) + '%');
+    });
+
+    this.upload.on('error', (obj, msg) => {
+      this.update(_('Imgur Upload Failed'), msg);
+    });
+
+    this.upload.on('done', () => {
+      if (this.upload.response) {
+        this.update(_('Imgur Upload Successful'), this.upload.response.data.link);
         this._updateCopyButton();
+      }
+    });
+  }
+
+  _updateCopyButton() {
+    if (!this.copyButton) {
+      return;
+    }
+    this.copyButton.visible = this.screenshot.imgurUpload?.response !== undefined;
+  }
+
+  createBanner() {
+    const b = super.createBanner();
+    this.copyButton = b.addAction(_('Copy Link'), this._onCopy.bind(this)) as MessageTrayButton;
+    this._updateCopyButton();
+    return b;
+  }
+
+  _onActivated() {
+    if (this.screenshot.imgurUpload?.response) {
+      this.screenshot.imgurOpenURL();
+    } else {
+      this.upload.on('done', () => {
+        this.screenshot.imgurOpenURL();
       });
     }
+  }
 
-    _updateCopyButton() {
-      if (!this._copyButton) {
-        return;
-      }
-      this._copyButton.visible = this._screenshot.isImgurUploadComplete();
-    }
-
-    createBanner() {
-      const b = super.createBanner();
-      this._copyButton = b.addAction(_('Copy Link'), this._onCopy.bind(this));
-      this._updateCopyButton();
-      return b;
-    }
-
-    _onActivated() {
-      if (this._screenshot.isImgurUploadComplete()) {
-        this._screenshot.imgurOpenURL();
-      } else {
-        this._upload.connect('done', () => {
-          this._screenshot.imgurOpenURL();
-        });
-      }
-    }
-
-    _onCopy() {
-      this._screenshot.imgurCopyURL();
-    }
-  },
-);
+  _onCopy() {
+    this.screenshot.imgurCopyURL();
+  }
+}
 
 export function notifyScreenshot(screenshot: Screenshot): void {
   const source = getSource();

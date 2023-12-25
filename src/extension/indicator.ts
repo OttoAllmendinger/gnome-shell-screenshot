@@ -1,27 +1,42 @@
-import * as St from '@gi-types/st1';
-import * as Cogl from '@gi-types/cogl8';
-import * as Clutter from '@gi-types/clutter10';
+import St from '@girs/st-13';
+import Cogl from '@girs/cogl-10';
+import Clutter from '@girs/clutter-13';
 
-import ExtensionUtils, { _ } from '../gselib/extensionUtils';
+import * as PanelMenu from '@gnome-shell/ui/panelMenu';
+import * as PopupMenu from '@gnome-shell/ui/popupMenu';
+import * as Slider from '@gnome-shell/ui/slider';
 
 import * as Config from './config';
-import * as Extension from './extension';
 import { Screenshot } from './screenshot';
 import { wrapNotifyError } from './notifications';
 import { onAction } from './actions';
 import { getExtension } from './extension';
 import { ActionName, getBackend } from './backends/backend';
-
-const PanelMenu = imports.ui.panelMenu;
-const PopupMenu = imports.ui.popupMenu;
-const Slider = imports.ui.slider;
+import { _ } from './gettext';
 
 const DefaultIcon = 'camera-photo-symbolic';
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-declare interface CaptureDelayMenu extends St.Widget {}
+function getMenu(obj: unknown): PopupMenu.PopupMenu {
+  if (typeof obj === 'object' && obj && 'menu' in obj) {
+    return (obj as Record<string, unknown>).menu as PopupMenu.PopupMenu;
+  }
+  throw new Error('could not get menu');
+}
+
+function getLabel(obj: unknown): St.Label {
+  if (typeof obj === 'object' && obj && 'label' in obj) {
+    return (obj as Record<string, unknown>).label as St.Label;
+  }
+  throw new Error('could not get label');
+}
 
 class CaptureDelayMenu extends PopupMenu.PopupMenuSection {
+  private readonly slider: Slider.Slider;
+  private scaleMS: number[];
+  private delayValueMS: number;
+  private readonly sliderItem: PopupMenu.PopupBaseMenuItem;
+  private readonly delayInfoItem: PopupMenu.PopupMenuItem;
+
   createScale() {
     const scale = [0];
     for (let x = 1; x <= 10; x += 1) {
@@ -35,7 +50,7 @@ class CaptureDelayMenu extends PopupMenu.PopupMenuSection {
 
     this.scaleMS = this.createScale();
 
-    this.delayValueMS = getExtension().settings.get_int(Config.KeyCaptureDelay);
+    this.delayValueMS = getExtension().getSettings().get_int(Config.KeyCaptureDelay);
     this.slider = new Slider.Slider(this.scaleToSlider(this.delayValueMS));
     this.slider.connect('notify::value', this.onDragEnd.bind(this));
     this.sliderItem = new PopupMenu.PopupBaseMenuItem({ activate: false });
@@ -53,24 +68,24 @@ class CaptureDelayMenu extends PopupMenu.PopupMenuSection {
     this.updateDelayInfo();
   }
 
-  scaleToSlider(ms) {
+  scaleToSlider(ms: number) {
     return this.scaleMS.findIndex((v) => v >= ms) / (this.scaleMS.length - 1);
   }
 
-  sliderToScale(value) {
+  sliderToScale(value: number) {
     return this.scaleMS[(value * (this.scaleMS.length - 1)) | 0];
   }
 
-  onDragEnd(slider) {
+  onDragEnd(slider: Slider.Slider) {
     const newValue = this.sliderToScale(slider.value);
     if (newValue !== this.delayValueMS) {
       this.delayValueMS = newValue;
-      getExtension().settings.set_int(Config.KeyCaptureDelay, newValue);
+      getExtension().getSettings().set_int(Config.KeyCaptureDelay, newValue);
       this.updateDelayInfo();
     }
   }
 
-  updateDelayInfo() {
+  updateDelayInfo(): void {
     const v = this.delayValueMS;
     let text;
     if (v === 0) {
@@ -80,30 +95,24 @@ class CaptureDelayMenu extends PopupMenu.PopupMenuSection {
     } else {
       text = `${v / 1000}s ` + _('Capture Delay');
     }
-    this.delayInfoItem.label.text = text;
+    getLabel(this.delayInfoItem).text = text;
   }
-}
-
-interface PopupMenuItem extends St.BoxLayout {
-  menu: {
-    addMenuItem(v: St.Widget | PopupMenuItem);
-  };
 }
 
 class ScreenshotSection {
   private _screenshot?: Screenshot;
 
-  private readonly image: PopupMenuItem;
-  private readonly clear: PopupMenuItem;
-  private readonly copy: PopupMenuItem;
-  private readonly save: PopupMenuItem;
-  private readonly imgurMenu: PopupMenuItem;
-  private readonly imgurUpload: PopupMenuItem;
-  private readonly imgurOpen: PopupMenuItem;
-  private readonly imgurCopyLink: PopupMenuItem;
-  private readonly imgurDelete: PopupMenuItem;
+  private image: PopupMenu.PopupMenuItem;
+  private clear: PopupMenu.PopupMenuItem;
+  private copy: PopupMenu.PopupMenuItem;
+  private save: PopupMenu.PopupMenuItem;
+  private imgurMenu: PopupMenu.PopupSubMenuMenuItem;
+  private imgurUpload: PopupMenu.PopupMenuItem;
+  private imgurOpen: PopupMenu.PopupMenuItem;
+  private imgurCopyLink: PopupMenu.PopupMenuItem;
+  private imgurDelete: PopupMenu.PopupMenuItem;
 
-  constructor(menu) {
+  constructor(menu: PopupMenu.PopupMenu) {
     this.image = new PopupMenu.PopupBaseMenuItem();
     this.image.content_gravity = Clutter.ContentGravity.RESIZE_ASPECT;
 
@@ -127,7 +136,6 @@ class ScreenshotSection {
       'activate',
       wrapNotifyError(() => this.onSave()),
     );
-
     menu.addMenuItem(this.image);
     menu.addMenuItem(this.clear);
     menu.addMenuItem(this.copy);
@@ -160,10 +168,10 @@ class ScreenshotSection {
       wrapNotifyError(() => this.onImgurDelete()),
     );
 
-    this.imgurMenu.menu.addMenuItem(this.imgurUpload);
-    this.imgurMenu.menu.addMenuItem(this.imgurOpen);
-    this.imgurMenu.menu.addMenuItem(this.imgurCopyLink);
-    this.imgurMenu.menu.addMenuItem(this.imgurDelete);
+    getMenu(this.imgurMenu).addMenuItem(this.imgurUpload);
+    getMenu(this.imgurMenu).addMenuItem(this.imgurOpen);
+    getMenu(this.imgurMenu).addMenuItem(this.imgurCopyLink);
+    getMenu(this.imgurMenu).addMenuItem(this.imgurDelete);
 
     menu.addMenuItem(this.imgurMenu);
 
@@ -178,7 +186,7 @@ class ScreenshotSection {
     this.copy.visible = visible;
     this.save.visible = visible;
 
-    const imgurEnabled = getExtension().settings.get_boolean(Config.KeyEnableUploadImgur);
+    const imgurEnabled = getExtension().getConfig().getBool(Config.KeyEnableUploadImgur);
     const imgurComplete = this._screenshot && this._screenshot.imgurUpload && this._screenshot.imgurUpload.response;
 
     this.imgurMenu.visible = visible && imgurEnabled;
@@ -214,7 +222,7 @@ class ScreenshotSection {
 
     if (this._screenshot) {
       this.setImage(this._screenshot.pixbuf);
-      this._screenshot.connect('imgur-upload', (obj, upload) => {
+      this._screenshot.on('imgur-upload', (obj, upload) => {
         upload.connect('done', (_obj, _data) => {
           this.updateVisibility();
         });
@@ -240,7 +248,7 @@ class ScreenshotSection {
   }
 
   onCopy() {
-    this.screenshot.copyClipboard(getExtension().settings.get_string(Config.KeyCopyButtonAction));
+    this.screenshot.copyClipboard(getExtension().getConfig().getString(Config.KeyCopyButtonAction));
   }
 
   onSave() {
@@ -265,17 +273,14 @@ class ScreenshotSection {
 }
 
 export class Indicator {
-  private extension: Extension.Extension;
   private screenshotSection: ScreenshotSection;
   private captureDelayMenu: CaptureDelayMenu;
-  private actionItems: Record<ActionName, PopupMenuItem>;
+  private actionItems: Record<ActionName, PopupMenu.PopupMenuItem>;
 
-  public panelButton: St.Button & { menu: any };
+  public panelButton: PanelMenu.Button;
 
-  constructor(extension: Extension.Extension) {
-    this.extension = extension;
-
-    this.panelButton = new PanelMenu.Button(null, Config.IndicatorName);
+  constructor() {
+    this.panelButton = new PanelMenu.Button(0, Config.IndicatorName);
     const icon = new St.Icon({
       icon_name: DefaultIcon,
       style_class: 'system-status-icon',
@@ -283,7 +288,7 @@ export class Indicator {
     this.panelButton.add_actor(icon);
     this.panelButton.connect(
       'button-press-event',
-      wrapNotifyError((obj, evt) => this.onClick(obj, (evt as unknown) as Clutter.Event)),
+      wrapNotifyError((obj, evt) => this.onClick(obj, evt as unknown as Clutter.Event)),
     );
 
     // These actions can be triggered via shortcut or popup menu
@@ -295,22 +300,27 @@ export class Indicator {
       ['select-desktop', _('Select Desktop')],
     ];
 
-    this.actionItems = items.reduce((record: Record<ActionName, PopupMenuItem>, [action, title]) => {
-      const item = new PopupMenu.PopupMenuItem(title);
-      item.connect(
-        'activate',
-        wrapNotifyError(async () => {
-          menu.close();
-          await onAction(action);
-        }),
-      );
-      menu.addMenuItem(item);
-      return { ...record, [action]: item };
-    }, {} as Record<ActionName, PopupMenuItem>);
+    this.actionItems = items.reduce(
+      (record: Record<ActionName, PopupMenu.PopupMenuItem>, [action, title]) => {
+        const item = new PopupMenu.PopupMenuItem(title);
+        item.connect(
+          'activate',
+          wrapNotifyError(async () => {
+            menu.close(/* animate */ true);
+            await onAction(action);
+          }),
+        );
+        menu.addMenuItem(item);
+        return { ...record, [action]: item };
+      },
+      {} as Record<ActionName, PopupMenu.PopupMenuItem>,
+    );
 
     menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
 
-    menu.addMenuItem((this.captureDelayMenu = new CaptureDelayMenu()));
+    this.captureDelayMenu = new CaptureDelayMenu();
+    // FIXME: cast due to a bug in the type definitions
+    menu.addMenuItem(this.captureDelayMenu as unknown as PopupMenu.PopupBaseMenuItem);
 
     menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
 
@@ -321,12 +331,13 @@ export class Indicator {
     // Settings can only be triggered via menu
     const settingsItem = new PopupMenu.PopupMenuItem(_('Settings'));
     settingsItem.connect('activate', () => {
-      ExtensionUtils.openPrefs();
+      getExtension().openPreferences();
     });
     menu.addMenuItem(settingsItem);
 
     menu.connect('open-state-changed', () => {
       this.updateVisibility();
+      return false;
     });
   }
 
@@ -336,22 +347,22 @@ export class Indicator {
       return;
     }
 
-    const action = getExtension().settings.get_string(Config.KeyClickAction);
+    const action = getExtension().getConfig().getString(Config.KeyClickAction);
     if (action === 'show-menu') {
       return;
     }
 
-    this.panelButton.menu.close();
-    wrapNotifyError(async () => onAction(action))();
+    this.panelButton.menu.close(/* animate */ true);
+    wrapNotifyError(() => onAction(action))();
   }
 
   updateVisibility(): void {
-    const backend = getBackend(this.extension.settings);
+    const backend = getBackend(getExtension().getSettings());
     Object.entries(this.actionItems).forEach(([actionName, item]) => {
       item.visible = backend.supportsAction(actionName as ActionName);
     });
 
-    this.captureDelayMenu.visible = backend.supportsParam('delay-seconds');
+    (this.captureDelayMenu as any).visible = backend.supportsParam('delay-seconds');
 
     this.screenshotSection.updateVisibility();
   }

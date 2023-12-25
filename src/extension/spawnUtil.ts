@@ -1,4 +1,4 @@
-import * as GLib from '@gi-types/glib2';
+import GLib from '@girs/glib-2.0';
 
 function getEnvArray(override: string[]): string[] {
   return [
@@ -28,7 +28,7 @@ export function spawnAsync(argv: string[], env: string[] | null = null): Promise
       if (exitCode === 0) {
         resolve();
       } else {
-        logError(new Error(`cmd: ${argv.join(' ')} exitCode=${exitCode}`));
+        console.error(new Error(`cmd: ${argv.join(' ')} exitCode=${exitCode}`));
         return reject(new Error(`exitCode=${exitCode}`));
       }
     });

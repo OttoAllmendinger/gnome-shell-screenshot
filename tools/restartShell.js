@@ -1,7 +1,7 @@
 const Gio = imports.gi.Gio;
 
 const MyIface =
-    '<node>\
+  '<node>\
     <interface name="org.gnome.Shell">\
         <method name="Eval">\
             <arg type="s" direction="in" />\
@@ -12,12 +12,8 @@ const MyIface =
 
 const MyProxy = Gio.DBusProxy.makeProxyWrapper(MyIface);
 
-let instance = new MyProxy(
-    Gio.DBus.session,
-    'org.gnome.Shell',
-    '/org/gnome/Shell'
-);
+let instance = new MyProxy(Gio.DBus.session, 'org.gnome.Shell', '/org/gnome/Shell');
 
-instance.EvalSync("global.reexec_self()");
+instance.EvalSync('global.reexec_self()');
 
-imports.mainloop.run("main");
+imports.mainloop.run('main');

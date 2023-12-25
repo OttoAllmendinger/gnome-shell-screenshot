@@ -1,8 +1,3 @@
-import ExtensionUtils from '../gselib/extensionUtils';
-import { enable, disable } from './extension';
+import { GnomeShellScreenshotExtension } from './extension';
 
-export default function init() {
-  ExtensionUtils.initTranslations();
-
-  return { enable, disable };
-}
+export default GnomeShellScreenshotExtension;
