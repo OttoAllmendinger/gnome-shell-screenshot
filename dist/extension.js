@@ -1713,19 +1713,11 @@ class Indicator {
 
 class GnomeShellScreenshotExtension extends Extension {
     static instance = null;
-    servicePromise;
+    servicePromise = null;
     indicator;
     signalSettings = [];
     constructor(props) {
         super(props);
-        const path = this.dir.get_path();
-        if (!path) {
-            throw new Error('could not get extension path');
-        }
-        this.servicePromise = getServiceProxy(path).catch((err) => {
-            console.error(err);
-        });
-        this.signalSettings.push(this.getSettings().connect('changed::' + KeyEnableIndicator, this.updateIndicator.bind(this)));
     }
     setKeybindings() {
         const bindingMode = Shell.ActionMode.NORMAL;
@@ -1761,6 +1753,14 @@ class GnomeShellScreenshotExtension extends Extension {
     enable() {
         initGettext(gettext$1);
         GnomeShellScreenshotExtension.instance = this;
+        const path = this.dir.get_path();
+        if (!path) {
+            throw new Error('could not get extension path');
+        }
+        this.servicePromise = getServiceProxy(path).catch((err) => {
+            console.error(err);
+        });
+        this.signalSettings.push(this.getSettings().connect('changed::' + KeyEnableIndicator, this.updateIndicator.bind(this)));
         this.updateIndicator();
         this.setKeybindings();
     }
@@ -1768,6 +1768,7 @@ class GnomeShellScreenshotExtension extends Extension {
         this.signalSettings.forEach((signal) => {
             this.getSettings().disconnect(signal);
         });
+        this.servicePromise = null;
         this.destroyIndicator();
         this.unsetKeybindings();
         GnomeShellScreenshotExtension.instance = null;

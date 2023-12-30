@@ -6,11 +6,11 @@ type VariantGJSUtil = GLib.Variant & {
   deepUnpack(): unknown;
 };
 
-export interface ScreenshotPortalProxy {
+export interface ScreenshotPortalProxy extends Gio.DBusProxy {
   ScreenshotSync(parentWindow: string, options: Record<string, unknown>): [string];
 }
 
-const connection = (Gio as any).DBus.session as Gio.DBusConnection;
+const connection = Gio.DBus.session;
 
 const serviceName = 'org.freedesktop.portal.Desktop';
 const interfaceName = 'org.freedesktop.portal.Request';
