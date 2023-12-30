@@ -13,6 +13,7 @@ import { onAction } from './actions';
 import { getExtension } from './extension';
 import { ActionName, getBackend } from './backends/backend';
 import { _ } from './gettext';
+import { Upload } from './imgur/Upload';
 
 const DefaultIcon = 'camera-photo-symbolic';
 
@@ -222,8 +223,8 @@ class ScreenshotSection {
 
     if (this._screenshot) {
       this.setImage(this._screenshot.pixbuf);
-      this._screenshot.on('imgur-upload', (obj, upload) => {
-        upload.connect('done', (_obj, _data) => {
+      this._screenshot.on('imgur-upload', (upload: Upload) => {
+        upload.on('done', () => {
           this.updateVisibility();
         });
       });

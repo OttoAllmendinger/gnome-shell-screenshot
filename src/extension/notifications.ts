@@ -169,7 +169,7 @@ class ImgurNotification extends MessageTray.Notification {
     }
     this.upload = screenshot.imgurUpload;
 
-    this.upload.on('progress', (obj, bytes, total) => {
+    this.upload.on('progress', (bytes, total) => {
       this.update(_('Imgur Upload'), '' + Math.floor(100 * (bytes / total)) + '%');
     });
 

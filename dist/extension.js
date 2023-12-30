@@ -679,11 +679,8 @@ function _promisify(cls, function_name, finish_function_name) {
     Gio._promisify(cls, function_name, finish_function_name);
 }
 const LocalFilePrototype = Gio.File.new_for_path('/').constructor.prototype;
-_promisify(LocalFilePrototype, 'load_bytes_async', 'load_bytes_finish');
+_promisify(LocalFilePrototype, 'load_contents_async', 'load_contents_finish');
 _promisify(Soup.Session.prototype, 'send_and_read_async');
-_promisify(Gio.OutputStream.prototype, 'write_bytes_async');
-_promisify(Gio.IOStream.prototype, 'close_async');
-_promisify(Gio.Subprocess.prototype, 'wait_check_async');
 function authMessage(message) {
     message.request_headers.append('Authorization', 'Client-ID ' + clientId);
 }
@@ -748,6 +745,7 @@ class Upload extends eventemitter3 {
         if (this.response) {
             await Upload.delete(this.response.data.deletehash);
         }
+        this.emit('deleted');
     }
 }
 
@@ -1102,7 +1100,7 @@ let ImgurNotification = class ImgurNotification extends Notification {
             throw new Error('imgur upload not present');
         }
         this.upload = screenshot.imgurUpload;
-        this.upload.on('progress', (obj, bytes, total) => {
+        this.upload.on('progress', (bytes, total) => {
             this.update(_('Imgur Upload'), '' + Math.floor(100 * (bytes / total)) + '%');
         });
         this.upload.on('error', (obj, msg) => {
@@ -1593,8 +1591,8 @@ class ScreenshotSection {
         this._screenshot = screenshot;
         if (this._screenshot) {
             this.setImage(this._screenshot.pixbuf);
-            this._screenshot.on('imgur-upload', (obj, upload) => {
-                upload.connect('done', (_obj, _data) => {
+            this._screenshot.on('imgur-upload', (upload) => {
+                upload.on('done', () => {
                     this.updateVisibility();
                 });
             });

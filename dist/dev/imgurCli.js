@@ -360,11 +360,8 @@ function _promisify(cls, function_name, finish_function_name) {
     Gio._promisify(cls, function_name, finish_function_name);
 }
 const LocalFilePrototype = Gio.File.new_for_path('/').constructor.prototype;
-_promisify(LocalFilePrototype, 'load_bytes_async', 'load_bytes_finish');
+_promisify(LocalFilePrototype, 'load_contents_async', 'load_contents_finish');
 _promisify(Soup.Session.prototype, 'send_and_read_async');
-_promisify(Gio.OutputStream.prototype, 'write_bytes_async');
-_promisify(Gio.IOStream.prototype, 'close_async');
-_promisify(Gio.Subprocess.prototype, 'wait_check_async');
 function authMessage(message) {
     message.request_headers.append('Authorization', 'Client-ID ' + clientId);
 }
@@ -429,6 +426,7 @@ class Upload extends eventemitter3 {
         if (this.response) {
             await Upload.delete(this.response.data.deletehash);
         }
+        this.emit('deleted');
     }
 }
 
