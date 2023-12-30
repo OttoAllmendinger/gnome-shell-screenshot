@@ -12,23 +12,13 @@ import { initGettext } from './gettext';
 
 export class GnomeShellScreenshotExtension extends Extension {
   public static instance: GnomeShellScreenshotExtension | null = null;
-  public readonly servicePromise: Promise<ScreenshotPortalProxy | void>;
+  public servicePromise: Promise<ScreenshotPortalProxy | void> | null = null;
   public indicator?: Indicator.Indicator;
 
   private readonly signalSettings: number[] = [];
 
   constructor(props: ExtensionMetadata) {
     super(props);
-    const path = this.dir.get_path();
-    if (!path) {
-      throw new Error('could not get extension path');
-    }
-    this.servicePromise = getServiceProxy(path).catch((err) => {
-      console.error(err);
-    });
-    this.signalSettings.push(
-      this.getSettings().connect('changed::' + Config.KeyEnableIndicator, this.updateIndicator.bind(this)),
-    );
   }
 
   setKeybindings(): void {
@@ -76,6 +66,16 @@ export class GnomeShellScreenshotExtension extends Extension {
   enable(): void {
     initGettext(gettext);
     GnomeShellScreenshotExtension.instance = this;
+    const path = this.dir.get_path();
+    if (!path) {
+      throw new Error('could not get extension path');
+    }
+    this.servicePromise = getServiceProxy(path).catch((err) => {
+      console.error(err);
+    });
+    this.signalSettings.push(
+      this.getSettings().connect('changed::' + Config.KeyEnableIndicator, this.updateIndicator.bind(this)),
+    );
     this.updateIndicator();
     this.setKeybindings();
   }
@@ -84,6 +84,7 @@ export class GnomeShellScreenshotExtension extends Extension {
     this.signalSettings.forEach((signal) => {
       this.getSettings().disconnect(signal);
     });
+    this.servicePromise = null;
 
     this.destroyIndicator();
     this.unsetKeybindings();
