@@ -3,6 +3,7 @@
     <enum id="org.gnome.shell.extensions.screenshot.backend">
         <value nick="gnome-screenshot" value="0"/>
         <value nick="desktop-portal" value="1"/>
+        <value nick="shell-ui" value="2"/>
     </enum>
 
     <enum id="org.gnome.shell.extensions.screenshot.click-action">

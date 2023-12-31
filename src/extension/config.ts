@@ -5,6 +5,7 @@ export const KeyBackend = 'backend';
 export const Backends = {
   DESKTOP_PORTAL: 'desktop-portal',
   GNOME_SCREENSHOT_CLI: 'gnome-screenshot',
+  SHELL_UI: 'shell-ui',
 };
 
 export const IndicatorName = 'de.ttll.GnomeScreenshot';

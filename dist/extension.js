@@ -10,6 +10,7 @@ import Soup from 'gi://Soup';
 import { Notification, Source } from 'resource:///org/gnome/shell/ui/messageTray.js';
 import GObject from 'gi://GObject';
 import Clutter from 'gi://Clutter';
+import { ScreenshotUI } from 'resource:///org/gnome/shell/ui/screenshot.js';
 import Cogl from 'gi://Cogl';
 import { Button } from 'resource:///org/gnome/shell/ui/panelMenu.js';
 import { PopupMenuItem, PopupSeparatorMenuItem, PopupMenuSection, PopupBaseMenuItem, PopupSubMenuMenuItem } from 'resource:///org/gnome/shell/ui/popupMenu.js';
@@ -46,6 +47,7 @@ const KeyBackend = 'backend';
 const Backends = {
     DESKTOP_PORTAL: 'desktop-portal',
     GNOME_SCREENSHOT_CLI: 'gnome-screenshot',
+    SHELL_UI: 'shell-ui',
 };
 const IndicatorName = 'de.ttll.GnomeScreenshot';
 const KeyEnableIndicator = 'enable-indicator';
@@ -1363,6 +1365,125 @@ class BackendDeskopPortal {
     }
 }
 
+// based around Gnome-Shell `js/ui/screenshot.js` (v45.1)
+Gio._promisify(Shell.Screenshot, 'composite_to_stream');
+/**
+ * Captures a screenshot from a texture, given a region, scale and optional
+ * cursor data.
+ *
+ * @param {Cogl.Texture} texture - The texture to take the screenshot from.
+ * @param {number[4]} [geometry] - The region to use: x, y, width and height.
+ * @param {number} scale - The texture scale.
+ * @param {object} [cursor] - Cursor data to include in the screenshot.
+ * @param {Cogl.Texture} cursor.texture - The cursor texture.
+ * @param {number} cursor.x - The cursor x coordinate.
+ * @param {number} cursor.y - The cursor y coordinate.
+ * @param {number} cursor.scale - The cursor texture scale.
+ */
+async function captureScreenshot(texture, geometry, scale, cursor) {
+    const stream = Gio.MemoryOutputStream.new_resizable();
+    const [x, y, w, h] = geometry ?? [0, 0, -1, -1];
+    if (cursor === null) {
+        cursor = { texture: null, x: 0, y: 0, scale: 1 };
+    }
+    await Shell.Screenshot.composite_to_stream(texture, x, y, w, h, scale, cursor.texture, cursor.x, cursor.y, cursor.scale, stream);
+    stream.close(null);
+    return stream.steal_as_bytes();
+}
+let CustomScreenshotUI = class CustomScreenshotUI extends ScreenshotUI {
+    bytesPromise;
+    bytesResolve;
+    bytesReject;
+    bytesRejectClose;
+    constructor() {
+        super();
+        this.bytesPromise = new Promise((resolve, reject) => {
+            this.bytesResolve = resolve;
+            this.bytesReject = reject;
+            this.bytesRejectClose = reject;
+        });
+    }
+    async getScreenshotBytes() {
+        if (this._selectionButton.checked || this._screenButton.checked) {
+            const content = this._stageScreenshot.get_content();
+            if (!content) {
+                throw new Error('No content');
+            }
+            const texture = content.get_texture();
+            const geometry = this._getSelectedGeometry(true);
+            let cursorTexture = this._cursor.content?.get_texture();
+            if (!this._cursor.visible) {
+                cursorTexture = null;
+            }
+            return captureScreenshot(texture, geometry, this._scale, {
+                texture: cursorTexture ?? null,
+                x: this._cursor.x * this._scale,
+                y: this._cursor.y * this._scale,
+                scale: this._cursorScale,
+            });
+        }
+        else if (this._windowButton.checked) {
+            const window = this._windowSelectors.flatMap((selector) => selector.windows()).find((win) => win.checked);
+            if (!window) {
+                throw new Error('No window selected');
+            }
+            const content = window.windowContent;
+            if (!content) {
+                throw new Error('No window content');
+            }
+            const texture = content.get_texture();
+            let cursorTexture = window.getCursorTexture()?.get_texture();
+            if (!this._cursor.visible) {
+                cursorTexture = null;
+            }
+            return captureScreenshot(texture, null, window.bufferScale, {
+                texture: cursorTexture ?? null,
+                x: window.cursorPoint.x * window.bufferScale,
+                y: window.cursorPoint.y * window.bufferScale,
+                scale: this._cursorScale,
+            });
+        }
+        throw new Error('No screenshot type selected');
+    }
+    async _saveScreenshot() {
+        this.bytesRejectClose = undefined;
+        try {
+            this.bytesResolve?.(await this.getScreenshotBytes());
+        }
+        catch (e) {
+            this.bytesReject?.(e);
+        }
+    }
+    close(instantly) {
+        super.close(instantly);
+        this.bytesRejectClose?.(new Error('Screenshot UI closed'));
+    }
+};
+CustomScreenshotUI = __decorate([
+    registerGObjectClass
+], CustomScreenshotUI);
+class BackendShellUI {
+    supportsParam(paramName) {
+        return false;
+    }
+    supportsAction(action) {
+        return action === 'open-portal';
+    }
+    async exec(action, params) {
+        if (action !== 'open-portal') {
+            throw new Error();
+        }
+        const ui = new CustomScreenshotUI();
+        await ui.open();
+        const bytes = await ui.bytesPromise;
+        const tempfile = getTemp();
+        const file = Gio.File.new_for_path(tempfile);
+        const stream = file.create(Gio.FileCreateFlags.NONE, null);
+        stream.write_bytes(bytes, null);
+        return tempfile;
+    }
+}
+
 class ErrorNotImplemented extends Error {
     constructor(action) {
         super(`action ${action} not implemented for this backend`);
@@ -1382,6 +1503,8 @@ function getBackend(settings) {
             return new BackendGnomeScreenshot();
         case Backends.DESKTOP_PORTAL:
             return new BackendDeskopPortal();
+        case Backends.SHELL_UI:
+            return new BackendShellUI();
         default:
             throw new Error(`unexpected backend ${name}`);
     }

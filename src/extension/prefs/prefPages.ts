@@ -25,6 +25,7 @@ function getBackendPrefs(): PrefRow[] {
   const comboBoxOptions: PrefComboBoxOption[] = [
     [_('gnome-screenshot'), Config.Backends.GNOME_SCREENSHOT_CLI],
     [_('Desktop Portal'), Config.Backends.DESKTOP_PORTAL],
+    [_('Shell UI'), Config.Backends.SHELL_UI],
   ];
 
   return [prefRow(_('Backend'), prefComboBox(comboBoxOptions, Config.KeyBackend))];

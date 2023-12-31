@@ -4,6 +4,7 @@ import * as Config from '../config';
 
 import { BackendGnomeScreenshot } from './backendGnomeScreenshot';
 import { BackendDeskopPortal } from './backendDeskopPortal';
+import { BackendShellUI } from './backendShellUI';
 
 export class ErrorNotImplemented extends Error {
   constructor(action: ActionName) {
@@ -44,6 +45,8 @@ export function getBackend(settings: Gio.Settings): Backend {
       return new BackendGnomeScreenshot();
     case Config.Backends.DESKTOP_PORTAL:
       return new BackendDeskopPortal();
+    case Config.Backends.SHELL_UI:
+      return new BackendShellUI();
     default:
       throw new Error(`unexpected backend ${name}`);
   }

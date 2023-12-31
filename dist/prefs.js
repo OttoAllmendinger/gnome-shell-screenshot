@@ -29,6 +29,7 @@ const KeyBackend = 'backend';
 const Backends = {
     DESKTOP_PORTAL: 'desktop-portal',
     GNOME_SCREENSHOT_CLI: 'gnome-screenshot',
+    SHELL_UI: 'shell-ui',
 };
 const KeyEnableIndicator = 'enable-indicator';
 const KeyEnableNotification = 'enable-notification';
@@ -718,6 +719,7 @@ function getBackendPrefs() {
     const comboBoxOptions = [
         [_('gnome-screenshot'), Backends.GNOME_SCREENSHOT_CLI],
         [_('Desktop Portal'), Backends.DESKTOP_PORTAL],
+        [_('Shell UI'), Backends.SHELL_UI],
     ];
     return [prefRow(_('Backend'), prefComboBox(comboBoxOptions, KeyBackend))];
 }
