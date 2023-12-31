@@ -1530,7 +1530,9 @@ class ScreenshotSection {
     imgurDelete;
     constructor(menu) {
         this.image = new PopupBaseMenuItem();
-        this.image.content_gravity = Clutter.ContentGravity.RESIZE_ASPECT;
+        this.image.style = 'padding: 0px;';
+        this.image.x_align = Clutter.ActorAlign.CENTER;
+        this.image.y_align = Clutter.ActorAlign.CENTER;
         this.clear = new PopupMenuItem(_('Clear'));
         this.copy = new PopupMenuItem(_('Copy'));
         this.save = new PopupMenuItem(_('Save As...'));
@@ -1575,17 +1577,22 @@ class ScreenshotSection {
         this.imgurDelete.visible = Boolean(visible && imgurEnabled && imgurComplete);
     }
     setImage(pixbuf) {
-        const { width, height } = pixbuf;
-        if (height == 0) {
-            return;
+        const content = St.ImageContent.new_with_preferred_size(pixbuf.width, pixbuf.height);
+        content.set_bytes(pixbuf.get_pixels(), Cogl.PixelFormat.RGBA_8888, pixbuf.width, pixbuf.height, pixbuf.rowstride);
+        const widget = new St.Widget({
+            content,
+            content_gravity: Clutter.ContentGravity.RESIZE_ASPECT,
+            width: pixbuf.width,
+            height: pixbuf.height,
+        });
+        if (widget.width > 200) {
+            widget.width = 200;
         }
-        const image = new Clutter.Image();
-        const success = image.set_data(pixbuf.get_pixels(), pixbuf.get_has_alpha() ? Cogl.PixelFormat.RGBA_8888 : Cogl.PixelFormat.RGB_888, width, height, pixbuf.get_rowstride());
-        if (!success) {
-            throw Error('error creating Clutter.Image()');
+        if (widget.height > 200) {
+            widget.height = 200;
         }
-        this.image.content = image;
-        this.image.height = 200;
+        this.image.remove_all_children();
+        this.image.add_child(widget);
     }
     setScreenshot(screenshot) {
         this._screenshot = screenshot;

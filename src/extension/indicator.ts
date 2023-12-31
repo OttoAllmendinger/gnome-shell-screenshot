@@ -1,6 +1,7 @@
 import St from '@girs/st-13';
 import Cogl from '@girs/cogl-10';
 import Clutter from '@girs/clutter-13';
+import GdkPixbuf from '@girs/gdkpixbuf-2.0';
 
 import * as PanelMenu from '@gnome-shell/ui/panelMenu';
 import * as PopupMenu from '@gnome-shell/ui/popupMenu';
@@ -115,7 +116,9 @@ class ScreenshotSection {
 
   constructor(menu: PopupMenu.PopupMenu) {
     this.image = new PopupMenu.PopupBaseMenuItem();
-    this.image.content_gravity = Clutter.ContentGravity.RESIZE_ASPECT;
+    this.image.style = 'padding: 0px;';
+    this.image.x_align = Clutter.ActorAlign.CENTER;
+    this.image.y_align = Clutter.ActorAlign.CENTER;
 
     this.clear = new PopupMenu.PopupMenuItem(_('Clear'));
     this.copy = new PopupMenu.PopupMenuItem(_('Copy'));
@@ -197,25 +200,29 @@ class ScreenshotSection {
     this.imgurDelete.visible = Boolean(visible && imgurEnabled && imgurComplete);
   }
 
-  setImage(pixbuf) {
-    const { width, height } = pixbuf;
-    if (height == 0) {
-      return;
-    }
-    const image = new Clutter.Image();
-    const success = image.set_data(
+  setImage(pixbuf: GdkPixbuf.Pixbuf) {
+    const content = St.ImageContent.new_with_preferred_size(pixbuf.width, pixbuf.height);
+    (content as any).set_bytes(
       pixbuf.get_pixels(),
-      pixbuf.get_has_alpha() ? Cogl.PixelFormat.RGBA_8888 : Cogl.PixelFormat.RGB_888,
-      width,
-      height,
-      pixbuf.get_rowstride(),
+      Cogl.PixelFormat.RGBA_8888,
+      pixbuf.width,
+      pixbuf.height,
+      pixbuf.rowstride,
     );
-    if (!success) {
-      throw Error('error creating Clutter.Image()');
+    const widget = new St.Widget({
+      content,
+      content_gravity: Clutter.ContentGravity.RESIZE_ASPECT,
+      width: pixbuf.width,
+      height: pixbuf.height,
+    });
+    if (widget.width > 200) {
+      widget.width = 200;
     }
-
-    this.image.content = image;
-    this.image.height = 200;
+    if (widget.height > 200) {
+      widget.height = 200;
+    }
+    this.image.remove_all_children();
+    this.image.add_child(widget);
   }
 
   setScreenshot(screenshot: Screenshot | undefined) {
