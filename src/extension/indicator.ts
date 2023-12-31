@@ -99,6 +99,11 @@ class CaptureDelayMenu extends PopupMenu.PopupMenuSection {
     }
     getLabel(this.delayInfoItem).text = text;
   }
+
+  set visible(visible: boolean) {
+    (this as any).actor.visible = visible;
+    (this as any).box.visible = visible;
+  }
 }
 
 class ScreenshotSection {
@@ -282,7 +287,7 @@ class ScreenshotSection {
 
 export class Indicator {
   private screenshotSection: ScreenshotSection;
-  private captureDelayMenu: CaptureDelayMenu;
+  private captureDelayMenu: PopupMenu.PopupBaseMenuItem[];
   private actionItems: Record<ActionName, PopupMenu.PopupMenuItem>;
 
   public panelButton: PanelMenu.Button;
@@ -326,11 +331,13 @@ export class Indicator {
 
     menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
 
-    this.captureDelayMenu = new CaptureDelayMenu();
-    // FIXME: cast due to a bug in the type definitions
-    menu.addMenuItem(this.captureDelayMenu as unknown as PopupMenu.PopupBaseMenuItem);
-
-    menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
+    this.captureDelayMenu = [
+      new CaptureDelayMenu() as unknown as PopupMenu.PopupBaseMenuItem,
+      new PopupMenu.PopupSeparatorMenuItem(),
+    ];
+    this.captureDelayMenu.forEach((i) => {
+      menu.addMenuItem(i);
+    });
 
     this.screenshotSection = new ScreenshotSection(menu);
 
@@ -370,7 +377,9 @@ export class Indicator {
       item.visible = backend.supportsAction(actionName as ActionName);
     });
 
-    (this.captureDelayMenu as any).visible = backend.supportsParam('delay-seconds');
+    this.captureDelayMenu.forEach((i) => {
+      i.visible = backend.supportsParam('delay-seconds');
+    });
 
     this.screenshotSection.updateVisibility();
   }
