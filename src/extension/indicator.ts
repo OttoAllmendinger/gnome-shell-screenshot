@@ -298,7 +298,7 @@ export class Indicator {
       icon_name: DefaultIcon,
       style_class: 'system-status-icon',
     });
-    this.panelButton.add_actor(icon);
+    this.panelButton.add_child(icon);
     this.panelButton.connect(
       'button-press-event',
       wrapNotifyError((obj, evt) => this.onClick(obj, evt as unknown as Clutter.Event)),
