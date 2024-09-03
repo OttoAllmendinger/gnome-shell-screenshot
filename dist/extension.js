@@ -1775,7 +1775,7 @@ class Indicator {
             icon_name: DefaultIcon,
             style_class: 'system-status-icon',
         });
-        this.panelButton.add_actor(icon);
+        this.panelButton.add_child(icon);
         this.panelButton.connect('button-press-event', wrapNotifyError((obj, evt) => this.onClick(obj, evt)));
         // These actions can be triggered via shortcut or popup menu
         const menu = this.panelButton.menu;

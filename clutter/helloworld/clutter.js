@@ -35,7 +35,7 @@ let color = new Clutter.Color();
 
 stage.color = color;
 
-stage.add_actor(texture);
+stage.add_child(texture);
 stage.show();
 
 stage.connect('destroy', Clutter.main_quit);
